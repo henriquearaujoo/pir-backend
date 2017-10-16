@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import com.samsung.fas.pir.dao.AgentDAO;
 import com.samsung.fas.pir.dto.AgentDTO;
 import com.samsung.fas.pir.models.Agent;
+import com.samsung.fas.pir.service.AgentService;
 
 @Controller
 @RequestMapping("/agents")
@@ -21,16 +22,16 @@ import com.samsung.fas.pir.models.Agent;
 public class AgentREST {
 	// TODO: BOs
 	@Autowired
-	private			AgentDAO		agentdb;
+	private			AgentService		agentdb;
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<Agent>> test() {
-		return new ResponseEntity<List<Agent>>(agentdb.queryAll(), HttpStatus.OK);
+		return new ResponseEntity<List<Agent>>(agentdb.findAll(), HttpStatus.OK);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public @ResponseBody ResponseEntity<Boolean> addAgent(@RequestBody AgentDTO agent) {	
-		agentdb.queryCreate(agent.getModel());
+		agentdb.save(agent.getModel());
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 }

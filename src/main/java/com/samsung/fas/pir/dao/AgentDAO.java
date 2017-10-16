@@ -22,11 +22,11 @@ public class AgentDAO {
 		this.repository = repository;
 	}
 	
-	public boolean queryCreate(Agent agent) {
+	public boolean save(Agent agent) {
 		return repository.save(agent) != null;
 	}
 	
-	public List<Agent> queryAll() {
+	public List<Agent> findAll() {
 		return repository.findAll();
 	}
 
