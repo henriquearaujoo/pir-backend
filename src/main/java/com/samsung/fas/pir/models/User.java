@@ -16,19 +16,19 @@ public class User {
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(name="user_id")
+	@Column(name="user_id", unique=true)
 	private		UUID			id;
-	@Column(name="user_login")
+	@Column(name="user_login", unique=true)
 	private		String			login;
-	@Column(name="user_psswd")
+	@Column(name="user_psswd", length=20)
 	private		String			password;
 	@Column(name="user_name")
 	private		String			name;
-	@Column(name="user_rg")
+	@Column(name="user_rg", length=10, unique=true)
 	private		String			rg;
-	@Column(name="user_cpf")
+	@Column(name="user_cpf", length=11, unique=true)
 	private		String			cpf;
-	@Column(name="user_cnpj")
+	@Column(name="user_cnpj", length=14, unique=true)
 	private		String			cnpj;
 	@Column(name="user_addr_district")
 	private		String			districtAddr;
@@ -39,11 +39,11 @@ public class User {
 	@Column(name="user_addr_number")
 	private		String			numberAddr;
 	@ManyToOne
-	@JoinColumn(name="city_id_fk", nullable=false)
+	@JoinColumn(name="city_id_fk")
 	private		City			city;
 	@Column(name="user_status")
 	private		boolean			active;
-	@Column(name="user_type")
+	@Column(name="user_type", length=10)
 	private		String			type;
 	
 	
@@ -95,7 +95,7 @@ public class User {
 		return city;
 	}
 	
-	public boolean isAtive() {
+	public boolean isActive() {
 		return active;
 	}
 	
@@ -147,7 +147,7 @@ public class User {
 		this.city = city;
 	}
 	
-	public void setAtive(boolean ative) {
+	public void setActive(boolean ative) {
 		this.active = ative;
 	}
 	

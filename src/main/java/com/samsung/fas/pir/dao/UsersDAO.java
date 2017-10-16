@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.dao;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,11 @@ public class UsersDAO {
 	
 	public List<User> findAll() {
 		return repository.findAll();
+	}
+	
+	// ID is a primary unique key, so we going to have a list with only one element
+	public User findByID(UUID id) {
+		return repository.findById(id).get(0);
 	}
 
 }
