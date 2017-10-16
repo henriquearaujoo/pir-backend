@@ -20,7 +20,6 @@ import com.samsung.fas.pir.service.AgentService;
 @RequestMapping("/agents")
 @Produces(MediaType.APPLICATION_JSON)
 public class AgentREST {
-	// TODO: BOs
 	@Autowired
 	private			AgentService		agentdb;
 	
