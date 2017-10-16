@@ -1,5 +1,7 @@
 package com.samsung.fas.pir.models;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,5 +23,5 @@ public class City {
 	@JoinColumn(name="state_id_fk", nullable=false)
 	private		State		state;
 	@OneToMany(mappedBy="city", targetEntity=User.class)
-	private		User		user;
+	private		List<User>		user;
 }

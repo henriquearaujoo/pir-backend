@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -39,12 +38,120 @@ public class User {
 	private		String			complementAddr;
 	@Column(name="user_addr_number")
 	private		String			numberAddr;
-////	@ManyToOne
-////	@JoinColumn(name="city_id_fk", nullable=false)
-////	@Column(name="user_addr_state")
-//	private		City			city;
+	@ManyToOne
+	@JoinColumn(name="city_id_fk", nullable=false)
+	private		City			city;
 	@Column(name="user_status")
-	private		boolean			ative;
+	private		boolean			active;
 	@Column(name="user_type")
 	private		String			type;
+	
+	
+	public UUID getId() {
+		return id;
+	}
+	
+	public String getLogin() {
+		return login;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public String getRg() {
+		return rg;
+	}
+	
+	public String getCpf() {
+		return cpf;
+	}
+	
+	public String getCnpj() {
+		return cnpj;
+	}
+	
+	public String getDistrictAddr() {
+		return districtAddr;
+	}
+	
+	public String getStreetNameAddr() {
+		return streetNameAddr;
+	}
+	
+	public String getComplementAddr() {
+		return complementAddr;
+	}
+	
+	public String getNumberAddr() {
+		return numberAddr;
+	}
+	
+	public City getCity() {
+		return city;
+	}
+	
+	public boolean isAtive() {
+		return active;
+	}
+	
+	public String getType() {
+		return type;
+	}
+	
+	public void setLogin(String login) {
+		this.login = login;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setRg(String rg) {
+		this.rg = rg;
+	}
+	
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+	
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
+	
+	public void setDistrictAddr(String districtAddr) {
+		this.districtAddr = districtAddr;
+	}
+	
+	public void setStreetNameAddr(String streetNameAddr) {
+		this.streetNameAddr = streetNameAddr;
+	}
+	
+	public void setComplementAddr(String complementAddr) {
+		this.complementAddr = complementAddr;
+	}
+	
+	public void setNumberAddr(String numberAddr) {
+		this.numberAddr = numberAddr;
+	}
+	
+	public void setCity(City city) {
+		this.city = city;
+	}
+	
+	public void setAtive(boolean ative) {
+		this.active = ative;
+	}
+	
+	public void setType(String type) {
+		this.type = type;
+	}
 }
