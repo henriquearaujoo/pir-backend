@@ -18,9 +18,9 @@ public class Child {
 	@Column(name="parent")
 	private 	String		relatives;
 	// The foreign key in this example must contain a value
-	@ManyToOne
-	@JoinColumn(name="agent_id_fk", nullable=false)
-	private		Agent		agent;
+//	@ManyToOne
+//	@JoinColumn(name="agent_id_fk", nullable=false)
+//	private		Agent		agent;
 
 	public long getId() {
 		return id;
@@ -42,9 +42,9 @@ public class Child {
 		return relatives;
 	}
 
-	public Agent getAgent() {
-		return agent;
-	}
+//	public Agent getAgent() {
+//		return agent;
+//	}
 
 	public void setName(String name) {
 		this.name = name;
@@ -62,7 +62,7 @@ public class Child {
 		this.relatives = relatives;
 	}
 
-	public void setAgent(Agent agent) {
-		this.agent = agent;
-	}
+//	public void setAgent(Agent agent) {
+//		this.agent = agent;
+//	}
 }

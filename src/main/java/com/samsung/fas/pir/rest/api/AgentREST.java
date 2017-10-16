@@ -11,26 +11,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 
-import com.samsung.fas.pir.dao.AgentDAO;
-import com.samsung.fas.pir.dto.AgentDTO;
-import com.samsung.fas.pir.models.Agent;
-import com.samsung.fas.pir.service.AgentService;
+import com.samsung.fas.pir.models.User;
+import com.samsung.fas.pir.service.UsersService;
 
 @Controller
 @RequestMapping("/agents")
 @Produces(MediaType.APPLICATION_JSON)
 public class AgentREST {
 	@Autowired
-	private			AgentService		agentdb;
+	private UsersService uservice;
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<Agent>> test() {
-		return new ResponseEntity<List<Agent>>(agentdb.findAll(), HttpStatus.OK);
+	public @ResponseBody ResponseEntity<List<User>> test() {
+		return new ResponseEntity<List<User>>(uservice.findAll(), HttpStatus.OK);
 	}
 	
-	@RequestMapping(method=RequestMethod.POST)
-	public @ResponseBody ResponseEntity<Boolean> addAgent(@RequestBody AgentDTO agent) {	
-		agentdb.save(agent.getModel());
-		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
-	}
+//	@RequestMapping(method=RequestMethod.POST)
+//	public @ResponseBody ResponseEntity<Boolean> addAgent(@RequestBody AgentDTO agent) {	
+//		uservice.save(agent.getModel());
+//		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+//	}
 }
