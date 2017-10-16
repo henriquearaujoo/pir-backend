@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.dto;
 
 import java.util.Set;
+import java.util.UUID;
 
 import com.samsung.fas.pir.models.Agent;
 import com.samsung.fas.pir.models.Child;
@@ -9,7 +10,7 @@ import com.samsung.fas.pir.models.Child;
  * This is an example class (Data Transfer Object)
  */
 public class AgentDTO {
-	private		long 		id;
+	private		UUID 		id;
 	private 	String 		name;
 	private 	String 		register;
 	private 	Set<Child>	children;
@@ -25,7 +26,7 @@ public class AgentDTO {
 		children	= agent.getChildren();
 	}
 
-	public long getId() {
+	public UUID getId() {
 		return id;
 	}
 
