@@ -1,5 +1,4 @@
 package com.samsung.fas.pir.rest.api;
-
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 

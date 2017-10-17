@@ -19,4 +19,5 @@ public class Profile {
 	
 	@Column(name="prof_description", unique=true)
 	private		String			description;
+
 }
