@@ -3,6 +3,8 @@ package com.samsung.fas.pir.dao;
 import java.util.List;
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +28,18 @@ public class UsersDAO {
 		return repository.findAll();
 	}
 	
-	// ID is a primary unique key, so we going to have a list with only one element
 	public User findByID(UUID id) {
+		// ID is a primary unique key, so we going to have a list with only one element
 		return repository.findById(id).get(0);
+	}
+	
+	@Transactional
+	public boolean updateUser(User user, UUID id) {
+		// ID is a primary unique key, so we going to have a list with only one element
+		User toUpdate = repository.findById(id).get(0);
+		toUpdate.copyFrom(user);
+		System.out.println(toUpdate.getPassword());
+		return repository.save(toUpdate) != null;
 	}
 
 }

@@ -1,16 +1,20 @@
 package com.samsung.fas.pir.dto;
 
+import java.util.Date;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.models.City;
 import com.samsung.fas.pir.models.User;
 
-public class NewUserDTO {
+/*
+ * For create and update an user
+ */
+public class UserDTO {
 	// Must
 	@JsonProperty("login")
 	private		String			login;
-	@JsonProperty("passwd")
+	@JsonProperty("password")
 	private		String			password;
 	
 	// Optional
@@ -24,20 +28,26 @@ public class NewUserDTO {
 	private		String			cpf;
 	@JsonProperty("cnpj")
 	private		String			cnpj;
-	@JsonProperty("district")
-	private		String			districtAddr;
+	@JsonProperty("ie")
+	private		String			ie;
+	@JsonProperty("neighborhood")
+	private		String			neighborhoodAddress;
 	@JsonProperty("street")
-	private		String			streetNameAddr;
+	private		String			streetNameAddress;
 	@JsonProperty("complement")
-	private		String			complementAddr;
+	private		String			complementAddress;
 	@JsonProperty("number")
-	private		String			numberAddr;
+	private		String			numberAddress;
 	@JsonProperty("city")
 	private		City			city;
-	@JsonProperty("isacitve")
+	@JsonProperty("status")
 	private		boolean			active;
 	@JsonProperty("type")
 	private		String			type;
+	@JsonProperty("date")
+	private		Date			registerDate;
+	@JsonProperty("zipcode")
+	private		String			postalCode;
 	
 	public String getLogin() {
 		return login;
@@ -68,19 +78,19 @@ public class NewUserDTO {
 	}
 
 	public String getDistrictAddr() {
-		return districtAddr;
+		return neighborhoodAddress;
 	}
 
 	public String getStreetNameAddr() {
-		return streetNameAddr;
+		return streetNameAddress;
 	}
 
 	public String getComplementAddr() {
-		return complementAddr;
+		return complementAddress;
 	}
 
 	public String getNumberAddr() {
-		return numberAddr;
+		return numberAddress;
 	}
 
 	public City getCity() {
@@ -95,21 +105,51 @@ public class NewUserDTO {
 		return type;
 	}
 	
+	public String getIe() {
+		return ie;
+	}
+
+	public String getNeighborhoodAddress() {
+		return neighborhoodAddress;
+	}
+
+	public String getStreetNameAddress() {
+		return streetNameAddress;
+	}
+
+	public String getComplementAddress() {
+		return complementAddress;
+	}
+
+	public String getNumberAddress() {
+		return numberAddress;
+	}
+
+	public Date getRegisterDate() {
+		return registerDate;
+	}
+
+	public String getPostalCode() {
+		return postalCode;
+	}
+
 	public User getModel() {
 		User user = new User();
 		user.setActive(active);
 		user.setCity(city);
 		user.setCnpj(cnpj);
-		user.setComplementAddr(complementAddr);
+		user.setComplementAdress(complementAddress);
 		user.setCpf(cpf);
-		user.setDistrictAddr(districtAddr);
+		user.setNeighborhoodAddress(neighborhoodAddress);
 		user.setLogin(login);
 		user.setName(name);
-		user.setNumberAddr(numberAddr);
+		user.setNumberAddress(numberAddress);
 		user.setPassword(password);
 		user.setRg(rg);
-		user.setStreetNameAddr(streetNameAddr);
+		user.setStreetAddress(streetNameAddress);
 		user.setType(type);
+		user.setRegisterDate(registerDate);
+		user.setPostalCode(postalCode);
 		return user;
 	}
 }

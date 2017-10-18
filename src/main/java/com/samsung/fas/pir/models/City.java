@@ -24,4 +24,32 @@ public class City {
 	private		State		state;
 	@OneToMany(mappedBy="city", targetEntity=User.class)
 	private		List<User>		user;
+	
+	public long getId() {
+		return id;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public State getState() {
+		return state;
+	}
+	
+	public List<User> getUser() {
+		return user;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setState(State state) {
+		this.state = state;
+	}
+	
+	public void setUser(List<User> user) {
+		this.user = user;
+	}
 }

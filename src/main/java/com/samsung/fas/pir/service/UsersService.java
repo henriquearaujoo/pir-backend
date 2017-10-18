@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.samsung.fas.pir.dao.UsersDAO;
+import com.samsung.fas.pir.dto.UserDTO;
 import com.samsung.fas.pir.models.User;
 
 @Service
@@ -18,8 +19,8 @@ public class UsersService {
 		udao = dao;
 	}
 	
-	public boolean save(User agent) {
-		return udao.save(agent);
+	public boolean save(UserDTO user) {
+		return udao.save(user.getModel());
 	}
 	
 	public List<User> findAll() {
@@ -28,5 +29,9 @@ public class UsersService {
 	
 	public User findByID(UUID id) {
 		return udao.findByID(id);
+	}
+	
+	public boolean updateUser(UserDTO user, UUID id) {
+		return udao.updateUser(user.getModel(), id);
 	}
 }

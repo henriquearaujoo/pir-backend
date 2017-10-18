@@ -1,5 +1,8 @@
 package com.samsung.fas.pir.models;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -10,148 +13,206 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
 
 @Entity(name="user")
 public class User {
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(name="user_id", unique=true)
+	@Column(name="id", unique=true)
 	private		UUID			id;
-	@Column(name="user_login", unique=true)
+	
+	@Column(name="login", unique=true)
 	private		String			login;
-	@Column(name="user_psswd", length=20)
+	
+	@Column(name="password", length=20)
 	private		String			password;
-	@Column(name="user_name")
+	
+	@Column(name="full_name")
 	private		String			name;
-	@Column(name="user_rg", length=10, unique=true)
+	
+	@Column(name="rg", length=10, unique=true)
 	private		String			rg;
-	@Column(name="user_cpf", length=11, unique=true)
+	
+	@Column(name="cpf", length=11, unique=true)
 	private		String			cpf;
-	@Column(name="user_cnpj", length=14, unique=true)
+	
+	@Column(name="cnpj", length=14, unique=true)
 	private		String			cnpj;
-	@Column(name="user_addr_district")
-	private		String			districtAddr;
-	@Column(name="user_addr_street")
-	private		String			streetNameAddr;
-	@Column(name="user_addr_complement")
-	private		String			complementAddr;
-	@Column(name="user_addr_number")
-	private		String			numberAddr;
+	
+	@Column(name="ie", unique=true)
+	private		String			ie;
+	
+	@Column(name="neighborhood")
+	private		String			neighborhoodAddress;
+	
+	@Column(name="street")
+	private		String			streetAddress;
+	
+	@Column(name="complement")
+	private		String			complementAdress;
+	
+	@Column(name="number")
+	private		String			numberAddress;
+	
+	@Column(name="postal_code")
+	private		String			postalCode;
+	
+	@Column(name="status")
+	private		boolean			active;
+	
+	@Column(name="type", length=10)
+	private		String			type;
+	
+	@Column(name="dt_register")
+	private		Date			registerDate;
+	
 	@ManyToOne
 	@JoinColumn(name="city_id_fk")
 	private		City			city;
-	@Column(name="user_status")
-	private		boolean			active;
-	@Column(name="user_type", length=10)
-	private		String			type;
-	
 	
 	public UUID getId() {
 		return id;
 	}
-	
+
 	public String getLogin() {
 		return login;
 	}
-	
+
 	public String getPassword() {
 		return password;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public String getRg() {
 		return rg;
 	}
-	
+
 	public String getCpf() {
 		return cpf;
 	}
-	
+
 	public String getCnpj() {
 		return cnpj;
 	}
-	
-	public String getDistrictAddr() {
-		return districtAddr;
+
+	public String getIe() {
+		return ie;
 	}
-	
-	public String getStreetNameAddr() {
-		return streetNameAddr;
+
+	public String getNeighborhoodAddress() {
+		return neighborhoodAddress;
 	}
-	
-	public String getComplementAddr() {
-		return complementAddr;
+
+	public String getStreetAddress() {
+		return streetAddress;
 	}
-	
-	public String getNumberAddr() {
-		return numberAddr;
+
+	public String getComplementAdress() {
+		return complementAdress;
 	}
-	
-	public City getCity() {
-		return city;
+
+	public String getNumberAddress() {
+		return numberAddress;
 	}
-	
+
+	public String getPostalCode() {
+		return postalCode;
+	}
+
 	public boolean isActive() {
 		return active;
 	}
-	
+
 	public String getType() {
 		return type;
 	}
-	
+
+	public Date getRegisterDate() {
+		return registerDate;
+	}
+
+	public City getCity() {
+		return city;
+	}
+
 	public void setLogin(String login) {
 		this.login = login;
 	}
-	
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public void setRg(String rg) {
 		this.rg = rg;
 	}
-	
+
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
-	
+
 	public void setCnpj(String cnpj) {
 		this.cnpj = cnpj;
 	}
-	
-	public void setDistrictAddr(String districtAddr) {
-		this.districtAddr = districtAddr;
+
+	public void setIe(String ie) {
+		this.ie = ie;
 	}
-	
-	public void setStreetNameAddr(String streetNameAddr) {
-		this.streetNameAddr = streetNameAddr;
+
+	public void setNeighborhoodAddress(String neighborhoodAddress) {
+		this.neighborhoodAddress = neighborhoodAddress;
 	}
-	
-	public void setComplementAddr(String complementAddr) {
-		this.complementAddr = complementAddr;
+
+	public void setStreetAddress(String streetAddress) {
+		this.streetAddress = streetAddress;
 	}
-	
-	public void setNumberAddr(String numberAddr) {
-		this.numberAddr = numberAddr;
+
+	public void setComplementAdress(String complementAdress) {
+		this.complementAdress = complementAdress;
 	}
-	
+
+	public void setNumberAddress(String numberAddress) {
+		this.numberAddress = numberAddress;
+	}
+
+	public void setPostalCode(String zipCode) {
+		this.postalCode = zipCode;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public void setRegisterDate(Date registerDate) {
+		this.registerDate = registerDate;
+	}
+
 	public void setCity(City city) {
 		this.city = city;
 	}
-	
-	public void setActive(boolean ative) {
-		this.active = ative;
-	}
-	
-	public void setType(String type) {
-		this.type = type;
+
+	public void copyFrom(Object source) {
+		Iterable<Field>		props	= Arrays.asList(this.getClass().getDeclaredFields());
+		BeanWrapper			srcwrap = PropertyAccessorFactory.forBeanPropertyAccess(source);
+		BeanWrapper			trgwrap = PropertyAccessorFactory.forBeanPropertyAccess(this);
+		props.forEach(p -> {
+			if(!p.getName().contentEquals("id")) {
+				trgwrap.setPropertyValue(p.getName(), srcwrap.getPropertyValue(p.getName()));
+			}
+		});
 	}
 }

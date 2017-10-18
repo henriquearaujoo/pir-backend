@@ -15,10 +15,30 @@ public class State {
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	@Column(name="state_id")
 	private		long		id;
+	
 	@Column(name="state_name")
 	private		String		name;
+	
 	@OneToMany(mappedBy="state", targetEntity=City.class)
 	private		List<City>	cities;
 	
+	public long getId() {
+		return id;
+	}
 	
+	public String getName() {
+		return name;
+	}
+	
+	public List<City> getCities() {
+		return cities;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setCities(List<City> cities) {
+		this.cities = cities;
+	}
 }
