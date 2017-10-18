@@ -10,19 +10,29 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity(name="city")
 public class City {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
-	@Column(name="state_id")
+	@Column(name="id")
 	private		long		id;
-	@Column(name="city_name")
+	
+	@Column(name="name")
+	@NotNull(message = "Invalid value for name field (NULL)")
+	@NotEmpty(message = "Invalid value for name field (EMPTY)")
 	private		String		name;
+	
 	@ManyToOne
 	@JoinColumn(name="state_id_fk", nullable=false)
+	@NotNull(message = "Invalid value for state field (NULL)")
+	@NotEmpty(message = "Invalid value for state field (EMPTY)")
 	private		State		state;
-	@OneToMany(mappedBy="city", targetEntity=User.class)
+	
+	@OneToMany(mappedBy="address.city", targetEntity=User.class)
 	private		List<User>		user;
 	
 	public long getId() {

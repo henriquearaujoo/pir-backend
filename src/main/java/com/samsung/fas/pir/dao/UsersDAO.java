@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,17 +30,27 @@ public class UsersDAO {
 	}
 	
 	public User findByID(UUID id) {
+		List<User> users = repository.findById(id);
 		// ID is a primary unique key, so we going to have a list with only one element
-		return repository.findById(id).get(0);
+		return users.isEmpty()? null : users.get(0);
+	}
+	
+	public User findByLogin(String login) {
+		List<User> users = repository.findByLogin(login);
+		// ID is a primary unique key, so we going to have a list with only one element
+		return users.isEmpty()? null : users.get(0);
 	}
 	
 	@Transactional
-	public boolean updateUser(User user, UUID id) {
+	public User updateUser(User user, UUID id) {
+		List<User> users = repository.findById(id);
 		// ID is a primary unique key, so we going to have a list with only one element
-		User toUpdate = repository.findById(id).get(0);
-		toUpdate.copyFrom(user);
-		System.out.println(toUpdate.getPassword());
-		return repository.save(toUpdate) != null;
+		if (!users.isEmpty()) {
+			User toUpdate = repository.findById(id).get(0);
+			toUpdate.copyFrom(user);
+			System.out.println(toUpdate.getAddress().getStreetAddress());
+			return repository.save(toUpdate);
+		}
+		return null;
 	}
-
 }

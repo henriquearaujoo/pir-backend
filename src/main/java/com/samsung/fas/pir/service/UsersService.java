@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class UsersService {
 	}
 	
 	public boolean updateUser(UserDTO user, UUID id) {
-		return udao.updateUser(user.getModel(), id);
+		return udao.updateUser(user.getModel(), id) != null;
+		//return new UserDTO(udao.updateUser(user.getModel(), id));
 	}
 }

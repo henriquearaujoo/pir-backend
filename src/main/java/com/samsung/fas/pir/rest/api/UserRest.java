@@ -34,6 +34,7 @@ public class UserRest {
 		BaseDTO base = new BaseDTO();
 		base.setCode(BaseDTO.Code.SUCCESS);
 		base.setData(uservice.findAll());
+		System.out.println(uservice.findAll().get(0).getAddress());
 		return new ResponseEntity<BaseDTO>(base, HttpStatus.OK);
 	}
 	

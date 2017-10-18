@@ -8,16 +8,26 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity(name="state")
 public class State {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
-	@Column(name="state_id")
+	@Column(name="id")
 	private		long		id;
 	
-	@Column(name="state_name")
+	@Column(name="name")
+	@NotNull(message = "Invalid value for name field (NULL)")
+	@NotEmpty(message = "Invalid value for name field (EMPTY)")
 	private		String		name;
+	
+	@Column(name="fu")
+	@NotNull(message = "Invalid value for f.u. field (NULL)")
+	@NotEmpty(message = "Invalid value for f.u. field (EMPTY)")
+	private		String		abbreviation;
 	
 	@OneToMany(mappedBy="state", targetEntity=City.class)
 	private		List<City>	cities;

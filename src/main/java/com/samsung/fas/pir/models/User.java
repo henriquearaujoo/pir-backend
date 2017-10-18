@@ -1,27 +1,41 @@
 package com.samsung.fas.pir.models;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.PropertyAccessorFactory;
+import org.springframework.beans.BeanWrapperImpl;
+
+import com.samsung.fas.pir.models.user.Address;
+import com.samsung.fas.pir.models.user.Organization;
+import com.samsung.fas.pir.models.user.Person;
 
 @Entity(name="user")
-public class User {
+public class User implements Serializable {
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(name="id", unique=true)
+	@Column(name="id")
 	private		UUID			id;
 	
 	@Column(name="login", unique=true)
@@ -31,48 +45,44 @@ public class User {
 	private		String			password;
 	
 	@Column(name="full_name")
+	@NotNull(message = "Invalid value for name field (NULL)")
+	@NotEmpty(message = "Invalid value for name field (EMPTY)")
 	private		String			name;
 	
-	@Column(name="rg", length=10, unique=true)
-	private		String			rg;
+	@Embedded
+	private		Address			address;
 	
-	@Column(name="cpf", length=11, unique=true)
-	private		String			cpf;
+	@Embedded	
+	private		Person			person;
 	
-	@Column(name="cnpj", length=14, unique=true)
-	private		String			cnpj;
-	
-	@Column(name="ie", unique=true)
-	private		String			ie;
-	
-	@Column(name="neighborhood")
-	private		String			neighborhoodAddress;
-	
-	@Column(name="street")
-	private		String			streetAddress;
-	
-	@Column(name="complement")
-	private		String			complementAdress;
-	
-	@Column(name="number")
-	private		String			numberAddress;
-	
-	@Column(name="postal_code")
-	private		String			postalCode;
+	@Embedded	
+	private		Organization	organization;
 	
 	@Column(name="status")
-	private		boolean			active;
+	@NotNull(message = "Invalid value for status field (NULL)")
+	private		Boolean			active;
 	
 	@Column(name="type", length=10)
+	@NotNull(message = "Invalid value for type field (NULL)")
+	@NotEmpty(message = "Invalid value for type field (EMPTY)")
 	private		String			type;
 	
-	@Column(name="dt_register")
+	@CreationTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="dt_register", updatable=false)
 	private		Date			registerDate;
 	
-	@ManyToOne
-	@JoinColumn(name="city_id_fk")
-	private		City			city;
-	
+	@OneToMany(mappedBy="agent", targetEntity=Child.class)
+	private		List<Child>		children;
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
 	public UUID getId() {
 		return id;
 	}
@@ -89,56 +99,12 @@ public class User {
 		return name;
 	}
 
-	public String getRg() {
-		return rg;
-	}
-
-	public String getCpf() {
-		return cpf;
-	}
-
-	public String getCnpj() {
-		return cnpj;
-	}
-
-	public String getIe() {
-		return ie;
-	}
-
-	public String getNeighborhoodAddress() {
-		return neighborhoodAddress;
-	}
-
-	public String getStreetAddress() {
-		return streetAddress;
-	}
-
-	public String getComplementAdress() {
-		return complementAdress;
-	}
-
-	public String getNumberAddress() {
-		return numberAddress;
-	}
-
-	public String getPostalCode() {
-		return postalCode;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
 	public String getType() {
 		return type;
 	}
 
 	public Date getRegisterDate() {
 		return registerDate;
-	}
-
-	public City getCity() {
-		return city;
 	}
 
 	public void setLogin(String login) {
@@ -152,66 +118,55 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public void setRg(String rg) {
-		this.rg = rg;
-	}
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-
-	public void setCnpj(String cnpj) {
-		this.cnpj = cnpj;
-	}
-
-	public void setIe(String ie) {
-		this.ie = ie;
-	}
-
-	public void setNeighborhoodAddress(String neighborhoodAddress) {
-		this.neighborhoodAddress = neighborhoodAddress;
-	}
-
-	public void setStreetAddress(String streetAddress) {
-		this.streetAddress = streetAddress;
-	}
-
-	public void setComplementAdress(String complementAdress) {
-		this.complementAdress = complementAdress;
-	}
-
-	public void setNumberAddress(String numberAddress) {
-		this.numberAddress = numberAddress;
-	}
-
-	public void setPostalCode(String zipCode) {
-		this.postalCode = zipCode;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
+	
 	public void setType(String type) {
 		this.type = type;
 	}
 
-	public void setRegisterDate(Date registerDate) {
-		this.registerDate = registerDate;
+	public List<Child> getChildren() {
+		return children;
 	}
 
-	public void setCity(City city) {
-		this.city = city;
+	public void setChildren(List<Child> children) {
+		this.children = children;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public Person getPerson() {
+		return person;
+	}
+
+	public Organization getOrganization() {
+		return organization;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
+	}
+
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
 	}
 
 	public void copyFrom(Object source) {
 		Iterable<Field>		props	= Arrays.asList(this.getClass().getDeclaredFields());
-		BeanWrapper			srcwrap = PropertyAccessorFactory.forBeanPropertyAccess(source);
-		BeanWrapper			trgwrap = PropertyAccessorFactory.forBeanPropertyAccess(this);
+		BeanWrapper			srcwrap = new BeanWrapperImpl(source);
+		BeanWrapper			trgwrap = new BeanWrapperImpl(this);
+		
 		props.forEach(p -> {
-			if(!p.getName().contentEquals("id")) {
-				trgwrap.setPropertyValue(p.getName(), srcwrap.getPropertyValue(p.getName()));
+			try {
+				if (srcwrap.getPropertyValue(p.getName()) != null) {
+					trgwrap.setPropertyValue(p.getName(), srcwrap.getPropertyValue(p.getName()));
+				}
+			} catch (Exception e) {
+				LoggerFactory.getLogger(this.getClass()).error(e.getMessage());;
 			}
 		});
 	}

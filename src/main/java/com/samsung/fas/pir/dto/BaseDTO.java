@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /*
  * WebAPi Response Class
- * Any response generated will use this class
+ * Any response generated must use this container class
  */
 public class BaseDTO {
 	@JsonProperty("code")
@@ -14,8 +14,9 @@ public class BaseDTO {
 	
 	public enum Code {
 		SUCCESS,
-		FAILURE,
-		ERROR
+		ERROR,
+		LOGIN_SUCCESS,
+		LOGIN_FAILURE,
 	}
 
 	public BaseDTO.Code getCode() {

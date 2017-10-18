@@ -3,9 +3,14 @@ package com.samsung.fas.pir.dto;
 import java.util.Date;
 import java.util.UUID;
 
+import org.springframework.ui.ModelMap;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.models.City;
 import com.samsung.fas.pir.models.User;
+import com.samsung.fas.pir.models.user.Address;
+import com.samsung.fas.pir.models.user.Organization;
+import com.samsung.fas.pir.models.user.Person;
 
 /*
  * For create and update an user
@@ -41,13 +46,21 @@ public class UserDTO {
 	@JsonProperty("city")
 	private		City			city;
 	@JsonProperty("status")
-	private		boolean			active;
+	private		Boolean			active;
 	@JsonProperty("type")
 	private		String			type;
 	@JsonProperty("date")
 	private		Date			registerDate;
 	@JsonProperty("zipcode")
 	private		String			postalCode;
+	
+//	public UserDTO(User m) {
+//		id				= m.getId();
+//		login			= m.getLogin();
+//		password		= m.getPassword();
+//		name			= m.getName();
+//	}
+	
 	
 	public String getLogin() {
 		return login;
@@ -97,7 +110,7 @@ public class UserDTO {
 		return city;
 	}
 
-	public boolean isActive() {
+	public Boolean isActive() {
 		return active;
 	}
 
@@ -134,22 +147,39 @@ public class UserDTO {
 	}
 
 	public User getModel() {
-		User user = new User();
+		User 			user 			= new User();
+		Address			addr			= new Address();
+		Organization	org				= new Organization();
+		Person			person			= new Person();
+		
+		// User relative
 		user.setActive(active);
-		user.setCity(city);
-		user.setCnpj(cnpj);
-		user.setComplementAdress(complementAddress);
-		user.setCpf(cpf);
-		user.setNeighborhoodAddress(neighborhoodAddress);
 		user.setLogin(login);
 		user.setName(name);
-		user.setNumberAddress(numberAddress);
 		user.setPassword(password);
-		user.setRg(rg);
-		user.setStreetAddress(streetNameAddress);
 		user.setType(type);
-		user.setRegisterDate(registerDate);
-		user.setPostalCode(postalCode);
+		
+		// Person relative
+		person.setCpf(cpf);
+		person.setRg(rg);
+		
+		// ONG relative
+		org.setCnpj(cnpj);
+		org.setIe(ie);
+		
+		// Address relative
+		addr.setCity(city);
+		addr.setComplementAdress(complementAddress);
+		addr.setNeighborhoodAddress(neighborhoodAddress);
+		addr.setNumberAddress(numberAddress);
+		addr.setPostalCode(postalCode);
+		addr.setStreetAddress(streetNameAddress);
+		
+		// Set user attrs
+		user.setAddress(addr);
+		user.setOrganization(org);
+		user.setPerson(person);
+		
 		return user;
 	}
 }
