@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +20,8 @@ public class UsersDAO {
 		this.repository = repository;
 	}
 	
-	public boolean save(User agent) {
-		return repository.save(agent) != null;
+	public User save(User user) {
+		return repository.save(user);
 	}
 	
 	public List<User> findAll() {
@@ -41,6 +40,26 @@ public class UsersDAO {
 		return users.isEmpty()? null : users.get(0);
 	}
 	
+	public User findByCpf(String cpf) {
+		List<User> users = repository.findByPersonCpf(cpf);
+		// ID is a primary unique key, so we going to have a list with only one element
+		return users.isEmpty()? null : users.get(0);
+	}
+	
+	public List<User> findByRg(String rg) {
+		return repository.findByPersonRg(rg);
+	}
+	
+	public User findByCnpj(String cnpj) {
+		List<User> users = repository.findByOrganizationCnpj(cnpj);
+		// ID is a primary unique key, so we going to have a list with only one element
+		return users.isEmpty()? null : users.get(0);
+	}
+	
+	public List<User> findByIe(String ie) {
+		return repository.findByOrganizationIe(ie);
+	}
+
 	@Transactional
 	public User updateUser(User user, UUID id) {
 		List<User> users = repository.findById(id);
@@ -48,7 +67,6 @@ public class UsersDAO {
 		if (!users.isEmpty()) {
 			User toUpdate = repository.findById(id).get(0);
 			toUpdate.copyFrom(user);
-			System.out.println(toUpdate.getAddress().getStreetAddress());
 			return repository.save(toUpdate);
 		}
 		return null;

@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.models.user;
+package com.samsung.fas.pir.models.user.embedded;
 
 import java.io.Serializable;
 
@@ -11,6 +11,8 @@ import com.samsung.fas.pir.models.City;
 
 @Embeddable
 public class Address implements Serializable {
+	private static final long serialVersionUID = 2409021773982957683L;
+
 	@Column(name="neighborhood")
 	private		String			neighborhoodAddress;
 	
@@ -23,13 +25,11 @@ public class Address implements Serializable {
 	@Column(name="number")
 	private		String			numberAddress;
 	
-	@Column(name="postal_code")
+	@Column(name="postal_code", length=64)
 	private		String			postalCode;
 	
 	@ManyToOne
 	@JoinColumn(name="city_id_fk")
-//	@NotNull(message = "Invalid value for city field (NULL)")
-//	@NotEmpty(message = "Invalid value for city field (EMPTY)")
 	private		City			city;
 
 	public String getNeighborhoodAddress() {

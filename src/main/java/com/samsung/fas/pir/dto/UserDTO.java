@@ -3,183 +3,151 @@ package com.samsung.fas.pir.dto;
 import java.util.Date;
 import java.util.UUID;
 
-import org.springframework.ui.ModelMap;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.models.City;
+import com.samsung.fas.pir.enums.UserType;
 import com.samsung.fas.pir.models.User;
-import com.samsung.fas.pir.models.user.Address;
-import com.samsung.fas.pir.models.user.Organization;
-import com.samsung.fas.pir.models.user.Person;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /*
- * For create and update an user
+ * Use to create or update an user on server side
+ * Missing, blank and null fields validation are
+ * made inside this class when put together with
+ * @Valid annotation
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
-	// Must
-	@JsonProperty("login")
-	private		String			login;
-	@JsonProperty("password")
-	private		String			password;
-	
-	// Optional
+	@Getter
 	@JsonProperty("id")
 	private		UUID			id;
-	@JsonProperty("name")
+	
+	@Setter
+	@Getter
+	@JsonProperty(value="name")
+	@NotEmpty(message="user.name.missing")
+	@NotBlank(message="user.name.blank")
 	private		String			name;
-	@JsonProperty("rg")
-	private		String			rg;
-	@JsonProperty("cpf")
-	private		String			cpf;
-	@JsonProperty("cnpj")
-	private		String			cnpj;
-	@JsonProperty("ie")
-	private		String			ie;
-	@JsonProperty("neighborhood")
-	private		String			neighborhoodAddress;
-	@JsonProperty("street")
-	private		String			streetNameAddress;
-	@JsonProperty("complement")
-	private		String			complementAddress;
-	@JsonProperty("number")
-	private		String			numberAddress;
-	@JsonProperty("city")
-	private		City			city;
+
+	@Setter
+	@Getter
+	@JsonProperty("login")
+	@NotEmpty(message="user.login.empty")
+	@NotBlank(message="user.login.blank")
+	private		String			login;
+	
+	@Setter
+	@Getter
+	@JsonProperty("password")
+	@Size(min=8, message="user.password.short")
+	private		String			password;
+
+	@Setter
+	@Getter
 	@JsonProperty("status")
 	private		Boolean			active;
+
+	@Setter
+	@Getter
 	@JsonProperty("type")
-	private		String			type;
+	private		UserType		type;
+	
+	@Setter
+	@Getter
 	@JsonProperty("date")
 	private		Date			registerDate;
-	@JsonProperty("zipcode")
-	private		String			postalCode;
 	
-//	public UserDTO(User m) {
-//		id				= m.getId();
-//		login			= m.getLogin();
-//		password		= m.getPassword();
-//		name			= m.getName();
-//	}
+	// Other properties
+	@Setter
+	@Getter
+	@JsonProperty("address")
+	@NotNull(message="user.address.missing")
+	@Valid
+	private		AddressDTO		addressDTO;
 	
+	@Setter
+	@Getter
+	@JsonProperty("person")
+	@Valid
+	private		PersonDTO		personDTO;
 	
-	public String getLogin() {
-		return login;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public UUID getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getRg() {
-		return rg;
-	}
-
-	public String getCpf() {
-		return cpf;
-	}
-
-	public String getCnpj() {
-		return cnpj;
-	}
-
-	public String getDistrictAddr() {
-		return neighborhoodAddress;
-	}
-
-	public String getStreetNameAddr() {
-		return streetNameAddress;
-	}
-
-	public String getComplementAddr() {
-		return complementAddress;
-	}
-
-	public String getNumberAddr() {
-		return numberAddress;
-	}
-
-	public City getCity() {
-		return city;
-	}
-
-	public Boolean isActive() {
-		return active;
-	}
-
-	public String getType() {
-		return type;
-	}
+	@Setter
+	@Getter
+	@JsonProperty("org")
+	@Valid
+	private		OrganizationDTO	orgDTO;
 	
-	public String getIe() {
-		return ie;
+	private UserDTO(User entity) {
+		id				= entity.getId();
+		name			= entity.getName();
+		login			= entity.getLogin();
+		type			= entity.getType();
+		active			= entity.getActive();
+		registerDate	= entity.getRegisterDate();
+		addressDTO		= AddressDTO.toDTO(entity.getAddress());
+		personDTO		= PersonDTO.toDTO(entity.getPerson());
+		orgDTO			= OrganizationDTO.toDTO(entity.getOrganization());
+	}
+ 	
+	public UserDTO() {
+		// JSON
 	}
 
-	public String getNeighborhoodAddress() {
-		return neighborhoodAddress;
-	}
-
-	public String getStreetNameAddress() {
-		return streetNameAddress;
-	}
-
-	public String getComplementAddress() {
-		return complementAddress;
-	}
-
-	public String getNumberAddress() {
-		return numberAddress;
-	}
-
-	public Date getRegisterDate() {
-		return registerDate;
-	}
-
-	public String getPostalCode() {
-		return postalCode;
-	}
-
+	@JsonIgnore
 	public User getModel() {
 		User 			user 			= new User();
-		Address			addr			= new Address();
-		Organization	org				= new Organization();
-		Person			person			= new Person();
-		
-		// User relative
-		user.setActive(active);
+		user.setActive(active == null? false : active);
 		user.setLogin(login);
 		user.setName(name);
 		user.setPassword(password);
 		user.setType(type);
 		
-		// Person relative
-		person.setCpf(cpf);
-		person.setRg(rg);
+		try {
+			user.setAddress(addressDTO.getModel());
+		} catch (Exception e) {
+			LoggerFactory.getLogger(this.getClass()).error(e.getMessage());
+		}
 		
-		// ONG relative
-		org.setCnpj(cnpj);
-		org.setIe(ie);
-		
-		// Address relative
-		addr.setCity(city);
-		addr.setComplementAdress(complementAddress);
-		addr.setNeighborhoodAddress(neighborhoodAddress);
-		addr.setNumberAddress(numberAddress);
-		addr.setPostalCode(postalCode);
-		addr.setStreetAddress(streetNameAddress);
-		
-		// Set user attrs
-		user.setAddress(addr);
-		user.setOrganization(org);
-		user.setPerson(person);
-		
+		try {
+			user.setOrganization(orgDTO.getModel());
+		} catch (Exception e) {
+			LoggerFactory.getLogger(this.getClass()).error(e.getMessage());
+			try {
+				user.setPerson(personDTO.getModel());
+			} catch (Exception ex) {
+				LoggerFactory.getLogger(this.getClass()).error(e.getMessage());
+			}
+		}
 		return user;
+	}
+	
+	public static User toEntity(UserDTO dto) {
+		if (dto != null) {
+			User 			user 			= new User();
+			user.setActive(dto.active);
+			user.setLogin(dto.login);
+			user.setName(dto.name);
+			user.setPassword(dto.password);
+			user.setType(dto.type);
+			return user;
+		}
+		return null;
+	}
+	
+	public static UserDTO toDTO(User entity) {
+		if (entity != null) {
+			return new UserDTO(entity);
+		}
+		return null;
 	}
 }
