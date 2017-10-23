@@ -8,47 +8,31 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity(name="state")
 public class State {
+	@Getter
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
-	@Column(name="id")
+	@Column(name="id", updatable=false)
 	private		long		id;
 	
-	@Column(name="name")
-	@NotNull(message = "Invalid value for name field (NULL)")
-	@NotEmpty(message = "Invalid value for name field (EMPTY)")
+	@Getter
+	@Setter
+	@Column(name="name", nullable=false, unique=true)
 	private		String		name;
 	
-	@Column(name="fu")
-	@NotNull(message = "Invalid value for f.u. field (NULL)")
-	@NotEmpty(message = "Invalid value for f.u. field (EMPTY)")
+	@Getter
+	@Setter
+	@Column(name="uf_abbr", nullable=false, unique=true)
 	private		String		abbreviation;
 	
+	@Getter
+	@Setter
 	@OneToMany(mappedBy="state", targetEntity=City.class)
 	private		List<City>	cities;
 	
-	public long getId() {
-		return id;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public List<City> getCities() {
-		return cities;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public void setCities(List<City> cities) {
-		this.cities = cities;
-	}
 }

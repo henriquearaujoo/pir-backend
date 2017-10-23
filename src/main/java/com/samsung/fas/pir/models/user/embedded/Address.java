@@ -13,23 +13,23 @@ import com.samsung.fas.pir.models.City;
 public class Address implements Serializable {
 	private static final long serialVersionUID = 2409021773982957683L;
 
-	@Column(name="neighborhood")
+	@Column(name="neighborhood", nullable=false)
 	private		String			neighborhoodAddress;
 	
-	@Column(name="street")
+	@Column(name="street", nullable=false)
 	private		String			streetAddress;
 	
 	@Column(name="complement")
 	private		String			complementAdress;
 	
-	@Column(name="number")
+	@Column(name="number", nullable=false)
 	private		String			numberAddress;
 	
-	@Column(name="postal_code", length=64)
+	@Column(name="postal_code", length=32, nullable=false)
 	private		String			postalCode;
 	
 	@ManyToOne
-	@JoinColumn(name="city_id_fk")
+	@JoinColumn(name="city_id_fk", nullable=false)
 	private		City			city;
 
 	public String getNeighborhoodAddress() {

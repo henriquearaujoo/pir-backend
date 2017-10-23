@@ -60,6 +60,7 @@ public class UserDTO {
 	@Setter
 	@Getter
 	@JsonProperty("type")
+	@NotNull(message="user.type.null")
 	private		UserType		type;
 	
 	@Setter

@@ -11,7 +11,6 @@ import java.lang.String;
 
 @Repository
 public interface IUsersRepository extends JpaRepository<User, UUID> {
-	List<User> findById(UUID id);
 	List<User> findByLogin(String login);
 	List<User> findByPersonCpf(String cpf);
 	List<User> findByPersonRg(String rg);

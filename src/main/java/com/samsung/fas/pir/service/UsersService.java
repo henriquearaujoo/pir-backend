@@ -4,81 +4,97 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.samsung.fas.pir.dao.CityDAO;
 import com.samsung.fas.pir.dao.UsersDAO;
 import com.samsung.fas.pir.dto.UserDTO;
 import com.samsung.fas.pir.enums.UserType;
+import com.samsung.fas.pir.models.City;
 import com.samsung.fas.pir.models.User;
 
 @Service
 public class UsersService {
 	@Autowired
-	private UsersDAO udao;
+	private 	UsersDAO 	udao;
+	@Autowired
+	private		CityDAO		cdao;
 	
-	public UserDTO save(UserDTO user) {
-		// Type mismatch
-		if(user.getPersonDTO() != null && user.getType() == UserType.PJUR)
-			throw new RuntimeException("user.type.organization.type.mismatch");
+	public void save(UserDTO user) {
 		
-		if (user.getOrgDTO() != null && user.getType() == UserType.PFIS)
-			throw new RuntimeException("user.type.person.type.mismatch");
-		
-		// Details missing
-		if(user.getPersonDTO() == null && user.getType() == UserType.PFIS)
-			throw new RuntimeException("user.type.person.details.missing");
-		
-		if(user.getOrgDTO() == null && user.getType() == UserType.PJUR)
-			throw new RuntimeException("user.type.organization.details.missing");
-		
-		// Valid CPF & CNPJ
-		if(user.getPersonDTO() != null && !CNP.isValidCPF(user.getPersonDTO().getCpf())) {
-			throw new RuntimeException("user.type.person.cpf.invalid");
-		}
-		
-		if(user.getOrgDTO() != null && !CNP.isValidCNPJ(user.getOrgDTO().getCnpj())) {
-			throw new RuntimeException("user.type.organization.cnpj.invalid");
-		}
-		
-		// Primary keys already exists
-		if(udao.findByLogin(user.getLogin()) != null)
+		// Login already exists
+		if(udao.findOneByLogin(user.getLogin()) != null)
 			throw new RuntimeException("user.login.exists");
 		
-		if ((user.getType() == UserType.PFIS) && (udao.findByCpf(user.getPersonDTO().getCpf()) != null)) {
-			throw new RuntimeException("user.type.person.cpf.exists");
-		} else if (user.getType() == UserType.PJUR && udao.findByCnpj(user.getOrgDTO().getCnpj()) != null) {
-			throw new RuntimeException("user.type.organization.cnpj.exists");
+		if (user.getType() == UserType.PFIS) {
+			if (user.getOrgDTO() != null)
+				throw new RuntimeException("user.type.pfis.data.mismatch");
+			
+			if (user.getPersonDTO() == null)
+				throw new RuntimeException("user.type.pfis.data.missing");
+			
+			// Validate CPF
+			String 	ucpf 	= user.getPersonDTO().getCpf();
+			if(!CNP.isValidCPF(ucpf)) 
+				throw new RuntimeException("user.type.pfis.cpf.invalid");
+			
+			// Verify if CPF exists in database
+			if (udao.findOneByCpf(ucpf) != null)
+				throw new RuntimeException("user.type.pfis.cpf.exists");
+		}
+		
+		if (user.getType() == UserType.PJUR) {
+			if (user.getPersonDTO() != null)
+				throw new RuntimeException("user.type.pjur.data.mismatch");
+			
+			if (user.getOrgDTO() == null)
+				throw new RuntimeException("user.type.pjur.data.missing");
+			
+			// Validate CNPJ
+			String 	ucnpj 	= user.getOrgDTO().getCnpj();
+			if(!CNP.isValidCPF(ucnpj)) 
+				throw new RuntimeException("user.type.pjur.cnpj.invalid");
+			
+			// Verify if CPF exists in database
+			if (udao.findOneByCnpj(ucnpj) != null)
+				throw new RuntimeException("user.type.pjur.cnpj.exists");
 		}
 		
 		// Password validation
-		if (user.getPassword() == null && user.getPassword().replaceAll("\\s+","").isEmpty()) {
+		if (user.getPassword() == null) {
 			throw new RuntimeException("user.login.password.empty");
 		}
 		
+		if (user.getPassword().replaceAll("\\s+","").isEmpty()) {
+			throw new RuntimeException("user.login.password.empty");
+		}
+		
+		// City Validation
+		City city = cdao.findCityByID(user.getAddressDTO().getCityId());
+		if (city == null) 
+			throw new RuntimeException("user.address.city.invalid");
+		
 		// All above conditions are satisfied
-		return UserDTO.toDTO(udao.save(user.getModel()));
+		User model = user.getModel();
+		model.getAddress().setCity(city);
+		udao.save(model);
 	}
 	
-	public UserDTO updateUser(UserDTO user) {
+	public void updateUser(UserDTO user) {
 		User model = udao.findByID(user.getId());
 		
 		// Verify if user exists
 		if (model == null) 
 			throw new RuntimeException("user.id.notfound");
 		
-		// Verify if is PJUR and PJUR data is missing
-		if(user.getPersonDTO() != null && user.getType() == UserType.PJUR)
-			throw new RuntimeException("user.type.organization.type.mismatch");
-		
-		// Verify if is PFIS and PFIS data is missing
-		if (user.getOrgDTO() != null && user.getType() == UserType.PFIS)
-			throw new RuntimeException("user.type.person.type.mismatch");
-		
 		// If PFIS
 		if (user.getType() == UserType.PFIS) {
+			
+			// Verify type mismatch
+			if (user.getOrgDTO() != null) {
+				throw new RuntimeException("user.type.person.data.mismatch");
+			}
 			
 			// Verify if PFIS data is missing
 			if(user.getPersonDTO() == null)
@@ -92,18 +108,23 @@ public class UsersService {
 				throw new RuntimeException("user.type.person.cpf.invalid");
 			
 			// Verify if CPF exists in database
-			if (!mcpf.equalsIgnoreCase(ucpf) && udao.findByCpf(ucpf) != null)
+			if (!mcpf.equalsIgnoreCase(ucpf) && udao.findOneByCpf(ucpf) != null)
 				throw new RuntimeException("user.type.person.cpf.exists");
 		}
 		
 		// If PJUR
 		if (user.getType() == UserType.PJUR) {
 			
+			// Verify type mismatch
+			if (user.getPersonDTO() != null) {
+				throw new RuntimeException("user.type.organization.data.mismatch");
+			}
+			
 			// Verify PJUR data is missing
 			if(user.getOrgDTO() == null)
 				throw new RuntimeException("user.type.organization.data.missing");
 			
-			String 	mcnpj 	= model.getOrganization() == null? "" : model.getOrganization().getCnpj();
+			String 	mcnpj 	= model.getOrganization().getCnpj() == null? "" : model.getOrganization().getCnpj();
 			String 	ucnpj 	= user.getOrgDTO().getCnpj();
 			
 			// Validate CNPJ
@@ -111,13 +132,13 @@ public class UsersService {
 				throw new RuntimeException("user.type.organization.cnpj.invalid");
 			
 			// Verify if CNPJ exists in database
-			if (!mcnpj.equalsIgnoreCase(ucnpj) && udao.findByCnpj(ucnpj) != null)
+			if (!mcnpj.equalsIgnoreCase(ucnpj) && udao.findOneByCnpj(ucnpj) != null)
 				throw new RuntimeException("user.type.organization.cnpj.exists");
 			
 		}
 		
 		// Verify if login already exists
-		if(!model.getLogin().equalsIgnoreCase(user.getLogin()) && udao.findByLogin(user.getLogin()) != null)
+		if(!model.getLogin().equalsIgnoreCase(user.getLogin()) && udao.findOneByLogin(user.getLogin()) != null)
 			throw new RuntimeException("user.login.exists");
 		
 		// Password validation
@@ -128,8 +149,16 @@ public class UsersService {
 		if (user.getPassword().isEmpty()) {
 			user.setPassword(model.getPassword());
 		}
+		
+		// City Validation
+		City city = cdao.findCityByID(user.getAddressDTO().getCityId());
+		if (city == null) 
+			throw new RuntimeException("user.address.city.invalid");
 
-		return UserDTO.toDTO(udao.updateUser(user.getModel(), user.getId()));
+		// All above conditions are satisfied
+		User toUpdate = user.getModel();
+		toUpdate.getAddress().setCity(city);
+		udao.updateUser(toUpdate, user.getId());
 	}
 	
 	public List<UserDTO> findAll() {

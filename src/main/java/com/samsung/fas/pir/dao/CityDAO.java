@@ -22,11 +22,14 @@ public class CityDAO {
 	}
 	
 	public List<City> findCitiesByStateID(long stateID) {
-		return repository.findByStateID(stateID);
+		return repository.findByStateId(stateID);
+	}
+	
+	public City findCityByID(long cityID) {
+		return repository.findOne(cityID);
 	}
 	
 	public void deleteByID(long cityID) {
 		repository.delete(cityID);
 	}
-
 }

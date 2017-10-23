@@ -9,7 +9,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.models.City;
 import com.samsung.fas.pir.models.user.embedded.Address;
 
 import lombok.Getter;
@@ -43,8 +42,8 @@ public class AddressDTO {
 	
 	@Getter
 	@JsonProperty("city")
-	// TODO: City table
-	private		City			city;
+	@NotNull(message="user.address.city.missing")
+	private		Long			cityId;
 	
 	@Getter
 	@JsonProperty("postalcode")
@@ -56,7 +55,6 @@ public class AddressDTO {
 	
 	private AddressDTO(Address embedded) {
 		streetNameAddress		= embedded.getStreetAddress();
-		city					= embedded.getCity();
 		complementAddress		= embedded.getComplementAdress();
 		numberAddress			= embedded.getNumberAddress();
 		postalCode				= embedded.getPostalCode();
@@ -70,7 +68,6 @@ public class AddressDTO {
 	@JsonIgnore
 	public Address getModel() {
 		Address			addr			= new Address();
-		addr.setCity(city);
 		addr.setComplementAdress(complementAddress);
 		addr.setNeighborhoodAddress(neighborhoodAddress);
 		addr.setNumberAddress(numberAddress);
@@ -82,7 +79,6 @@ public class AddressDTO {
 	public static Address toModel(AddressDTO dto) {
 		if (dto != null) {
 			Address			addr			= new Address();
-			addr.setCity(dto.city);
 			addr.setComplementAdress(dto.complementAddress);
 			addr.setNeighborhoodAddress(dto.neighborhoodAddress);
 			addr.setNumberAddress(dto.numberAddress);

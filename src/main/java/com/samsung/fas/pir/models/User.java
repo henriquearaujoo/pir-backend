@@ -15,7 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -39,33 +38,32 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(name="id", updatable=false)
+	@Column(name="id", updatable=false, nullable=false)
 	private		UUID			id;
 	
 	@Getter
 	@Setter
-	@Column(name="login", unique=true)
+	@Column(name="login", unique=true, nullable=false)
 	private		String			login;
 	
 	@Getter
 	@Setter
-	@Column(name="password")
-	@Size(min=8)
+	@Column(name="password", nullable=false)
 	private		String			password;
 	
 	@Getter
 	@Setter
-	@Column(name="full_name")
+	@Column(name="full_name", nullable=false)
 	private		String			name;
 	
 	@Getter
 	@Setter
-	@Column(name="status")
+	@Column(name="status", nullable=false)
 	private		Boolean			active;
 	
 	@Getter
 	@Setter
-	@Column(name="type")
+	@Column(name="type", nullable=false)
 	private		UserType		type;
 	
 	@Getter
@@ -86,7 +84,7 @@ public class User implements Serializable {
 	@Getter
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="dt_register", updatable=false)
+	@Column(name="dt_register", updatable=false, nullable=false)
 	private		Date			registerDate;
 	
 	@Getter

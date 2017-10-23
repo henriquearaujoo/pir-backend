@@ -29,18 +29,16 @@ public class UsersDAO {
 	}
 	
 	public User findByID(UUID id) {
-		List<User> users = repository.findById(id);
-		// ID is a primary unique key, so we going to have a list with only one element
-		return users.isEmpty()? null : users.get(0);
+		return repository.findOne(id);
 	}
 	
-	public User findByLogin(String login) {
+	public User findOneByLogin(String login) {
 		List<User> users = repository.findByLogin(login);
 		// ID is a primary unique key, so we going to have a list with only one element
 		return users.isEmpty()? null : users.get(0);
 	}
 	
-	public User findByCpf(String cpf) {
+	public User findOneByCpf(String cpf) {
 		List<User> users = repository.findByPersonCpf(cpf);
 		// ID is a primary unique key, so we going to have a list with only one element
 		return users.isEmpty()? null : users.get(0);
@@ -50,7 +48,7 @@ public class UsersDAO {
 		return repository.findByPersonRg(rg);
 	}
 	
-	public User findByCnpj(String cnpj) {
+	public User findOneByCnpj(String cnpj) {
 		List<User> users = repository.findByOrganizationCnpj(cnpj);
 		// ID is a primary unique key, so we going to have a list with only one element
 		return users.isEmpty()? null : users.get(0);
@@ -62,10 +60,9 @@ public class UsersDAO {
 
 	@Transactional
 	public User updateUser(User user, UUID id) {
-		List<User> users = repository.findById(id);
+		User toUpdate = repository.findOne(id);
 		// ID is a primary unique key, so we going to have a list with only one element
-		if (!users.isEmpty()) {
-			User toUpdate = repository.findById(id).get(0);
+		if (toUpdate != null) {
 			toUpdate.copyFrom(user);
 			return repository.save(toUpdate);
 		}

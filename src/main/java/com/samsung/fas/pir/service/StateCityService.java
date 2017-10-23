@@ -1,43 +1,32 @@
 package com.samsung.fas.pir.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.samsung.fas.pir.dao.CityDAO;
 import com.samsung.fas.pir.dao.StateDAO;
-import com.samsung.fas.pir.models.City;
-import com.samsung.fas.pir.models.State;
+import com.samsung.fas.pir.dto.CityDTO;
+import com.samsung.fas.pir.dto.StateDTO;
 
 @Service
 public class StateCityService {
-	private		CityDAO 	citydao;
-	private 	StateDAO 	statedao;
+	private		CityDAO 	cdao;
+	private 	StateDAO 	sdao;
 	
 	@Autowired
 	public StateCityService(StateDAO sdao, CityDAO cdao) {
-		this.citydao			= cdao;
-		this.statedao			= sdao;
+		this.cdao			= cdao;
+		this.sdao			= sdao;
 	}
 	
-	public List<City> findCitiesByStateID(long stateID) {
-		return citydao.findCitiesByStateID(stateID);
+	public List<StateDTO> findAllStates() {
+		return sdao.findAll().stream().map(m -> StateDTO.toDTO(m)).collect(Collectors.toList());
 	}
 	
-	public boolean saveCity(City city) {
-		return citydao.save(city);
-	}
-	
-	public void deleteCityByID(long id) {
-		citydao.deleteByID(id);
-	}
-	
-	public List<State> findAllStates() {
-		return statedao.findAll();
-	}
-	
-	public boolean saveState(State state) {
-		return statedao.save(state);
+	public List<CityDTO> findAllCitiesByState(long id) {
+		return cdao.findCitiesByStateID(id).stream().map(m -> CityDTO.toDTO(m)).collect(Collectors.toList());
 	}
 }
