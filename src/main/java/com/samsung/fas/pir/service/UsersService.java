@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.samsung.fas.pir.dao.CityDAO;
+import com.samsung.fas.pir.dao.ProfileDAO;
 import com.samsung.fas.pir.dao.UsersDAO;
 import com.samsung.fas.pir.dto.UserDTO;
 import com.samsung.fas.pir.enums.UserType;
 import com.samsung.fas.pir.models.City;
+import com.samsung.fas.pir.models.Profile;
 import com.samsung.fas.pir.models.User;
 
 @Service
@@ -20,9 +22,10 @@ public class UsersService {
 	private 	UsersDAO 	udao;
 	@Autowired
 	private		CityDAO		cdao;
+	@Autowired
+	private		ProfileDAO	pdao;
 	
 	public void save(UserDTO user) {
-		
 		// Login already exists
 		if(udao.findOneByLogin(user.getLogin()) != null)
 			throw new RuntimeException("user.login.exists");
@@ -75,9 +78,15 @@ public class UsersService {
 		if (city == null) 
 			throw new RuntimeException("user.address.city.invalid");
 		
+		// Profile Validation
+		Profile profile = pdao.findOne(user.getProfile());
+		if (profile == null)
+			throw new RuntimeException("user.profile.notfound");
+		
 		// All above conditions are satisfied
 		User model = user.getModel();
 		model.getAddress().setCity(city);
+		model.setProfile(profile);
 		udao.save(model);
 	}
 	
@@ -154,10 +163,16 @@ public class UsersService {
 		City city = cdao.findCityByID(user.getAddressDTO().getCityId());
 		if (city == null) 
 			throw new RuntimeException("user.address.city.invalid");
+		
+		// Profile Validation
+		Profile profile = pdao.findOne(user.getProfile());
+		if (profile == null)
+			throw new RuntimeException("user.profile.notfound");
 
 		// All above conditions are satisfied
 		User toUpdate = user.getModel();
 		toUpdate.getAddress().setCity(city);
+		toUpdate.setProfile(profile);
 		udao.update(toUpdate, user.getId());
 	}
 	

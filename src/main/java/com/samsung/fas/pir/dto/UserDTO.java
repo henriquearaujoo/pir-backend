@@ -65,6 +65,12 @@ public class UserDTO {
 	
 	@Setter
 	@Getter
+	@JsonProperty("profile")
+	@NotNull(message="user.profile.null")
+	private		UUID		profile;
+	
+	@Setter
+	@Getter
 	@JsonProperty("date")
 	private		Date			registerDate;
 	
@@ -95,6 +101,7 @@ public class UserDTO {
 		type			= entity.getType();
 		active			= entity.isActive();
 		registerDate	= entity.getRegisterDate();
+		profile			= entity.getProfile().getId();
 		addressDTO		= AddressDTO.toDTO(entity.getAddress());
 		personDTO		= PersonDTO.toDTO(entity.getPerson());
 		orgDTO			= OrganizationDTO.toDTO(entity.getOrganization());

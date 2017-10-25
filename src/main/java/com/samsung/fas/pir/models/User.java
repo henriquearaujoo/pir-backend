@@ -88,7 +88,7 @@ public class User implements Serializable {
 	@Getter
 	@Setter
 	@ManyToOne
-	@JoinColumn(name="profile_id_fk")
+	@JoinColumn(name="profile_id_fk", nullable=false)
 	private		Profile			profile;
 	
 	@Getter
