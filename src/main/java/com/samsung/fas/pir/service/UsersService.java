@@ -90,7 +90,7 @@ public class UsersService {
 		udao.save(model);
 	}
 	
-	public void updateUser(UserDTO user) {
+	public void update(UserDTO user) {
 		User model = udao.findOne(user.getId());
 		
 		// Verify if user exists

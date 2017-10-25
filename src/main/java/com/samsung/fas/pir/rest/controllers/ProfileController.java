@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.samsung.fas.pir.dto.ProfileDTO;
-import com.samsung.fas.pir.dto.UserDTO;
 import com.samsung.fas.pir.service.ProfileService;
 
 @Controller
@@ -30,25 +29,25 @@ public class ProfileController {
 	@Autowired
 	private ProfileService pservice;
 
-	// Get all users (GET)
+	// Get all (GET)
 	@RequestMapping(method=RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<ProfileDTO>> getAllUsers() {
+	public ResponseEntity<List<ProfileDTO>> getAll() {
 		return ResponseEntity.ok(pservice.findAll());
 	}
 	
-	// Create new user (POST)
+	// Create (POST)
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> addUser(@Valid @RequestBody ProfileDTO profile) {
+	public ResponseEntity<?> add(@Valid @RequestBody ProfileDTO profile) {
 		pservice.save(profile);
 		return ResponseEntity.ok(null);
 	}
 	
-	// Update user (PUT)
+	// Update (PUT)
 	@RequestMapping(method=RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<?> updateUser(@Valid @RequestBody ProfileDTO profile) {
+	public ResponseEntity<?> update(@Valid @RequestBody ProfileDTO profile) {
 		pservice.update(profile);
 		return ResponseEntity.ok(null);
 	}

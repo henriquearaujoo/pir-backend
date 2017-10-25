@@ -15,7 +15,6 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,44 +22,51 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.samsung.fas.pir.dto.UserDTO;
-import com.samsung.fas.pir.service.UsersService;
+import com.samsung.fas.pir.dto.RuleDTO;
+import com.samsung.fas.pir.service.RuleService;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/rules")
 @Produces(MediaType.APPLICATION_JSON)
-@CrossOrigin
-public class UserController {
+public class RulesController {
 	@Autowired
-	private		UsersService	uservice;
+	private		RuleService		rservice;
 	
-	// Get all users (GET)
+	// Get all (GET)
 	@RequestMapping(method=RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<UserDTO>> getAll() {
-		return ResponseEntity.ok(uservice.findAll());
+	public ResponseEntity<List<RuleDTO>> getAll() {
+		return ResponseEntity.ok(rservice.findAll());
 	}
 	
-	// Get specific user (GET)
+	// Get specific (GET)
 	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	@ResponseBody
-	public ResponseEntity<UserDTO> get(@PathVariable("id") UUID uuid) {
-		return ResponseEntity.ok(uservice.findByID(uuid));
+	public ResponseEntity<RuleDTO> get(@PathVariable("id") UUID uuid) {
+		return ResponseEntity.ok(rservice.findOne(uuid));
 	}
 	
-	// Create new user (POST)
+	// Create (POST)
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> add(@Valid @RequestBody UserDTO user) {
-		uservice.save(user);
+	public ResponseEntity<?> add(@Valid @RequestBody RuleDTO rule) {
+		rservice.save(rule);
 		return ResponseEntity.ok(null);
 	}
 	
-	// Update user (PUT)
+	// Update (PUT)
 	@RequestMapping(method=RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<?> update(@Valid @RequestBody UserDTO user) {
-		uservice.update(user);
+	public ResponseEntity<?> update(@Valid @RequestBody RuleDTO rule) {
+		rservice.update(rule);
+		return ResponseEntity.ok(null);
+	}
+	
+	// Get specific (GET)
+	@RequestMapping(method=RequestMethod.DELETE, value="/{id}")
+	@ResponseBody
+	public ResponseEntity<RuleDTO> delete(@PathVariable("id") UUID uuid) {
+		rservice.delete(uuid);
 		return ResponseEntity.ok(null);
 	}
 	

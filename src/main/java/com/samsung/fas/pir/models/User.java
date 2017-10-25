@@ -17,6 +17,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.samsung.fas.pir.enums.UserType;
@@ -28,6 +30,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity(name="user")
+@DynamicUpdate
+@DynamicInsert
 public class User implements Serializable {
 	private static final long serialVersionUID = -2390821297865569815L;
 

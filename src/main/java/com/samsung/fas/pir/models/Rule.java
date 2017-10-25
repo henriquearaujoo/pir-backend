@@ -1,7 +1,6 @@
 package com.samsung.fas.pir.models;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -9,10 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
@@ -23,10 +24,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name="profile")
+@Entity(name="profile_page_rules")
+@Table(uniqueConstraints= {@UniqueConstraint(columnNames= {"profile_id_fk", "page_id_fk"})})
 @DynamicUpdate
 @DynamicInsert
-public class Profile {
+public class Rule {
 	@Setter
 	@Getter
 	@Id
@@ -37,18 +39,15 @@ public class Profile {
 	
 	@Getter
 	@Setter
-	@Column(name="title", nullable=false, unique=true)
-	private		String			title;
+	@ManyToOne
+	@JoinColumn(name="profile_id_fk")
+	private		Profile			profile;
 	
 	@Getter
 	@Setter
-	@Column(name="description")
-	private		String			description;
-	
-	@Getter
-	@Setter
-	@Column(name="status")
-	private		boolean			active;
+	@ManyToOne
+	@JoinColumn(name="page_id_fk")
+	private		Page			page;
 	
 	@Getter
 	@Setter
@@ -63,6 +62,26 @@ public class Profile {
 	private		User			whoUpdated;
 	
 	@Getter
+	@Setter
+	@Column(name="can_create")
+	private		boolean			create;
+	
+	@Getter
+	@Setter
+	@Column(name="can_view")
+	private		boolean			read;
+	
+	@Getter
+	@Setter
+	@Column(name="can_update")
+	private		boolean			update;
+	
+	@Getter
+	@Setter
+	@Column(name="can_delete")
+	private		boolean			delete;
+	
+	@Getter
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_at", updatable=false, nullable=false)
@@ -73,14 +92,5 @@ public class Profile {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="updated_at", nullable=false)
 	private		Date			updatedAt;
-	
-	@Getter
-	@Setter
-	@OneToMany(mappedBy="profile", targetEntity=User.class)
-	private		List<User>		users;
-	
-	@Getter
-	@Setter
-	@OneToMany(mappedBy="profile", targetEntity=Rule.class)
-	private		List<Profile>	profiles;
+
 }
