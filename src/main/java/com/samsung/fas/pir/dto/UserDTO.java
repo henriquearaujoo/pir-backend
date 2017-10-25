@@ -55,7 +55,7 @@ public class UserDTO {
 	@Setter
 	@Getter
 	@JsonProperty("status")
-	private		Boolean			active;
+	private		boolean			active;
 
 	@Setter
 	@Getter
@@ -93,7 +93,7 @@ public class UserDTO {
 		name			= entity.getName();
 		login			= entity.getLogin();
 		type			= entity.getType();
-		active			= entity.getActive();
+		active			= entity.isActive();
 		registerDate	= entity.getRegisterDate();
 		addressDTO		= AddressDTO.toDTO(entity.getAddress());
 		personDTO		= PersonDTO.toDTO(entity.getPerson());
@@ -107,7 +107,7 @@ public class UserDTO {
 	@JsonIgnore
 	public User getModel() {
 		User 			user 			= new User();
-		user.setActive(active == null? false : active);
+		user.setActive(active);
 		user.setLogin(login);
 		user.setName(name);
 		user.setPassword(password);

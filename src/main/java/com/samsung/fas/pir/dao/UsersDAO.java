@@ -3,8 +3,6 @@ package com.samsung.fas.pir.dao;
 import java.util.List;
 import java.util.UUID;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +11,8 @@ import com.samsung.fas.pir.models.User;
 
 @Service
 public class UsersDAO {
-	private		IUsersRepository		repository;
-	
 	@Autowired
-	public UsersDAO(IUsersRepository repository) {
-		this.repository = repository;
-	}
+	private		IUsersRepository		repository;
 	
 	public User save(User user) {
 		return repository.save(user);
@@ -28,7 +22,7 @@ public class UsersDAO {
 		return repository.findAll();
 	}
 	
-	public User findByID(UUID id) {
+	public User findOne(UUID id) {
 		return repository.findOne(id);
 	}
 	
@@ -58,14 +52,8 @@ public class UsersDAO {
 		return repository.findByOrganizationIe(ie);
 	}
 
-	@Transactional
-	public User updateUser(User user, UUID id) {
-		User toUpdate = repository.findOne(id);
-		// ID is a primary unique key, so we going to have a list with only one element
-		if (toUpdate != null) {
-			toUpdate.copyFrom(user);
-			return repository.save(toUpdate);
-		}
-		return null;
+	public User update(User user, UUID id) {
+		user.setId(id);
+		return repository.save(user);
 	}
 }

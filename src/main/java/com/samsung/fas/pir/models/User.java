@@ -1,10 +1,8 @@
 package com.samsung.fas.pir.models;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -12,15 +10,14 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 
 import com.samsung.fas.pir.enums.UserType;
 import com.samsung.fas.pir.models.user.embedded.Address;
@@ -35,10 +32,11 @@ public class User implements Serializable {
 	private static final long serialVersionUID = -2390821297865569815L;
 
 	@Getter
+	@Setter
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(name="id", updatable=false, nullable=false)
+	@Column(name="id", updatable=false)
 	private		UUID			id;
 	
 	@Getter
@@ -59,7 +57,7 @@ public class User implements Serializable {
 	@Getter
 	@Setter
 	@Column(name="status", nullable=false)
-	private		Boolean			active;
+	private		boolean			active;
 	
 	@Getter
 	@Setter
@@ -89,20 +87,12 @@ public class User implements Serializable {
 	
 	@Getter
 	@Setter
+	@ManyToOne
+	@JoinColumn(name="profile_id_fk")
+	private		Profile			profile;
+	
+	@Getter
+	@Setter
 	@OneToMany(mappedBy="agent", targetEntity=Child.class)
-	private		List<Child>		children;
-
-	public void copyFrom(Object source) {
-		Iterable<Field>		props	= Arrays.asList(this.getClass().getDeclaredFields());
-		BeanWrapper			srcwrap = new BeanWrapperImpl(source);
-		BeanWrapper			trgwrap = new BeanWrapperImpl(this);
-		
-		props.forEach(p -> {
-			try {
-				trgwrap.setPropertyValue(p.getName(), srcwrap.getPropertyValue(p.getName()));
-			} catch (Exception e) {
-				LoggerFactory.getLogger(this.getClass()).error(e.getMessage());
-			}
-		});
-	}
+	private		Set<Child>		children;
 }

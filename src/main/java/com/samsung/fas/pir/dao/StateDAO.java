@@ -10,12 +10,8 @@ import com.samsung.fas.pir.models.State;
 
 @Service
 public class StateDAO {
-	private IStateRepository repository;
-	
 	@Autowired
-	public StateDAO(IStateRepository repo) {
-		this.repository = repo;
-	}
+	private IStateRepository repository;
 	
 	public boolean save(State state) {
 		return repository.save(state) != null;

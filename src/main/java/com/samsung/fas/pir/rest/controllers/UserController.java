@@ -1,9 +1,11 @@
-package com.samsung.fas.pir.rest.api;
+package com.samsung.fas.pir.rest.controllers;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
+import javax.validation.Valid;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -16,32 +18,50 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.samsung.fas.pir.dto.CityDTO;
-import com.samsung.fas.pir.dto.StateDTO;
-import com.samsung.fas.pir.service.StateCityService;
+import com.samsung.fas.pir.dto.UserDTO;
+import com.samsung.fas.pir.service.UsersService;
 
 @Controller
-@RequestMapping("/states")
+@RequestMapping("/users")
 @Produces(MediaType.APPLICATION_JSON)
 @CrossOrigin
-public class StateCityRest {
+public class UserController {
 	@Autowired
-	private		StateCityService	scservice;
+	private		UsersService	uservice;
 	
+	// Get all users (GET)
 	@RequestMapping(method=RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<StateDTO>> getAll() {
-		return ResponseEntity.ok(scservice.findAllStates());
+	public ResponseEntity<List<UserDTO>> getAllUsers() {
+		return ResponseEntity.ok(uservice.findAll());
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/{id}/")
+	// Get specific user (GET)
+	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	@ResponseBody
-	public ResponseEntity<List<CityDTO>> getAllCitiesByState(@PathVariable("id") long id) {
-		return ResponseEntity.ok(scservice.findAllCitiesByState(id));
+	public ResponseEntity<UserDTO> getUser(@PathVariable("id") UUID uuid) {
+		return ResponseEntity.ok(uservice.findByID(uuid));
+	}
+	
+	// Create new user (POST)
+	@RequestMapping(method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<?> addUser(@Valid @RequestBody UserDTO user) {
+		uservice.save(user);
+		return ResponseEntity.ok(null);
+	}
+	
+	// Update user (PUT)
+	@RequestMapping(method=RequestMethod.PUT)
+	@ResponseBody
+	public ResponseEntity<?> updateUser(@Valid @RequestBody UserDTO user) {
+		uservice.updateUser(user);
+		return ResponseEntity.ok(null);
 	}
 	
 	/***********************************************************************************/

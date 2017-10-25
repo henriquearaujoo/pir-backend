@@ -10,12 +10,8 @@ import com.samsung.fas.pir.models.Child;
 
 @Service
 public class ChildDAO {
-	private		IChildRepository		repository;
-	
 	@Autowired
-	public ChildDAO(IChildRepository repository) {
-		this.repository = repository;
-	}
+	private		IChildRepository		repository;
 	
 	public boolean queryCreate(Child child) {
 		return repository.save(child) != null;

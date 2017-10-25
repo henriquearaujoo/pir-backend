@@ -10,12 +10,8 @@ import com.samsung.fas.pir.models.City;
 
 @Service
 public class CityDAO {
-	private 	ICityRepository 		repository;
-	
 	@Autowired
-	public CityDAO(ICityRepository repo) {
-		repository = repo;
-	}
+	private 	ICityRepository 		repository;
 	
 	public boolean save(City city) {
 		return repository.save(city) != null;

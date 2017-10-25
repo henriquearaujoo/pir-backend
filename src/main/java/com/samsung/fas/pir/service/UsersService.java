@@ -82,7 +82,7 @@ public class UsersService {
 	}
 	
 	public void updateUser(UserDTO user) {
-		User model = udao.findByID(user.getId());
+		User model = udao.findOne(user.getId());
 		
 		// Verify if user exists
 		if (model == null) 
@@ -158,7 +158,7 @@ public class UsersService {
 		// All above conditions are satisfied
 		User toUpdate = user.getModel();
 		toUpdate.getAddress().setCity(city);
-		udao.updateUser(toUpdate, user.getId());
+		udao.update(toUpdate, user.getId());
 	}
 	
 	public List<UserDTO> findAll() {
@@ -166,7 +166,7 @@ public class UsersService {
 	}
 	
 	public UserDTO findByID(UUID id) {
-		return UserDTO.toDTO(udao.findByID(id));
+		return UserDTO.toDTO(udao.findOne(id));
 	}
 }
 
