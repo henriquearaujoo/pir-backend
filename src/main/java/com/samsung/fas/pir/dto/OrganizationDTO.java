@@ -4,6 +4,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jsondoc.core.annotation.ApiObject;
+import org.jsondoc.core.annotation.ApiObjectField;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,9 +14,11 @@ import com.samsung.fas.pir.models.user.embedded.Organization;
 
 import lombok.Getter;
 
+@ApiObject
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrganizationDTO {
 	
+	@ApiObjectField(name="cnpj")
 	@Getter
 	@JsonProperty("cnpj")
 	@NotEmpty(message="user.type.pjur.cnpj.empty")
@@ -22,6 +26,7 @@ public class OrganizationDTO {
 	@Size(min=14, max=14, message="user.type.pjur.cnpj.size.error")
 	private		String			cnpj;
 	
+	@ApiObjectField(name="ie")
 	@Getter
 	@JsonProperty("ie")
 	@NotEmpty(message="user.type.pjur.ie.empty")

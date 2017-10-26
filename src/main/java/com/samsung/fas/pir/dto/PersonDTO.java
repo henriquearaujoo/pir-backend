@@ -4,6 +4,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jsondoc.core.annotation.ApiObject;
+import org.jsondoc.core.annotation.ApiObjectField;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,9 +14,11 @@ import com.samsung.fas.pir.models.user.embedded.Person;
 
 import lombok.Getter;
 
+@ApiObject
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PersonDTO {
 	
+	@ApiObjectField(name="rg")
 	@Getter
 	@JsonProperty("rg")
 	@NotEmpty(message="user.type.pfis.rg.empty")
@@ -22,6 +26,7 @@ public class PersonDTO {
 	@Size(min=5, message="user.type.pfis.rg.short")
 	private		String			rg;
 	
+	@ApiObjectField(name="emitter")
 	@Getter
 	@JsonProperty("emitter")
 	@NotEmpty(message="user.type.pfis.rg.emitter.empty")
@@ -29,6 +34,7 @@ public class PersonDTO {
 	@Size(min=2, message="user.type.pfis.rg.emitter.short")
 	private		String			emitter;
 	
+	@ApiObjectField(name="cpf")
 	@Getter
 	@JsonProperty("cpf")
 	@NotEmpty(message="user.type.pfis.cpf.empty")

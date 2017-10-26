@@ -5,6 +5,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jsondoc.core.annotation.ApiObject;
+import org.jsondoc.core.annotation.ApiObjectField;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,8 +15,10 @@ import com.samsung.fas.pir.models.user.embedded.Address;
 
 import lombok.Getter;
 
+@ApiObject
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddressDTO {
+	@ApiObjectField(name="neighborhood")
 	@Getter
 	@JsonProperty("neighborhood")
 	@NotNull(message="user.address.neighborhood.missing")
@@ -22,6 +26,7 @@ public class AddressDTO {
 	@NotBlank(message="user.address.neighborhood.blank")
 	private		String			neighborhoodAddress;
 	
+	@ApiObjectField(name="street")
 	@Getter
 	@JsonProperty("street")
 	@NotNull(message="user.address.street.missing")
@@ -29,10 +34,12 @@ public class AddressDTO {
 	@NotBlank(message="user.address.street.blank")
 	private		String			streetNameAddress;
 	
+	@ApiObjectField(name="complement", required=false)
 	@Getter
 	@JsonProperty("complement")
 	private		String			complementAddress;
 	
+	@ApiObjectField(name="number")
 	@Getter
 	@JsonProperty("number")
 	@NotNull(message="user.address.number.missing")
@@ -40,11 +47,13 @@ public class AddressDTO {
 	@NotBlank(message="user.address.number.blank")
 	private		String			numberAddress;
 	
+	@ApiObjectField(name="city")
 	@Getter
 	@JsonProperty("city")
 	@NotNull(message="user.address.city.missing")
 	private		Long			cityId;
 	
+	@ApiObjectField(name="postalcode")
 	@Getter
 	@JsonProperty("postalcode")
 	@NotNull(message="user.address.postalcode.missing")

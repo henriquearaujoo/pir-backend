@@ -7,6 +7,13 @@ import javax.validation.Valid;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.jsondoc.core.annotation.Api;
+import org.jsondoc.core.annotation.ApiAuthNone;
+import org.jsondoc.core.annotation.ApiBodyObject;
+import org.jsondoc.core.annotation.ApiMethod;
+import org.jsondoc.core.annotation.ApiResponseObject;
+import org.jsondoc.core.pojo.ApiStage;
+import org.jsondoc.core.pojo.ApiVisibility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -22,6 +29,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.samsung.fas.pir.dto.ProfileDTO;
 import com.samsung.fas.pir.service.ProfileService;
 
+@Api(name = "Profile Services", description = "Methods managing user profiles", group = "Profiles", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
+@ApiAuthNone
 @Controller
 @RequestMapping("/profiles")
 @Produces(MediaType.APPLICATION_JSON)
@@ -30,6 +39,8 @@ public class ProfileController {
 	private ProfileService pservice;
 
 	// Get all (GET)
+	@ApiMethod(description="Get all profiles saved in database")
+	@ApiResponseObject(clazz = ProfileDTO.class)
 	@RequestMapping(method=RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<List<ProfileDTO>> getAll() {
@@ -37,17 +48,21 @@ public class ProfileController {
 	}
 	
 	// Create (POST)
+	@ApiMethod(description="Create a new profile")
+	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> add(@Valid @RequestBody ProfileDTO profile) {
+	public ResponseEntity<?> add(@ApiBodyObject @Valid @RequestBody ProfileDTO profile) {
 		pservice.save(profile);
 		return ResponseEntity.ok(null);
 	}
 	
 	// Update (PUT)
+	@ApiMethod(description="Update an existing profile")
+	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<?> update(@Valid @RequestBody ProfileDTO profile) {
+	public ResponseEntity<?> update(@ApiBodyObject @Valid @RequestBody ProfileDTO profile) {
 		pservice.update(profile);
 		return ResponseEntity.ok(null);
 	}

@@ -9,6 +9,14 @@ import javax.validation.Valid;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.jsondoc.core.annotation.Api;
+import org.jsondoc.core.annotation.ApiAuthNone;
+import org.jsondoc.core.annotation.ApiBodyObject;
+import org.jsondoc.core.annotation.ApiMethod;
+import org.jsondoc.core.annotation.ApiPathParam;
+import org.jsondoc.core.annotation.ApiResponseObject;
+import org.jsondoc.core.pojo.ApiStage;
+import org.jsondoc.core.pojo.ApiVisibility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -25,6 +33,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.samsung.fas.pir.dto.RuleDTO;
 import com.samsung.fas.pir.service.RuleService;
 
+@Api(name = "Rules Services", description = "Methods managing user profiles rules (permissions)", group = "Profiles", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
+@ApiAuthNone
 @Controller
 @RequestMapping("/rules")
 @Produces(MediaType.APPLICATION_JSON)
@@ -33,6 +43,8 @@ public class RulesController {
 	private		RuleService		rservice;
 	
 	// Get all (GET)
+	@ApiMethod(description="Get all rules saved in database")
+	@ApiResponseObject(clazz = RuleDTO.class)
 	@RequestMapping(method=RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<List<RuleDTO>> getAll() {
@@ -40,32 +52,40 @@ public class RulesController {
 	}
 	
 	// Get specific (GET)
+	@ApiMethod(description="Get specific profile saved in database")
+	@ApiResponseObject(clazz = RuleDTO.class)
 	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	@ResponseBody
-	public ResponseEntity<RuleDTO> get(@PathVariable("id") UUID uuid) {
+	public ResponseEntity<RuleDTO> get(@ApiPathParam @PathVariable("id") UUID uuid) {
 		return ResponseEntity.ok(rservice.findOne(uuid));
 	}
 	
 	// Create (POST)
+	@ApiMethod(description="Save a rule in database")
+	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> add(@Valid @RequestBody RuleDTO rule) {
+	public ResponseEntity<?> add(@ApiBodyObject @Valid @RequestBody RuleDTO rule) {
 		rservice.save(rule);
 		return ResponseEntity.ok(null);
 	}
 	
 	// Update (PUT)
+	@ApiMethod(description="Update a specific rule")
+	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<?> update(@Valid @RequestBody RuleDTO rule) {
+	public ResponseEntity<?> update(@ApiBodyObject @Valid @RequestBody RuleDTO rule) {
 		rservice.update(rule);
 		return ResponseEntity.ok(null);
 	}
 	
 	// Get specific (GET)
+	@ApiMethod(description="Get all profiles saved in database")
+	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.DELETE, value="/{id}")
 	@ResponseBody
-	public ResponseEntity<RuleDTO> delete(@PathVariable("id") UUID uuid) {
+	public ResponseEntity<RuleDTO> delete(@ApiPathParam @PathVariable("id") UUID uuid) {
 		rservice.delete(uuid);
 		return ResponseEntity.ok(null);
 	}

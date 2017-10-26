@@ -9,6 +9,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jsondoc.core.annotation.ApiObject;
+import org.jsondoc.core.annotation.ApiObjectField;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,12 +28,15 @@ import lombok.Setter;
  * made inside this class when put together with
  * @Valid annotation
  */
+@ApiObject
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
+	@ApiObjectField(name="id", required=false)
 	@Getter
 	@JsonProperty("id")
 	private		UUID			id;
 	
+	@ApiObjectField(name="name")
 	@Setter
 	@Getter
 	@JsonProperty(value="name")
@@ -39,6 +44,7 @@ public class UserDTO {
 	@NotBlank(message="user.name.blank")
 	private		String			name;
 
+	@ApiObjectField(name="login")
 	@Setter
 	@Getter
 	@JsonProperty("login")
@@ -46,35 +52,41 @@ public class UserDTO {
 	@NotBlank(message="user.login.blank")
 	private		String			login;
 	
+	@ApiObjectField(name="password")
 	@Setter
 	@Getter
 	@JsonProperty("password")
 	@Size(min=8, message="user.password.short")
 	private		String			password;
 
+	@ApiObjectField(name="status")
 	@Setter
 	@Getter
 	@JsonProperty("status")
 	private		boolean			active;
 
+	@ApiObjectField(name="type")
 	@Setter
 	@Getter
 	@JsonProperty("type")
 	@NotNull(message="user.type.null")
 	private		UserType		type;
 	
+	@ApiObjectField(name="profile")
 	@Setter
 	@Getter
 	@JsonProperty("profile")
 	@NotNull(message="user.profile.null")
 	private		UUID		profile;
 	
+	@ApiObjectField(name="date")
 	@Setter
 	@Getter
 	@JsonProperty("date")
 	private		Date			registerDate;
 	
 	// Other properties
+	@ApiObjectField(name="address")
 	@Setter
 	@Getter
 	@JsonProperty("address")
@@ -82,12 +94,14 @@ public class UserDTO {
 	@Valid
 	private		AddressDTO		addressDTO;
 	
+	@ApiObjectField(name="person")
 	@Setter
 	@Getter
 	@JsonProperty("person")
 	@Valid
 	private		PersonDTO		personDTO;
 	
+	@ApiObjectField(name="org")
 	@Setter
 	@Getter
 	@JsonProperty("org")

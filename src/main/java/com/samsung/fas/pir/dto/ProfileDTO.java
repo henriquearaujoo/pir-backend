@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jsondoc.core.annotation.ApiObject;
+import org.jsondoc.core.annotation.ApiObjectField;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,12 +20,15 @@ import lombok.Setter;
 /*
  * Create, Update Profiles
  */
+@ApiObject
 public class ProfileDTO {
+	@ApiObjectField(required=false, name="id")
 	@Getter
 	@Setter
 	@JsonProperty("id")
 	private		UUID			id;
 	
+	@ApiObjectField(name="title")
 	@Getter
 	@Setter
 	@JsonProperty("title")
@@ -31,32 +36,38 @@ public class ProfileDTO {
 	@NotBlank(message="profile.title.blank")
 	private		String			title;
 	
+	@ApiObjectField(name="description")
 	@Getter
 	@Setter
 	@JsonProperty("description")
 	private		String			description;
 	
+	@ApiObjectField(name="status")
 	@Getter
 	@Setter
 	@JsonProperty("status")
 	private		boolean			active;
 	
+	@ApiObjectField(name="created_by")
 	@Getter
 	@Setter
 	@JsonProperty("created_by")
 	@NotNull(message="profile.createdby.null")
 	private		UUID			createdBy;
 	
+	@ApiObjectField(name="modified_by")
 	@Getter
 	@Setter
 	@JsonProperty("modified_by")
 	@NotNull(message="profile.updatedby.null")
 	private		UUID			modifiedBy;
 	
+	@ApiObjectField(name="created_at")
 	@Getter
 	@JsonProperty("created_at")
 	private		String			createdAt;
 	
+	@ApiObjectField(name="updated_at")
 	@Getter
 	@JsonProperty("updated_at")
 	private		String			updatedAt;

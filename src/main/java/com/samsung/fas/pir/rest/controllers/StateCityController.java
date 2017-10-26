@@ -7,6 +7,13 @@ import java.util.Set;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.jsondoc.core.annotation.Api;
+import org.jsondoc.core.annotation.ApiAuthNone;
+import org.jsondoc.core.annotation.ApiMethod;
+import org.jsondoc.core.annotation.ApiPathParam;
+import org.jsondoc.core.annotation.ApiResponseObject;
+import org.jsondoc.core.pojo.ApiStage;
+import org.jsondoc.core.pojo.ApiVisibility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -24,6 +31,8 @@ import com.samsung.fas.pir.dto.CityDTO;
 import com.samsung.fas.pir.dto.StateDTO;
 import com.samsung.fas.pir.service.StateCityService;
 
+@Api(name = "State City Services", description = "Methods for getting state and cities", group = "Address", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
+@ApiAuthNone
 @Controller
 @RequestMapping("/states")
 @Produces(MediaType.APPLICATION_JSON)
@@ -32,15 +41,19 @@ public class StateCityController {
 	@Autowired
 	private		StateCityService	scservice;
 	
+	@ApiMethod(description="Get list of states")
+	@ApiResponseObject(clazz = StateDTO.class)
 	@RequestMapping(method=RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<List<StateDTO>> getAll() {
 		return ResponseEntity.ok(scservice.findAllStates());
 	}
 	
+	@ApiMethod(description="Get specific state cities")
+	@ApiResponseObject(clazz = CityDTO.class)
 	@RequestMapping(method=RequestMethod.GET, value="/{id}/")
 	@ResponseBody
-	public ResponseEntity<List<CityDTO>> getAllCitiesByState(@PathVariable("id") long id) {
+	public ResponseEntity<List<CityDTO>> getAllCitiesByState(@ApiPathParam @PathVariable("id") long id) {
 		return ResponseEntity.ok(scservice.findAllCitiesByState(id));
 	}
 	
