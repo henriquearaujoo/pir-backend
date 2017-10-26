@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.samsung.fas.pir.models.Profile;
+import com.samsung.fas.pir.models.entity.Profile;
+
 import java.lang.String;
 
 @Repository

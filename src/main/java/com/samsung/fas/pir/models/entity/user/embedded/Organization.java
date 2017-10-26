@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.models.user.embedded;
+package com.samsung.fas.pir.models.entity.user.embedded;
 
 import java.io.Serializable;
 

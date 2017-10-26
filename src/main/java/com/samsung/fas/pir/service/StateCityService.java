@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.samsung.fas.pir.dao.CityDAO;
 import com.samsung.fas.pir.dao.StateDAO;
-import com.samsung.fas.pir.dto.CityDTO;
-import com.samsung.fas.pir.dto.StateDTO;
+import com.samsung.fas.pir.models.dto.CityDTO;
+import com.samsung.fas.pir.models.dto.StateDTO;
 
 @Service
 public class StateCityService {

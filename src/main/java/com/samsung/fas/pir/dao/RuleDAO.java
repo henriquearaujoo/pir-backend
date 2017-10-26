@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.samsung.fas.pir.dao.repository.IRulesRepository;
-import com.samsung.fas.pir.models.Rule;
+import com.samsung.fas.pir.models.entity.Rule;
 
 @Service
 public class RuleDAO {

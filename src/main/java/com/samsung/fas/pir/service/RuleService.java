@@ -11,10 +11,10 @@ import com.samsung.fas.pir.dao.PageDAO;
 import com.samsung.fas.pir.dao.ProfileDAO;
 import com.samsung.fas.pir.dao.RuleDAO;
 import com.samsung.fas.pir.dao.UsersDAO;
-import com.samsung.fas.pir.dto.RuleDTO;
-import com.samsung.fas.pir.models.Page;
-import com.samsung.fas.pir.models.Profile;
-import com.samsung.fas.pir.models.Rule;
+import com.samsung.fas.pir.models.dto.RuleDTO;
+import com.samsung.fas.pir.models.entity.Page;
+import com.samsung.fas.pir.models.entity.Profile;
+import com.samsung.fas.pir.models.entity.Rule;
 
 @Service
 public class RuleService {

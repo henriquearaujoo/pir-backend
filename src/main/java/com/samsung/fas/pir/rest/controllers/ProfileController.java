@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.samsung.fas.pir.dto.ProfileDTO;
+import com.samsung.fas.pir.models.dto.ProfileDTO;
 import com.samsung.fas.pir.service.ProfileService;
 
 @Api(name = "Profile Services", description = "Methods managing user profiles", group = "Profiles", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)

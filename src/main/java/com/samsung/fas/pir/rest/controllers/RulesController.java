@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.samsung.fas.pir.dto.RuleDTO;
+import com.samsung.fas.pir.models.dto.RuleDTO;
 import com.samsung.fas.pir.service.RuleService;
 
 @Api(name = "Rules Services", description = "Methods managing user profiles rules (permissions)", group = "Profiles", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
@@ -61,7 +61,7 @@ public class RulesController {
 	}
 	
 	// Create (POST)
-	@ApiMethod(description="Save a rule in database")
+	@ApiMethod(description="Save a rule in database (Permissions: Edit, View, Delete, Update) (Relative to: Web Application View Pages)")
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
@@ -71,7 +71,7 @@ public class RulesController {
 	}
 	
 	// Update (PUT)
-	@ApiMethod(description="Update a specific rule")
+	@ApiMethod(description="Update a specific rule (Permissions: Edit, View, Delete, Update) (Relative to: Web Application View Pages)")
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.PUT)
 	@ResponseBody
@@ -80,7 +80,7 @@ public class RulesController {
 		return ResponseEntity.ok(null);
 	}
 	
-	// Get specific (GET)
+	// Delete specific (DELETE)
 	@ApiMethod(description="Get all profiles saved in database")
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.DELETE, value="/{id}")

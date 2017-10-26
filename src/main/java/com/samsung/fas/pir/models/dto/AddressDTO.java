@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.dto;
+package com.samsung.fas.pir.models.dto;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -11,7 +11,7 @@ import org.jsondoc.core.annotation.ApiObjectField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.models.user.embedded.Address;
+import com.samsung.fas.pir.models.entity.user.embedded.Address;
 
 import lombok.Getter;
 

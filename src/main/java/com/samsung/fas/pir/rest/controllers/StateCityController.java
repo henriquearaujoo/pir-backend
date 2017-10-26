@@ -27,8 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.samsung.fas.pir.dto.CityDTO;
-import com.samsung.fas.pir.dto.StateDTO;
+import com.samsung.fas.pir.models.dto.CityDTO;
+import com.samsung.fas.pir.models.dto.StateDTO;
 import com.samsung.fas.pir.service.StateCityService;
 
 @Api(name = "State City Services", description = "Methods for getting state and cities", group = "Address", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)

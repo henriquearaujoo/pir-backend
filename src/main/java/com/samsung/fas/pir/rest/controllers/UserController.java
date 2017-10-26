@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.samsung.fas.pir.dto.UserDTO;
+import com.samsung.fas.pir.models.dto.UserDTO;
 import com.samsung.fas.pir.service.UsersService;
 
 @Api(name = "User Services", description = "Methods managing users", group = "Users", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
@@ -63,7 +63,7 @@ public class UserController {
 	}
 	
 	// Create new user (POST)
-	@ApiMethod(description="Create a new user (If user is PJUR, then send only OrgDTO, else if is PFIS, send PersonDTO)")
+	@ApiMethod(description="Create a new user (If user is PJUR, then send only OrgDTO, else if PFIS, send PersonDTO)")
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
@@ -73,7 +73,7 @@ public class UserController {
 	}
 	
 	// Update user (PUT)
-	@ApiMethod(description="Update an user")
+	@ApiMethod(description="Update an user (If user is PJUR, then send only OrgDTO, else if PFIS, send PersonDTO)")
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.PUT)
 	@ResponseBody

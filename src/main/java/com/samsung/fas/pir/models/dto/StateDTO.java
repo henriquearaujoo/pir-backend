@@ -1,10 +1,10 @@
-package com.samsung.fas.pir.dto;
+package com.samsung.fas.pir.models.dto;
 
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.models.State;
+import com.samsung.fas.pir.models.entity.State;
 
 import lombok.Getter;
 

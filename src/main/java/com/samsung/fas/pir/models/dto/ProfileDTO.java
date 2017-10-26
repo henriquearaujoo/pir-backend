@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.dto;
+package com.samsung.fas.pir.models.dto;
 
 import java.text.SimpleDateFormat;
 import java.util.UUID;
@@ -12,7 +12,7 @@ import org.jsondoc.core.annotation.ApiObjectField;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.models.Profile;
+import com.samsung.fas.pir.models.entity.Profile;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,13 +22,13 @@ import lombok.Setter;
  */
 @ApiObject
 public class ProfileDTO {
-	@ApiObjectField(required=false, name="id")
+	@ApiObjectField(required=false, name="id", order=0)
 	@Getter
 	@Setter
 	@JsonProperty("id")
 	private		UUID			id;
 	
-	@ApiObjectField(name="title")
+	@ApiObjectField(name="title", order=1)
 	@Getter
 	@Setter
 	@JsonProperty("title")
@@ -36,38 +36,38 @@ public class ProfileDTO {
 	@NotBlank(message="profile.title.blank")
 	private		String			title;
 	
-	@ApiObjectField(name="description")
+	@ApiObjectField(name="description", order=2)
 	@Getter
 	@Setter
 	@JsonProperty("description")
 	private		String			description;
 	
-	@ApiObjectField(name="status")
+	@ApiObjectField(name="status", order=3)
 	@Getter
 	@Setter
 	@JsonProperty("status")
 	private		boolean			active;
 	
-	@ApiObjectField(name="created_by")
+	@ApiObjectField(name="created_by", order=4)
 	@Getter
 	@Setter
 	@JsonProperty("created_by")
 	@NotNull(message="profile.createdby.null")
 	private		UUID			createdBy;
 	
-	@ApiObjectField(name="modified_by")
+	@ApiObjectField(name="modified_by", order=5)
 	@Getter
 	@Setter
 	@JsonProperty("modified_by")
 	@NotNull(message="profile.updatedby.null")
 	private		UUID			modifiedBy;
 	
-	@ApiObjectField(name="created_at")
+	@ApiObjectField(name="created_at", order=6)
 	@Getter
 	@JsonProperty("created_at")
 	private		String			createdAt;
 	
-	@ApiObjectField(name="updated_at")
+	@ApiObjectField(name="updated_at", order=7)
 	@Getter
 	@JsonProperty("updated_at")
 	private		String			updatedAt;

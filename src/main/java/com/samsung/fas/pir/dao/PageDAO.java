@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.samsung.fas.pir.dao.repository.IPageRepository;
-import com.samsung.fas.pir.models.Page;
+import com.samsung.fas.pir.models.entity.Page;
 
 @Service
 public class PageDAO {

@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.models;
+package com.samsung.fas.pir.models.entity;
 
 import java.util.List;
 

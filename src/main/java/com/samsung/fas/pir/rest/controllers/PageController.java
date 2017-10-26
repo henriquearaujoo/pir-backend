@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.samsung.fas.pir.dto.PageDTO;
+import com.samsung.fas.pir.models.dto.PageDTO;
 import com.samsung.fas.pir.service.PageService;
 
 @Api(name = "Page Services", description = "Methods for listing pages", group = "Profiles", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)

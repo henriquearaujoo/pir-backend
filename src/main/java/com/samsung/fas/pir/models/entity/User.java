@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.models;
+package com.samsung.fas.pir.models.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -21,10 +21,10 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.samsung.fas.pir.enums.UserType;
-import com.samsung.fas.pir.models.user.embedded.Address;
-import com.samsung.fas.pir.models.user.embedded.Organization;
-import com.samsung.fas.pir.models.user.embedded.Person;
+import com.samsung.fas.pir.models.entity.user.embedded.Address;
+import com.samsung.fas.pir.models.entity.user.embedded.Organization;
+import com.samsung.fas.pir.models.entity.user.embedded.Person;
+import com.samsung.fas.pir.models.enums.UserType;
 
 import lombok.Getter;
 import lombok.Setter;

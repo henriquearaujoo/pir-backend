@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.samsung.fas.pir.dao.repository.IChildRepository;
-import com.samsung.fas.pir.models.Child;
+import com.samsung.fas.pir.models.entity.Child;
 
 @Service
 public class ChildDAO {

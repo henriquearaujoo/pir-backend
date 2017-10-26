@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.dto;
+package com.samsung.fas.pir.models.dto;
 
 import java.util.UUID;
 
@@ -9,64 +9,64 @@ import org.jsondoc.core.annotation.ApiObjectField;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.models.Rule;
+import com.samsung.fas.pir.models.entity.Rule;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @ApiObject
 public class RuleDTO {
-	@ApiObjectField(name="id", required=false)
+	@ApiObjectField(name="id", required=false, order=0)
 	@Getter
 	@Setter
 	@JsonProperty("id")
 	private		UUID			id;
 	
-	@ApiObjectField(name="profile_id")
+	@ApiObjectField(name="profile_id", order=1)
 	@Getter
 	@Setter
 	@JsonProperty("profile_id")
 	@NotNull(message="rule.profile.missing")
 	private		UUID			profile;
 	
-	@ApiObjectField(name="page_id")
+	@ApiObjectField(name="page_id", order=2)
 	@Getter
 	@Setter
 	@JsonProperty("page_id")
 	@NotNull(message="rule.page.missing")
 	private		UUID			page;
 	
-	@ApiObjectField(name="created_by")
+	@ApiObjectField(name="created_by", order=3)
 	@Getter
 	@Setter
 	@JsonProperty("created_by")
 	private		UUID			whoCreated;
 	
-	@ApiObjectField(name="updated_by")
+	@ApiObjectField(name="updated_by", order=4)
 	@Getter
 	@Setter
 	@JsonProperty("updated_by")
 	private		UUID			whoUpdated;
 	
-	@ApiObjectField(name="create")
+	@ApiObjectField(name="create", order=5)
 	@Getter
 	@Setter
 	@JsonProperty("create")
 	private		boolean			create;
 	
-	@ApiObjectField(name="read")
+	@ApiObjectField(name="read", order=6)
 	@Getter
 	@Setter
 	@JsonProperty("read")
 	private		boolean			read;
 	
-	@ApiObjectField(name="update")
+	@ApiObjectField(name="update", order=7)
 	@Getter
 	@Setter
 	@JsonProperty("update")
 	private		boolean			update;
 	
-	@ApiObjectField(name="delete")
+	@ApiObjectField(name="delete", order=8)
 	@Getter
 	@Setter
 	@JsonProperty("delete")

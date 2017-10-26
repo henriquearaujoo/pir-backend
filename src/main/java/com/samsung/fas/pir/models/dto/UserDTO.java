@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.dto;
+package com.samsung.fas.pir.models.dto;
 
 import java.util.Date;
 import java.util.UUID;
@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.enums.UserType;
-import com.samsung.fas.pir.models.User;
+import com.samsung.fas.pir.models.entity.User;
+import com.samsung.fas.pir.models.enums.UserType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,12 +31,12 @@ import lombok.Setter;
 @ApiObject
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
-	@ApiObjectField(name="id", required=false)
+	@ApiObjectField(name="id",required=false, order=0)
 	@Getter
 	@JsonProperty("id")
 	private		UUID			id;
 	
-	@ApiObjectField(name="name")
+	@ApiObjectField(name="name", order=1)
 	@Setter
 	@Getter
 	@JsonProperty(value="name")
@@ -44,7 +44,7 @@ public class UserDTO {
 	@NotBlank(message="user.name.blank")
 	private		String			name;
 
-	@ApiObjectField(name="login")
+	@ApiObjectField(name="login", order=2)
 	@Setter
 	@Getter
 	@JsonProperty("login")
@@ -52,41 +52,41 @@ public class UserDTO {
 	@NotBlank(message="user.login.blank")
 	private		String			login;
 	
-	@ApiObjectField(name="password")
+	@ApiObjectField(name="password", order=3)
 	@Setter
 	@Getter
 	@JsonProperty("password")
 	@Size(min=8, message="user.password.short")
 	private		String			password;
 
-	@ApiObjectField(name="status")
+	@ApiObjectField(name="status", order=4)
 	@Setter
 	@Getter
 	@JsonProperty("status")
 	private		boolean			active;
 
-	@ApiObjectField(name="type")
+	@ApiObjectField(name="type", order=5)
 	@Setter
 	@Getter
 	@JsonProperty("type")
 	@NotNull(message="user.type.null")
 	private		UserType		type;
 	
-	@ApiObjectField(name="profile")
+	@ApiObjectField(name="profile", order=6)
 	@Setter
 	@Getter
 	@JsonProperty("profile")
 	@NotNull(message="user.profile.null")
 	private		UUID		profile;
 	
-	@ApiObjectField(name="date")
+	@ApiObjectField(name="date", order=7)
 	@Setter
 	@Getter
 	@JsonProperty("date")
 	private		Date			registerDate;
 	
 	// Other properties
-	@ApiObjectField(name="address")
+	@ApiObjectField(name="address", order=8)
 	@Setter
 	@Getter
 	@JsonProperty("address")
@@ -94,14 +94,14 @@ public class UserDTO {
 	@Valid
 	private		AddressDTO		addressDTO;
 	
-	@ApiObjectField(name="person")
+	@ApiObjectField(name="person", order=9)
 	@Setter
 	@Getter
 	@JsonProperty("person")
 	@Valid
 	private		PersonDTO		personDTO;
 	
-	@ApiObjectField(name="org")
+	@ApiObjectField(name="org", order=10)
 	@Setter
 	@Getter
 	@JsonProperty("org")

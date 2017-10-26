@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.samsung.fas.pir.dao.repository.IProfileRepository;
-import com.samsung.fas.pir.models.Profile;
+import com.samsung.fas.pir.models.entity.Profile;
 
 @Service
 public class ProfileDAO {

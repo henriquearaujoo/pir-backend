@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import com.samsung.fas.pir.dao.CityDAO;
 import com.samsung.fas.pir.dao.ProfileDAO;
 import com.samsung.fas.pir.dao.UsersDAO;
-import com.samsung.fas.pir.dto.UserDTO;
-import com.samsung.fas.pir.enums.UserType;
-import com.samsung.fas.pir.models.City;
-import com.samsung.fas.pir.models.Profile;
-import com.samsung.fas.pir.models.User;
+import com.samsung.fas.pir.models.dto.UserDTO;
+import com.samsung.fas.pir.models.entity.City;
+import com.samsung.fas.pir.models.entity.Profile;
+import com.samsung.fas.pir.models.entity.User;
+import com.samsung.fas.pir.models.enums.UserType;
 
 @Service
 public class UsersService {

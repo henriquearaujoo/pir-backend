@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.samsung.fas.pir.dao.repository.IStateRepository;
-import com.samsung.fas.pir.models.State;
+import com.samsung.fas.pir.models.entity.State;
 
 @Service
 public class StateDAO {

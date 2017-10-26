@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.models.user.embedded;
+package com.samsung.fas.pir.models.entity.user.embedded;
 
 import java.io.Serializable;
 
@@ -7,7 +7,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.samsung.fas.pir.models.City;
+import com.samsung.fas.pir.models.entity.City;
 
 @Embeddable
 public class Address implements Serializable {

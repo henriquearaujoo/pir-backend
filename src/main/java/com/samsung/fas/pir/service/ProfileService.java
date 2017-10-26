@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.samsung.fas.pir.dao.ProfileDAO;
 import com.samsung.fas.pir.dao.UsersDAO;
-import com.samsung.fas.pir.dto.ProfileDTO;
-import com.samsung.fas.pir.models.Profile;
-import com.samsung.fas.pir.models.User;
+import com.samsung.fas.pir.models.dto.ProfileDTO;
+import com.samsung.fas.pir.models.entity.Profile;
+import com.samsung.fas.pir.models.entity.User;
 
 @Service
 public class ProfileService {
