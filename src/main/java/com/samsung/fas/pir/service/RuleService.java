@@ -31,6 +31,10 @@ public class RuleService {
 		return rdao.findAll().stream().map(m -> RuleDTO.toDTO(m)).collect(Collectors.toList());
 	}
 	
+	public List<RuleDTO> findByProfileID(UUID id) {
+		return rdao.findByProfileID(id).stream().map(m -> RuleDTO.toDTO(m)).collect(Collectors.toList());
+	}
+	
 	public RuleDTO findOne(UUID id) {
 		return RuleDTO.toDTO(rdao.findOne(id));
 	}

@@ -18,6 +18,10 @@ public class RuleDAO {
 		return repository.findAll();
 	}
 	
+	public List<Rule> findByProfileID(UUID id) {
+		return repository.findByProfileId(id);
+	}
+	
 	public Rule findByProfileAndPageIDs(UUID profileID, UUID pageID) {
 		return repository.findByProfileAndPageIDs(profileID, pageID);
 	}

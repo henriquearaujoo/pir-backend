@@ -52,7 +52,16 @@ public class RulesController {
 	}
 	
 	// Get specific (GET)
-	@ApiMethod(description="Get specific profile saved in database")
+	@ApiMethod(description="Get rules by profile")
+	@ApiResponseObject(clazz = RuleDTO.class)
+	@RequestMapping(method=RequestMethod.GET, value="/by/profile/{id}")
+	@ResponseBody
+	public ResponseEntity<List<RuleDTO>> getByProfile(@ApiPathParam @PathVariable("id") UUID uuid) {
+		return ResponseEntity.ok(rservice.findByProfileID(uuid));
+	}
+	
+	// Get specific (GET)
+	@ApiMethod(description="Get specific rule saved in database")
 	@ApiResponseObject(clazz = RuleDTO.class)
 	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	@ResponseBody

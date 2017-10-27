@@ -52,6 +52,6 @@ public class Page {
 	@Getter
 	@Setter
 	@OneToMany(mappedBy="page", targetEntity=Rule.class)
-	private		List<Page>		pages;
+	private		List<Rule>		rules;
 
 }

@@ -82,5 +82,5 @@ public class Profile {
 	@Getter
 	@Setter
 	@OneToMany(mappedBy="profile", targetEntity=Rule.class)
-	private		List<Profile>	profiles;
+	private		List<Rule>		rules;
 }
