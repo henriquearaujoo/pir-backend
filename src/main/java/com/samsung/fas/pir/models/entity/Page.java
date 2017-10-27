@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -53,5 +54,8 @@ public class Page {
 	@Setter
 	@OneToMany(mappedBy="page", targetEntity=Rule.class)
 	private		List<Rule>		rules;
+	
+	@ManyToMany(mappedBy="pages", targetEntity=EndPoints.class)
+	private		List<EndPoints>	endpoints;
 
 }
