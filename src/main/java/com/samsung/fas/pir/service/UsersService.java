@@ -5,6 +5,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.samsung.fas.pir.dao.CityDAO;
@@ -180,7 +182,18 @@ public class UsersService {
 		return udao.findAll().stream().map(m -> UserDTO.toDTO(m)).collect(Collectors.toList());
 	}
 	
+	public List<UserDTO> findByProfileID(UUID id) {
+		return udao.findAll().stream().map(m -> UserDTO.toDTO(m)).collect(Collectors.toList());
+	}
+	
+	public Page<UserDTO> findAll(Pageable pageable) {
+		return udao.findAllByPage(pageable).map(m -> UserDTO.toDTO(m));
+	}
+	
 	public UserDTO findByID(UUID id) {
+		User user = udao.findOne(id);
+		if (user == null)
+			throw new RuntimeException("profile.notfound");
 		return UserDTO.toDTO(udao.findOne(id));
 	}
 }

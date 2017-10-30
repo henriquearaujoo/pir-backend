@@ -53,13 +53,13 @@ public class Profile {
 	@Getter
 	@Setter
 	@OneToOne
-	@JoinColumn(name="created_by", nullable=false, updatable=false)
+	@JoinColumn(name="created_by", nullable=true, updatable=false)
 	private		User			whoCreated;
 	
 	@Getter
 	@Setter
 	@OneToOne
-	@JoinColumn(name="modified_by", nullable=false)
+	@JoinColumn(name="modified_by", nullable=true)
 	private		User			whoUpdated;
 	
 	@Getter

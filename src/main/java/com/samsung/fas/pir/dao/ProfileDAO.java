@@ -22,6 +22,10 @@ public class ProfileDAO {
 		return repository.findOneByTitle(title);
 	}
 	
+	public List<Profile> findAllActive() {
+		return repository.findByActiveTrue();
+	}
+	
 	public List<Profile> findAll() {
 		return repository.findAll();
 	}

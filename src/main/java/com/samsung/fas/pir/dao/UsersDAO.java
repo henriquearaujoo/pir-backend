@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.samsung.fas.pir.dao.repository.IUsersRepository;
@@ -16,6 +18,14 @@ public class UsersDAO {
 	
 	public User save(User user) {
 		return repository.save(user);
+	}
+	
+	public Page<User> findAllByPage(Pageable pageable) {
+		return repository.findAll(pageable);
+	}
+	
+	public List<User> findByProfileID(UUID id) {
+		return repository.findByProfileId(id);
 	}
 	
 	public List<User> findAll() {

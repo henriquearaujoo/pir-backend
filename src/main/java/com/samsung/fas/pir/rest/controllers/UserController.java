@@ -18,6 +18,8 @@ import org.jsondoc.core.annotation.ApiResponseObject;
 import org.jsondoc.core.pojo.ApiStage;
 import org.jsondoc.core.pojo.ApiVisibility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
@@ -51,6 +53,15 @@ public class UserController {
 	@ResponseBody
 	public ResponseEntity<List<UserDTO>> getAll() {
 		return ResponseEntity.ok(uservice.findAll());
+	}
+	
+	// Get all users (GET)
+	@ApiMethod(description="Get all users saved in database (pageable)")
+	@ApiResponseObject(clazz = UserDTO.class)
+	@RequestMapping(method=RequestMethod.GET, path="bypage")
+	@ResponseBody
+	public ResponseEntity<Page<UserDTO>> getAll(Pageable pageable) {
+		return ResponseEntity.ok(uservice.findAll(pageable));
 	}
 	
 	// Get specific user (GET)

@@ -23,6 +23,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +39,7 @@ import com.samsung.fas.pir.service.RuleService;
 @Controller
 @RequestMapping("/rules")
 @Produces(MediaType.APPLICATION_JSON)
+@CrossOrigin
 public class RulesController {
 	@Autowired
 	private		RuleService		rservice;
@@ -90,7 +92,7 @@ public class RulesController {
 	}
 	
 	// Delete specific (DELETE)
-	@ApiMethod(description="Get all profiles saved in database")
+	@ApiMethod(description="Delete a profile saved in database")
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.DELETE, value="/{id}")
 	@ResponseBody

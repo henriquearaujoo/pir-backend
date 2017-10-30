@@ -76,8 +76,8 @@ public class RuleDTO {
 		id			= entity.getId();
 		profile		= entity.getProfile().getId();
 		page		= entity.getPage().getId();
-		whoCreated	= entity.getWhoCreated().getId();
-		whoUpdated	= entity.getWhoUpdated().getId();
+//		whoCreated	= entity.getWhoCreated().getId();
+//		whoUpdated	= entity.getWhoUpdated().getId();
 		create		= entity.isCreate();
 		read		= entity.isRead();
 		update		= entity.isUpdate();

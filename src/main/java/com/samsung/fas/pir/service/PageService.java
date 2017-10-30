@@ -15,7 +15,7 @@ public class PageService {
 	private 	PageDAO 	pgdao;
 	
 	public List<PageDTO> findAll() {
-		return pgdao.findAll().stream().map(m -> PageDTO.toDTO(m)).collect(Collectors.toList());
+		return pgdao.findAll().stream().map(m -> PageDTO.toDTO(m, false)).collect(Collectors.toList());
 	}
 
 }

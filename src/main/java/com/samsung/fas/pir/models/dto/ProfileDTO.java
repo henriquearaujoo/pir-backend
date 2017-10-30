@@ -52,14 +52,14 @@ public class ProfileDTO {
 	@Getter
 	@Setter
 	@JsonProperty("created_by")
-	@NotNull(message="profile.createdby.null")
+//	@NotNull(message="profile.createdby.null")
 	private		UUID			createdBy;
 	
 	@ApiObjectField(name="modified_by", order=5)
 	@Getter
 	@Setter
 	@JsonProperty("modified_by")
-	@NotNull(message="profile.updatedby.null")
+//	@NotNull(message="profile.updatedby.null")
 	private		UUID			modifiedBy;
 	
 	@ApiObjectField(name="created_at", order=6)
@@ -79,8 +79,8 @@ public class ProfileDTO {
 		active			= entity.isActive();
 		createdAt		= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'").format(entity.getCreatedAt());
 		updatedAt		= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'").format(entity.getUpdatedAt());
-		modifiedBy		= entity.getWhoUpdated().getId();
-		createdBy		= entity.getWhoCreated().getId();
+		//modifiedBy		= entity.getWhoUpdated().getId();
+		//createdBy		= entity.getWhoCreated().getId();
 	}
 	
 	public ProfileDTO() {

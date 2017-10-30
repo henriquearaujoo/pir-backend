@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.dao.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +13,7 @@ import java.lang.String;
 
 @Repository
 public interface IProfileRepository extends JpaRepository<Profile, UUID> {
-	@Query(value="select * from profile where title = ?1",nativeQuery=true)
+	@Query(value="select * from profile where title = ?1", nativeQuery=true)
 	Profile findOneByTitle(String title);
+	List<Profile> findByActiveTrue();
 }

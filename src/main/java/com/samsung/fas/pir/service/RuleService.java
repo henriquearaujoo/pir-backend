@@ -60,8 +60,8 @@ public class RuleService {
 		model.setPage(page);
 		model.setProfile(profile);
 		// TODO: get from session login
-		model.setWhoCreated(udao.findOne(rule.getWhoCreated()));
-		model.setWhoUpdated(udao.findOne(rule.getWhoUpdated()));
+//		model.setWhoCreated(udao.findOne(rule.getWhoCreated()));
+//		model.setWhoUpdated(udao.findOne(rule.getWhoUpdated()));
 		rdao.save(model);
 	}
 	
