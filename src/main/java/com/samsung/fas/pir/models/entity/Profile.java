@@ -63,12 +63,14 @@ public class Profile {
 	private		User			whoUpdated;
 	
 	@Getter
+	@Setter
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_at", updatable=false, nullable=false)
 	private		Date			createdAt;
 	
 	@Getter
+	@Setter
 	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="updated_at", nullable=false)

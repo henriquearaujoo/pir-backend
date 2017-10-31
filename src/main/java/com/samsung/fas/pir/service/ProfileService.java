@@ -44,52 +44,29 @@ public class ProfileService {
 		Profile profile = pdao.findOne(id);
 		if (profile == null) 
 			throw new RuntimeException("profile.notfound");
-		return ProfileDTO.toDTO(pdao.findOne(id));
+		return ProfileDTO.toDTO(profile);
 	}
 	
-	public void save(ProfileDTO profile) {
-//		User whoCreate = udao.findOne(profile.getCreatedBy());
-//		
-//		if (whoCreate == null) 
-//			throw new RuntimeException("profile.user.notfound");
-		
-		// TODO: Check permissions
-		//if (whoUpdate.getProfile().getTitle() != "ADM")
-		//	throw new RuntimeException("profile.user.nopermission");
-		
+	public void save(ProfileDTO profile) {		
 		// Verify if title exists, if exists, may the user want to update the profile
 		if (pdao.findOneByTitle(profile.getTitle()) != null) 
 			throw new RuntimeException("profile.title.exists");
 		
 		// TODO: Get from active session
 		Profile model = profile.getModel();
-//		model.setWhoCreated(whoCreate);
-//		model.setWhoUpdated(whoCreate);
 		pdao.save(model);
 	}
 	
 	public void update(ProfileDTO profile) {
-//		User whoUpdate = udao.findOne(profile.getModifiedBy());
-//		
-//		if (whoUpdate == null) 
-//			throw new RuntimeException("profile.user.notfound");
-		
-		// TODO: Check permissions
-		//if (whoUpdate.getProfile().getTitle() != "ADM")
-		//	throw new RuntimeException("profile.user.nopermission");
-			
 		if (pdao.findOne(profile.getId()) == null)
 			throw new RuntimeException("profile.id.notfound");
 		
 		// Verify if title exists in another profile
-		Profile p = pdao.findOneByTitle(profile.getTitle());
-		if (p != null && p.getId().compareTo(profile.getId()) != 0) 
+		Profile model = pdao.findOneByTitle(profile.getTitle());
+		if (model != null && model.getId().compareTo(profile.getId()) != 0) 
 			throw new RuntimeException("profile.title.exists");
 		
-		// TODO: Get from active session
-		Profile model = profile.getModel();
-//		model.setWhoCreated(whoUpdate);
-//		model.setWhoUpdated(whoUpdate);
-		pdao.update(model, profile.getId());
+		// If all OK
+		pdao.update(profile.getModel(), profile.getId());
 	}
 }

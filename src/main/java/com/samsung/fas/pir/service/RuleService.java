@@ -36,10 +36,15 @@ public class RuleService {
 	}
 	
 	public RuleDTO findOne(UUID id) {
-		return RuleDTO.toDTO(rdao.findOne(id));
+		Rule rule = rdao.findOne(id);
+		if (rule == null)
+			throw new RuntimeException("rule.notfound");
+		return RuleDTO.toDTO(rule);
 	}
 	
 	public void delete(UUID id) {
+		if (rdao.findOne(id) == null)
+			throw new RuntimeException("rule.notfound");
 		rdao.delete(id);
 	}
 	

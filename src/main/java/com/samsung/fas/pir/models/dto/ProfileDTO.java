@@ -3,8 +3,6 @@ package com.samsung.fas.pir.models.dto;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jsondoc.core.annotation.ApiObject;

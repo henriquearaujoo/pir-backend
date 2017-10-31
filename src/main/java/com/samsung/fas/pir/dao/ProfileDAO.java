@@ -34,9 +34,11 @@ public class ProfileDAO {
 		return repository.save(entity);
 	}
 	
-	public Profile update(Profile entity, UUID id) {
-		entity.setId(id);
-		return repository.save(entity);
+	public Profile update(Profile toUpdate, UUID id) {
+		//Profile model = repository.findOne(id);
+		toUpdate.setId(id);
+		//toUpdate.setCreatedAt(model.getCreatedAt());
+		return repository.save(toUpdate);
 	}
 }
 

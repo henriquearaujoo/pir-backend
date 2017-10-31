@@ -66,7 +66,7 @@ public class ProfileController {
 	// Get specific (GET)
 	@ApiMethod(description="Get a sepcific profile")
 	@ApiResponseObject(clazz = ProfileDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="{id}")
+	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	@ResponseBody
 	public ResponseEntity<ProfileDTO> get(@ApiPathParam @PathVariable("id") UUID uuid) {
 		return ResponseEntity.ok(pservice.findOne(uuid));
@@ -75,7 +75,7 @@ public class ProfileController {
 	// Get users from specified profile (GET)
 	@ApiMethod(description="Get users from a specific profile")
 	@ApiResponseObject(clazz = UserDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="{id}/users")
+	@RequestMapping(method=RequestMethod.GET, value="/{id}/users")
 	@ResponseBody
 	public ResponseEntity<List<UserDTO>> getUsers(@ApiPathParam @PathVariable("id") UUID uuid) {
 		return ResponseEntity.ok(pservice.findUsersByProfileID(uuid));
@@ -84,7 +84,7 @@ public class ProfileController {
 	// Get pages from specified profile (GET)
 	@ApiMethod(description="Get pages from a specific profile")
 	@ApiResponseObject(clazz = PageDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="{id}/pages")
+	@RequestMapping(method=RequestMethod.GET, value="/{id}/pages")
 	@ResponseBody
 	public ResponseEntity<List<PageDTO>> getPages(@ApiPathParam @PathVariable("id") UUID uuid) {
 		return ResponseEntity.ok(pservice.findPagesByProfileID(uuid));
