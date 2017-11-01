@@ -19,7 +19,7 @@ public class ProfileDAO {
 	}
 	
 	public Profile findOneByTitle(String title) {
-		return repository.findOneByTitle(title);
+		return repository.findOneByTitleIgnoreCase(title);
 	}
 	
 	public List<Profile> findAllActive() {

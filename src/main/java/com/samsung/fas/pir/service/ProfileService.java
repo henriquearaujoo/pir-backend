@@ -50,7 +50,7 @@ public class ProfileService {
 	public void save(ProfileDTO profile) {		
 		// Verify if title exists, if exists, may the user want to update the profile
 		if (pdao.findOneByTitle(profile.getTitle()) != null) 
-			throw new RuntimeException("profile.title.exists");
+			throw new RuntimeException("profile.title." + profile.getTitle() + ".exists");
 		
 		// TODO: Get from active session
 		Profile model = profile.getModel();

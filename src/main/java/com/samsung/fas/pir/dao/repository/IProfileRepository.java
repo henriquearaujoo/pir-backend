@@ -16,7 +16,7 @@ import java.lang.String;
 @Repository
 @Transactional
 public interface IProfileRepository extends JpaRepository<Profile, UUID> {
-	@Query(value="select * from profile where title = ?1", nativeQuery=true)
-	Profile findOneByTitle(String title);
+	@Query(value="select * from profile where lower(title) = lower(?1)", nativeQuery=true)
+	Profile findOneByTitleIgnoreCase(String title);
 	List<Profile> findByActiveTrue();
 }
