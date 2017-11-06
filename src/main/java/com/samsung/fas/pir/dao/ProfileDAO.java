@@ -1,13 +1,12 @@
 package com.samsung.fas.pir.dao;
 
-import java.util.List;
-import java.util.UUID;
-
+import com.samsung.fas.pir.dao.repository.IProfileRepository;
+import com.samsung.fas.pir.models.entity.Profile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.samsung.fas.pir.dao.repository.IProfileRepository;
-import com.samsung.fas.pir.models.entity.Profile;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProfileDAO {
@@ -15,7 +14,7 @@ public class ProfileDAO {
 	private		IProfileRepository		repository;
 	
 	public Profile findOne(UUID id) {
-		return repository.findOne(id);
+		return repository.findOneByGuid(id);
 	}
 	
 	public Profile findOneByTitle(String title) {

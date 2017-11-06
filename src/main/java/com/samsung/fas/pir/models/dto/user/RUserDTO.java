@@ -2,9 +2,9 @@ package com.samsung.fas.pir.models.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.models.dto.AddressDTO;
-import com.samsung.fas.pir.models.dto.OrganizationDTO;
-import com.samsung.fas.pir.models.dto.PersonDTO;
+import com.samsung.fas.pir.models.dto.address.AddressDTO;
+import com.samsung.fas.pir.models.dto.user.typemodel.PFisDTO;
+import com.samsung.fas.pir.models.dto.user.typemodel.PJurDTO;
 import com.samsung.fas.pir.models.entity.User;
 import com.samsung.fas.pir.models.enums.UserType;
 import lombok.Getter;
@@ -60,15 +60,16 @@ public class RUserDTO {
     @JsonProperty("address")
     private AddressDTO addressDTO;
 
-    @ApiObjectField(name="person", order=9)
-    @Getter
-    @JsonProperty("person")
-    private PersonDTO personDTO;
+	@ApiObjectField(name="person", order=9)
+	@Getter
+	@JsonProperty("pfis")
+	private PFisDTO pfis;
 
-    @ApiObjectField(name="org", order=10)
-    @Getter
-    @JsonProperty("org")
-    private OrganizationDTO orgDTO;
+	@ApiObjectField(name="org", order=10)
+	@Getter
+	@JsonProperty("pjur")
+	private PJurDTO pjur;
+
 
     private RUserDTO(User entity) {
         id				= Base64Utils.encodeToUrlSafeString(entity.getGuid().toString().getBytes());
@@ -77,10 +78,10 @@ public class RUserDTO {
         type			= entity.getType();
         active			= entity.isActive();
         registerDate	= entity.getRegisterDate();
-        profile			= entity.getProfile().getId().toString();
+        profile			= Base64Utils.encodeToUrlSafeString(entity.getProfile().getGuid().toString().getBytes());
         addressDTO		= AddressDTO.toDTO(entity.getAddress());
-        personDTO		= PersonDTO.toDTO(entity.getPerson());
-        orgDTO			= OrganizationDTO.toDTO(entity.getOrganization());
+        pfis			= PFisDTO.toDTO(entity.getPerson());
+        pjur			= PJurDTO.toDTO(entity.getOrganization());
     }
 
     public static RUserDTO toDTO(User entity) {

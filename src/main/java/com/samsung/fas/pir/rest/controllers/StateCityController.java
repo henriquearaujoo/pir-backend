@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.rest.controllers;
 
-import com.samsung.fas.pir.models.dto.CityDTO;
-import com.samsung.fas.pir.models.dto.StateDTO;
+import com.samsung.fas.pir.models.dto.address.CityDTO;
+import com.samsung.fas.pir.models.dto.address.StateDTO;
 import com.samsung.fas.pir.service.StateCityService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;

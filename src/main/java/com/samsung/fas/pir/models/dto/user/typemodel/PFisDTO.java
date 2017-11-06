@@ -1,22 +1,20 @@
-package com.samsung.fas.pir.models.dto;
-
-import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.jsondoc.core.annotation.ApiObject;
-import org.jsondoc.core.annotation.ApiObjectField;
+package com.samsung.fas.pir.models.dto.user.typemodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.models.entity.user.embedded.Person;
-
 import lombok.Getter;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.jsondoc.core.annotation.ApiObject;
+import org.jsondoc.core.annotation.ApiObjectField;
+
+import javax.validation.constraints.Size;
 
 @ApiObject
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PersonDTO {
+public class PFisDTO {
 	
 	@ApiObjectField(name="rg")
 	@Getter
@@ -42,13 +40,13 @@ public class PersonDTO {
 	@Size(max=11, min=11, message="user.type.pfis.cpf.size.error")
 	private		String			cpf;
 	
-	private PersonDTO(Person embedded) {
+	private PFisDTO(Person embedded) {
 		cpf						= embedded.getCpf();
 		rg						= embedded.getRg();
 		emitter					= embedded.getEmitter();
 	}
 	
-	public PersonDTO() {
+	public PFisDTO() {
 		// JSON
 	}
 	
@@ -61,7 +59,7 @@ public class PersonDTO {
 		return person;
 	}
 	
-	public static Person toModel(PersonDTO dto) {
+	public static Person toModel(PFisDTO dto) {
 		if (dto != null) {
 			Person			person			= new Person();
 			person.setCpf(dto.cpf);
@@ -72,9 +70,9 @@ public class PersonDTO {
 		return null;
 	}
 	
-	public static PersonDTO toDTO(Person entity) {
+	public static PFisDTO toDTO(Person entity) {
 		if (entity != null) {
-			return new PersonDTO(entity);
+			return new PFisDTO(entity);
 		}
 		return null;
 	}

@@ -1,7 +1,9 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.samsung.fas.pir.models.dto.PageDTO;
-import com.samsung.fas.pir.models.dto.ProfileDTO;
+import com.samsung.fas.pir.models.dto.profile.CProfileDTO;
+import com.samsung.fas.pir.models.dto.profile.RProfileDTO;
+import com.samsung.fas.pir.models.dto.profile.UProfileDTO;
 import com.samsung.fas.pir.models.dto.user.RUserDTO;
 import com.samsung.fas.pir.service.ProfileService;
 import org.jsondoc.core.annotation.*;
@@ -34,28 +36,28 @@ public class ProfileController {
 
 	// Get all (GET)
 	@ApiMethod(description="Get all profiles saved in database")
-	@ApiResponseObject(clazz = ProfileDTO.class)
+	@ApiResponseObject(clazz = CProfileDTO.class)
 	@RequestMapping(method=RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<ProfileDTO>> getAll() {
+	public ResponseEntity<List<RProfileDTO>> getAll() {
 		return ResponseEntity.ok(pservice.findAll());
 	}
 	
 	// Get all actives (GET)
 	@ApiMethod(description="Get all active profiles")
-	@ApiResponseObject(clazz = ProfileDTO.class)
+	@ApiResponseObject(clazz = RProfileDTO.class)
 	@RequestMapping(method=RequestMethod.GET, path="active")
 	@ResponseBody
-	public ResponseEntity<List<ProfileDTO>> getAllActive() {
+	public ResponseEntity<List<RProfileDTO>> getAllActive() {
 		return ResponseEntity.ok(pservice.findAllActive());
 	}
 	
 	// Get specific (GET)
 	@ApiMethod(description="Get a sepcific profile")
-	@ApiResponseObject(clazz = ProfileDTO.class)
+	@ApiResponseObject(clazz = RProfileDTO.class)
 	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	@ResponseBody
-	public ResponseEntity<ProfileDTO> get(@ApiPathParam @PathVariable("id") UUID uuid) {
+	public ResponseEntity<RProfileDTO> get(@ApiPathParam @PathVariable("id") UUID uuid) {
 		return ResponseEntity.ok(pservice.findOne(uuid));
 	}
 	
@@ -82,7 +84,7 @@ public class ProfileController {
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> add(@ApiBodyObject @Valid @RequestBody ProfileDTO profile) {
+	public ResponseEntity<?> add(@ApiBodyObject @Valid @RequestBody CProfileDTO profile) {
 		pservice.save(profile);
 		return ResponseEntity.ok(null);
 	}
@@ -92,7 +94,7 @@ public class ProfileController {
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<?> update(@ApiBodyObject @Valid @RequestBody ProfileDTO profile) {
+	public ResponseEntity<?> update(@ApiBodyObject @Valid @RequestBody UProfileDTO profile) {
 		pservice.update(profile);
 		return ResponseEntity.ok(null);
 	}

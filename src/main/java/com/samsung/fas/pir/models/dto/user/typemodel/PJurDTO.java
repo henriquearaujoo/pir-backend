@@ -1,22 +1,20 @@
-package com.samsung.fas.pir.models.dto;
-
-import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.jsondoc.core.annotation.ApiObject;
-import org.jsondoc.core.annotation.ApiObjectField;
+package com.samsung.fas.pir.models.dto.user.typemodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.models.entity.user.embedded.Organization;
-
 import lombok.Getter;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.jsondoc.core.annotation.ApiObject;
+import org.jsondoc.core.annotation.ApiObjectField;
+
+import javax.validation.constraints.Size;
 
 @ApiObject
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class OrganizationDTO {
+public class PJurDTO {
 	
 	@ApiObjectField(name="cnpj")
 	@Getter
@@ -33,12 +31,12 @@ public class OrganizationDTO {
 	@NotBlank(message="user.type.pjur.ie.blank")
 	private		String			ie;
 	
-	private OrganizationDTO(Organization embedded) {
+	private PJurDTO(Organization embedded) {
 		cnpj					= embedded.getCnpj();
 		ie						= embedded.getIe();
 	}
 	
-	public OrganizationDTO() {
+	public PJurDTO() {
 		// JOSN
 	}
 	
@@ -50,7 +48,7 @@ public class OrganizationDTO {
 		return org;
 	}
 	
-	public static Organization toModel(OrganizationDTO dto) {
+	public static Organization toModel(PJurDTO dto) {
 		if (dto != null) {
 			Organization	org				= new Organization();
 			org.setCnpj(dto.cnpj);
@@ -60,9 +58,9 @@ public class OrganizationDTO {
 		return null;
 	}
 	
-	public static OrganizationDTO toDTO(Organization entity) {
+	public static PJurDTO toDTO(Organization entity) {
 		if (entity != null) {
-			return new OrganizationDTO(entity);
+			return new PJurDTO(entity);
 		}
 		return null;
 	}

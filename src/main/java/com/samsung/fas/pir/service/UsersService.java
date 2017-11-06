@@ -41,14 +41,14 @@ public class UsersService {
 			throw new RESTRuntimeException("user.login.exists");
 		
 		if (user.getType() == UserType.PFIS) {
-			if (user.getOrgDTO() != null)
+			if (user.getPjur() != null)
 				throw new RESTRuntimeException("user.type.pfis.data.mismatch");
 			
-			if (user.getPersonDTO() == null)
+			if (user.getPfis() == null)
 				throw new RESTRuntimeException("user.type.pfis.data.missing");
 			
 			// Validate CPF
-			String 	ucpf 	= user.getPersonDTO().getCpf();
+			String 	ucpf 	= user.getPfis().getCpf();
 			if(!CNP.isValidCPF(ucpf)) 
 				throw new RESTRuntimeException("user.type.pfis.cpf.invalid");
 			
@@ -58,14 +58,14 @@ public class UsersService {
 		}
 		
 		if (user.getType() == UserType.PJUR) {
-			if (user.getPersonDTO() != null)
+			if (user.getPfis() != null)
 				throw new RESTRuntimeException("user.type.pjur.data.mismatch");
 			
-			if (user.getOrgDTO() == null)
+			if (user.getPjur() == null)
 				throw new RESTRuntimeException("user.type.pjur.data.missing");
 			
 			// Validate CNPJ
-			String 	ucnpj 	= user.getOrgDTO().getCnpj();
+			String 	ucnpj 	= user.getPjur().getCnpj();
 //			if(!CNP.isValidCPF(ucnpj))
 //				throw new RESTRuntimeException("user.type.pjur.cnpj.invalid");
 			
@@ -101,7 +101,7 @@ public class UsersService {
 	}
 	
 	public void update(UUserDTO user) {
-		User model = udao.findOne(UUID.fromString(new String(Base64Utils.decodeFromUrlSafeString(user.getId()), StandardCharsets.UTF_8)));
+		User model = udao.findOne(user.getModel().getGuid());
 		
 		// Verify if user exists
 		if (model == null) 
@@ -111,16 +111,16 @@ public class UsersService {
 		if (user.getType() == UserType.PFIS) {
 			
 			// Verify type mismatch
-			if (user.getOrgDTO() != null) {
+			if (user.getPjur() != null) {
 				throw new RESTRuntimeException("user.type.person.data.mismatch");
 			}
 			
 			// Verify if PFIS data is missing
-			if(user.getPersonDTO() == null)
+			if(user.getPfis() == null)
 				throw new RESTRuntimeException("user.type.person.data.missing");
 			
 			String 	mcpf 	= model.getPerson() == null? "" : model.getPerson().getCpf();
-			String 	ucpf 	= user.getPersonDTO().getCpf();
+			String 	ucpf 	= user.getPfis().getCpf();
 			
 			// Validate CPF
 			if(!CNP.isValidCPF(ucpf)) 
@@ -135,16 +135,16 @@ public class UsersService {
 		if (user.getType() == UserType.PJUR) {
 			
 			// Verify type mismatch
-			if (user.getPersonDTO() != null) {
+			if (user.getPfis() != null) {
 				throw new RESTRuntimeException("user.type.organization.data.mismatch");
 			}
 			
 			// Verify PJUR data is missing
-			if(user.getOrgDTO() == null)
+			if(user.getPjur() == null)
 				throw new RESTRuntimeException("user.type.organization.data.missing");
 			
 			String 	mcnpj 	= model.getOrganization().getCnpj() == null? "" : model.getOrganization().getCnpj();
-			String 	ucnpj 	= user.getOrgDTO().getCnpj();
+			String 	ucnpj 	= user.getPjur().getCnpj();
 			
 			// Validate CNPJ
 			if(!CNP.isValidCNPJ(ucnpj))
@@ -174,7 +174,7 @@ public class UsersService {
 			throw new RESTRuntimeException("user.address.city.invalid");
 		
 		// Profile Validation
-		Profile profile = pdao.findOne(UUID.fromString(user.getProfile()));
+		Profile profile = pdao.findOne(UUID.fromString(new String(Base64Utils.decodeFromUrlSafeString(user.getProfile()), StandardCharsets.UTF_8)));
 		if (profile == null)
 			throw new RESTRuntimeException("user.profile.notfound");
 

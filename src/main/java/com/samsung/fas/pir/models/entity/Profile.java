@@ -26,6 +26,8 @@ public class Profile implements Serializable{
 	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	private		UUID			id;
 
+	@Setter
+	@Getter
 	@Column(name="guid", updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
 	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	private 	UUID			guid;

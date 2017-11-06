@@ -1,15 +1,14 @@
 package com.samsung.fas.pir.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.samsung.fas.pir.dao.CityDAO;
+import com.samsung.fas.pir.dao.StateDAO;
+import com.samsung.fas.pir.models.dto.address.CityDTO;
+import com.samsung.fas.pir.models.dto.address.StateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.samsung.fas.pir.dao.CityDAO;
-import com.samsung.fas.pir.dao.StateDAO;
-import com.samsung.fas.pir.models.dto.CityDTO;
-import com.samsung.fas.pir.models.dto.StateDTO;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StateCityService {

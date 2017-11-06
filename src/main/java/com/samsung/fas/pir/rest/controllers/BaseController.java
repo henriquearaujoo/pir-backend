@@ -37,13 +37,13 @@ public class BaseController {
 	public ResponseEntity<?> handleException(HttpMessageNotReadableException e) {
 		Log.error(e.getRootCause().getMessage());
 		e.printStackTrace();
-		return ResponseEntity.badRequest().body("http.status.400.badrequest");
+		return ResponseEntity.badRequest().build();
 	}
 
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<?> handleException(RuntimeException e) {
 		Log.error(e.getMessage());
 		e.printStackTrace();
-		return ResponseEntity.badRequest().body("http.status.400.badrequest");
+		return ResponseEntity.badRequest().build();
 	}
 }

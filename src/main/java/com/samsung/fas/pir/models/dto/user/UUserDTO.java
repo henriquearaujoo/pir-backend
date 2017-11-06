@@ -1,11 +1,10 @@
 package com.samsung.fas.pir.models.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.models.dto.AddressDTO;
-import com.samsung.fas.pir.models.dto.OrganizationDTO;
-import com.samsung.fas.pir.models.dto.PersonDTO;
+import com.samsung.fas.pir.models.dto.address.AddressDTO;
+import com.samsung.fas.pir.models.dto.user.typemodel.PFisDTO;
+import com.samsung.fas.pir.models.dto.user.typemodel.PJurDTO;
 import com.samsung.fas.pir.models.entity.User;
 import com.samsung.fas.pir.models.enums.UserType;
 import lombok.Getter;
@@ -20,6 +19,7 @@ import org.springframework.util.Base64Utils;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.UUID;
 
@@ -27,7 +27,6 @@ import java.util.UUID;
  * Update Uer DTO
  */
 @ApiObject
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UUserDTO {
 	@ApiObjectField(name="id",required=false, order=0)
 	@Getter
@@ -94,19 +93,19 @@ public class UUserDTO {
 	@Valid
 	private AddressDTO addressDTO;
 
-	@ApiObjectField(name="person", order=9)
+	@ApiObjectField(name="pfis", order=9)
 	@Setter
 	@Getter
-	@JsonProperty("person")
+	@JsonProperty("pfis")
 	@Valid
-	private PersonDTO personDTO;
+	private PFisDTO pfis;
 
-	@ApiObjectField(name="org", order=10)
+	@ApiObjectField(name="pjur", order=10)
 	@Setter
 	@Getter
-	@JsonProperty("org")
+	@JsonProperty("pjur")
 	@Valid
-	private OrganizationDTO orgDTO;
+	private PJurDTO pjur;
 
 	@JsonIgnore
 	public User getModel() {
@@ -116,7 +115,7 @@ public class UUserDTO {
 		user.setName(name);
 		user.setPassword(password);
 		user.setType(type);
-		user.setGuid(UUID.nameUUIDFromBytes(Base64Utils.decodeFromUrlSafeString(id)));
+		user.setGuid(UUID.fromString(new String(Base64Utils.decodeFromUrlSafeString(id), StandardCharsets.UTF_8)));
 
 		try {
 			user.setAddress(addressDTO.getModel());
@@ -125,11 +124,11 @@ public class UUserDTO {
 		}
 
 		try {
-			user.setOrganization(orgDTO.getModel());
+			user.setOrganization(pjur.getModel());
 		} catch (Exception e) {
 			LoggerFactory.getLogger(this.getClass()).error(e.getMessage());
 			try {
-				user.setPerson(personDTO.getModel());
+				user.setPerson(pfis.getModel());
 			} catch (Exception ex) {
 				LoggerFactory.getLogger(this.getClass()).error(e.getMessage());
 			}
