@@ -1,89 +1,97 @@
 package com.samsung.fas.pir.service;
 
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import com.samsung.fas.pir.dao.CityDAO;
 import com.samsung.fas.pir.dao.ProfileDAO;
 import com.samsung.fas.pir.dao.UsersDAO;
-import com.samsung.fas.pir.models.dto.UserDTO;
+import com.samsung.fas.pir.exception.RESTRuntimeException;
+import com.samsung.fas.pir.models.dto.user.CUserDTO;
+import com.samsung.fas.pir.models.dto.user.RUserDTO;
+import com.samsung.fas.pir.models.dto.user.UUserDTO;
 import com.samsung.fas.pir.models.entity.City;
 import com.samsung.fas.pir.models.entity.Profile;
 import com.samsung.fas.pir.models.entity.User;
 import com.samsung.fas.pir.models.enums.UserType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Base64Utils;
+
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UsersService {
-	@Autowired
 	private 	UsersDAO 	udao;
-	@Autowired
 	private		CityDAO		cdao;
-	@Autowired
 	private		ProfileDAO	pdao;
+
+	@Autowired
+	public UsersService(UsersDAO udao, CityDAO cdao, ProfileDAO pdao) {
+		this.udao		= udao;
+		this.pdao		= pdao;
+		this.cdao		= cdao;
+	}
 	
-	public void save(UserDTO user) {
+	public void save(CUserDTO user) {
 		// Login already exists
 		if(udao.findOneByLogin(user.getLogin()) != null)
-			throw new RuntimeException("user.login.exists");
+			throw new RESTRuntimeException("user.login.exists");
 		
 		if (user.getType() == UserType.PFIS) {
 			if (user.getOrgDTO() != null)
-				throw new RuntimeException("user.type.pfis.data.mismatch");
+				throw new RESTRuntimeException("user.type.pfis.data.mismatch");
 			
 			if (user.getPersonDTO() == null)
-				throw new RuntimeException("user.type.pfis.data.missing");
+				throw new RESTRuntimeException("user.type.pfis.data.missing");
 			
 			// Validate CPF
 			String 	ucpf 	= user.getPersonDTO().getCpf();
 			if(!CNP.isValidCPF(ucpf)) 
-				throw new RuntimeException("user.type.pfis.cpf.invalid");
+				throw new RESTRuntimeException("user.type.pfis.cpf.invalid");
 			
 			// Verify if CPF exists in database
 			if (udao.findOneByCpf(ucpf) != null)
-				throw new RuntimeException("user.type.pfis.cpf.exists");
+				throw new RESTRuntimeException("user.type.pfis.cpf.exists");
 		}
 		
 		if (user.getType() == UserType.PJUR) {
 			if (user.getPersonDTO() != null)
-				throw new RuntimeException("user.type.pjur.data.mismatch");
+				throw new RESTRuntimeException("user.type.pjur.data.mismatch");
 			
 			if (user.getOrgDTO() == null)
-				throw new RuntimeException("user.type.pjur.data.missing");
+				throw new RESTRuntimeException("user.type.pjur.data.missing");
 			
 			// Validate CNPJ
 			String 	ucnpj 	= user.getOrgDTO().getCnpj();
-			if(!CNP.isValidCPF(ucnpj)) 
-				throw new RuntimeException("user.type.pjur.cnpj.invalid");
+//			if(!CNP.isValidCPF(ucnpj))
+//				throw new RESTRuntimeException("user.type.pjur.cnpj.invalid");
 			
 			// Verify if CPF exists in database
 			if (udao.findOneByCnpj(ucnpj) != null)
-				throw new RuntimeException("user.type.pjur.cnpj.exists");
+				throw new RESTRuntimeException("user.type.pjur.cnpj.exists");
 		}
 		
 		// Password validation
 		if (user.getPassword() == null) {
-			throw new RuntimeException("user.login.password.empty");
+			throw new RESTRuntimeException("user.login.password.empty");
 		}
 		
 		if (user.getPassword().replaceAll("\\s+","").isEmpty()) {
-			throw new RuntimeException("user.login.password.empty");
+			throw new RESTRuntimeException("user.login.password.empty");
 		}
 		
 		// City Validation
 		City city = cdao.findCityByID(user.getAddressDTO().getCityId());
 		if (city == null) 
-			throw new RuntimeException("user.address.city.invalid");
+			throw new RESTRuntimeException("user.address.city.invalid");
 		
 		// Profile Validation
-		Profile profile = pdao.findOne(user.getProfile());
+		Profile profile = pdao.findOne(UUID.fromString(user.getProfile()));
 		if (profile == null)
-			throw new RuntimeException("user.profile.notfound");
+			throw new RESTRuntimeException("user.profile.notfound");
 		
 		// All above conditions are satisfied
 		User model = user.getModel();
@@ -92,35 +100,35 @@ public class UsersService {
 		udao.save(model);
 	}
 	
-	public void update(UserDTO user) {
-		User model = udao.findOne(user.getId());
+	public void update(UUserDTO user) {
+		User model = udao.findOne(UUID.fromString(new String(Base64Utils.decodeFromUrlSafeString(user.getId()), StandardCharsets.UTF_8)));
 		
 		// Verify if user exists
 		if (model == null) 
-			throw new RuntimeException("user.id.notfound");
+			throw new RESTRuntimeException("user.id.notfound");
 		
 		// If PFIS
 		if (user.getType() == UserType.PFIS) {
 			
 			// Verify type mismatch
 			if (user.getOrgDTO() != null) {
-				throw new RuntimeException("user.type.person.data.mismatch");
+				throw new RESTRuntimeException("user.type.person.data.mismatch");
 			}
 			
 			// Verify if PFIS data is missing
 			if(user.getPersonDTO() == null)
-				throw new RuntimeException("user.type.person.data.missing");
+				throw new RESTRuntimeException("user.type.person.data.missing");
 			
 			String 	mcpf 	= model.getPerson() == null? "" : model.getPerson().getCpf();
 			String 	ucpf 	= user.getPersonDTO().getCpf();
 			
 			// Validate CPF
 			if(!CNP.isValidCPF(ucpf)) 
-				throw new RuntimeException("user.type.person.cpf.invalid");
+				throw new RESTRuntimeException("user.type.person.cpf.invalid");
 			
 			// Verify if CPF exists in database
 			if (!mcpf.equalsIgnoreCase(ucpf) && udao.findOneByCpf(ucpf) != null)
-				throw new RuntimeException("user.type.person.cpf.exists");
+				throw new RESTRuntimeException("user.type.person.cpf.exists");
 		}
 		
 		// If PJUR
@@ -128,73 +136,72 @@ public class UsersService {
 			
 			// Verify type mismatch
 			if (user.getPersonDTO() != null) {
-				throw new RuntimeException("user.type.organization.data.mismatch");
+				throw new RESTRuntimeException("user.type.organization.data.mismatch");
 			}
 			
 			// Verify PJUR data is missing
 			if(user.getOrgDTO() == null)
-				throw new RuntimeException("user.type.organization.data.missing");
+				throw new RESTRuntimeException("user.type.organization.data.missing");
 			
 			String 	mcnpj 	= model.getOrganization().getCnpj() == null? "" : model.getOrganization().getCnpj();
 			String 	ucnpj 	= user.getOrgDTO().getCnpj();
 			
 			// Validate CNPJ
 			if(!CNP.isValidCNPJ(ucnpj))
-				throw new RuntimeException("user.type.organization.cnpj.invalid");
+				throw new RESTRuntimeException("user.type.organization.cnpj.invalid");
 			
 			// Verify if CNPJ exists in database
 			if (!mcnpj.equalsIgnoreCase(ucnpj) && udao.findOneByCnpj(ucnpj) != null)
-				throw new RuntimeException("user.type.organization.cnpj.exists");
+				throw new RESTRuntimeException("user.type.organization.cnpj.exists");
 			
 		}
 		
 		// Verify if login already exists
 		if(!model.getLogin().equalsIgnoreCase(user.getLogin()) && udao.findOneByLogin(user.getLogin()) != null)
-			throw new RuntimeException("user.login.exists");
+			throw new RESTRuntimeException("user.login.exists");
 		
 		// Password validation
 		if (user.getPassword() != null && user.getPassword().replaceAll("\\s+","").isEmpty())
-			throw new RuntimeException("user.login.password.empty");
+			throw new RESTRuntimeException("user.login.password.empty");
 		
 		// If password
-		if (user.getPassword().isEmpty()) {
+		if (user.getPassword() == null || user.getPassword().isEmpty())
 			user.setPassword(model.getPassword());
-		}
 		
 		// City Validation
 		City city = cdao.findCityByID(user.getAddressDTO().getCityId());
 		if (city == null) 
-			throw new RuntimeException("user.address.city.invalid");
+			throw new RESTRuntimeException("user.address.city.invalid");
 		
 		// Profile Validation
-		Profile profile = pdao.findOne(user.getProfile());
+		Profile profile = pdao.findOne(UUID.fromString(user.getProfile()));
 		if (profile == null)
-			throw new RuntimeException("user.profile.notfound");
+			throw new RESTRuntimeException("user.profile.notfound");
 
 		// All above conditions are satisfied
 		User toUpdate = user.getModel();
 		toUpdate.getAddress().setCity(city);
 		toUpdate.setProfile(profile);
-		udao.update(toUpdate, user.getId());
+		udao.update(toUpdate, model.getId());
 	}
 	
-	public List<UserDTO> findAll() {
-		return udao.findAll().stream().map(m -> UserDTO.toDTO(m)).collect(Collectors.toList());
+	public List<RUserDTO> findAll() {
+		return udao.findAll().stream().map(RUserDTO::toDTO).collect(Collectors.toList());
 	}
 	
-	public List<UserDTO> findByProfileID(UUID id) {
-		return udao.findAll().stream().map(m -> UserDTO.toDTO(m)).collect(Collectors.toList());
+	public List<RUserDTO> findByProfileID(UUID id) {
+		return udao.findAll().stream().map(RUserDTO::toDTO).collect(Collectors.toList());
 	}
 	
-	public Page<UserDTO> findAll(Pageable pageable) {
-		return udao.findAllByPage(pageable).map(m -> UserDTO.toDTO(m));
+	public Page<RUserDTO> findAll(Pageable pageable) {
+		return udao.findAllByPage(pageable).map(RUserDTO::toDTO);
 	}
 	
-	public UserDTO findByID(UUID id) {
-		User user = udao.findOne(id);
+	public RUserDTO findByID(String id) {
+		User user = udao.findOne(UUID.fromString(new String(Base64Utils.decodeFromUrlSafeString(id), StandardCharsets.UTF_8)));
 		if (user == null)
-			throw new RuntimeException("profile.notfound");
-		return UserDTO.toDTO(udao.findOne(id));
+			throw new RESTRuntimeException("profile.notfound");
+		return RUserDTO.toDTO(user);
 	}
 }
 
@@ -214,7 +221,7 @@ class CNP {
 	  return soma > 9 ? 0 : soma;
 	}
 
-	public static boolean isValidCPF(String cpf) {
+	static boolean isValidCPF(String cpf) {
 	  if ((cpf==null) || (cpf.length()!=11)) return false;
 	
 	  Integer digito1 = calcularDigito(cpf.substring(0,9), pCPF);
@@ -222,7 +229,7 @@ class CNP {
 	  return cpf.equals(cpf.substring(0,9) + digito1.toString() + digito2.toString());
 	}
 
-	public static boolean isValidCNPJ(String cnpj) {
+	static boolean isValidCNPJ(String cnpj) {
 	  if ((cnpj==null)||(cnpj.length()!=14)) return false;
 	
 	  Integer digito1 = calcularDigito(cnpj.substring(0,12), pCNPJ);

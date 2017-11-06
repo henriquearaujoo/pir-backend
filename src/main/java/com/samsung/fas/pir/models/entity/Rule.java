@@ -1,28 +1,14 @@
 package com.samsung.fas.pir.models.entity;
 
-import java.util.Date;
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.*;
+
+import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.Date;
+import java.util.UUID;
 
 @Entity(name="profile_page_rules")
 @Table(uniqueConstraints= {@UniqueConstraint(columnNames= {"profile_id_fk", "page_id_fk"})})
@@ -32,9 +18,10 @@ public class Rule {
 	@Setter
 	@Getter
 	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(name="id", updatable=false)
+	@GeneratedValue(generator = "UUID")
+	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	@Column(name="id", updatable=false, nullable = false, unique = true)
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	private		UUID			id;
 	
 	@Getter

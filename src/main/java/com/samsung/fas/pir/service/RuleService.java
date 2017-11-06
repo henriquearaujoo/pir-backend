@@ -1,20 +1,20 @@
 package com.samsung.fas.pir.service;
 
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.samsung.fas.pir.dao.PageDAO;
 import com.samsung.fas.pir.dao.ProfileDAO;
 import com.samsung.fas.pir.dao.RuleDAO;
 import com.samsung.fas.pir.dao.UsersDAO;
+import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.models.dto.RuleDTO;
 import com.samsung.fas.pir.models.entity.Page;
 import com.samsung.fas.pir.models.entity.Profile;
 import com.samsung.fas.pir.models.entity.Rule;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class RuleService {
@@ -38,13 +38,13 @@ public class RuleService {
 	public RuleDTO findOne(UUID id) {
 		Rule rule = rdao.findOne(id);
 		if (rule == null)
-			throw new RuntimeException("rule.notfound");
+			throw new RESTRuntimeException("rule.notfound");
 		return RuleDTO.toDTO(rule);
 	}
 	
 	public void delete(UUID id) {
 		if (rdao.findOne(id) == null)
-			throw new RuntimeException("rule.notfound");
+			throw new RESTRuntimeException("rule.notfound");
 		rdao.delete(id);
 	}
 	
@@ -54,13 +54,13 @@ public class RuleService {
 		Rule		model		= rule.getModel();
 		
 		if (profile == null) 
-			throw new RuntimeException("rule.profile.notfound");
+			throw new RESTRuntimeException("rule.profile.notfound");
 		
 		if (page == null)
-			throw new RuntimeException("rule.page.notfound");
+			throw new RESTRuntimeException("rule.page.notfound");
 		
 		if (rdao.findByProfileAndPageIDs(rule.getProfile(), rule.getPage()) != null)
-			throw new RuntimeException("rule.exists");
+			throw new RESTRuntimeException("rule.exists");
 		
 		model.setPage(page);
 		model.setProfile(profile);
@@ -76,13 +76,13 @@ public class RuleService {
 		Rule		model		= rule.getModel();
 		
 		if (rdao.findOne(rule.getId()) == null)
-			throw new RuntimeException("rule.id.notfound");
+			throw new RESTRuntimeException("rule.id.notfound");
 		
 		if (profile == null) 
-			throw new RuntimeException("rule.profile.notfound");
+			throw new RESTRuntimeException("rule.profile.notfound");
 		
 		if (page == null)
-			throw new RuntimeException("rule.page.notfound");
+			throw new RESTRuntimeException("rule.page.notfound");
 		
 		model.setPage(page);
 		model.setProfile(profile);

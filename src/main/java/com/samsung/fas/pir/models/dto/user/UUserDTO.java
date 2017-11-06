@@ -1,41 +1,39 @@
-package com.samsung.fas.pir.models.dto;
+package com.samsung.fas.pir.models.dto.user;
 
-import java.util.Date;
-import java.util.UUID;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.samsung.fas.pir.models.dto.AddressDTO;
+import com.samsung.fas.pir.models.dto.OrganizationDTO;
+import com.samsung.fas.pir.models.dto.PersonDTO;
+import com.samsung.fas.pir.models.entity.User;
+import com.samsung.fas.pir.models.enums.UserType;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Base64Utils;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.models.entity.User;
-import com.samsung.fas.pir.models.enums.UserType;
-
-import lombok.Getter;
-import lombok.Setter;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Date;
+import java.util.UUID;
 
 /*
- * Use to create or update an user on server side
- * Missing, blank and null fields validation are
- * made inside this class when put together with
- * @Valid annotation
+ * Update Uer DTO
  */
 @ApiObject
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserDTO {
+public class UUserDTO {
 	@ApiObjectField(name="id",required=false, order=0)
 	@Getter
 	@JsonProperty("id")
-	private		UUID			id;
-	
+	private		String			id;
+
 	@ApiObjectField(name="name", order=1)
 	@Setter
 	@Getter
@@ -51,7 +49,7 @@ public class UserDTO {
 	@NotEmpty(message="user.login.empty")
 	@NotBlank(message="user.login.blank")
 	private		String			login;
-	
+
 	@ApiObjectField(name="password", order=3)
 	@Setter
 	@Getter
@@ -70,21 +68,23 @@ public class UserDTO {
 	@Getter
 	@JsonProperty("type")
 	@NotNull(message="user.type.null")
-	private		UserType		type;
-	
+	private UserType type;
+
 	@ApiObjectField(name="profile", order=6)
 	@Setter
 	@Getter
 	@JsonProperty("profile")
 	@NotNull(message="user.profile.null")
-	private		UUID		profile;
-	
+	@NotEmpty(message="user.profile.empty")
+	@NotBlank(message="user.profile.blank")
+	private		String		profile;
+
 	@ApiObjectField(name="date", order=7)
 	@Setter
 	@Getter
 	@JsonProperty("date")
-	private		Date			registerDate;
-	
+	private Date registerDate;
+
 	// Other properties
 	@ApiObjectField(name="address", order=8)
 	@Setter
@@ -92,38 +92,21 @@ public class UserDTO {
 	@JsonProperty("address")
 	@NotNull(message="user.address.missing")
 	@Valid
-	private		AddressDTO		addressDTO;
-	
+	private AddressDTO addressDTO;
+
 	@ApiObjectField(name="person", order=9)
 	@Setter
 	@Getter
 	@JsonProperty("person")
 	@Valid
-	private		PersonDTO		personDTO;
-	
+	private PersonDTO personDTO;
+
 	@ApiObjectField(name="org", order=10)
 	@Setter
 	@Getter
 	@JsonProperty("org")
 	@Valid
-	private		OrganizationDTO	orgDTO;
-	
-	private UserDTO(User entity) {
-		id				= entity.getId();
-		name			= entity.getName();
-		login			= entity.getLogin();
-		type			= entity.getType();
-		active			= entity.isActive();
-		registerDate	= entity.getRegisterDate();
-		profile			= entity.getProfile().getId();
-		addressDTO		= AddressDTO.toDTO(entity.getAddress());
-		personDTO		= PersonDTO.toDTO(entity.getPerson());
-		orgDTO			= OrganizationDTO.toDTO(entity.getOrganization());
-	}
- 	
-	public UserDTO() {
-		// JSON
-	}
+	private OrganizationDTO orgDTO;
 
 	@JsonIgnore
 	public User getModel() {
@@ -133,13 +116,14 @@ public class UserDTO {
 		user.setName(name);
 		user.setPassword(password);
 		user.setType(type);
-		
+		user.setGuid(UUID.nameUUIDFromBytes(Base64Utils.decodeFromUrlSafeString(id)));
+
 		try {
 			user.setAddress(addressDTO.getModel());
 		} catch (Exception e) {
 			LoggerFactory.getLogger(this.getClass()).error(e.getMessage());
 		}
-		
+
 		try {
 			user.setOrganization(orgDTO.getModel());
 		} catch (Exception e) {
@@ -151,25 +135,5 @@ public class UserDTO {
 			}
 		}
 		return user;
-	}
-	
-	public static User toEntity(UserDTO dto) {
-		if (dto != null) {
-			User 			user 			= new User();
-			user.setActive(dto.active);
-			user.setLogin(dto.login);
-			user.setName(dto.name);
-			user.setPassword(dto.password);
-			user.setType(dto.type);
-			return user;
-		}
-		return null;
-	}
-	
-	public static UserDTO toDTO(User entity) {
-		if (entity != null) {
-			return new UserDTO(entity);
-		}
-		return null;
 	}
 }

@@ -1,10 +1,7 @@
 package com.samsung.fas.pir.rest.controllers;
 
-import java.util.List;
-
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
+import com.samsung.fas.pir.models.dto.PageDTO;
+import com.samsung.fas.pir.service.PageService;
 import org.jsondoc.core.annotation.Api;
 import org.jsondoc.core.annotation.ApiAuthNone;
 import org.jsondoc.core.annotation.ApiMethod;
@@ -19,8 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.samsung.fas.pir.models.dto.PageDTO;
-import com.samsung.fas.pir.service.PageService;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Api(name = "Page Services", description = "Methods for listing pages", group = "Profiles", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
@@ -29,8 +27,12 @@ import com.samsung.fas.pir.service.PageService;
 @Produces(MediaType.APPLICATION_JSON)
 @CrossOrigin
 public class PageController {
-	@Autowired
 	private PageService pservice;
+
+	@Autowired
+	public PageController(PageService pservice) {
+		this.pservice		= pservice;
+	}
 
 	// Get all (GET)
 	@ApiMethod(description="Get all pages saved in database")

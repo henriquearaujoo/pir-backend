@@ -1,21 +1,15 @@
 package com.samsung.fas.pir.models.entity;
 
-import java.util.List;
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.*;
+import java.util.List;
+import java.util.UUID;
 
 @Entity(name="pages")
 @DynamicUpdate
@@ -24,9 +18,10 @@ public class Page {
 	@Setter
 	@Getter
 	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(name="id", updatable=false)
+	@GeneratedValue(generator = "UUID")
+	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	@Column(name="id", updatable=false, nullable = false, unique = true)
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	private		UUID			id;
 	
 	@Setter
