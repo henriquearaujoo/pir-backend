@@ -1,6 +1,6 @@
 package com.samsung.fas.pir.rest.controllers;
 
-import com.samsung.fas.pir.models.dto.PageDTO;
+import com.samsung.fas.pir.models.dto.page.RSimplePageDTO;
 import com.samsung.fas.pir.service.PageService;
 import org.jsondoc.core.annotation.Api;
 import org.jsondoc.core.annotation.ApiAuthNone;
@@ -36,10 +36,10 @@ public class PageController {
 
 	// Get all (GET)
 	@ApiMethod(description="Get all pages saved in database")
-	@ApiResponseObject(clazz = PageDTO.class)
+	@ApiResponseObject(clazz = RSimplePageDTO.class)
 	@RequestMapping(method=RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<PageDTO>> getAll() {
+	public ResponseEntity<List<RSimplePageDTO>> getAll() {
 		return ResponseEntity.ok(pservice.findAll());
 	}
 

@@ -16,5 +16,5 @@ public interface IUsersRepository extends PagingAndSortingRepository<User, UUID>
 	List<User> findByPersonRg(String rg);
 	List<User> findByOrganizationCnpj(String cnpj);
 	List<User> findByOrganizationIe(String ie);
-	List<User> findByProfileId(UUID id);
+	List<User> findByProfileGuid(UUID id);
 }

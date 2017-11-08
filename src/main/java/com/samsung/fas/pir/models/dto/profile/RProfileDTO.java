@@ -33,16 +33,6 @@ public class RProfileDTO {
 	@JsonProperty("status")
 	private		boolean			active;
 
-	@ApiObjectField(name="created_by", order=4)
-	@Getter
-	@JsonProperty("created_by")
-	private		String			createdBy;
-
-	@ApiObjectField(name="modified_by", order=5)
-	@Getter
-	@JsonProperty("modified_by")
-	private		String			modifiedBy;
-
 	@ApiObjectField(name="created_at", order=6)
 	@Getter
 	@JsonProperty("created_at")
@@ -60,8 +50,6 @@ public class RProfileDTO {
 		active			= entity.isActive();
 		createdAt		= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'").format(entity.getCreatedAt());
 		updatedAt		= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'").format(entity.getUpdatedAt());
-		//modifiedBy	= entity.getWhoUpdated().getId();
-		//createdBy		= entity.getWhoCreated().getId();
 	}
 
 	public static RProfileDTO toDTO(Profile entity) {

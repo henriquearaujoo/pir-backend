@@ -23,29 +23,39 @@ public class Rule {
 	@Column(name="id", updatable=false, nullable = false, unique = true)
 	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	private		UUID			id;
+
+	@Setter
+	@Getter
+	@Column(name="guid", updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
+	private 	UUID			guid;
 	
 	@Getter
 	@Setter
 	@ManyToOne
 	@JoinColumn(name="profile_id_fk")
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	private		Profile			profile;
 	
 	@Getter
 	@Setter
 	@ManyToOne
 	@JoinColumn(name="page_id_fk")
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	private		Page			page;
 	
 	@Getter
 	@Setter
 	@OneToOne
 	@JoinColumn(name="created_by", nullable=true, updatable=false)
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	private		User			whoCreated;
 	
 	@Getter
 	@Setter
 	@OneToOne
 	@JoinColumn(name="modified_by", nullable=true)
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	private		User			whoUpdated;
 	
 	@Getter

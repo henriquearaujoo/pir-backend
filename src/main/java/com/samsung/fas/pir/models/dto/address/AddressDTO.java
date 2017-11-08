@@ -66,6 +66,7 @@ public class AddressDTO {
 		numberAddress			= embedded.getNumberAddress();
 		postalCode				= embedded.getPostalCode();
 		neighborhoodAddress		= embedded.getNeighborhoodAddress();
+		cityId					= embedded.getCity().getId();
 	}
 	
 	public AddressDTO() {
@@ -81,19 +82,6 @@ public class AddressDTO {
 		addr.setPostalCode(postalCode);
 		addr.setStreetAddress(streetNameAddress);
 		return addr;
-	}
-	
-	public static Address toModel(AddressDTO dto) {
-		if (dto != null) {
-			Address			addr			= new Address();
-			addr.setComplementAdress(dto.complementAddress);
-			addr.setNeighborhoodAddress(dto.neighborhoodAddress);
-			addr.setNumberAddress(dto.numberAddress);
-			addr.setPostalCode(dto.postalCode);
-			addr.setStreetAddress(dto.streetNameAddress);
-			return addr;
-		}
-		return null;
 	}
 	
 	public static AddressDTO toDTO(Address entity) {

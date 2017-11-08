@@ -20,6 +20,8 @@ public class UProfileDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
+	@NotBlank(message = "profile.id.blank")
+	@NotEmpty(message = "profile.id.missing")
 	private 	String 			id;
 
 	@ApiObjectField(name="title", order=1)

@@ -65,7 +65,7 @@ public class UserController {
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> add(@ApiBodyObject @Valid @RequestBody CUserDTO user) {
+	public ResponseEntity<?> add(@ApiBodyObject @RequestBody @Valid CUserDTO user) {
 		uservice.save(user);
 		return ResponseEntity.ok(null);
 	}
@@ -75,7 +75,7 @@ public class UserController {
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<?> update(@ApiBodyObject @Valid @RequestBody UUserDTO user) {
+	public ResponseEntity<?> update(@ApiBodyObject @RequestBody @Valid UUserDTO user) {
 		uservice.update(user);
 		return ResponseEntity.ok(null);
 	}

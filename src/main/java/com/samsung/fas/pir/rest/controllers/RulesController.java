@@ -1,6 +1,8 @@
 package com.samsung.fas.pir.rest.controllers;
 
-import com.samsung.fas.pir.models.dto.RuleDTO;
+import com.samsung.fas.pir.models.dto.rule.CRuleDTO;
+import com.samsung.fas.pir.models.dto.rule.RRuleDTO;
+import com.samsung.fas.pir.models.dto.rule.URuleDTO;
 import com.samsung.fas.pir.service.RuleService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;
@@ -14,7 +16,6 @@ import javax.validation.Valid;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.UUID;
 
 @Api(name = "Rules Services", description = "Methods managing user profiles rules (permissions)", group = "Profiles", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
@@ -32,29 +33,29 @@ public class RulesController {
 	
 	// Get all (GET)
 	@ApiMethod(description="Get all rules saved in database")
-	@ApiResponseObject(clazz = RuleDTO.class)
+	@ApiResponseObject(clazz = RRuleDTO.class)
 	@RequestMapping(method=RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<RuleDTO>> getAll() {
+	public ResponseEntity<List<RRuleDTO>> getAll() {
 		return ResponseEntity.ok(rservice.findAll());
 	}
 	
 	// Get specific (GET)
 	@ApiMethod(description="Get rules by profile")
-	@ApiResponseObject(clazz = RuleDTO.class)
+	@ApiResponseObject(clazz = RRuleDTO.class)
 	@RequestMapping(method=RequestMethod.GET, value="/by/profile/{id}")
 	@ResponseBody
-	public ResponseEntity<List<RuleDTO>> getByProfile(@ApiPathParam @PathVariable("id") UUID uuid) {
-		return ResponseEntity.ok(rservice.findByProfileID(uuid));
+	public ResponseEntity<List<RRuleDTO>> getByProfile(@ApiPathParam @PathVariable("id") String codedid) {
+		return ResponseEntity.ok(rservice.findByProfileID(codedid));
 	}
 	
 	// Get specific (GET)
 	@ApiMethod(description="Get specific rule saved in database")
-	@ApiResponseObject(clazz = RuleDTO.class)
+	@ApiResponseObject(clazz = RRuleDTO.class)
 	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	@ResponseBody
-	public ResponseEntity<RuleDTO> get(@ApiPathParam @PathVariable("id") UUID uuid) {
-		return ResponseEntity.ok(rservice.findOne(uuid));
+	public ResponseEntity<RRuleDTO> get(@ApiPathParam @PathVariable("id") String codedid) {
+		return ResponseEntity.ok(rservice.findOne(codedid));
 	}
 	
 	// Create (POST)
@@ -62,7 +63,7 @@ public class RulesController {
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> add(@ApiBodyObject @Valid @RequestBody RuleDTO rule) {
+	public ResponseEntity<?> add(@ApiBodyObject @Valid @RequestBody CRuleDTO rule) {
 		rservice.save(rule);
 		return ResponseEntity.ok(null);
 	}
@@ -72,7 +73,7 @@ public class RulesController {
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<?> update(@ApiBodyObject @Valid @RequestBody RuleDTO rule) {
+	public ResponseEntity<?> update(@ApiBodyObject @Valid @RequestBody URuleDTO rule) {
 		rservice.update(rule);
 		return ResponseEntity.ok(null);
 	}
@@ -82,8 +83,8 @@ public class RulesController {
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.DELETE, value="/{id}")
 	@ResponseBody
-	public ResponseEntity<RuleDTO> delete(@ApiPathParam @PathVariable("id") UUID uuid) {
-		rservice.delete(uuid);
+	public ResponseEntity<?> delete(@ApiPathParam @PathVariable("id") String codedid) {
+		rservice.delete(codedid);
 		return ResponseEntity.ok(null);
 	}
 }

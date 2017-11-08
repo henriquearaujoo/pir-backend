@@ -1,12 +1,11 @@
 package com.samsung.fas.pir.models.entity.user.embedded;
 
-import java.io.Serializable;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-
-import lombok.Getter;
-import lombok.Setter;
+import java.io.Serializable;
 
 @Embeddable
 public class Organization implements Serializable {
@@ -21,4 +20,14 @@ public class Organization implements Serializable {
 	@Setter
 	@Column(name="ie", length=32)
 	private		String			ie;
+
+	@Getter
+	@Setter
+	@Column(name="fantasy_name")
+	private		String			fantasyName;
+
+	@Getter
+	@Setter
+	@Column(name="social_name")
+	private		String			socialName;
 }

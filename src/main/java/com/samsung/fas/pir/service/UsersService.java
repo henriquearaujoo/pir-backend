@@ -89,7 +89,7 @@ public class UsersService {
 			throw new RESTRuntimeException("user.address.city.invalid");
 		
 		// Profile Validation
-		Profile profile = pdao.findOne(UUID.fromString(user.getProfile()));
+		Profile profile = pdao.findOne(UUID.fromString(new String(Base64Utils.decodeFromUrlSafeString(user.getProfile()), StandardCharsets.UTF_8)));
 		if (profile == null)
 			throw new RESTRuntimeException("user.profile.notfound");
 		
@@ -186,10 +186,6 @@ public class UsersService {
 	}
 	
 	public List<RUserDTO> findAll() {
-		return udao.findAll().stream().map(RUserDTO::toDTO).collect(Collectors.toList());
-	}
-	
-	public List<RUserDTO> findByProfileID(UUID id) {
 		return udao.findAll().stream().map(RUserDTO::toDTO).collect(Collectors.toList());
 	}
 	

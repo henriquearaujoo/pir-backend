@@ -22,10 +22,14 @@ public class StateCityService {
 	}
 	
 	public List<StateDTO> findAllStates() {
-		return sdao.findAll().stream().map(m -> StateDTO.toDTO(m)).collect(Collectors.toList());
+		return sdao.findAll().stream().map(StateDTO::toDTO).collect(Collectors.toList());
+	}
+
+	public CityDTO findOne(long id) {
+		return CityDTO.toDTO(cdao.findCityByID(id));
 	}
 	
 	public List<CityDTO> findAllCitiesByState(long id) {
-		return cdao.findCitiesByStateID(id).stream().map(m -> CityDTO.toDTO(m)).collect(Collectors.toList());
+		return cdao.findCitiesByStateID(id).stream().map(CityDTO::toDTO).collect(Collectors.toList());
 	}
 }

@@ -1,21 +1,24 @@
 package com.samsung.fas.pir.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.samsung.fas.pir.dao.PageDAO;
+import com.samsung.fas.pir.models.dto.page.RSimplePageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.samsung.fas.pir.dao.PageDAO;
-import com.samsung.fas.pir.models.dto.PageDTO;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PageService {
-	@Autowired
 	private 	PageDAO 	pgdao;
+
+	@Autowired
+	public PageService(PageDAO pgdao) {
+		this.pgdao = pgdao;
+	}
 	
-	public List<PageDTO> findAll() {
-		return pgdao.findAll().stream().map(m -> PageDTO.toDTO(m, false)).collect(Collectors.toList());
+	public List<RSimplePageDTO> findAll() {
+		return pgdao.findAll().stream().map(RSimplePageDTO::toDTO).collect(Collectors.toList());
 	}
 
 }

@@ -3,79 +3,83 @@ package com.samsung.fas.pir.service;
 import com.samsung.fas.pir.dao.PageDAO;
 import com.samsung.fas.pir.dao.ProfileDAO;
 import com.samsung.fas.pir.dao.RuleDAO;
-import com.samsung.fas.pir.dao.UsersDAO;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
-import com.samsung.fas.pir.models.dto.RuleDTO;
+import com.samsung.fas.pir.models.dto.rule.CRuleDTO;
+import com.samsung.fas.pir.models.dto.rule.RRuleDTO;
+import com.samsung.fas.pir.models.dto.rule.URuleDTO;
 import com.samsung.fas.pir.models.entity.Page;
 import com.samsung.fas.pir.models.entity.Profile;
 import com.samsung.fas.pir.models.entity.Rule;
+import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Base64Utils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class RuleService {
-	@Autowired
 	private		RuleDAO		rdao;
-	@Autowired	
 	private		ProfileDAO	prodao;
-	@Autowired
 	private		PageDAO		pgdao;
+
 	@Autowired
-	private		UsersDAO	udao;
-	
-	public List<RuleDTO> findAll() {
-		return rdao.findAll().stream().map(m -> RuleDTO.toDTO(m)).collect(Collectors.toList());
+	public RuleService(RuleDAO rdao, ProfileDAO prodao, PageDAO pgdao) {
+		this.pgdao		= pgdao;
+		this.prodao		= prodao;
+		this.rdao		= rdao;
 	}
 	
-	public List<RuleDTO> findByProfileID(UUID id) {
-		return rdao.findByProfileID(id).stream().map(m -> RuleDTO.toDTO(m)).collect(Collectors.toList());
+	public List<RRuleDTO> findAll() {
+		return rdao.findAll().stream().map(RRuleDTO::toDTO).collect(Collectors.toList());
 	}
 	
-	public RuleDTO findOne(UUID id) {
-		Rule rule = rdao.findOne(id);
+	public List<RRuleDTO> findByProfileID(String id) {
+		return rdao.findByProfileID(IDCoder.decode(id)).stream().map(RRuleDTO::toDTO).collect(Collectors.toList());
+	}
+	
+	public RRuleDTO findOne(String id) {
+		Rule rule = rdao.findOne(IDCoder.decode(id));
 		if (rule == null)
 			throw new RESTRuntimeException("rule.notfound");
-		return RuleDTO.toDTO(rule);
+		return RRuleDTO.toDTO(rule);
 	}
 	
-	public void delete(UUID id) {
-		if (rdao.findOne(id) == null)
+	public void delete(String id) {
+		if (rdao.findOne(IDCoder.decode(id)) == null)
 			throw new RESTRuntimeException("rule.notfound");
-		rdao.delete(id);
+		rdao.delete(UUID.fromString(new String(Base64Utils.decodeFromUrlSafeString(id), StandardCharsets.UTF_8)));
 	}
 	
-	public void save(RuleDTO rule) {
-		Profile		profile		= prodao.findOne(rule.getProfile());
-		Page		page		= pgdao.findOne(rule.getPage());
-		Rule		model		= rule.getModel();
+	public void save(CRuleDTO rule) {
+		Profile		profile		= prodao.findOne(IDCoder.decode(rule.getProfile()));
+		Page		page		= pgdao.findOne(IDCoder.decode(rule.getPage()));
+		Rule		data		= rule.getModel();
 		
 		if (profile == null) 
 			throw new RESTRuntimeException("rule.profile.notfound");
 		
 		if (page == null)
 			throw new RESTRuntimeException("rule.page.notfound");
-		
-		if (rdao.findByProfileAndPageIDs(rule.getProfile(), rule.getPage()) != null)
+
+		if (rdao.findByProfileAndPageIDs(profile.getId(), page.getId()) != null)
 			throw new RESTRuntimeException("rule.exists");
-		
-		model.setPage(page);
-		model.setProfile(profile);
-		// TODO: get from session login
-//		model.setWhoCreated(udao.findOne(rule.getWhoCreated()));
-//		model.setWhoUpdated(udao.findOne(rule.getWhoUpdated()));
-		rdao.save(model);
+
+		data.setPage(page);
+		data.setProfile(profile);
+		rdao.save(data);
 	}
 	
-	public void update(RuleDTO rule) {
-		Profile		profile		= prodao.findOne(rule.getProfile());
-		Page		page		= pgdao.findOne(rule.getPage());
-		Rule		model		= rule.getModel();
+	public void update(URuleDTO rule) {
+		Profile		profile		= prodao.findOne(IDCoder.decode(rule.getProfile()));
+		Page		page		= pgdao.findOne(IDCoder.decode(rule.getPage()));
+		Rule		model		= rdao.findOne(IDCoder.decode(rule.getId()));
+		Rule		data		= rule.getModel();
 		
-		if (rdao.findOne(rule.getId()) == null)
+		if (model == null)
 			throw new RESTRuntimeException("rule.id.notfound");
 		
 		if (profile == null) 
@@ -84,11 +88,8 @@ public class RuleService {
 		if (page == null)
 			throw new RESTRuntimeException("rule.page.notfound");
 		
-		model.setPage(page);
-		model.setProfile(profile);
-		// TODO: get from session login
-		model.setWhoCreated(udao.findOne(rule.getWhoCreated()));
-		model.setWhoUpdated(udao.findOne(rule.getWhoUpdated()));
-		rdao.update(model, rule.getId());
+		data.setPage(page);
+		data.setProfile(profile);
+		rdao.update(data, model.getId());
 	}
 }

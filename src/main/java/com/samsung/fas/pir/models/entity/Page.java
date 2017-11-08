@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity(name="pages")
+@Table(uniqueConstraints= {@UniqueConstraint(columnNames= {"id", "guid"})})
 @DynamicUpdate
 @DynamicInsert
 public class Page {
@@ -23,6 +24,12 @@ public class Page {
 	@Column(name="id", updatable=false, nullable = false, unique = true)
 	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	private		UUID			id;
+
+	@Setter
+	@Getter
+	@Column(name="guid", updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
+	private 	UUID			guid;
 	
 	@Setter
 	@Getter

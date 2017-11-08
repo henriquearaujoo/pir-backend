@@ -39,9 +39,17 @@ public class StateCityController {
 	
 	@ApiMethod(description="Get specific state cities")
 	@ApiResponseObject(clazz = CityDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="/{id}/")
+	@RequestMapping(method=RequestMethod.GET, value="/state/{id}/")
 	@ResponseBody
 	public ResponseEntity<List<CityDTO>> getAllCitiesByState(@ApiPathParam @PathVariable("id") long id) {
 		return ResponseEntity.ok(scservice.findAllCitiesByState(id));
+	}
+
+	@ApiMethod(description="Get specific city info")
+	@ApiResponseObject(clazz = CityDTO.class)
+	@RequestMapping(method=RequestMethod.GET, value="/city/{id}/")
+	@ResponseBody
+	public ResponseEntity<CityDTO> getCity(@ApiPathParam @PathVariable("id") long id) {
+		return ResponseEntity.ok(scservice.findOne(id));
 	}
 }

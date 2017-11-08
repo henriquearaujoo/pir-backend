@@ -28,7 +28,7 @@ public class UsersDAO {
 	}
 	
 	public List<User> findByProfileID(UUID id) {
-		return repository.findByProfileId(id);
+		return repository.findByProfileGuid(id);
 	}
 	
 	public List<User> findAll() {

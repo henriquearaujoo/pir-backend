@@ -30,6 +30,7 @@ public class BaseController {
 	@ExceptionHandler(RESTRuntimeException.class)
 	public ResponseEntity<?> handleException(RESTRuntimeException e) {
 		Log.error(e.toString());
+		e.printStackTrace();
 		return ResponseEntity.badRequest().body(e.getMessage());
 	}
 

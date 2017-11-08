@@ -30,7 +30,11 @@ import java.util.UUID;
 public class UUserDTO {
 	@ApiObjectField(name="id",required=false, order=0)
 	@Getter
+	@Setter
 	@JsonProperty("id")
+	@NotNull(message = "user.id.null")
+	@NotBlank(message = "user.id.blank")
+	@NotEmpty(message = "user.id.missing")
 	private		String			id;
 
 	@ApiObjectField(name="name", order=1)

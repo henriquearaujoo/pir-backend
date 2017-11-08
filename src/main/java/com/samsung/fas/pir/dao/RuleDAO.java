@@ -1,29 +1,32 @@
 package com.samsung.fas.pir.dao;
 
-import java.util.List;
-import java.util.UUID;
-
+import com.samsung.fas.pir.dao.repository.IRulesRepository;
+import com.samsung.fas.pir.models.entity.Rule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.samsung.fas.pir.dao.repository.IRulesRepository;
-import com.samsung.fas.pir.models.entity.Rule;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class RuleDAO {
-	@Autowired
 	private		IRulesRepository		repository;
+
+	@Autowired
+	public RuleDAO(IRulesRepository repository) {
+		this.repository = repository;
+	}
 
 	public List<Rule> findAll() {
 		return repository.findAll();
 	}
 	
 	public List<Rule> findByProfileID(UUID id) {
-		return repository.findByProfileId(id);
+		return repository.findByProfileGuid(id);
 	}
 	
 	public Rule findByProfileAndPageIDs(UUID profileID, UUID pageID) {
-		return repository.findByProfileAndPageIDs(profileID, pageID);
+		return repository.findByProfileIdAndPageId(profileID, pageID);
 	}
 	
 	public Rule save(Rule entity) {
@@ -36,10 +39,10 @@ public class RuleDAO {
 	}
 	
 	public Rule findOne(UUID id) {
-		return repository.findOne(id);
+		return repository.findOneByGuid(id);
 	}
 	
 	public void delete(UUID id) {
-		repository.delete(id);
+		repository.deleteByGuid(id);
 	}
 }

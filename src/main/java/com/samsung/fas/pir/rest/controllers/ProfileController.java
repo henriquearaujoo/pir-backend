@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.rest.controllers;
 
-import com.samsung.fas.pir.models.dto.PageDTO;
+import com.samsung.fas.pir.models.dto.page.RCompletePageDTO;
+import com.samsung.fas.pir.models.dto.page.RSimplePageDTO;
 import com.samsung.fas.pir.models.dto.profile.CProfileDTO;
 import com.samsung.fas.pir.models.dto.profile.RProfileDTO;
 import com.samsung.fas.pir.models.dto.profile.UProfileDTO;
@@ -18,7 +19,6 @@ import javax.validation.Valid;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.UUID;
 
 @Api(name = "Profile Services", description = "Methods managing user profiles", group = "Profiles", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
@@ -46,7 +46,7 @@ public class ProfileController {
 	// Get all actives (GET)
 	@ApiMethod(description="Get all active profiles")
 	@ApiResponseObject(clazz = RProfileDTO.class)
-	@RequestMapping(method=RequestMethod.GET, path="active")
+	@RequestMapping(method=RequestMethod.GET, path="/active")
 	@ResponseBody
 	public ResponseEntity<List<RProfileDTO>> getAllActive() {
 		return ResponseEntity.ok(pservice.findAllActive());
@@ -57,8 +57,8 @@ public class ProfileController {
 	@ApiResponseObject(clazz = RProfileDTO.class)
 	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	@ResponseBody
-	public ResponseEntity<RProfileDTO> get(@ApiPathParam @PathVariable("id") UUID uuid) {
-		return ResponseEntity.ok(pservice.findOne(uuid));
+	public ResponseEntity<RProfileDTO> get(@ApiPathParam @PathVariable("id") String codedid) {
+		return ResponseEntity.ok(pservice.findOne(codedid));
 	}
 	
 	// Get users from specified profile (GET)
@@ -66,17 +66,17 @@ public class ProfileController {
 	@ApiResponseObject(clazz = RUserDTO.class)
 	@RequestMapping(method=RequestMethod.GET, value="/{id}/users")
 	@ResponseBody
-	public ResponseEntity<List<RUserDTO>> getUsers(@ApiPathParam @PathVariable("id") UUID uuid) {
-		return ResponseEntity.ok(pservice.findUsersByProfileID(uuid));
+	public ResponseEntity<List<RUserDTO>> getUsers(@ApiPathParam @PathVariable("id") String codedid) {
+		return ResponseEntity.ok(pservice.findUsersByProfileID(codedid));
 	}
 	
 	// Get pages from specified profile (GET)
 	@ApiMethod(description="Get pages from a specific profile")
-	@ApiResponseObject(clazz = PageDTO.class)
+	@ApiResponseObject(clazz = RSimplePageDTO.class)
 	@RequestMapping(method=RequestMethod.GET, value="/{id}/pages")
 	@ResponseBody
-	public ResponseEntity<List<PageDTO>> getPages(@ApiPathParam @PathVariable("id") UUID uuid) {
-		return ResponseEntity.ok(pservice.findPagesByProfileID(uuid));
+	public ResponseEntity<List<RCompletePageDTO>> getPages(@ApiPathParam @PathVariable("id") String codedid) {
+		return ResponseEntity.ok(pservice.findPagesByProfileID(codedid));
 	}
 	
 	// Create (POST)
