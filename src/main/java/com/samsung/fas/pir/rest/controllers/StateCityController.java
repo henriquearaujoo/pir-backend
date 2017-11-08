@@ -37,11 +37,19 @@ public class StateCityController {
 		return ResponseEntity.ok(scservice.findAllStates());
 	}
 	
-	@ApiMethod(description="Get specific state cities")
-	@ApiResponseObject(clazz = CityDTO.class)
+	@ApiMethod(description="Get specific state info")
+	@ApiResponseObject(clazz = StateDTO.class)
 	@RequestMapping(method=RequestMethod.GET, value="/state/{id}/")
 	@ResponseBody
-	public ResponseEntity<List<CityDTO>> getAllCitiesByState(@ApiPathParam @PathVariable("id") long id) {
+	public ResponseEntity<StateDTO> get(@ApiPathParam @PathVariable("id") long id) {
+		return ResponseEntity.ok(scservice.findOneState(id));
+	}
+
+	@ApiMethod(description="Get specific state cities")
+	@ApiResponseObject(clazz = CityDTO.class)
+	@RequestMapping(method=RequestMethod.GET, value="/state/{id}/cities")
+	@ResponseBody
+	public ResponseEntity<List<CityDTO>> getCitiesByState(@ApiPathParam @PathVariable("id") long id) {
 		return ResponseEntity.ok(scservice.findAllCitiesByState(id));
 	}
 
@@ -50,6 +58,6 @@ public class StateCityController {
 	@RequestMapping(method=RequestMethod.GET, value="/city/{id}/")
 	@ResponseBody
 	public ResponseEntity<CityDTO> getCity(@ApiPathParam @PathVariable("id") long id) {
-		return ResponseEntity.ok(scservice.findOne(id));
+		return ResponseEntity.ok(scservice.findOneCity(id));
 	}
 }

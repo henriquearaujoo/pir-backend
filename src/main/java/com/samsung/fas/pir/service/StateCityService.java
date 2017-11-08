@@ -25,7 +25,11 @@ public class StateCityService {
 		return sdao.findAll().stream().map(StateDTO::toDTO).collect(Collectors.toList());
 	}
 
-	public CityDTO findOne(long id) {
+	public StateDTO findOneState(long id) {
+		return StateDTO.toDTO(sdao.findOne(id));
+	}
+
+	public CityDTO findOneCity(long id) {
 		return CityDTO.toDTO(cdao.findCityByID(id));
 	}
 	

@@ -13,11 +13,8 @@ import com.samsung.fas.pir.models.entity.Rule;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Base64Utils;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,11 +44,11 @@ public class RuleService {
 			throw new RESTRuntimeException("rule.notfound");
 		return RRuleDTO.toDTO(rule);
 	}
-	
+
 	public void delete(String id) {
 		if (rdao.findOne(IDCoder.decode(id)) == null)
 			throw new RESTRuntimeException("rule.notfound");
-		rdao.delete(UUID.fromString(new String(Base64Utils.decodeFromUrlSafeString(id), StandardCharsets.UTF_8)));
+		rdao.delete(IDCoder.decode(id));
 	}
 	
 	public void save(CRuleDTO rule) {
