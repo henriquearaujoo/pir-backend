@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.dao;
 
-import com.samsung.fas.pir.dao.repository.IUsersRepository;
 import com.samsung.fas.pir.models.entity.User;
+import com.samsung.fas.pir.repository.IUsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,9 +26,17 @@ public class UsersDAO {
 	public Page<User> findAllByPage(Pageable pageable) {
 		return repository.findAll(pageable);
 	}
+
+	public Page<User> findAllActive(Pageable pageable) {
+		return repository.findAllByActive(pageable, true);
+	}
 	
 	public List<User> findByProfileID(UUID id) {
 		return repository.findByProfileGuid(id);
+	}
+
+	public List<User> findAllActive() {
+		return repository.findAllByActive(true);
 	}
 	
 	public List<User> findAll() {

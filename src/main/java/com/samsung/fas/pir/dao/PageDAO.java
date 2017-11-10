@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.dao;
 
-import com.samsung.fas.pir.dao.repository.IPageRepository;
 import com.samsung.fas.pir.models.entity.Page;
+import com.samsung.fas.pir.repository.IPageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

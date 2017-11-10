@@ -1,11 +1,10 @@
-package com.samsung.fas.pir.dao.repository;
+package com.samsung.fas.pir.repository;
 
-import java.util.List;
-
+import com.samsung.fas.pir.models.entity.City;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.samsung.fas.pir.models.entity.City;
+import java.util.List;
 
 @Repository
 public interface ICityRepository extends JpaRepository<City, Long> {

@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.dao.repository;
+package com.samsung.fas.pir.repository;
 
 import com.samsung.fas.pir.models.entity.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;

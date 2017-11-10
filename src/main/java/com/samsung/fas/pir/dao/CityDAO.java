@@ -1,12 +1,11 @@
 package com.samsung.fas.pir.dao;
 
-import java.util.List;
-
+import com.samsung.fas.pir.models.entity.City;
+import com.samsung.fas.pir.repository.ICityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.samsung.fas.pir.dao.repository.ICityRepository;
-import com.samsung.fas.pir.models.entity.City;
+import java.util.List;
 
 @Service
 public class CityDAO {

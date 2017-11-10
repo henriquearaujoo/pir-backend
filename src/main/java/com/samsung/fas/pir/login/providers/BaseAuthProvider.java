@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.login;
+package com.samsung.fas.pir.login.providers;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;

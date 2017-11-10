@@ -1,9 +1,7 @@
 package com.samsung.fas.pir.login.providers;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import com.samsung.fas.pir.service.UsersService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,10 +9,20 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.samsung.fas.pir.login.BaseAuthProvider;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class BAuthProvider extends BaseAuthProvider {
+	private UsersService uservice;
+
+	@Autowired
+	public BAuthProvider(UsersService service) {
+		super();
+		this.uservice = service;
+	}
+
+
 	@Override
 	protected void checkUserCredentials(String username, String password) throws UsernameNotFoundException, BadCredentialsException {
 		if (!username.equals("test")) {
@@ -30,15 +38,7 @@ public class BAuthProvider extends BaseAuthProvider {
 	protected User getUserDetails(String username, String password) {
 		List<GrantedAuthority> listRoles = new ArrayList<>();
 	    listRoles.add(new SimpleGrantedAuthority("GET_USER"));
-	    
-	    Collection<GrantedAuthority> authorities = listRoles;
-	    boolean accountNonExpired = true;
-	    boolean accountNonLocked = true;
-	    boolean credentialsNonExpired = true;
-	    boolean enabled = true;
-	 
-	    User appUser = new User(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
-	    return appUser;
+	    return new User(username, password, true, true, true, true, listRoles);
 	}
 
 }

@@ -32,8 +32,7 @@ public class UserController {
 	public UserController(UsersService uservice) {
 		this.uservice		= uservice;
 	}
-	
-	// Get all users (GET)
+
 	@ApiMethod(description="Get all users saved in database")
 	@ApiResponseObject(clazz = RUserDTO.class)
 	@RequestMapping(method=RequestMethod.GET)
@@ -41,17 +40,31 @@ public class UserController {
 	public ResponseEntity<List<RUserDTO>> getAll() {
 		return ResponseEntity.ok(uservice.findAll());
 	}
-	
-	// Get all users (GET)
+
 	@ApiMethod(description="Get all users saved in database (pageable)")
 	@ApiResponseObject(clazz = RUserDTO.class)
-	@RequestMapping(method=RequestMethod.GET, path="bypage")
+	@RequestMapping(method=RequestMethod.GET, path="/page")
 	@ResponseBody
 	public ResponseEntity<Page<RUserDTO>> getAll(Pageable pageable) {
 		return ResponseEntity.ok(uservice.findAll(pageable));
 	}
-	
-	// Get specific user (GET)
+
+	@ApiMethod(description="Get all avtive users")
+	@ApiResponseObject(clazz = RUserDTO.class)
+	@RequestMapping(method=RequestMethod.GET, path = "/active")
+	@ResponseBody
+	public ResponseEntity<List<RUserDTO>> getAllActive() {
+		return ResponseEntity.ok(uservice.findAllActive());
+	}
+
+	@ApiMethod(description="Get all active users (pageable)")
+	@ApiResponseObject(clazz = RUserDTO.class)
+	@RequestMapping(method=RequestMethod.GET, path="/active/page")
+	@ResponseBody
+	public ResponseEntity<Page<RUserDTO>> getAllActive(Pageable pageable) {
+		return ResponseEntity.ok(uservice.findAllActive(pageable));
+	}
+
 	@ApiMethod(description="Get specific user")
 	@ApiResponseObject(clazz = RUserDTO.class)
 	@RequestMapping(method=RequestMethod.GET, value="/{id}")
@@ -59,8 +72,7 @@ public class UserController {
 	public ResponseEntity<RUserDTO> get(@ApiPathParam @PathVariable("id") String codedid) {
 		return ResponseEntity.ok(uservice.findByID(codedid));
 	}
-	
-	// Create new user (POST)
+
 	@ApiMethod(description="Create a new user (If user is PJUR, then send only OrgDTO, else if PFIS, send PersonDTO)")
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.POST)
@@ -69,8 +81,7 @@ public class UserController {
 		uservice.save(user);
 		return ResponseEntity.ok(null);
 	}
-	
-	// Update user (PUT)
+
 	@ApiMethod(description="Update an user (If user is PJUR, then send only OrgDTO, else if PFIS, send PersonDTO)")
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.PUT)
