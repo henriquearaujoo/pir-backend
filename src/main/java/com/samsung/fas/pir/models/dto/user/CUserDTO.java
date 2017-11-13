@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.models.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.models.dto.address.AddressDTO;
 import com.samsung.fas.pir.models.dto.user.typemodel.PFisDTO;
@@ -9,6 +10,7 @@ import com.samsung.fas.pir.models.entity.User;
 import com.samsung.fas.pir.models.enums.UserType;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jsondoc.core.annotation.ApiObject;
@@ -23,6 +25,7 @@ import javax.validation.constraints.Size;
  * Create user DTO
  */
 @ApiObject
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CUserDTO {
     @ApiObjectField(name="name", order=1)
     @Setter
@@ -31,6 +34,15 @@ public class CUserDTO {
     @NotEmpty(message="user.name.missing")
     @NotBlank(message="user.name.blank")
     private		String			name;
+
+	@ApiObjectField(name="email", order=3)
+	@Setter
+	@Getter
+	@JsonProperty("email")
+	@Email(message = "user.email.invalid")
+	@NotEmpty(message="user.email.empty")
+	@NotBlank(message="user.email.blank")
+	private		String			email;
 
     @ApiObjectField(name="login", order=2)
     @Setter
@@ -64,7 +76,6 @@ public class CUserDTO {
     @Setter
     @Getter
     @JsonProperty("profile")
-    @NotNull(message="user.profile.null")
     @NotEmpty(message="user.profile.empty")
     @NotBlank(message="user.profile.blank")
     private		String		profile;
@@ -104,6 +115,7 @@ public class CUserDTO {
         user.setName(name);
         user.setPassword(password);
         user.setType(type);
+        user.setEmail(email);
 
         try {
             user.setAddress(addressDTO.getModel());
