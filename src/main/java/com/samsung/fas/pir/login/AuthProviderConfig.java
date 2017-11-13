@@ -56,7 +56,7 @@ public class AuthProviderConfig extends WebSecurityConfigurerAdapter {
 //		.antMatchers("/test/**").hasAuthority("POST_TEST").anyRequest().authenticated()
 //		.and()
 //		.addFilterBefore(new JWTAuthenticationFilter("/login/", authenticationManager()), UsernamePasswordAuthenticationFilter.class)
-////		.addFilterBefore(new JWTAuthorizationFilter(authenticationManager()))
+//		.addFilterBefore(new JWTAuthorizationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
 //		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		
 		.and()
