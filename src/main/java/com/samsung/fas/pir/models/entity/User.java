@@ -52,6 +52,11 @@ public class User implements Serializable {
 	@Setter
 	@Column(name="full_name", nullable=false)
 	private		String			name;
+
+	@Getter
+	@Setter
+	@Column(name="email", nullable=false, unique = true)
+	private		String			email;
 	
 	@Getter
 	@Setter
