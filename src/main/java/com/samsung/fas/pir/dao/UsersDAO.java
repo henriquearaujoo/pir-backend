@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.dao;
 
+import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.models.entity.User;
 import com.samsung.fas.pir.repository.IUsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class UsersDAO {
@@ -18,33 +21,33 @@ public class UsersDAO {
 	public UsersDAO(IUsersRepository repository) {
 		this.repository = repository;
 	}
+
+	public List<User> findAll() {
+		return repository.findAll();
+	}
+
+	public List<User> findAll(Predicate predicate) {
+		return StreamSupport.stream(repository.findAll(predicate).spliterator(),true).collect(Collectors.toList());
+	}
+
+	public Page<User> findAll(Pageable pageable) {
+		return repository.findAll(pageable);
+	}
+
+	public Page<User> findAll(Predicate predicate, Pageable pageable) {
+		return repository.findAll(predicate, pageable);
+	}
 	
 	public User save(User user) {
 		return repository.save(user);
 	}
 	
-	public Page<User> findAllByPage(Pageable pageable) {
-		return repository.findAll(pageable);
-	}
-
-	public Page<User> findAllActive(Pageable pageable) {
-		return repository.findAllByActive(pageable, true);
-	}
-	
 	public List<User> findByProfileID(UUID id) {
 		return repository.findByProfileGuid(id);
 	}
-
-	public List<User> findAllActive() {
-		return repository.findAllByActive(true);
-	}
-	
-	public List<User> findAll() {
-		return repository.findAll();
-	}
 	
 	public User findOne(UUID id) {
-		return repository.findOneByGuid(id);
+		return repository.findOne(id);
 	}
 	
 	public User findOneByLogin(String login) {

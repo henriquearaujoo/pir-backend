@@ -1,8 +1,10 @@
 package com.samsung.fas.pir.rest.controllers;
 
+import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.models.dto.user.CUserDTO;
 import com.samsung.fas.pir.models.dto.user.RUserDTO;
 import com.samsung.fas.pir.models.dto.user.UUserDTO;
+import com.samsung.fas.pir.models.entity.User;
 import com.samsung.fas.pir.service.UsersService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;
@@ -10,6 +12,7 @@ import org.jsondoc.core.pojo.ApiVisibility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -45,24 +48,8 @@ public class UserController {
 	@ApiResponseObject(clazz = RUserDTO.class)
 	@RequestMapping(method=RequestMethod.GET, path="/page")
 	@ResponseBody
-	public ResponseEntity<Page<RUserDTO>> getAll(Pageable pageable) {
+	public ResponseEntity<Page<RUserDTO>> getAll(@ApiPathParam Pageable pageable) {
 		return ResponseEntity.ok(uservice.findAll(pageable));
-	}
-
-	@ApiMethod(description="Get all avtive users")
-	@ApiResponseObject(clazz = RUserDTO.class)
-	@RequestMapping(method=RequestMethod.GET, path = "/active")
-	@ResponseBody
-	public ResponseEntity<List<RUserDTO>> getAllActive() {
-		return ResponseEntity.ok(uservice.findAllActive());
-	}
-
-	@ApiMethod(description="Get all active users (pageable)")
-	@ApiResponseObject(clazz = RUserDTO.class)
-	@RequestMapping(method=RequestMethod.GET, path="/active/page")
-	@ResponseBody
-	public ResponseEntity<Page<RUserDTO>> getAllActive(Pageable pageable) {
-		return ResponseEntity.ok(uservice.findAllActive(pageable));
 	}
 
 	@ApiMethod(description="Get specific user")
@@ -90,4 +77,22 @@ public class UserController {
 		uservice.update(user);
 		return ResponseEntity.ok(null);
 	}
+
+
+	@ApiMethod(description="Search users using specified filters on url")
+	@ApiResponseObject
+	@RequestMapping(method=RequestMethod.GET, value="/search/")
+	@ResponseBody
+	public ResponseEntity<List<RUserDTO>> search(@QuerydslPredicate(root = User.class) Predicate predicate) {
+		return ResponseEntity.ok(uservice.findAll(predicate));
+	}
+
+	@ApiMethod(description="Search users using specified filters on url (Pageable)")
+	@ApiResponseObject
+	@RequestMapping(method=RequestMethod.GET, value="/search/page")
+	@ResponseBody
+	public ResponseEntity<Page<RUserDTO>> search(@ApiPathParam @QuerydslPredicate(root = User.class) Predicate predicate, @ApiPathParam Pageable pageable) {
+		return ResponseEntity.ok(uservice.findAll(predicate, pageable));
+	}
+
 }

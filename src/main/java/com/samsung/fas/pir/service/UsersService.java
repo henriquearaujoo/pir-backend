@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.service;
 
+import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.dao.CityDAO;
 import com.samsung.fas.pir.dao.ProfileDAO;
 import com.samsung.fas.pir.dao.UsersDAO;
@@ -35,7 +36,8 @@ public class UsersService {
 		this.pdao		= pdao;
 		this.cdao		= cdao;
 	}
-	
+
+	// region create and update model
 	public void save(CUserDTO user) {
 		// Login already exists
 		if(udao.findOneByLogin(user.getLogin()) != null)
@@ -191,21 +193,22 @@ public class UsersService {
 		toUpdate.setProfile(profile);
 		udao.update(toUpdate, model.getId());
 	}
+	// endregion
 	
 	public List<RUserDTO> findAll() {
 		return udao.findAll().stream().map(RUserDTO::toDTO).collect(Collectors.toList());
 	}
 	
 	public Page<RUserDTO> findAll(Pageable pageable) {
-		return udao.findAllByPage(pageable).map(RUserDTO::toDTO);
+		return udao.findAll(pageable).map(RUserDTO::toDTO);
 	}
 
-	public List<RUserDTO> findAllActive() {
-		return udao.findAllActive().stream().map(RUserDTO::toDTO).collect(Collectors.toList());
+	public List<RUserDTO> findAll(Predicate predicate) {
+		return udao.findAll(predicate).stream().map(RUserDTO::toDTO).collect(Collectors.toList());
 	}
 
-	public Page<RUserDTO> findAllActive(Pageable pageable) {
-		return udao.findAllActive(pageable).map(RUserDTO::toDTO);
+	public Page<RUserDTO> findAll(Predicate predicate, Pageable pageable) {
+		return udao.findAll(predicate, pageable).map(RUserDTO::toDTO);
 	}
 	
 	public RUserDTO findByID(String id) {
