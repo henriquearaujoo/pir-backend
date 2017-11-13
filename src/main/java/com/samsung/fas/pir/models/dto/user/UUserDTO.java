@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.models.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.models.dto.address.AddressDTO;
 import com.samsung.fas.pir.models.dto.user.typemodel.PFisDTO;
@@ -9,6 +10,7 @@ import com.samsung.fas.pir.models.entity.User;
 import com.samsung.fas.pir.models.enums.UserType;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jsondoc.core.annotation.ApiObject;
@@ -27,6 +29,7 @@ import java.util.UUID;
  * Update Uer DTO
  */
 @ApiObject
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UUserDTO {
 	@ApiObjectField(name="id",required=false, order=0)
 	@Getter
@@ -44,6 +47,15 @@ public class UUserDTO {
 	@NotEmpty(message="user.name.missing")
 	@NotBlank(message="user.name.blank")
 	private		String			name;
+
+	@ApiObjectField(name="email", order=3)
+	@Setter
+	@Getter
+	@JsonProperty("email")
+	@Email(message = "user.email.invalid")
+	@NotEmpty(message="user.email.empty")
+	@NotBlank(message="user.email.blank")
+	private		String			email;
 
 	@ApiObjectField(name="login", order=2)
 	@Setter
@@ -119,6 +131,7 @@ public class UUserDTO {
 		user.setName(name);
 		user.setPassword(password);
 		user.setType(type);
+		user.setEmail(email);
 		user.setGuid(UUID.fromString(new String(Base64Utils.decodeFromUrlSafeString(id), StandardCharsets.UTF_8)));
 
 		try {
