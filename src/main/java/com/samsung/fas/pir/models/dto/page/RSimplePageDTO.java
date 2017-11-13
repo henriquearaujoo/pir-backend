@@ -26,7 +26,7 @@ public class RSimplePageDTO {
 	@JsonProperty("route")
 	private		String			path;
 	
-	private RSimplePageDTO(Page entity) {
+	RSimplePageDTO(Page entity) {
 		id			= Base64Utils.encodeToUrlSafeString(entity.getGuid().toString().getBytes());
 		title		= entity.getTitle();
 		path		= entity.getUrl();
