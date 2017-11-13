@@ -8,6 +8,7 @@ import com.samsung.fas.pir.models.dto.user.typemodel.PJurDTO;
 import com.samsung.fas.pir.models.entity.User;
 import com.samsung.fas.pir.models.enums.UserType;
 import lombok.Getter;
+import lombok.Setter;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 import org.springframework.util.Base64Utils;
@@ -29,6 +30,12 @@ public class RUserDTO {
     @Getter
     @JsonProperty(value="name")
     private		String			name;
+
+	@ApiObjectField(name="email", order=3)
+	@Setter
+	@Getter
+	@JsonProperty("email")
+	private		String			email;
 
     @ApiObjectField(name="login", order=2)
     @Getter
@@ -75,6 +82,7 @@ public class RUserDTO {
         id				= Base64Utils.encodeToUrlSafeString(entity.getGuid().toString().getBytes());
         name			= entity.getName();
         login			= entity.getLogin();
+        email			= entity.getEmail();
         type			= entity.getType();
         active			= entity.isActive();
         registerDate	= entity.getRegisterDate();
