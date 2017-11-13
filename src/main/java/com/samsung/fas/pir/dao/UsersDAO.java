@@ -48,15 +48,15 @@ public class UsersDAO {
 	}
 	
 	public User findOneByLogin(String login) {
-		List<User> users = repository.findByLogin(login);
-		// ID is a primary unique key, so we going to have a list with only one element
-		return users.isEmpty()? null : users.get(0);
+		return repository.findByLogin(login);
 	}
 	
 	public User findOneByCpf(String cpf) {
-		List<User> users = repository.findByPersonCpf(cpf);
-		// ID is a primary unique key, so we going to have a list with only one element
-		return users.isEmpty()? null : users.get(0);
+		return repository.findByPersonCpf(cpf);
+	}
+
+	public User findOneByEmail(String email) {
+		return repository.findByEmail(email);
 	}
 	
 	public List<User> findByRg(String rg) {
@@ -64,9 +64,7 @@ public class UsersDAO {
 	}
 	
 	public User findOneByCnpj(String cnpj) {
-		List<User> users = repository.findByOrganizationCnpj(cnpj);
-		// ID is a primary unique key, so we going to have a list with only one element
-		return users.isEmpty()? null : users.get(0);
+		return repository.findByOrganizationCnpj(cnpj);
 	}
 	
 	public List<User> findByIe(String ie) {
