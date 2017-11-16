@@ -25,7 +25,7 @@ import java.util.List;
 @Api(name = "User Services", description = "Methods managing users", group = "Users", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/users/")
 @Produces(MediaType.APPLICATION_JSON)
 @CrossOrigin
 public class UserController {
@@ -46,7 +46,7 @@ public class UserController {
 
 	@ApiMethod(description="Get all users saved in database (pageable)")
 	@ApiResponseObject(clazz = RUserDTO.class)
-	@RequestMapping(method=RequestMethod.GET, path="/page")
+	@RequestMapping(method=RequestMethod.GET, path="page/")
 	@ResponseBody
 	public ResponseEntity<Page<RUserDTO>> getAll(@ApiPathParam Pageable pageable) {
 		return ResponseEntity.ok(uservice.findAll(pageable));
@@ -54,7 +54,7 @@ public class UserController {
 
 	@ApiMethod(description="Get specific user")
 	@ApiResponseObject(clazz = RUserDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="/{id}")
+	@RequestMapping(method=RequestMethod.GET, value="{id}/")
 	@ResponseBody
 	public ResponseEntity<RUserDTO> get(@ApiPathParam @PathVariable("id") String codedid) {
 		return ResponseEntity.ok(uservice.findByID(codedid));
@@ -81,7 +81,7 @@ public class UserController {
 
 	@ApiMethod(description="Search users using specified filters on url")
 	@ApiResponseObject
-	@RequestMapping(method=RequestMethod.GET, value="/search/")
+	@RequestMapping(method=RequestMethod.GET, value="search/")
 	@ResponseBody
 	public ResponseEntity<List<RUserDTO>> search(@QuerydslPredicate(root = User.class) Predicate predicate) {
 		return ResponseEntity.ok(uservice.findAll(predicate));
@@ -89,16 +89,15 @@ public class UserController {
 
 	@ApiMethod(description="Search users using specified filters on url (Pageable)")
 	@ApiResponseObject
-	@RequestMapping(method=RequestMethod.GET, value="/search/page")
+	@RequestMapping(method=RequestMethod.GET, value="search/page/")
 	@ResponseBody
 	public ResponseEntity<Page<RUserDTO>> search(@ApiPathParam @QuerydslPredicate(root = User.class) Predicate predicate, @ApiPathParam Pageable pageable) {
 		return ResponseEntity.ok(uservice.findAll(predicate, pageable));
 	}
 
-	@RequestMapping(method=RequestMethod.GET, value="/test/page/")
+	@RequestMapping(method=RequestMethod.GET, value="test/page/")
 	@ResponseBody
 	public ResponseEntity<Page<RUserDTO>> test(@QuerydslPredicate(root = User.class) Predicate predicate, @ApiPathParam Pageable pageable) {
 		return ResponseEntity.ok(uservice.findAll(predicate, pageable));
 	}
-
 }
