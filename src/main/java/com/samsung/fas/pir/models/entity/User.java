@@ -7,6 +7,7 @@ import com.samsung.fas.pir.models.enums.UserType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -82,12 +83,14 @@ public class User implements Serializable {
 	@Setter
 	@Embedded	
 	private		Organization	organization;
-	
+
 	@Getter
+	@Setter
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="dt_register", updatable=false, nullable=false)
-	private		Date			registerDate;
+	private 	Date 			registerDate;
 	
 	@Getter
 	@Setter

@@ -95,4 +95,10 @@ public class UserController {
 		return ResponseEntity.ok(uservice.findAll(predicate, pageable));
 	}
 
+	@RequestMapping(method=RequestMethod.GET, value="/test/page/")
+	@ResponseBody
+	public ResponseEntity<Page<RUserDTO>> test(@QuerydslPredicate(root = User.class) Predicate predicate, @ApiPathParam Pageable pageable) {
+		return ResponseEntity.ok(uservice.findAll(predicate, pageable));
+	}
+
 }

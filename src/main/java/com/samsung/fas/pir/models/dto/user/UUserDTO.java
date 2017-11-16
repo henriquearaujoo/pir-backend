@@ -8,6 +8,7 @@ import com.samsung.fas.pir.models.dto.user.typemodel.PFisDTO;
 import com.samsung.fas.pir.models.dto.user.typemodel.PJurDTO;
 import com.samsung.fas.pir.models.entity.User;
 import com.samsung.fas.pir.models.enums.UserType;
+import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
@@ -16,14 +17,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Base64Utils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.UUID;
 
 /*
  * Update Uer DTO
@@ -94,12 +91,6 @@ public class UUserDTO {
 	@NotBlank(message="user.profile.blank")
 	private		String		profile;
 
-	@ApiObjectField(name="date", order=7)
-	@Setter
-	@Getter
-	@JsonProperty("date")
-	private Date registerDate;
-
 	// Other properties
 	@ApiObjectField(name="address", order=8)
 	@Setter
@@ -132,7 +123,7 @@ public class UUserDTO {
 		user.setPassword(password);
 		user.setType(type);
 		user.setEmail(email);
-		user.setGuid(UUID.fromString(new String(Base64Utils.decodeFromUrlSafeString(id), StandardCharsets.UTF_8)));
+		user.setGuid(IDCoder.decode(id));
 
 		try {
 			user.setAddress(addressDTO.getModel());

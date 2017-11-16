@@ -6,6 +6,7 @@ import com.samsung.fas.pir.repository.IUsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +31,10 @@ public class UsersDAO {
 		return StreamSupport.stream(repository.findAll(predicate).spliterator(),true).collect(Collectors.toList());
 	}
 
+	public List<User> findAll(Specification<User> specification) {
+		return repository.findAll(specification);
+	}
+
 	public Page<User> findAll(Pageable pageable) {
 		return repository.findAll(pageable);
 	}
@@ -37,6 +42,8 @@ public class UsersDAO {
 	public Page<User> findAll(Predicate predicate, Pageable pageable) {
 		return repository.findAll(predicate, pageable);
 	}
+
+
 	
 	public User save(User user) {
 		return repository.save(user);
@@ -47,11 +54,11 @@ public class UsersDAO {
 	}
 	
 	public User findOne(UUID id) {
-		return repository.findOne(id);
+		return repository.findOneByGuid(id);
 	}
 	
 	public User findOneByLogin(String login) {
-		return repository.findByLogin(login);
+		return repository.findByLoginIgnoreCase(login);
 	}
 	
 	public User findOneByCpf(String cpf) {

@@ -50,32 +50,32 @@ public class RUserDTO {
     @ApiObjectField(name="type", order=5)
     @Getter
     @JsonProperty("type")
-    private UserType type;
+    private 	UserType 		type;
 
     @ApiObjectField(name="profile", order=6)
     @Getter
     @JsonProperty("profile")
-    private		String		profile;
+    private		String			profile;
 
     @ApiObjectField(name="date", order=7)
     @Getter
     @JsonProperty("date")
-    private Date registerDate;
+    private 	Date			registerDate;
 
     @ApiObjectField(name="address", order=8)
     @Getter
     @JsonProperty("address")
-    private AddressDTO addressDTO;
+    private 	AddressDTO 		addressDTO;
 
 	@ApiObjectField(name="person", order=9)
 	@Getter
 	@JsonProperty("pfis")
-	private PFisDTO pfis;
+	private 	PFisDTO 		pfis;
 
 	@ApiObjectField(name="org", order=10)
 	@Getter
 	@JsonProperty("pjur")
-	private PJurDTO pjur;
+	private 	PJurDTO 		pjur;
 
 
     private RUserDTO(User entity) {

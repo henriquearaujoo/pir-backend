@@ -5,7 +5,7 @@ import com.querydsl.core.types.dsl.StringPath;
 import com.samsung.fas.pir.models.entity.QUser;
 import com.samsung.fas.pir.models.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
@@ -13,15 +13,17 @@ import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import static com.samsung.fas.pir.models.entity.QUser.user;
+
 @Repository
-public interface IUsersRepository extends JpaRepository<User, UUID>, PagingAndSortingRepository<User, UUID>, QueryDslPredicateExecutor<User>, QuerydslBinderCustomizer<QUser> {
-
-	@Query(value="select * from \"user\" where lower(\"login\") = lower(?1)", nativeQuery=true)
-	User findByLogin(String login);
-
+public interface IUsersRepository extends JpaRepository<User, UUID>, PagingAndSortingRepository<User, UUID>, JpaSpecificationExecutor<User>, QueryDslPredicateExecutor<User>, QuerydslBinderCustomizer<QUser> {
+	User findByLoginIgnoreCase(String login);
+	User findOneByGuid(UUID guid);
 	User findByEmail(String email);
 	User findByOrganizationCnpj(String cnpj);
 	User findByPersonCpf(String cpf);
@@ -32,11 +34,38 @@ public interface IUsersRepository extends JpaRepository<User, UUID>, PagingAndSo
 	List<User> findByProfileGuid(UUID id);
 
 	/*
-	 * Ignore password search
+	 * URL Queries
 	 */
 	@Override
 	default void customize(QuerydslBindings bindings, QUser root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
-		bindings.excluding(root.password);
+		bindings.bind(user.guid).as("id").withDefaultBinding();
+		bindings.bind(user.active).as("status").withDefaultBinding();
+		bindings.bind(user.organization).as("pjur").withDefaultBinding();
+		bindings.bind(user.person).as("pfis").withDefaultBinding();
+		bindings.bind(user.profile.guid).as("profile").withDefaultBinding();
+		bindings.bind(user.address.city.name).as("city").withDefaultBinding();
+		bindings.bind(user.registerDate).as("date").all((path, collection) -> {
+			Iterator<? extends Date> 	iterator 	= collection.iterator();
+			Date						last		= null;
+			Date						first		= null;
+			Date						current		= null;
+			while (iterator.hasNext()) {
+				current = iterator.next();
+				last 	= last == null? current : last;
+				first	= first == null? current : first;
+
+				last	= current.compareTo(last) > 0? current : last;
+				first	= current.compareTo(first) < 0? current : first;
+			}
+			return path.between(first, last).and(path.between(first, last));
+		});
+		bindings.excluding	(	root.id,
+								root.password,
+								root.profile.id,
+								root.profile.whoCreated,
+								root.profile.whoUpdated,
+								root.profile.rules
+							);
 	}
 }
