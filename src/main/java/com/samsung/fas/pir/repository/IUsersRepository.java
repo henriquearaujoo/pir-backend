@@ -5,7 +5,6 @@ import com.querydsl.core.types.dsl.StringPath;
 import com.samsung.fas.pir.models.entity.QUser;
 import com.samsung.fas.pir.models.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
@@ -18,7 +17,7 @@ import java.util.*;
 import static com.samsung.fas.pir.models.entity.QUser.user;
 
 @Repository
-public interface IUsersRepository extends JpaRepository<User, UUID>, PagingAndSortingRepository<User, UUID>, JpaSpecificationExecutor<User>, QueryDslPredicateExecutor<User>, QuerydslBinderCustomizer<QUser> {
+public interface IUsersRepository extends JpaRepository<User, UUID>, PagingAndSortingRepository<User, UUID>, QueryDslPredicateExecutor<User>, QuerydslBinderCustomizer<QUser> {
 	User findByLoginIgnoreCase(String login);
 	User findOneByGuid(UUID guid);
 	User findByEmail(String email);
