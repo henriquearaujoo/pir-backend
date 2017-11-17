@@ -31,10 +31,6 @@ public class UsersDAO {
 		return StreamSupport.stream(repository.findAll(predicate).spliterator(),true).collect(Collectors.toList());
 	}
 
-	public List<User> findAll(Specification<User> specification) {
-		return repository.findAll(specification);
-	}
-
 	public Page<User> findAll(Pageable pageable) {
 		return repository.findAll(pageable);
 	}

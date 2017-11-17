@@ -200,10 +200,6 @@ public class UsersService {
 	public List<RUserDTO> findAll() {
 		return udao.findAll().stream().map(RUserDTO::toDTO).collect(Collectors.toList());
 	}
-
-	public List<RUserDTO> findAll(Specification<User> specification) {
-		return udao.findAll(specification).stream().map(RUserDTO::toDTO).collect(Collectors.toList());
-	}
 	
 	public Page<RUserDTO> findAll(Pageable pageable) {
 		return udao.findAll(pageable).map(RUserDTO::toDTO);
