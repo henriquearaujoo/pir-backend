@@ -17,7 +17,6 @@ import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 
@@ -200,10 +199,6 @@ public class UsersService {
 	public List<RUserDTO> findAll() {
 		return udao.findAll().stream().map(RUserDTO::toDTO).collect(Collectors.toList());
 	}
-
-	public List<RUserDTO> findAll(Specification<User> specification) {
-		return udao.findAll(specification).stream().map(RUserDTO::toDTO).collect(Collectors.toList());
-	}
 	
 	public Page<RUserDTO> findAll(Pageable pageable) {
 		return udao.findAll(pageable).map(RUserDTO::toDTO);
@@ -216,7 +211,7 @@ public class UsersService {
 	public Page<RUserDTO> findAll(Predicate predicate, Pageable pageable) {
 		return udao.findAll(predicate, pageable).map(RUserDTO::toDTO);
 	}
-	
+
 	public RUserDTO findByID(String id) {
 		User user = udao.findOne(IDCoder.decode(id));
 		if (user == null)

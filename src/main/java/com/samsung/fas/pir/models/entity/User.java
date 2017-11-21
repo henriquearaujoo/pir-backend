@@ -7,7 +7,6 @@ import com.samsung.fas.pir.models.enums.UserType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -18,7 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity(name="user")
-@Table(uniqueConstraints= {@UniqueConstraint(columnNames= {"id", "guid"})})
+@Table(name = "user", uniqueConstraints= {@UniqueConstraint(columnNames= {"id", "guid"})})
 @DynamicUpdate
 @DynamicInsert
 public class User implements Serializable {
@@ -86,7 +85,6 @@ public class User implements Serializable {
 
 	@Getter
 	@Setter
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="dt_register", updatable=false, nullable=false)

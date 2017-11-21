@@ -1,16 +1,21 @@
 package com.samsung.fas.pir.rest.controllers;
 
+import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.models.dto.page.RCompletePageDTO;
 import com.samsung.fas.pir.models.dto.page.RSimplePageDTO;
 import com.samsung.fas.pir.models.dto.profile.CProfileDTO;
 import com.samsung.fas.pir.models.dto.profile.RProfileDTO;
 import com.samsung.fas.pir.models.dto.profile.UProfileDTO;
 import com.samsung.fas.pir.models.dto.user.RUserDTO;
+import com.samsung.fas.pir.models.entity.Profile;
 import com.samsung.fas.pir.service.ProfileService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;
 import org.jsondoc.core.pojo.ApiVisibility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -41,15 +46,6 @@ public class ProfileController {
 	@ResponseBody
 	public ResponseEntity<List<RProfileDTO>> getAll() {
 		return ResponseEntity.ok(pservice.findAll());
-	}
-	
-	// Get all actives (GET)
-	@ApiMethod(description="Get all active profiles")
-	@ApiResponseObject(clazz = RProfileDTO.class)
-	@RequestMapping(method=RequestMethod.GET, path="/active")
-	@ResponseBody
-	public ResponseEntity<List<RProfileDTO>> getAllActive() {
-		return ResponseEntity.ok(pservice.findAllActive());
 	}
 	
 	// Get specific (GET)
@@ -97,5 +93,11 @@ public class ProfileController {
 	public ResponseEntity<?> update(@ApiBodyObject @Valid @RequestBody UProfileDTO profile) {
 		pservice.update(profile);
 		return ResponseEntity.ok(null);
+	}
+
+	@RequestMapping(method=RequestMethod.GET, value="test/page/")
+	@ResponseBody
+	public ResponseEntity<Page<RProfileDTO>> test(@QuerydslPredicate(root = Profile.class) Predicate predicate, @ApiPathParam Pageable pageable) {
+		return ResponseEntity.ok(pservice.findAll(predicate, pageable));
 	}
 }
