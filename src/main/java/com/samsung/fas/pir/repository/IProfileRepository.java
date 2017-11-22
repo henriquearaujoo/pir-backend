@@ -29,6 +29,6 @@ public interface IProfileRepository extends JpaRepository<Profile, UUID>, Paging
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
 		bindings.bind(root.guid).as("id").withDefaultBinding();
 		bindings.bind(root.active).as("status").withDefaultBinding();
-		bindings.bind(root.title).as("title").withDefaultBinding();
+		bindings.bind(root.users).as("users").withDefaultBinding();
 	}
 }

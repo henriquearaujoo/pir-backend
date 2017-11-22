@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.service;
 
+import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.dao.PageDAO;
 import com.samsung.fas.pir.dao.ProfileDAO;
 import com.samsung.fas.pir.dao.RuleDAO;
@@ -12,6 +13,7 @@ import com.samsung.fas.pir.models.entity.Profile;
 import com.samsung.fas.pir.models.entity.Rule;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +34,18 @@ public class RuleService {
 	
 	public List<RRuleDTO> findAll() {
 		return rdao.findAll().stream().map(RRuleDTO::toDTO).collect(Collectors.toList());
+	}
+
+	public List<RRuleDTO> findAll(Predicate predicate) {
+		return rdao.findAll(predicate).stream().map(RRuleDTO::toDTO).collect(Collectors.toList());
+	}
+
+	public org.springframework.data.domain.Page<RRuleDTO> findAll(Pageable pageable) {
+		return rdao.findAll(pageable).map(RRuleDTO::toDTO);
+	}
+
+	public org.springframework.data.domain.Page<RRuleDTO> findAll(Predicate predicate, Pageable pageable) {
+		return rdao.findAll(predicate, pageable).map(RRuleDTO::toDTO);
 	}
 	
 	public List<RRuleDTO> findByProfileID(String id) {

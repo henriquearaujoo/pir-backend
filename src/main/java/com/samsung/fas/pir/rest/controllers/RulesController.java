@@ -1,13 +1,18 @@
 package com.samsung.fas.pir.rest.controllers;
 
+import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.models.dto.rule.CRuleDTO;
 import com.samsung.fas.pir.models.dto.rule.RRuleDTO;
 import com.samsung.fas.pir.models.dto.rule.URuleDTO;
+import com.samsung.fas.pir.models.entity.Rule;
 import com.samsung.fas.pir.service.RuleService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;
 import org.jsondoc.core.pojo.ApiVisibility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +25,7 @@ import java.util.List;
 @Api(name = "Rules Services", description = "Methods managing user profiles rules (permissions)", group = "Profiles", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/rules")
+@RequestMapping("/rules/")
 @Produces(MediaType.APPLICATION_JSON)
 @CrossOrigin
 public class RulesController {
@@ -39,20 +44,20 @@ public class RulesController {
 	public ResponseEntity<List<RRuleDTO>> getAll() {
 		return ResponseEntity.ok(rservice.findAll());
 	}
-	
-	// Get specific (GET)
-	@ApiMethod(description="Get rules by profile")
+
+	// Get all (GET)
+	@ApiMethod(description="Get all rules saved in database (pageable)")
 	@ApiResponseObject(clazz = RRuleDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="/by/profile/{id}")
+	@RequestMapping(method=RequestMethod.GET, path = "page/")
 	@ResponseBody
-	public ResponseEntity<List<RRuleDTO>> getByProfile(@ApiPathParam @PathVariable("id") String codedid) {
-		return ResponseEntity.ok(rservice.findByProfileID(codedid));
+	public ResponseEntity<Page<RRuleDTO>> getAll(Pageable pageable) {
+		return ResponseEntity.ok(rservice.findAll(pageable));
 	}
-	
+
 	// Get specific (GET)
 	@ApiMethod(description="Get specific rule saved in database")
 	@ApiResponseObject(clazz = RRuleDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="/{id}")
+	@RequestMapping(method=RequestMethod.GET, value="{id}/")
 	@ResponseBody
 	public ResponseEntity<RRuleDTO> get(@ApiPathParam @PathVariable("id") String codedid) {
 		return ResponseEntity.ok(rservice.findOne(codedid));
@@ -81,10 +86,26 @@ public class RulesController {
 	// Delete specific (DELETE)
 	@ApiMethod(description="Delete a profile saved in database")
 	@ApiResponseObject
-	@RequestMapping(method=RequestMethod.DELETE, value="/{id}")
+	@RequestMapping(method=RequestMethod.DELETE, value="{id}/")
 	@ResponseBody
 	public ResponseEntity<?> delete(@ApiPathParam @PathVariable("id") String codedid) {
 		rservice.delete(codedid);
 		return ResponseEntity.ok(null);
+	}
+
+	@ApiMethod(description="Search rules using specified filters on url")
+	@ApiResponseObject
+	@RequestMapping(method=RequestMethod.GET, value="search/")
+	@ResponseBody
+	public ResponseEntity<List<RRuleDTO>> search(@QuerydslPredicate(root = Rule.class) Predicate predicate) {
+		return ResponseEntity.ok(rservice.findAll(predicate));
+	}
+
+	@ApiMethod(description="Search rules using specified filters on url (Pageable)")
+	@ApiResponseObject
+	@RequestMapping(method=RequestMethod.GET, value="search/page/")
+	@ResponseBody
+	public ResponseEntity<Page<RRuleDTO>> search(@ApiPathParam @QuerydslPredicate(root = Rule.class) Predicate predicate, @ApiPathParam Pageable pageable) {
+		return ResponseEntity.ok(rservice.findAll(predicate, pageable));
 	}
 }

@@ -6,7 +6,6 @@ import com.samsung.fas.pir.models.dto.page.RSimplePageDTO;
 import com.samsung.fas.pir.models.dto.profile.CProfileDTO;
 import com.samsung.fas.pir.models.dto.profile.RProfileDTO;
 import com.samsung.fas.pir.models.dto.profile.UProfileDTO;
-import com.samsung.fas.pir.models.dto.user.RUserDTO;
 import com.samsung.fas.pir.models.entity.Profile;
 import com.samsung.fas.pir.service.ProfileService;
 import org.jsondoc.core.annotation.*;
@@ -28,7 +27,7 @@ import java.util.List;
 @Api(name = "Profile Services", description = "Methods managing user profiles", group = "Profiles", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/profiles")
+@RequestMapping("/profiles/")
 @Produces(MediaType.APPLICATION_JSON)
 @CrossOrigin
 public class ProfileController {
@@ -39,6 +38,15 @@ public class ProfileController {
 		this.pservice		= pservice;
 	}
 
+	// Get specific (GET)
+	@ApiMethod(description="Get a sepcific profile")
+	@ApiResponseObject(clazz = RProfileDTO.class)
+	@RequestMapping(method=RequestMethod.GET, value="{id}/")
+	@ResponseBody
+	public ResponseEntity<RProfileDTO> get(@ApiPathParam @PathVariable("id") String codedid) {
+		return ResponseEntity.ok(pservice.findOne(codedid));
+	}
+
 	// Get all (GET)
 	@ApiMethod(description="Get all profiles saved in database")
 	@ApiResponseObject(clazz = CProfileDTO.class)
@@ -47,29 +55,21 @@ public class ProfileController {
 	public ResponseEntity<List<RProfileDTO>> getAll() {
 		return ResponseEntity.ok(pservice.findAll());
 	}
-	
-	// Get specific (GET)
-	@ApiMethod(description="Get a sepcific profile")
-	@ApiResponseObject(clazz = RProfileDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="/{id}")
+
+	// Get all (GET)
+	@ApiMethod(description="Get all profiles saved in database (Pageable)")
+	@ApiResponseObject(clazz = CProfileDTO.class)
+	@RequestMapping(method=RequestMethod.GET, path = "page/")
 	@ResponseBody
-	public ResponseEntity<RProfileDTO> get(@ApiPathParam @PathVariable("id") String codedid) {
-		return ResponseEntity.ok(pservice.findOne(codedid));
+	public ResponseEntity<Page<RProfileDTO>> getAll(Pageable pageable) {
+		return ResponseEntity.ok(pservice.findAll(pageable));
 	}
-	
-	// Get users from specified profile (GET)
-	@ApiMethod(description="Get users from a specific profile")
-	@ApiResponseObject(clazz = RUserDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="/{id}/users")
-	@ResponseBody
-	public ResponseEntity<List<RUserDTO>> getUsers(@ApiPathParam @PathVariable("id") String codedid) {
-		return ResponseEntity.ok(pservice.findUsersByProfileID(codedid));
-	}
-	
+
 	// Get pages from specified profile (GET)
-	@ApiMethod(description="Get pages from a specific profile")
+	@Deprecated
+	@ApiMethod(description="Get rules from spcific page")
 	@ApiResponseObject(clazz = RSimplePageDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="/{id}/pages")
+	@RequestMapping(method=RequestMethod.GET, value="{id}/pages")
 	@ResponseBody
 	public ResponseEntity<List<RCompletePageDTO>> getPages(@ApiPathParam @PathVariable("id") String codedid) {
 		return ResponseEntity.ok(pservice.findPagesByProfileID(codedid));
@@ -95,9 +95,19 @@ public class ProfileController {
 		return ResponseEntity.ok(null);
 	}
 
-	@RequestMapping(method=RequestMethod.GET, value="test/page/")
+	@ApiMethod(description="Search profiles using specified filters on url")
+	@ApiResponseObject
+	@RequestMapping(method=RequestMethod.GET, value="search/")
 	@ResponseBody
-	public ResponseEntity<Page<RProfileDTO>> test(@QuerydslPredicate(root = Profile.class) Predicate predicate, @ApiPathParam Pageable pageable) {
+	public ResponseEntity<List<RProfileDTO>> search(@QuerydslPredicate(root = Profile.class) Predicate predicate) {
+		return ResponseEntity.ok(pservice.findAll(predicate));
+	}
+
+	@ApiMethod(description="Search profiles using specified filters on url (Pageable)")
+	@ApiResponseObject
+	@RequestMapping(method=RequestMethod.GET, value="search/page/")
+	@ResponseBody
+	public ResponseEntity<Page<RProfileDTO>> search(@ApiPathParam @QuerydslPredicate(root = Profile.class) Predicate predicate, @ApiPathParam Pageable pageable) {
 		return ResponseEntity.ok(pservice.findAll(predicate, pageable));
 	}
 }

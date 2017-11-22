@@ -9,7 +9,6 @@ import com.samsung.fas.pir.models.dto.page.RCompletePageDTO;
 import com.samsung.fas.pir.models.dto.profile.CProfileDTO;
 import com.samsung.fas.pir.models.dto.profile.RProfileDTO;
 import com.samsung.fas.pir.models.dto.profile.UProfileDTO;
-import com.samsung.fas.pir.models.dto.user.RUserDTO;
 import com.samsung.fas.pir.models.entity.Profile;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +22,31 @@ import java.util.stream.Collectors;
 @Service
 public class ProfileService {
 	private 	ProfileDAO 	pdao;
-	private		UsersDAO	udao;
 	private		RuleDAO		rdao;
 
 	@Autowired
 	public ProfileService(ProfileDAO pdao, UsersDAO udao, RuleDAO rdao) {
 		this.pdao		= pdao;
-		this.udao		= udao;
 		this.rdao		= rdao;
+	}
+
+	public RProfileDTO findOne(String id) {
+		Profile profile = pdao.findOne(IDCoder.decode(id));
+		if (profile == null)
+			throw new RESTRuntimeException("profile.notfound");
+		return RProfileDTO.toDTO(profile);
 	}
 
 	public List<RProfileDTO> findAll() {
 		return pdao.findAll().stream().map(RProfileDTO::toDTO).collect(Collectors.toList());
+	}
+
+	public Page<RProfileDTO> findAll(Pageable pageable) {
+		return pdao.findAll(pageable).map(RProfileDTO::toDTO);
+	}
+
+	public List<RProfileDTO> findAll(Predicate predicate) {
+		return pdao.findAll(predicate).stream().map(RProfileDTO::toDTO).collect(Collectors.toList());
 	}
 
 	public Page<RProfileDTO> findAll(Predicate predicate, Pageable pageable) {
@@ -43,17 +55,6 @@ public class ProfileService {
 
 	public List<RCompletePageDTO> findPagesByProfileID(String id) {
 		return rdao.findByProfileID(IDCoder.decode(id)).stream().map(m -> RCompletePageDTO.toDTO(m.getPage())).collect(Collectors.toList());
-	}
-	
-	public List<RUserDTO> findUsersByProfileID(String id) {
-		return udao.findByProfileID(IDCoder.decode(id)).stream().map(RUserDTO::toDTO).collect(Collectors.toList());
-	}
-	
-	public RProfileDTO findOne(String id) {
-		Profile profile = pdao.findOne(IDCoder.decode(id));
-		if (profile == null) 
-			throw new RESTRuntimeException("profile.notfound");
-		return RProfileDTO.toDTO(profile);
 	}
 	
 	public void save(CProfileDTO profile) {

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class ProfileDAO {
@@ -23,13 +25,21 @@ public class ProfileDAO {
 	public Profile findOne(UUID id) {
 		return repository.findOneByGuid(id);
 	}
-	
+
 	public Profile findOneByTitle(String title) {
 		return repository.findByTitleIgnoreCase(title);
 	}
-	
+
 	public List<Profile> findAll() {
 		return repository.findAll();
+	}
+
+	public List<Profile> findAll(Predicate predicate) {
+		return StreamSupport.stream(repository.findAll(predicate).spliterator(), true).collect(Collectors.toList());
+	}
+
+	public Page<Profile> findAll(Pageable pageable) {
+		return repository.findAll(pageable);
 	}
 
 	public Page<Profile> findAll(Predicate predicate, Pageable pageable) {
