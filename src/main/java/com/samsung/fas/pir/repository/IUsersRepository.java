@@ -25,7 +25,7 @@ public interface IUsersRepository extends JpaRepository<User, UUID>, PagingAndSo
 	User findByOrganizationCnpj(String cnpj);
 	User findByPersonCpf(String cpf);
 
-	@Query(value = "select * from user order by lower(name)", nativeQuery = true)
+	@Query(value = "select * from \"user\" order by lower(\"full_name\")", nativeQuery = true)
 	List<User> findAll();
 	List<User> findByPersonRg(String rg);
 	List<User> findByOrganizationIe(String ie);
