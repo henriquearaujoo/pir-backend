@@ -78,7 +78,6 @@ public class UserController {
 		return ResponseEntity.ok(null);
 	}
 
-
 	@ApiMethod(description="Search users using specified filters on url")
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.GET, value="search/")
@@ -92,12 +91,6 @@ public class UserController {
 	@RequestMapping(method=RequestMethod.GET, value="search/page/")
 	@ResponseBody
 	public ResponseEntity<Page<RUserDTO>> search(@ApiPathParam @QuerydslPredicate(root = User.class) Predicate predicate, @ApiPathParam Pageable pageable) {
-		return ResponseEntity.ok(uservice.findAll(predicate, pageable));
-	}
-
-	@RequestMapping(method=RequestMethod.GET, value="test/page/")
-	@ResponseBody
-	public ResponseEntity<Page<RUserDTO>> test(@QuerydslPredicate(root = User.class) Predicate predicate, @ApiPathParam Pageable pageable) {
 		return ResponseEntity.ok(uservice.findAll(predicate, pageable));
 	}
 }

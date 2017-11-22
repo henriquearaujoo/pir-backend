@@ -38,6 +38,29 @@ public class UsersService {
 		this.cdao		= cdao;
 	}
 
+	public List<RUserDTO> findAll() {
+		return udao.findAll().stream().map(RUserDTO::toDTO).collect(Collectors.toList());
+	}
+
+	public Page<RUserDTO> findAll(Pageable pageable) {
+		return udao.findAll(pageable).map(RUserDTO::toDTO);
+	}
+
+	public List<RUserDTO> findAll(Predicate predicate) {
+		return udao.findAll(predicate).stream().map(RUserDTO::toDTO).collect(Collectors.toList());
+	}
+
+	public Page<RUserDTO> findAll(Predicate predicate, Pageable pageable) {
+		return udao.findAll(predicate, pageable).map(RUserDTO::toDTO);
+	}
+
+	public RUserDTO findByID(String id) {
+		User user = udao.findOne(IDCoder.decode(id));
+		if (user == null)
+			throw new RESTRuntimeException("profile.notfound");
+		return RUserDTO.toDTO(user);
+	}
+
 	// region create and update model
 	public void save(CUserDTO user) {
 		// Login already exists
@@ -195,27 +218,4 @@ public class UsersService {
 		udao.update(toUpdate, model.getId());
 	}
 	// endregion
-	
-	public List<RUserDTO> findAll() {
-		return udao.findAll().stream().map(RUserDTO::toDTO).collect(Collectors.toList());
-	}
-	
-	public Page<RUserDTO> findAll(Pageable pageable) {
-		return udao.findAll(pageable).map(RUserDTO::toDTO);
-	}
-
-	public List<RUserDTO> findAll(Predicate predicate) {
-		return udao.findAll(predicate).stream().map(RUserDTO::toDTO).collect(Collectors.toList());
-	}
-
-	public Page<RUserDTO> findAll(Predicate predicate, Pageable pageable) {
-		return udao.findAll(predicate, pageable).map(RUserDTO::toDTO);
-	}
-
-	public RUserDTO findByID(String id) {
-		User user = udao.findOne(IDCoder.decode(id));
-		if (user == null)
-			throw new RESTRuntimeException("profile.notfound");
-		return RUserDTO.toDTO(user);
-	}
 }
