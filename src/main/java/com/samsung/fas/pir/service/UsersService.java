@@ -96,7 +96,7 @@ public class UsersService {
 			
 			// Validate CNPJ
 			String 	ucnpj 	= user.getPjur().getCnpj();
-			if(!CNPValidator.isValidCPF(ucnpj))
+			if(!CNPValidator.isValidCNPJ(ucnpj))
 				throw new RESTRuntimeException("user.type.pjur.cnpj.invalid");
 			
 			// Verify if CPF exists in database
