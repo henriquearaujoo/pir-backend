@@ -3,7 +3,7 @@ package com.samsung.fas.pir.models.entity;
 import com.samsung.fas.pir.models.entity.user.embedded.Address;
 import com.samsung.fas.pir.models.entity.user.embedded.Organization;
 import com.samsung.fas.pir.models.entity.user.embedded.Person;
-import com.samsung.fas.pir.models.enums.UserType;
+import com.samsung.fas.pir.models.enums.EUserType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -66,7 +66,7 @@ public class User implements Serializable {
 	@Getter
 	@Setter
 	@Column(name="type", nullable=false)
-	private		UserType		type;
+	private EUserType type;
 	
 	@Getter
 	@Setter

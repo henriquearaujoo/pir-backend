@@ -3,7 +3,9 @@ package com.samsung.fas.pir.models.dto.address;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.samsung.fas.pir.models.entity.user.embedded.Address;
+import com.samsung.fas.pir.utils.serializers.LongJsonDeserializer;
 import lombok.Getter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -48,6 +50,7 @@ public class AddressDTO {
 	@ApiObjectField(name="city")
 	@Getter
 	@JsonProperty("city")
+	@JsonDeserialize(using = LongJsonDeserializer.class)
 	@NotNull(message="user.address.city.missing")
 	private		Long			cityId;
 	

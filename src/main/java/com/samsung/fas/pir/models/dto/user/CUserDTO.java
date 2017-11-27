@@ -7,12 +7,11 @@ import com.samsung.fas.pir.models.dto.address.AddressDTO;
 import com.samsung.fas.pir.models.dto.user.typemodel.PFisDTO;
 import com.samsung.fas.pir.models.dto.user.typemodel.PJurDTO;
 import com.samsung.fas.pir.models.entity.User;
-import com.samsung.fas.pir.models.enums.UserType;
+import com.samsung.fas.pir.models.enums.EUserType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 import org.slf4j.LoggerFactory;
@@ -31,7 +30,6 @@ public class CUserDTO {
     @Setter
     @Getter
     @JsonProperty(value="name")
-    @NotEmpty(message="user.name.missing")
     @NotBlank(message="user.name.blank")
     private		String			name;
 
@@ -40,7 +38,6 @@ public class CUserDTO {
 	@Getter
 	@JsonProperty("email")
 	@Email(message = "user.email.invalid")
-	@NotEmpty(message="user.email.empty")
 	@NotBlank(message="user.email.blank")
 	private		String			email;
 
@@ -48,7 +45,6 @@ public class CUserDTO {
     @Setter
     @Getter
     @JsonProperty("login")
-    @NotEmpty(message="user.login.empty")
     @NotBlank(message="user.login.blank")
     private		String			login;
 
@@ -70,13 +66,12 @@ public class CUserDTO {
     @Getter
     @JsonProperty("type")
     @NotNull(message="user.type.null")
-    private UserType type;
+    private EUserType type;
 
     @ApiObjectField(name="profile", order=6)
     @Setter
     @Getter
     @JsonProperty("profile")
-    @NotEmpty(message="user.profile.empty")
     @NotBlank(message="user.profile.blank")
     private		String		profile;
 
@@ -87,21 +82,21 @@ public class CUserDTO {
     @JsonProperty("address")
     @NotNull(message="user.address.missing")
     @Valid
-    private AddressDTO addressDTO;
+    private 	AddressDTO 	addressDTO;
 
     @ApiObjectField(name="pfis", order=9)
     @Setter
     @Getter
     @JsonProperty("pfis")
     @Valid
-    private PFisDTO pfis;
+    private 	PFisDTO 	pfis;
 
     @ApiObjectField(name="pjur", order=10)
     @Setter
     @Getter
     @JsonProperty("pjur")
     @Valid
-    private PJurDTO pjur;
+    private 	PJurDTO 	pjur;
 
     public CUserDTO() {
         // JSON

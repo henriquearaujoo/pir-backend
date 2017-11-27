@@ -11,8 +11,7 @@ import com.samsung.fas.pir.models.dto.user.UUserDTO;
 import com.samsung.fas.pir.models.entity.City;
 import com.samsung.fas.pir.models.entity.Profile;
 import com.samsung.fas.pir.models.entity.User;
-import com.samsung.fas.pir.models.enums.UserType;
-import com.samsung.fas.pir.utils.CNPValidator;
+import com.samsung.fas.pir.models.enums.EUserType;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -70,37 +69,27 @@ public class UsersService {
 		if(udao.findOneByEmail(user.getEmail()) != null)
 			throw new RESTRuntimeException("user.email.exists");
 		
-		if (user.getType() == UserType.PFIS) {
+		if (user.getType() == EUserType.PFIS) {
 			if (user.getPjur() != null)
 				throw new RESTRuntimeException("user.type.pfis.data.mismatch");
 			
 			if (user.getPfis() == null)
 				throw new RESTRuntimeException("user.type.pfis.data.missing");
-			
-			// Validate CPF
-			String 	ucpf 	= user.getPfis().getCpf();
-			if(!CNPValidator.isValidCPF(ucpf))
-				throw new RESTRuntimeException("user.type.pfis.cpf.invalid");
-			
+
 			// Verify if CPF exists in database
-			if (udao.findOneByCpf(ucpf) != null)
+			if (udao.findOneByCpf(user.getPfis().getCpf()) != null)
 				throw new RESTRuntimeException("user.type.pfis.cpf.exists");
 		}
 		
-		if (user.getType() == UserType.PJUR) {
+		if (user.getType() == EUserType.PJUR) {
 			if (user.getPfis() != null)
 				throw new RESTRuntimeException("user.type.pjur.data.mismatch");
 			
 			if (user.getPjur() == null)
 				throw new RESTRuntimeException("user.type.pjur.data.missing");
-			
-			// Validate CNPJ
-			String 	ucnpj 	= user.getPjur().getCnpj();
-			if(!CNPValidator.isValidCNPJ(ucnpj))
-				throw new RESTRuntimeException("user.type.pjur.cnpj.invalid");
-			
+
 			// Verify if CPF exists in database
-			if (udao.findOneByCnpj(ucnpj) != null)
+			if (udao.findOneByCnpj(user.getPjur().getCnpj()) != null)
 				throw new RESTRuntimeException("user.type.pjur.cnpj.exists");
 		}
 		
@@ -141,7 +130,7 @@ public class UsersService {
 			throw new RESTRuntimeException("user.email.exists");
 		
 		// If PFIS
-		if (user.getType() == UserType.PFIS) {
+		if (user.getType() == EUserType.PFIS) {
 			
 			// Verify type mismatch
 			if (user.getPjur() != null) {
@@ -151,21 +140,16 @@ public class UsersService {
 			// Verify if PFIS data is missing
 			if(user.getPfis() == null)
 				throw new RESTRuntimeException("user.type.pfis.data.missing");
-			
+
+			// Verify if CPF exists in database
 			String 	mcpf 	= model.getPerson() == null? "" : model.getPerson().getCpf();
 			String 	ucpf 	= user.getPfis().getCpf();
-			
-			// Validate CPF
-			if(!CNPValidator.isValidCPF(ucpf))
-				throw new RESTRuntimeException("user.type.pfis.cpf.invalid");
-			
-			// Verify if CPF exists in database
 			if (!mcpf.equalsIgnoreCase(ucpf) && udao.findOneByCpf(ucpf) != null)
 				throw new RESTRuntimeException("user.type.pfis.cpf.exists");
 		}
 		
 		// If PJUR
-		if (user.getType() == UserType.PJUR) {
+		if (user.getType() == EUserType.PJUR) {
 			
 			// Verify type mismatch
 			if (user.getPfis() != null) {
@@ -176,14 +160,9 @@ public class UsersService {
 			if(user.getPjur() == null)
 				throw new RESTRuntimeException("user.type.pjur.data.missing");
 
+			// Verify if CNPJ exists in database
 			String 	mcnpj 	= model.getOrganization() == null? "" : model.getOrganization().getCnpj();
 			String 	ucnpj 	= user.getPjur().getCnpj();
-
-			// Validate CNPJ
-			if(!CNPValidator.isValidCNPJ(ucnpj))
-				throw new RESTRuntimeException("user.type.pjur.cnpj.invalid");
-
-			// Verify if CNPJ exists in database
 			if (!mcnpj.equalsIgnoreCase(ucnpj) && udao.findOneByCnpj(ucnpj) != null)
 				throw new RESTRuntimeException("user.type.organization.cnpj.exists");
 			

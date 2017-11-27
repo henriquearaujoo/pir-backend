@@ -6,7 +6,7 @@ import com.samsung.fas.pir.models.dto.address.AddressDTO;
 import com.samsung.fas.pir.models.dto.user.typemodel.PFisDTO;
 import com.samsung.fas.pir.models.dto.user.typemodel.PJurDTO;
 import com.samsung.fas.pir.models.entity.User;
-import com.samsung.fas.pir.models.enums.UserType;
+import com.samsung.fas.pir.models.enums.EUserType;
 import lombok.Getter;
 import lombok.Setter;
 import org.jsondoc.core.annotation.ApiObject;
@@ -50,7 +50,7 @@ public class RUserDTO {
     @ApiObjectField(name="type", order=5)
     @Getter
     @JsonProperty("type")
-    private 	UserType 		type;
+    private EUserType type;
 
     @ApiObjectField(name="profile", order=6)
     @Getter

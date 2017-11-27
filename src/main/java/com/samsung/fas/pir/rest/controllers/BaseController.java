@@ -40,7 +40,7 @@ public class BaseController {
 	public ResponseEntity<?> handleException(HttpMessageNotReadableException e) {
 		Log.error(e.getRootCause().getMessage());
 		e.printStackTrace();
-		return ResponseEntity.badRequest().build();
+		return ResponseEntity.badRequest().body(e.getRootCause() instanceof RESTRuntimeException? e.getRootCause().getMessage() : null);
 	}
 
 	@ExceptionHandler(RuntimeException.class)

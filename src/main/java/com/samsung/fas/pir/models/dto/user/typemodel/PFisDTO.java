@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.models.entity.user.embedded.Person;
 import lombok.Getter;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.br.CPF;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 
@@ -19,7 +19,6 @@ public class PFisDTO {
 	@ApiObjectField(name="rg")
 	@Getter
 	@JsonProperty("rg")
-	@NotEmpty(message="user.type.pfis.rg.empty")
 	@NotBlank(message="user.type.pfis.rg.blank")
 	@Size(min=5, message="user.type.pfis.rg.short")
 	private		String			rg;
@@ -27,7 +26,6 @@ public class PFisDTO {
 	@ApiObjectField(name="emitter")
 	@Getter
 	@JsonProperty("emitter")
-	@NotEmpty(message="user.type.pfis.rg.emitter.empty")
 	@NotBlank(message="user.type.pfis.rg.emitter.blank")
 	@Size(min=2, message="user.type.pfis.rg.emitter.short")
 	private		String			emitter;
@@ -35,9 +33,8 @@ public class PFisDTO {
 	@ApiObjectField(name="cpf")
 	@Getter
 	@JsonProperty("cpf")
-	@NotEmpty(message="user.type.pfis.cpf.empty")
+	@CPF(message = "user.type.pfis.cpf.invalid")
 	@NotBlank(message="user.type.pfis.cpf.blank")
-	@Size(max=11, min=11, message="user.type.pfis.cpf.size.error")
 	private		String			cpf;
 	
 	private PFisDTO(Person embedded) {

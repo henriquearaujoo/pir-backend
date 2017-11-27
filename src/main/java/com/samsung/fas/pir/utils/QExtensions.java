@@ -2,8 +2,6 @@ package com.samsung.fas.pir.utils;
 
 import com.querydsl.core.annotations.QueryDelegate;
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.models.entity.QUser;
-import com.samsung.fas.pir.models.entity.User;
 import ext.java.util.QDate;
 
 import java.util.Calendar;
@@ -41,10 +39,5 @@ public class QExtensions {
 		last = new Date(l.getTimeInMillis());
 
 		return entity.between(first, last);
-	}
-
-	@QueryDelegate(User.class)
-	public static Predicate any(QUser entity, String value) {
-		return entity.name.eq(value).or(entity.email.eq(value));
 	}
 }

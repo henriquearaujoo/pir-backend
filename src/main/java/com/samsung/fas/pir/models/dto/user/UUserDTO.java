@@ -7,7 +7,7 @@ import com.samsung.fas.pir.models.dto.address.AddressDTO;
 import com.samsung.fas.pir.models.dto.user.typemodel.PFisDTO;
 import com.samsung.fas.pir.models.dto.user.typemodel.PJurDTO;
 import com.samsung.fas.pir.models.entity.User;
-import com.samsung.fas.pir.models.enums.UserType;
+import com.samsung.fas.pir.models.enums.EUserType;
 import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
@@ -80,7 +80,7 @@ public class UUserDTO {
 	@Getter
 	@JsonProperty("type")
 	@NotNull(message="user.type.null")
-	private UserType type;
+	private EUserType type;
 
 	@ApiObjectField(name="profile", order=6)
 	@Setter
