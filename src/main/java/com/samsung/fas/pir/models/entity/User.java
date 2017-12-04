@@ -28,7 +28,7 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-	@Column(name="id", updatable=false, nullable = false, unique = true)
+	@Column(name="id")
 	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	private		UUID			id;
 

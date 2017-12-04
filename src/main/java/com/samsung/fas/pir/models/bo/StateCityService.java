@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.service;
+package com.samsung.fas.pir.models.bo;
 
 import com.samsung.fas.pir.dao.CityDAO;
 import com.samsung.fas.pir.dao.StateDAO;

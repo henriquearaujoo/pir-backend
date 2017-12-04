@@ -1,13 +1,13 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
+import com.samsung.fas.pir.models.bo.ProfileService;
 import com.samsung.fas.pir.models.dto.page.RCompletePageDTO;
 import com.samsung.fas.pir.models.dto.page.RSimplePageDTO;
 import com.samsung.fas.pir.models.dto.profile.CProfileDTO;
 import com.samsung.fas.pir.models.dto.profile.RProfileDTO;
 import com.samsung.fas.pir.models.dto.profile.UProfileDTO;
 import com.samsung.fas.pir.models.entity.Profile;
-import com.samsung.fas.pir.service.ProfileService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;
 import org.jsondoc.core.pojo.ApiVisibility;
