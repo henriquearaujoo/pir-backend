@@ -1,33 +1,32 @@
 package com.samsung.fas.pir.models.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
-
-import lombok.Getter;
-import lombok.Setter;
-
 @Entity(name="pages")
+@Table(uniqueConstraints= {@UniqueConstraint(columnNames= {"id", "guid"})})
 @DynamicUpdate
 @DynamicInsert
 public class Page {
 	@Setter
 	@Getter
 	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(name="id", updatable=false)
+	@Column(name="id", updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	private		UUID			id;
+
+	@Setter
+	@Getter
+	@Column(name="guid", updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
+	private 	UUID			guid;
 	
 	@Setter
 	@Getter

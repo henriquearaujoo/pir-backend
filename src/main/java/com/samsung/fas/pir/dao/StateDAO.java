@@ -1,17 +1,20 @@
 package com.samsung.fas.pir.dao;
 
-import java.util.List;
-
+import com.samsung.fas.pir.models.entity.State;
+import com.samsung.fas.pir.repository.IStateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.samsung.fas.pir.dao.repository.IStateRepository;
-import com.samsung.fas.pir.models.entity.State;
+import java.util.List;
 
 @Service
 public class StateDAO {
-	@Autowired
 	private IStateRepository repository;
+
+	@Autowired
+	public StateDAO(IStateRepository repository) {
+		this.repository = repository;
+	}
 	
 	public boolean save(State state) {
 		return repository.save(state) != null;
@@ -19,6 +22,10 @@ public class StateDAO {
 	
 	public List<State> findAll() {
 		return repository.findAll();
+	}
+
+	public State findOne(long id) {
+		return repository.findOne(id);
 	}
 
 }

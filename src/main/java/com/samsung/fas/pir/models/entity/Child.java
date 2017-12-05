@@ -1,21 +1,22 @@
 package com.samsung.fas.pir.models.entity;
 
-import java.util.Date;
-import java.util.UUID;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.data.geo.Point;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.data.geo.Point;
+import java.util.Date;
+import java.util.UUID;
 
 @Entity(name="child")
 public class Child {
 	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(name="id")
+	@GeneratedValue(generator = "UUID")
+	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	@Column(name="id", updatable=false, nullable = false, unique = true)
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	private 	UUID		id;
 	
 	@Column(name="name")

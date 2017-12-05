@@ -1,24 +1,29 @@
 package com.samsung.fas.pir.login;
 
+import com.samsung.fas.pir.login.providers.BAuthProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-
-import com.samsung.fas.pir.login.providers.BAuthProvider;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Configuration
 @EnableWebSecurity
 @ComponentScan("com.samsung.fas.pir")
 public class AuthProviderConfig extends WebSecurityConfigurerAdapter {
-	@Autowired
+	private 	UserDetailsService 		userDetailsService;
 	private		UnauthorizedHandler		handler;
-	@Autowired
 	private		BAuthProvider			authprovider;
+
+	@Autowired
+	public AuthProviderConfig(UnauthorizedHandler handler, BAuthProvider authprovider, UserDetailsService userDetailsService) {
+		this.handler				= handler;
+		this.authprovider			= authprovider;
+		this.userDetailsService		= userDetailsService;
+	}
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -45,17 +50,24 @@ public class AuthProviderConfig extends WebSecurityConfigurerAdapter {
 //		
 //		// Permissions for pages endpoint (Create, Read, Update, Delete)
 //		.antMatchers(HttpMethod.GET, "/pages/**").hasAuthority("GET_PAGE")
-		
+//		.antMatchers(HttpMethod.POST, "/login/").permitAll()
 		.anyRequest().permitAll()
+//		.and().authorizeRequests()
+//		.antMatchers("/test/**").hasAuthority("POST_TEST").anyRequest().authenticated()
+//		.and()
+//		.addFilterBefore(new JWTAuthenticationFilter("/login/", authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+//		.addFilterBefore(new JWTAuthorizationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+//		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		
 		.and()
 		.httpBasic()
 		.authenticationEntryPoint(handler);
+
 	}
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.authenticationProvider(authprovider);
+		auth.userDetailsService(userDetailsService);
 	}
 
 }

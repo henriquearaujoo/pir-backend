@@ -1,35 +1,23 @@
 package com.samsung.fas.pir.models.entity;
 
+import com.samsung.fas.pir.models.entity.user.embedded.Address;
+import com.samsung.fas.pir.models.entity.user.embedded.Organization;
+import com.samsung.fas.pir.models.entity.user.embedded.Person;
+import com.samsung.fas.pir.models.enums.EUserType;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.*;
+
+import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
-
-import com.samsung.fas.pir.models.entity.user.embedded.Address;
-import com.samsung.fas.pir.models.entity.user.embedded.Organization;
-import com.samsung.fas.pir.models.entity.user.embedded.Person;
-import com.samsung.fas.pir.models.enums.UserType;
-
-import lombok.Getter;
-import lombok.Setter;
-
 @Entity(name="user")
+@Table(name = "user", uniqueConstraints= {@UniqueConstraint(columnNames= {"id", "guid"})})
 @DynamicUpdate
 @DynamicInsert
 public class User implements Serializable {
@@ -38,16 +26,23 @@ public class User implements Serializable {
 	@Getter
 	@Setter
 	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(name="id", updatable=false)
+	@GeneratedValue(generator = "UUID")
+	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	@Column(name="id")
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	private		UUID			id;
-	
+
+	@Getter
+	@Setter
+	@Column(name="guid", updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
+	private		UUID			guid;
+
 	@Getter
 	@Setter
 	@Column(name="login", unique=true, nullable=false)
 	private		String			login;
-	
+
 	@Getter
 	@Setter
 	@Column(name="password", nullable=false)
@@ -57,6 +52,11 @@ public class User implements Serializable {
 	@Setter
 	@Column(name="full_name", nullable=false)
 	private		String			name;
+
+	@Getter
+	@Setter
+	@Column(name="email", nullable=false, unique = true)
+	private		String			email;
 	
 	@Getter
 	@Setter
@@ -66,7 +66,7 @@ public class User implements Serializable {
 	@Getter
 	@Setter
 	@Column(name="type", nullable=false)
-	private		UserType		type;
+	private EUserType type;
 	
 	@Getter
 	@Setter
@@ -82,12 +82,13 @@ public class User implements Serializable {
 	@Setter
 	@Embedded	
 	private		Organization	organization;
-	
+
 	@Getter
+	@Setter
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="dt_register", updatable=false, nullable=false)
-	private		Date			registerDate;
+	private 	Date 			registerDate;
 	
 	@Getter
 	@Setter

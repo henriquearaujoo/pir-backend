@@ -22,3 +22,7 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+### Spring Boot Props ###
+src/main/resources/application.properties
+bin/
