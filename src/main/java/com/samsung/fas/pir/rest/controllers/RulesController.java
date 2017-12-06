@@ -1,11 +1,11 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.models.bo.RuleService;
 import com.samsung.fas.pir.models.dto.rule.CRuleDTO;
 import com.samsung.fas.pir.models.dto.rule.RRuleDTO;
 import com.samsung.fas.pir.models.dto.rule.URuleDTO;
 import com.samsung.fas.pir.models.entity.Rule;
+import com.samsung.fas.pir.models.services.RuleService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;
 import org.jsondoc.core.pojo.ApiVisibility;

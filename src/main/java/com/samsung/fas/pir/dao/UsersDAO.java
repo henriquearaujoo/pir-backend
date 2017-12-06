@@ -37,15 +37,9 @@ public class UsersDAO {
 	public Page<User> findAll(Predicate predicate, Pageable pageable) {
 		return repository.findAll(predicate, pageable);
 	}
-
-
 	
 	public User save(User user) {
 		return repository.save(user);
-	}
-	
-	public List<User> findByProfileID(UUID id) {
-		return repository.findByProfileGuid(id);
 	}
 	
 	public User findOne(UUID id) {

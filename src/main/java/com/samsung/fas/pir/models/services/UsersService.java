@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.models.bo;
+package com.samsung.fas.pir.models.services;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.dao.CityDAO;
@@ -54,7 +54,7 @@ public class UsersService {
 	}
 
 	public RUserDTO findByID(String id) {
-		User user = udao.findOne(IDCoder.decode(id));
+		User user = udao.findOne(IDCoder.decodeUUID(id));
 		if (user == null)
 			throw new RESTRuntimeException("profile.notfound");
 		return RUserDTO.toDTO(user);

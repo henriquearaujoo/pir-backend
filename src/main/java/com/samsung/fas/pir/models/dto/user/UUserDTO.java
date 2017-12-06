@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 import org.slf4j.LoggerFactory;
@@ -32,17 +31,14 @@ public class UUserDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	@NotNull(message = "user.id.null")
-	@NotBlank(message = "user.id.blank")
-	@NotEmpty(message = "user.id.missing")
+	@NotBlank(message = "user.id.missing")
 	private		String			id;
 
 	@ApiObjectField(name="name", order=1)
 	@Setter
 	@Getter
 	@JsonProperty(value="name")
-	@NotEmpty(message="user.name.missing")
-	@NotBlank(message="user.name.blank")
+	@NotBlank(message="user.name.missing")
 	private		String			name;
 
 	@ApiObjectField(name="email", order=3)
@@ -50,16 +46,14 @@ public class UUserDTO {
 	@Getter
 	@JsonProperty("email")
 	@Email(message = "user.email.invalid")
-	@NotEmpty(message="user.email.empty")
-	@NotBlank(message="user.email.blank")
+	@NotBlank(message="user.email.missing")
 	private		String			email;
 
 	@ApiObjectField(name="login", order=2)
 	@Setter
 	@Getter
 	@JsonProperty("login")
-	@NotEmpty(message="user.login.empty")
-	@NotBlank(message="user.login.blank")
+	@NotBlank(message="user.login.missing")
 	private		String			login;
 
 	@ApiObjectField(name="password", order=3)
@@ -86,9 +80,7 @@ public class UUserDTO {
 	@Setter
 	@Getter
 	@JsonProperty("profile")
-	@NotNull(message="user.profile.null")
-	@NotEmpty(message="user.profile.empty")
-	@NotBlank(message="user.profile.blank")
+	@NotBlank(message="user.profile.missing")
 	private		String		profile;
 
 	// Other properties
@@ -123,7 +115,7 @@ public class UUserDTO {
 		user.setPassword(password);
 		user.setType(type);
 		user.setEmail(email);
-		user.setGuid(IDCoder.decode(id));
+		user.setGuid(IDCoder.decodeUUID(id));
 
 		try {
 			user.setAddress(addressDTO.getModel());
