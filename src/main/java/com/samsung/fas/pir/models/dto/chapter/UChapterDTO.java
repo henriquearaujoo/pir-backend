@@ -43,6 +43,20 @@ public class UChapterDTO {
 	@Setter
 	private 	String			title;
 
+	@ApiObjectField(name="subtitle", order=3, required = true)
+	@JsonProperty("subtitle")
+	@NotBlank(message = "chapter.subtitle.missing")
+	@Getter
+	@Setter
+	private 	String			subtitle;
+
+	@ApiObjectField(name="resources", order=3, required = true)
+	@JsonProperty("resources")
+	@NotBlank(message = "chapter.resources.missing")
+	@Getter
+	@Setter
+	private 	String			resources;
+
 	@ApiObjectField(name="description", order=4, required = true)
 	@JsonProperty("description")
 	@NotBlank(message = "chapter.description.missing")
@@ -74,7 +88,6 @@ public class UChapterDTO {
 	@ApiObjectField(name="estimated_time", order=8, required = true)
 	@JsonProperty("estimated_time")
 	@Number(message = "chapter.estimatedtime.invalid")
-	@Min(value = 1000 * 60, message = "chapter.estimatedtime.mustbegreater")
 	@Getter
 	@Setter
 	private 	long			estimatedTime;
@@ -82,13 +95,13 @@ public class UChapterDTO {
 	@ApiObjectField(name="time_next_visit", order=9, required = true)
 	@JsonProperty("time_next_visit")
 	@Number(message = "chapter.estimatedtime.invalid")
-	@Min(value = 1000 * 60 * 60 * 12, message = "chapter.estimatedtime.mustbegreater")
+	@Min(value = 1, message = "chapter.timetonext.mustbegreater")
 	@Getter
 	@Setter
 	private 	long 			timeUntilNext;
 
-	@ApiObjectField(name="enable", order=10, required = true)
-	@JsonProperty("enable")
+	@ApiObjectField(name="status", order=10, required = true)
+	@JsonProperty("status")
 	@Getter
 	@Setter
 	private 	boolean			status;
@@ -104,9 +117,11 @@ public class UChapterDTO {
 		e.setEstimatedTime(estimatedTime);
 		e.setFamilyTasks(familyTasks);
 		e.setPurpose(purpose);
-		e.setTimeUntilNext(timeUntilNext);
+		e.setTimeUntilNext(timeUntilNext * 1000 * 60 * 60 * 24);
 		e.setTitle(title);
 		e.setValid(status);
+		e.setResources(resources);
+		e.setSubtitle(subtitle);
 		return e;
 	}
 }

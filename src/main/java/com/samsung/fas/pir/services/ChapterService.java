@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.models.services;
+package com.samsung.fas.pir.services;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.dao.ChapterDAO;
@@ -76,16 +76,20 @@ public class ChapterService {
 		if (persisted.getChapter() != entity.getChapter())
 			throw new RESTRuntimeException("chapter.differs");
 
-		// If chapter version differs from persited chapter vercion
+		// If chapter version differs from persited chapter version
 		if (persisted.getVersion() != entity.getVersion())
 			throw new RESTRuntimeException("chapter.version.differs");
 
 		// Check if the chapter will be active, if true, will invalidate the others
-		if (entity.isValid() && entity.isValid() != persisted.isValid() && persisted.getGreetings() != null && persisted.getIntervention() != null)
+		if (entity.isValid() && entity.isValid() != persisted.isValid() && entity.getGreetings() != null
+					&& entity.getIntervention() != null && entity.getConclusion() != null) {
 			cdao.invalidateAllChapters();
-		else
-			if (entity.isValid())
+		} else {
+			if (entity.isValid()) {
 				response = "chapter.updated.disabled";
+				entity.setValid(false);
+			}
+		}
 
 		cdao.save(entity);
 		return response;

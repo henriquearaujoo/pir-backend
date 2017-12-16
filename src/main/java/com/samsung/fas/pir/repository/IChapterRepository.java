@@ -30,5 +30,22 @@ public interface IChapterRepository extends JpaRepository<Chapter, Long>, Paging
 	@Override
 	default void customize(QuerydslBindings bindings, QChapter root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+		bindings.bind(root.chapter).as("number").withDefaultBinding();
+//		bindings.bind(root.title).as("title").withDefaultBinding();
+		bindings.bind(root.estimatedTime).as("estimated_time").withDefaultBinding();
+		bindings.bind(root.timeUntilNext).as("time_next_visit").withDefaultBinding();
+		bindings.bind(root.valid).as("status").withDefaultBinding();
+//		bindings.bind(root.version).as("version").withDefaultBinding();
+		bindings.excluding(
+				root.id,
+				root.description,
+				root.content,
+				root.purpose,
+				root.familyTasks,
+				root.conclusion,
+				root.intervention,
+				root.greetings,
+				root.subtitle
+		);
 	}
 }

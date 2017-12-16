@@ -5,7 +5,7 @@ import com.samsung.fas.pir.models.dto.chapter.CChapterDTO;
 import com.samsung.fas.pir.models.dto.chapter.RChapterDTO;
 import com.samsung.fas.pir.models.dto.chapter.UChapterDTO;
 import com.samsung.fas.pir.models.entity.Chapter;
-import com.samsung.fas.pir.models.services.ChapterService;
+import com.samsung.fas.pir.services.ChapterService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;
 import org.jsondoc.core.pojo.ApiVisibility;
@@ -25,9 +25,9 @@ import java.util.List;
 @Api(name = "Chapters Services", description = "Methods for managing chapters", group = "Chapters", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/chapters/")
+@RequestMapping("/chapters")
 @Produces(MediaType.APPLICATION_JSON)
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT}, allowCredentials = "true")
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT})
 public class ChapterController {
 	private ChapterService cservice;
 
@@ -46,7 +46,7 @@ public class ChapterController {
 
 	@ApiMethod(description="Get all chapters from database (pageable)")
 	@ApiResponseObject(clazz = RChapterDTO.class)
-	@RequestMapping(method=RequestMethod.GET, path="page/")
+	@RequestMapping(method=RequestMethod.GET, path="/page")
 	@ResponseBody
 	public ResponseEntity<Page<RChapterDTO>> getAll(@ApiPathParam Pageable pageable) {
 		return ResponseEntity.ok(cservice.findAll(pageable));
@@ -54,7 +54,7 @@ public class ChapterController {
 
 	@ApiMethod(description="Get specific chapter")
 	@ApiResponseObject(clazz = RChapterDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="{id}/")
+	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	@ResponseBody
 	public ResponseEntity<RChapterDTO> get(@ApiPathParam @PathVariable("id") String codedid) {
 		return ResponseEntity.ok(cservice.findOne(codedid));
@@ -62,7 +62,7 @@ public class ChapterController {
 
 	@ApiMethod(description="Search chapters using specified filters on url")
 	@ApiResponseObject
-	@RequestMapping(method=RequestMethod.GET, value="search/")
+	@RequestMapping(method=RequestMethod.GET, value="/search")
 	@ResponseBody
 	public ResponseEntity<List<RChapterDTO>> search(@QuerydslPredicate(root = Chapter.class) Predicate predicate) {
 		return ResponseEntity.ok(cservice.findAll(predicate));
@@ -70,7 +70,7 @@ public class ChapterController {
 
 	@ApiMethod(description="Search chapters using specified filters on url (Pageable)")
 	@ApiResponseObject
-	@RequestMapping(method=RequestMethod.GET, value="search/page/")
+	@RequestMapping(method=RequestMethod.GET, value="/search/page")
 	@ResponseBody
 	public ResponseEntity<Page<RChapterDTO>> search(@ApiPathParam @QuerydslPredicate(root = Chapter.class) Predicate predicate, @ApiPathParam Pageable pageable) {
 		return ResponseEntity.ok(cservice.findAll(predicate, pageable));

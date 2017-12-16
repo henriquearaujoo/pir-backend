@@ -1,6 +1,5 @@
 package com.samsung.fas.pir.models.dto.chapter;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.models.entity.Chapter;
 import com.samsung.fas.pir.utils.IDCoder;
@@ -9,7 +8,7 @@ import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 
 @ApiObject
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RChapterDTO {
 	@ApiObjectField(name="id", order=0)
 	@JsonProperty("id")
@@ -30,6 +29,16 @@ public class RChapterDTO {
 	@JsonProperty("title")
 	@Getter
 	private 	String			title;
+
+	@ApiObjectField(name="subtitle", order=3)
+	@JsonProperty("subtitle")
+	@Getter
+	private 	String			subtitle;
+
+	@ApiObjectField(name="resources", order=3)
+	@JsonProperty("resources")
+	@Getter
+	private 	String			resources;
 
 	@ApiObjectField(name="description", order=4)
 	@JsonProperty("description")
@@ -61,16 +70,22 @@ public class RChapterDTO {
 	@Getter
 	private 	long 			timeUntilNext;
 
-	@ApiObjectField(name="enable", order=10)
-	@JsonProperty("enable")
+	@ApiObjectField(name="status", order=10)
+	@JsonProperty("status")
 	@Getter
 	private 	boolean			status;
+
+	@ApiObjectField(name="percentage", order=10)
+	@JsonProperty("percentage")
+	@Getter
+	private 	float 			untilComplete		= 25.0f;	// Only chapter info exists
 
 	private RChapterDTO(Chapter entity) {
 		id				= IDCoder.encode(entity.getId());
 		chapter			= entity.getChapter();
 		version			= entity.getVersion();
 		title			= entity.getTitle();
+		subtitle		= entity.getSubtitle();
 		description		= entity.getDescription();
 		content			= entity.getContent();
 		purpose			= entity.getPurpose();
@@ -78,6 +93,19 @@ public class RChapterDTO {
 		estimatedTime	= entity.getEstimatedTime();
 		timeUntilNext	= entity.getTimeUntilNext();
 		status			= entity.isValid();
+		resources		= entity.getResources();
+
+		if (entity.getConclusion() != null) {
+			untilComplete	+= 25.0f;
+		}
+
+		if (entity.getGreetings() != null) {
+			untilComplete	+= 25.0f;
+		}
+
+		if (entity.getIntervention() != null) {
+			untilComplete	+= 25.0f;
+		}
 	}
 
 	public static RChapterDTO toDTO(Chapter entity) {
