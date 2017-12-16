@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.models.services;
+package com.samsung.fas.pir.services;
 
 import com.samsung.fas.pir.dao.PageDAO;
 import com.samsung.fas.pir.models.dto.page.RSimplePageDTO;

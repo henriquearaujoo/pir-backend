@@ -1,17 +1,14 @@
 package com.samsung.fas.pir.models.entity;
 
-import com.samsung.fas.pir.models.entity.user.embedded.Address;
-import com.samsung.fas.pir.models.entity.user.embedded.Organization;
-import com.samsung.fas.pir.models.entity.user.embedded.Person;
 import com.samsung.fas.pir.models.enums.EUserType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
 
+import javax.persistence.CascadeType;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
@@ -20,9 +17,7 @@ import java.util.UUID;
 @Table(name = "user", uniqueConstraints= {@UniqueConstraint(columnNames= {"id", "guid"})})
 @DynamicUpdate
 @DynamicInsert
-public class User implements Serializable {
-	private static final long serialVersionUID = -2390821297865569815L;
-
+public class User {
 	@Getter
 	@Setter
 	@Id
@@ -30,74 +25,73 @@ public class User implements Serializable {
 	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	@Column(name="id")
 	@Type(type = "org.hibernate.type.PostgresUUIDType")
-	private		UUID			id;
+	private		UUID				id;
 
 	@Getter
 	@Setter
 	@Column(name="guid", updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
 	@Type(type = "org.hibernate.type.PostgresUUIDType")
-	private		UUID			guid;
-
-	@Getter
-	@Setter
-	@Column(name="login", unique=true, nullable=false)
-	private		String			login;
-
-	@Getter
-	@Setter
-	@Column(name="password", nullable=false)
-	private		String			password;
+	private		UUID				guid;
 	
 	@Getter
 	@Setter
 	@Column(name="full_name", nullable=false)
-	private		String			name;
+	private		String				name;
 
 	@Getter
 	@Setter
 	@Column(name="email", nullable=false, unique = true)
-	private		String			email;
-	
-	@Getter
-	@Setter
-	@Column(name="status", nullable=false)
-	private		boolean			active;
+	private		String				email;
 	
 	@Getter
 	@Setter
 	@Column(name="type", nullable=false)
-	private EUserType type;
-	
-	@Getter
-	@Setter
-	@Embedded
-	private		Address			address;
-	
-	@Getter
-	@Setter
-	@Embedded	
-	private		Person			person;
-	
-	@Getter
-	@Setter
-	@Embedded	
-	private		Organization	organization;
+	private 	EUserType 			type;
 
 	@Getter
 	@Setter
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="dt_register", updatable=false, nullable=false)
-	private 	Date 			registerDate;
+	private 	Date 				registerDate;
+
+
+	// region Foreigns
+
+	@Getter
+	@Setter
+	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinColumn(name = "login_fk")
+	private 	Login				login;
+
+	@Getter
+	@Setter
+	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+	@JoinColumn(name = "individual_fk")
+	private 	IndividualPerson	individualPerson;
+
+	@Getter
+	@Setter
+	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+	@JoinColumn(name = "entity_fk")
+	private 	LegalPerson 		legalPerson;
+
+	@Getter
+	@Setter
+	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinColumn(name = "address_fk")
+	private		Address				address;
 	
 	@Getter
 	@Setter
 	@ManyToOne
-	@JoinColumn(name="profile_id_fk", nullable=false)
-	private		Profile			profile;
+	@JoinColumn(name="profile_fk", nullable=false)
+	private		Profile				profile;
 	
 	@Getter
 	@Setter
 	@OneToMany(mappedBy="agent", targetEntity=Child.class)
-	private		Set<Child>		children;
+	private		Set<Child>			children;
+
+	// endregion
 }

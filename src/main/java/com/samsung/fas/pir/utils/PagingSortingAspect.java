@@ -17,7 +17,11 @@ import java.util.stream.StreamSupport;
 class PagingSortingAspect {
 	@Around("execution(public * org.springframework.data.repository.PagingAndSortingRepository+.*(..))")
 	public Object enableIgnoreCaseSorting(ProceedingJoinPoint joinPoint) throws Throwable {
-		return joinPoint.proceed(Arrays.stream(joinPoint.getArgs()).map(PagingSortingAspect::sortWithIgnoreCase).toArray());
+		try {
+			return joinPoint.proceed(Arrays.stream(joinPoint.getArgs()).map(PagingSortingAspect::sortWithIgnoreCase).toArray());
+		} catch (Exception e) {
+			return joinPoint.proceed(joinPoint.getArgs());
+		}
 	}
 
 	private static Object sortWithIgnoreCase(Object arg) {

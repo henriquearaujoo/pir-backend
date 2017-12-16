@@ -27,7 +27,7 @@ public class AuthProviderConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().anyRequest().permitAll();
+		http.csrf().disable().authorizeRequests().anyRequest().permitAll()
 		
 //		// Permissions for users endpoint (Create, Read, Update, Delete)
 //		.antMatchers(HttpMethod.POST, "/users/**").hasAuthority("POST_USER")
@@ -59,10 +59,9 @@ public class AuthProviderConfig extends WebSecurityConfigurerAdapter {
 //		.addFilterBefore(new JWTAuthorizationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
 //		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		
-//		.and()
-//		.httpBasic()
-//		.authenticationEntryPoint(handler);
-
+		.and()
+		.httpBasic()
+		.authenticationEntryPoint(handler);
 	}
 	
 	@Override

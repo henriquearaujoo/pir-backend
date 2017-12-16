@@ -5,7 +5,7 @@ import com.samsung.fas.pir.models.dto.rule.CRuleDTO;
 import com.samsung.fas.pir.models.dto.rule.RRuleDTO;
 import com.samsung.fas.pir.models.dto.rule.URuleDTO;
 import com.samsung.fas.pir.models.entity.Rule;
-import com.samsung.fas.pir.models.services.RuleService;
+import com.samsung.fas.pir.services.RuleService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;
 import org.jsondoc.core.pojo.ApiVisibility;
@@ -25,7 +25,7 @@ import java.util.List;
 @Api(name = "Rules Services", description = "Methods managing user profiles rules (permissions)", group = "Profiles", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/rules/")
+@RequestMapping("/rules")
 @Produces(MediaType.APPLICATION_JSON)
 @CrossOrigin
 public class RulesController {
@@ -48,7 +48,7 @@ public class RulesController {
 	// Get all (GET)
 	@ApiMethod(description="Get all rules saved in database (pageable)")
 	@ApiResponseObject(clazz = RRuleDTO.class)
-	@RequestMapping(method=RequestMethod.GET, path = "page/")
+	@RequestMapping(method=RequestMethod.GET, path = "/page")
 	@ResponseBody
 	public ResponseEntity<Page<RRuleDTO>> getAll(Pageable pageable) {
 		return ResponseEntity.ok(rservice.findAll(pageable));
@@ -57,7 +57,7 @@ public class RulesController {
 	// Get specific (GET)
 	@ApiMethod(description="Get specific rule saved in database")
 	@ApiResponseObject(clazz = RRuleDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="{id}/")
+	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	@ResponseBody
 	public ResponseEntity<RRuleDTO> get(@ApiPathParam @PathVariable("id") String codedid) {
 		return ResponseEntity.ok(rservice.findOne(codedid));
@@ -86,7 +86,7 @@ public class RulesController {
 	// Delete specific (DELETE)
 	@ApiMethod(description="Delete a profile saved in database")
 	@ApiResponseObject
-	@RequestMapping(method=RequestMethod.DELETE, value="{id}/")
+	@RequestMapping(method=RequestMethod.DELETE, value="/{id}")
 	@ResponseBody
 	public ResponseEntity<?> delete(@ApiPathParam @PathVariable("id") String codedid) {
 		rservice.delete(codedid);
@@ -95,7 +95,7 @@ public class RulesController {
 
 	@ApiMethod(description="Search rules using specified filters on url")
 	@ApiResponseObject
-	@RequestMapping(method=RequestMethod.GET, value="search/")
+	@RequestMapping(method=RequestMethod.GET, value="/search")
 	@ResponseBody
 	public ResponseEntity<List<RRuleDTO>> search(@QuerydslPredicate(root = Rule.class) Predicate predicate) {
 		return ResponseEntity.ok(rservice.findAll(predicate));
@@ -103,7 +103,7 @@ public class RulesController {
 
 	@ApiMethod(description="Search rules using specified filters on url (Pageable)")
 	@ApiResponseObject
-	@RequestMapping(method=RequestMethod.GET, value="search/page/")
+	@RequestMapping(method=RequestMethod.GET, value="/search/page")
 	@ResponseBody
 	public ResponseEntity<Page<RRuleDTO>> search(@ApiPathParam @QuerydslPredicate(root = Rule.class) Predicate predicate, @ApiPathParam Pageable pageable) {
 		return ResponseEntity.ok(rservice.findAll(predicate, pageable));

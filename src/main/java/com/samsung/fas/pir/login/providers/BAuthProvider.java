@@ -1,6 +1,6 @@
 package com.samsung.fas.pir.login.providers;
 
-import com.samsung.fas.pir.models.services.UsersService;
+import com.samsung.fas.pir.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;

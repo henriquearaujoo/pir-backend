@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.models.dto.address.AddressDTO;
 import com.samsung.fas.pir.models.dto.user.typemodel.PFisDTO;
 import com.samsung.fas.pir.models.dto.user.typemodel.PJurDTO;
+import com.samsung.fas.pir.models.entity.Login;
 import com.samsung.fas.pir.models.entity.User;
 import com.samsung.fas.pir.models.enums.EUserType;
 import com.samsung.fas.pir.utils.IDCoder;
@@ -109,12 +110,17 @@ public class UUserDTO {
 	@JsonIgnore
 	public User getModel() {
 		User 			user 			= new User();
-		user.setActive(active);
-		user.setLogin(login);
+		Login			login			= new Login();
+
+		login.setActive(active);
+		login.setPassword(password);
+		login.setUsername(this.login);
+
+		user.setAddress(addressDTO.getModel());
 		user.setName(name);
-		user.setPassword(password);
 		user.setType(type);
 		user.setEmail(email);
+		user.setLogin(login);
 		user.setGuid(IDCoder.decodeUUID(id));
 
 		try {
@@ -124,11 +130,11 @@ public class UUserDTO {
 		}
 
 		try {
-			user.setOrganization(pjur.getModel());
+			user.setLegalPerson(pjur.getModel());
 		} catch (Exception e) {
 			LoggerFactory.getLogger(this.getClass()).error(e.getMessage());
 			try {
-				user.setPerson(pfis.getModel());
+				user.setIndividualPerson(pfis.getModel());
 			} catch (Exception ex) {
 				LoggerFactory.getLogger(this.getClass()).error(e.getMessage());
 			}

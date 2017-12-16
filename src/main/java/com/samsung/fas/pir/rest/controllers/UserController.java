@@ -5,7 +5,7 @@ import com.samsung.fas.pir.models.dto.user.CUserDTO;
 import com.samsung.fas.pir.models.dto.user.RUserDTO;
 import com.samsung.fas.pir.models.dto.user.UUserDTO;
 import com.samsung.fas.pir.models.entity.User;
-import com.samsung.fas.pir.models.services.UsersService;
+import com.samsung.fas.pir.services.UsersService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;
 import org.jsondoc.core.pojo.ApiVisibility;
@@ -25,9 +25,9 @@ import java.util.List;
 @Api(name = "User Services", description = "Methods managing users", group = "Users", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/users/")
+@RequestMapping("/users")
 @Produces(MediaType.APPLICATION_JSON)
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT})
 public class UserController {
 	private						UsersService	uservice;
 
@@ -46,7 +46,7 @@ public class UserController {
 
 	@ApiMethod(description="Get all users saved in database (pageable)")
 	@ApiResponseObject(clazz = RUserDTO.class)
-	@RequestMapping(method=RequestMethod.GET, path="page/")
+	@RequestMapping(method=RequestMethod.GET, path="/page")
 	@ResponseBody
 	public ResponseEntity<Page<RUserDTO>> getAll(@ApiPathParam Pageable pageable) {
 		return ResponseEntity.ok(uservice.findAll(pageable));
@@ -54,7 +54,7 @@ public class UserController {
 
 	@ApiMethod(description="Get specific user")
 	@ApiResponseObject(clazz = RUserDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="{id}/")
+	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	@ResponseBody
 	public ResponseEntity<RUserDTO> get(@ApiPathParam @PathVariable("id") String codedid) {
 		return ResponseEntity.ok(uservice.findByID(codedid));
@@ -80,7 +80,7 @@ public class UserController {
 
 	@ApiMethod(description="Search users using specified filters on url")
 	@ApiResponseObject
-	@RequestMapping(method=RequestMethod.GET, value="search/")
+	@RequestMapping(method=RequestMethod.GET, value="/search")
 	@ResponseBody
 	public ResponseEntity<List<RUserDTO>> search(@QuerydslPredicate(root = User.class) Predicate predicate) {
 		return ResponseEntity.ok(uservice.findAll(predicate));
@@ -88,7 +88,7 @@ public class UserController {
 
 	@ApiMethod(description="Search users using specified filters on url (Pageable)")
 	@ApiResponseObject
-	@RequestMapping(method=RequestMethod.GET, value="search/page/")
+	@RequestMapping(method=RequestMethod.GET, value="/search/page")
 	@ResponseBody
 	public ResponseEntity<Page<RUserDTO>> search(@ApiPathParam @QuerydslPredicate(root = User.class) Predicate predicate, @ApiPathParam Pageable pageable) {
 		return ResponseEntity.ok(uservice.findAll(predicate, pageable));

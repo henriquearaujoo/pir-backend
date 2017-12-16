@@ -7,11 +7,11 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
-@Entity(name="intervention")
-@Table(name = "intervention" /*,uniqueConstraints = @UniqueConstraint(columnNames= {"number", "version"})*/)
+@Entity(name = "answers")
+@Table(name = "answers")
 @DynamicUpdate
 @DynamicInsert
-public class Intervention {
+public class Answer {
 	@Getter
 	@Setter
 	@Id
@@ -26,12 +26,7 @@ public class Intervention {
 
 	@Getter
 	@Setter
-	@Column(name = "activity", nullable = false)
-	private 	String			activity;
-
-	@Getter
-	@Setter
-	@OneToOne//(mappedBy = "intervention", targetEntity = Chapter.class)
-	@JoinColumn(name = "intervention_fk")
-	private 	Chapter			chapter;
+	@ManyToOne
+	@JoinColumn(name="question_fk")
+	private 	Question		question;
 }

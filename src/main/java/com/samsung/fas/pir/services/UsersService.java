@@ -1,9 +1,7 @@
-package com.samsung.fas.pir.models.services;
+package com.samsung.fas.pir.services;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.dao.CityDAO;
-import com.samsung.fas.pir.dao.ProfileDAO;
-import com.samsung.fas.pir.dao.UsersDAO;
+import com.samsung.fas.pir.dao.*;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.models.dto.user.CUserDTO;
 import com.samsung.fas.pir.models.dto.user.RUserDTO;
@@ -12,7 +10,10 @@ import com.samsung.fas.pir.models.entity.City;
 import com.samsung.fas.pir.models.entity.Profile;
 import com.samsung.fas.pir.models.entity.User;
 import com.samsung.fas.pir.models.enums.EUserType;
+import com.samsung.fas.pir.rest.controllers.UserController;
 import com.samsung.fas.pir.utils.IDCoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,15 +27,23 @@ import java.util.stream.Collectors;
 
 @Service
 public class UsersService {
-	private 	UsersDAO 	udao;
-	private		CityDAO		cdao;
-	private		ProfileDAO	pdao;
+	private static	Logger 				Log				= LoggerFactory.getLogger(UserController.class);
+	private 		UsersDAO 			udao;
+	private			CityDAO				cdao;
+	private			ProfileDAO			pdao;
+	private 		LegalPersonDAO		lpdao;
+	private 		IndividualPersonDAO	ipdao;
+
+	private 		long				updatePFISId	= -1;
+	private 		long				updatePJURId	= -1;
 
 	@Autowired
-	public UsersService(UsersDAO udao, CityDAO cdao, ProfileDAO pdao) {
+	public UsersService(UsersDAO udao, CityDAO cdao, ProfileDAO pdao, LegalPersonDAO lpdao, IndividualPersonDAO ipdao) {
 		this.udao		= udao;
 		this.pdao		= pdao;
 		this.cdao		= cdao;
+		this.lpdao		= lpdao;
+		this.ipdao		= ipdao;
 	}
 
 	public List<RUserDTO> findAll() {
@@ -61,10 +70,13 @@ public class UsersService {
 	}
 
 	// region create and update model
+	// region create model
 	public void save(CUserDTO user) {
 		// Login already exists
 		if(udao.findOneByLogin(user.getLogin()) != null)
 			throw new RESTRuntimeException("user.login.exists");
+
+		System.out.println(udao.findOneByLogin(user.getLogin()));
 
 		if(udao.findOneByEmail(user.getEmail()) != null)
 			throw new RESTRuntimeException("user.email.exists");
@@ -118,9 +130,12 @@ public class UsersService {
 		model.setProfile(profile);
 		udao.save(model);
 	}
-	
+	// endregion
+
+	// region update model
 	public void update(UUserDTO user) {
-		User 	model = udao.findOne(user.getModel().getGuid());
+		User 				model				= udao.findOne(user.getModel().getGuid());
+		User 				toUpdate 			= user.getModel();
 		
 		// Verify if user exists
 		if (model == null) 
@@ -142,10 +157,17 @@ public class UsersService {
 				throw new RESTRuntimeException("user.type.pfis.data.missing");
 
 			// Verify if CPF exists in database
-			String 	mcpf 	= model.getPerson() == null? "" : model.getPerson().getCpf();
-			String 	ucpf 	= user.getPfis().getCpf();
+			String 	mcpf 		= model.getIndividualPerson() == null? "" : model.getIndividualPerson().getCpf();
+			String 	ucpf 		= user.getPfis().getCpf();
 			if (!mcpf.equalsIgnoreCase(ucpf) && udao.findOneByCpf(ucpf) != null)
 				throw new RESTRuntimeException("user.type.pfis.cpf.exists");
+
+			// If all pfis is ok, then we will mark pfis to update
+			try {
+				toUpdate.getIndividualPerson().setId(model.getIndividualPerson().getId());
+			} catch (Exception e) {
+				Log.error("PFIS does not exist in database");
+			}
 		}
 		
 		// If PJUR
@@ -161,15 +183,21 @@ public class UsersService {
 				throw new RESTRuntimeException("user.type.pjur.data.missing");
 
 			// Verify if CNPJ exists in database
-			String 	mcnpj 	= model.getOrganization() == null? "" : model.getOrganization().getCnpj();
-			String 	ucnpj 	= user.getPjur().getCnpj();
+			String 	mcnpj 		= model.getLegalPerson() == null? "" : model.getLegalPerson().getCnpj();
+			String 	ucnpj 		= user.getPjur().getCnpj();
 			if (!mcnpj.equalsIgnoreCase(ucnpj) && udao.findOneByCnpj(ucnpj) != null)
-				throw new RESTRuntimeException("user.type.organization.cnpj.exists");
-			
+				throw new RESTRuntimeException("user.type.legalPerson.cnpj.exists");
+
+			// If all pjur is ok, then we will mark pjur to update
+			try {
+				toUpdate.getLegalPerson().setId(model.getLegalPerson().getId());
+			} catch (Exception e) {
+				Log.error("PJUR does not exist in database");
+			}
 		}
 		
 		// Verify if login already exists
-		if(!model.getLogin().equalsIgnoreCase(user.getLogin()) && udao.findOneByLogin(user.getLogin()) != null)
+		if(!model.getLogin().getUsername().equalsIgnoreCase(user.getLogin()) && udao.findOneByLogin(user.getLogin()) != null)
 			throw new RESTRuntimeException("user.login.exists");
 		
 		// Password validation
@@ -178,7 +206,7 @@ public class UsersService {
 		
 		// If password
 		if (user.getPassword() == null || user.getPassword().isEmpty())
-			user.setPassword(model.getPassword());
+			toUpdate.getLogin().setPassword(model.getLogin().getPassword());
 		
 		// City Validation
 		City city = cdao.findCityByID(user.getAddressDTO().getCityId());
@@ -186,15 +214,20 @@ public class UsersService {
 			throw new RESTRuntimeException("user.address.city.invalid");
 		
 		// Profile Validation
-		Profile profile = pdao.findOne(UUID.fromString(new String(Base64Utils.decodeFromUrlSafeString(user.getProfile()), StandardCharsets.UTF_8)));
+		Profile profile = pdao.findOne(IDCoder.decodeUUID(user.getProfile()));
 		if (profile == null)
 			throw new RESTRuntimeException("user.profile.notfound");
 
 		// All above conditions are satisfied
-		User toUpdate = user.getModel();
+		toUpdate.getAddress().setId(model.getAddress().getId());
 		toUpdate.getAddress().setCity(city);
 		toUpdate.setProfile(profile);
+		toUpdate.getLogin().setId(model.getLogin().getId());
+
 		udao.update(toUpdate, model.getId());
+		lpdao.trim();
+		ipdao.trim();
 	}
+	// endregion
 	// endregion
 }

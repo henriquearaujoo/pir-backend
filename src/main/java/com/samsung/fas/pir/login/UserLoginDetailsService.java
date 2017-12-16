@@ -27,6 +27,6 @@ public class UserLoginDetailsService implements UserDetailsService {
 			throw new UsernameNotFoundException(s);
 		}
 		// TODO: Get Authorities
-		return new User(user.getLogin(), user.getPassword(), Collections.emptyList());
+		return new User(user.getLogin().getUsername(), user.getLogin().getPassword(), Collections.emptyList());
 	}
 }

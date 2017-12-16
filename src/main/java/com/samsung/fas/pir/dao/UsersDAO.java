@@ -2,7 +2,7 @@ package com.samsung.fas.pir.dao;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.models.entity.User;
-import com.samsung.fas.pir.repository.IUsersRepository;
+import com.samsung.fas.pir.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,10 +15,10 @@ import java.util.stream.StreamSupport;
 
 @Service
 public class UsersDAO {
-	private		IUsersRepository		repository;
+	private IUserRepository repository;
 
 	@Autowired
-	public UsersDAO(IUsersRepository repository) {
+	public UsersDAO(IUserRepository repository) {
 		this.repository = repository;
 	}
 
@@ -37,7 +37,7 @@ public class UsersDAO {
 	public Page<User> findAll(Predicate predicate, Pageable pageable) {
 		return repository.findAll(predicate, pageable);
 	}
-	
+
 	public User save(User user) {
 		return repository.save(user);
 	}
@@ -47,11 +47,11 @@ public class UsersDAO {
 	}
 	
 	public User findOneByLogin(String login) {
-		return repository.findByLoginIgnoreCase(login);
+		return repository.findByLoginUsernameIgnoreCase(login);
 	}
 	
 	public User findOneByCpf(String cpf) {
-		return repository.findByPersonCpf(cpf);
+		return repository.findByIndividualPersonCpf(cpf);
 	}
 
 	public User findOneByEmail(String email) {
@@ -59,15 +59,15 @@ public class UsersDAO {
 	}
 	
 	public List<User> findByRg(String rg) {
-		return repository.findByPersonRg(rg);
+		return repository.findByIndividualPersonRg(rg);
 	}
 	
 	public User findOneByCnpj(String cnpj) {
-		return repository.findByOrganizationCnpj(cnpj);
+		return repository.findByLegalPersonCnpj(cnpj);
 	}
 	
 	public List<User> findByIe(String ie) {
-		return repository.findByOrganizationIe(ie);
+		return repository.findByLegalPersonIe(ie);
 	}
 
 	public User update(User user, UUID id) {

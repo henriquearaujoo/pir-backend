@@ -3,7 +3,7 @@ package com.samsung.fas.pir.models.dto.user.typemodel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.models.entity.user.embedded.Person;
+import com.samsung.fas.pir.models.entity.IndividualPerson;
 import lombok.Getter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CPF;
@@ -37,7 +37,7 @@ public class PFisDTO {
 	@NotBlank(message="user.type.pfis.cpf.blank")
 	private		String			cpf;
 	
-	private PFisDTO(Person embedded) {
+	private PFisDTO(IndividualPerson embedded) {
 		cpf						= embedded.getCpf();
 		rg						= embedded.getRg();
 		emitter					= embedded.getEmitter();
@@ -48,26 +48,26 @@ public class PFisDTO {
 	}
 	
 	@JsonIgnore
-	public Person getModel() {
-		Person			person			= new Person();
-		person.setCpf(cpf);
-		person.setRg(rg);
-		person.setEmitter(emitter);
-		return person;
+	public IndividualPerson getModel() {
+		IndividualPerson IndividualPerson = new IndividualPerson();
+		IndividualPerson.setCpf(cpf);
+		IndividualPerson.setRg(rg);
+		IndividualPerson.setEmitter(emitter);
+		return IndividualPerson;
 	}
 	
-	public static Person toModel(PFisDTO dto) {
+	public static IndividualPerson toModel(PFisDTO dto) {
 		if (dto != null) {
-			Person			person			= new Person();
-			person.setCpf(dto.cpf);
-			person.setRg(dto.rg);
-			person.setEmitter(dto.emitter);
-			return person;
+			IndividualPerson IndividualPerson = new IndividualPerson();
+			IndividualPerson.setCpf(dto.cpf);
+			IndividualPerson.setRg(dto.rg);
+			IndividualPerson.setEmitter(dto.emitter);
+			return IndividualPerson;
 		}
 		return null;
 	}
 	
-	public static PFisDTO toDTO(Person entity) {
+	public static PFisDTO toDTO(IndividualPerson entity) {
 		if (entity != null) {
 			return new PFisDTO(entity);
 		}

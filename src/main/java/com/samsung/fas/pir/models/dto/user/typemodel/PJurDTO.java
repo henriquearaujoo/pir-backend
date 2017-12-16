@@ -3,7 +3,7 @@ package com.samsung.fas.pir.models.dto.user.typemodel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.models.entity.user.embedded.Organization;
+import com.samsung.fas.pir.models.entity.LegalPerson;
 import lombok.Getter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CNPJ;
@@ -38,7 +38,7 @@ public class PJurDTO {
 	@NotBlank(message="user.type.pjur.fantasyname.blank")
 	private		String			fantasy;
 	
-	private PJurDTO(Organization embedded) {
+	private PJurDTO(LegalPerson embedded) {
 		cnpj					= embedded.getCnpj();
 		ie						= embedded.getIe();
 		social					= embedded.getSocialName();
@@ -50,8 +50,8 @@ public class PJurDTO {
 	}
 	
 	@JsonIgnore
-	public Organization getModel() {
-		Organization	org				= new Organization();
+	public LegalPerson getModel() {
+		LegalPerson org				= new LegalPerson();
 		org.setCnpj(cnpj);
 		org.setIe(ie);
 		org.setFantasyName(fantasy);
@@ -59,9 +59,9 @@ public class PJurDTO {
 		return org;
 	}
 	
-	public static Organization toModel(PJurDTO dto) {
+	public static LegalPerson toModel(PJurDTO dto) {
 		if (dto != null) {
-			Organization	org				= new Organization();
+			LegalPerson org				= new LegalPerson();
 			org.setCnpj(dto.cnpj);
 			org.setIe(dto.ie);
 			org.setFantasyName(dto.fantasy);
@@ -71,7 +71,7 @@ public class PJurDTO {
 		return null;
 	}
 	
-	public static PJurDTO toDTO(Organization entity) {
+	public static PJurDTO toDTO(LegalPerson entity) {
 		if (entity != null) {
 			return new PJurDTO(entity);
 		}
