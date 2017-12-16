@@ -18,5 +18,24 @@ public interface IGreetingsRepository extends JpaRepository<Greetings, Long>, Pa
 	@Override
 	default void customize(QuerydslBindings bindings, QGreetings root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+		bindings.bind(root.chapter.chapter).as("chapter").withDefaultBinding();
+		bindings.bind(root.chapter.version).as("chapter_version").withDefaultBinding();
+		bindings.bind(root.chapter.valid).as("chapter_status").withDefaultBinding();
+		bindings.bind(root.chapter.title).as("chapter_title").withDefaultBinding();
+		bindings.excluding(
+				root.id,
+				root.description,
+				root.chapter.greetings,
+				root.chapter.intervention,
+				root.chapter.conclusion,
+				root.chapter.familyTasks,
+				root.chapter.purpose,
+				root.chapter.content,
+				root.chapter.estimatedTime,
+				root.chapter.description,
+				root.chapter.timeUntilNext,
+				root.chapter.id,
+				root.chapter.subtitle
+		);
 	}
 }

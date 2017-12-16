@@ -17,7 +17,7 @@ public class RGreetingsDTO {
 	private		String			id;
 
 	@ApiObjectField(name="description", order=1)
-	@JsonProperty("number")
+	@JsonProperty("description")
 	@Getter
 	private 	String			description;
 
@@ -26,10 +26,34 @@ public class RGreetingsDTO {
 	@Getter
 	private 	String			chapter;
 
+	@ApiObjectField(name="turnoff_eletronics", order=2)
+	@JsonProperty("turnoff_eletronics")
+	@Getter
+	private 	boolean			eletronics;
+
+	@ApiObjectField(name="turnoff_stove", order=2)
+	@JsonProperty("turnoff_stove")
+	@Getter
+	private 	boolean			stove;
+
+	@ApiObjectField(name="sit_down", order=2)
+	@JsonProperty("sit_down")
+	@Getter
+	private 	boolean			sit;
+
+	@ApiObjectField(name="goback_lastvisit", order=2)
+	@JsonProperty("goback_lastvisit")
+	@Getter
+	private 	boolean			goback;
+
 	private RGreetingsDTO(Greetings e) {
 		this.id				= IDCoder.encode(e.getId());
 		this.description	= e.getDescription();
 		this.chapter		= IDCoder.encode(e.getChapter().getId());
+		this.eletronics		= e.isEletronics();
+		this.sit			= e.isSit();
+		this.goback			= e.isGoback();
+		this.stove			= e.isStove();
 	}
 
 	public static RGreetingsDTO toDTO(Greetings e) {

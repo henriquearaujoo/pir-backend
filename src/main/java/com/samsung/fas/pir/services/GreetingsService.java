@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.models.services;
+package com.samsung.fas.pir.services;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.dao.ChapterDAO;
@@ -34,6 +34,10 @@ public class GreetingsService {
 	}
 
 	public List<RGreetingsDTO> findAll() {
+		gdao.findAll().stream().map(item -> {
+			System.out.println(item.getChapter());
+			return RGreetingsDTO.toDTO(item);
+		}).collect(Collectors.toList());
 		return gdao.findAll().stream().map(RGreetingsDTO::toDTO).collect(Collectors.toList());
 	}
 
@@ -50,8 +54,8 @@ public class GreetingsService {
 	}
 
 	public void save(CGreetingsDTO dto) {
-		Chapter		chapter		= cdao.findOne(IDCoder.decodeLong(dto.getChapter()));
 		Greetings	entity		= dto.getModel();
+		Chapter		chapter		= cdao.findOne(entity.getChapter().getId());
 
 		// Verify if chapter exists
 		if (chapter == null)
@@ -59,18 +63,17 @@ public class GreetingsService {
 
 		// Verify if chapter greetings is null (consider updating instead creating)
 		if (chapter.getGreetings() != null)
-			throw new RESTRuntimeException("chapter.greetins.notnull");
+			throw new RESTRuntimeException("chapter.greetings.notnull");
 
 		// Set chapter for greetings
 		entity.setChapter(chapter);
-
-		// Save greetings related to chapter id
-		gdao.save(entity);
+		chapter.setGreetings(entity);
+		cdao.save(chapter);
 	}
 
 	public void update(UGreetingsDTO dto) {
-		Chapter		chapter		= cdao.findOne(IDCoder.decodeLong(dto.getChapter()));
 		Greetings	entity		= dto.getModel();
+		Chapter		chapter		= cdao.findOne(entity.getChapter().getId());
 		Greetings	persisted	= gdao.findOne(entity.getId());
 
 		// Verify if greetings exists
@@ -81,11 +84,13 @@ public class GreetingsService {
 		if (chapter == null)
 			throw new RESTRuntimeException("chapter.greetings.chapterid.notfound");
 
+		// Verify if this greeting is in informed chapter id
+		if (chapter.getGreetings().getId() != entity.getChapter().getId())
+			throw new RESTRuntimeException("chapter.greetings.id.differs");
+
 		// Set chapter for greetings
 		entity.setChapter(chapter);
-
-		gdao.save(entity);
+		chapter.setGreetings(entity);
+		cdao.save(chapter);
 	}
-
-
 }
