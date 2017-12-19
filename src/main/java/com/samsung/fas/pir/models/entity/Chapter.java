@@ -11,6 +11,7 @@ import org.hibernate.bytecode.internal.javassist.FieldHandler;
 
 import javax.persistence.*;
 
+// TODO: Change mapping
 @Entity(name="chapter")
 @Table(name = "chapter", uniqueConstraints = @UniqueConstraint(columnNames= {"number", "version"}))
 @DynamicUpdate
