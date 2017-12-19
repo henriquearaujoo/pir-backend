@@ -49,7 +49,7 @@ public class InterventionService {
 		return idao.findAll(predicate, pageable).map(RInterventionDTO::toDTO);
 	}
 
-	public void save(CInterventionDTO dto) {
+	public RInterventionDTO save(CInterventionDTO dto) {
 		Intervention	entity		= dto.getModel();
 		Chapter			chapter		= cdao.findOne(IDCoder.decodeLong(dto.getChapterdID()));
 
@@ -64,10 +64,10 @@ public class InterventionService {
 		// If chapters exists exists and intervention not, then create intervention
 		entity.setChapter(chapter);
 		chapter.setIntervention(entity);
-		cdao.save(chapter);
+		return RInterventionDTO.toDTO(cdao.save(chapter).getIntervention());
 	}
 
-	public void update(UInterventionDTO dto) {
+	public RInterventionDTO update(UInterventionDTO dto) {
 		Intervention	entity		= dto.getModel();
 		Intervention	persisted	= idao.findOne(entity.getId());
 		Chapter			chapter		= cdao.findOne(entity.getChapter().getId());
@@ -87,6 +87,6 @@ public class InterventionService {
 		// Set chapter for intervention
 		entity.setChapter(chapter);
 		chapter.setIntervention(entity);
-		cdao.save(chapter);
+		return RInterventionDTO.toDTO(cdao.save(chapter).getIntervention());
 	}
 }

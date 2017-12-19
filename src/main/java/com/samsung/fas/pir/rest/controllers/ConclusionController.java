@@ -81,8 +81,7 @@ public class ConclusionController {
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<?> create(@ApiBodyObject @RequestBody @Valid CConclusionDTO dto) {
-		service.save(dto);
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(service.save(dto));
 	}
 
 	@ApiMethod(description="Update a greeting")
@@ -91,6 +90,6 @@ public class ConclusionController {
 	@ResponseBody
 	public ResponseEntity<?> update(@ApiBodyObject @RequestBody @Valid UConclusionDTO dto) {
 		service.update(dto);
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(service.update(dto));
 	}
 }

@@ -49,7 +49,7 @@ public class ConclusionService {
 		return cdao.findAll(predicate, pageable).map(RConclusionDTO::toDTO);
 	}
 
-	public void save(CConclusionDTO dto) {
+	public RConclusionDTO save(CConclusionDTO dto) {
 		Conclusion 	entity		= dto.getModel();
 		Chapter 	chapter		= chdao.findOne(entity.getChapter().getId());
 
@@ -65,10 +65,10 @@ public class ConclusionService {
 		entity.setChapter(chapter);
 		chapter.setConclusion(entity);
 
-		chdao.save(chapter);
+		return RConclusionDTO.toDTO(chdao.save(chapter).getConclusion());
 	}
 
-	public void update(UConclusionDTO dto) {
+	public RConclusionDTO update(UConclusionDTO dto) {
 		Conclusion	entity		= dto.getModel();
 		Chapter		chapter		= chdao.findOne(entity.getChapter().getId());
 		Conclusion	persisted	= cdao.findOne(entity.getId());
@@ -88,6 +88,6 @@ public class ConclusionService {
 		// Set chapter for greetings
 		entity.setChapter(chapter);
 		chapter.setConclusion(entity);
-		chdao.save(chapter);
+		return RConclusionDTO.toDTO(chdao.save(chapter).getConclusion());
 	}
 }

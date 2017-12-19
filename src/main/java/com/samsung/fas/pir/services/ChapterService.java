@@ -44,7 +44,7 @@ public class ChapterService {
 		return cdao.findAll(predicate, pageable).map(RChapterDTO::toDTO);
 	}
 
-	public void save(CChapterDTO dto) {
+	public RChapterDTO save(CChapterDTO dto) {
 		List<Chapter>	versions	= cdao.findAllByChapter(dto.getChapter());
 		Chapter			entity		= dto.getModel();
 		String			response	= null;
@@ -60,13 +60,13 @@ public class ChapterService {
 		if (cdao.findOneByChapterAndVersion(entity.getChapter(), entity.getVersion()) != null)
 			throw new RESTRuntimeException("chapter.exists");
 
-		cdao.save(entity);
+		return RChapterDTO.toDTO(cdao.save(entity));
 	}
 
-	public String update(UChapterDTO dto) {
+	public RChapterDTO update(UChapterDTO dto) {
 		Chapter			entity		= dto.getModel();
 		Chapter			persisted	= cdao.findOne(entity.getId());
-		String			response	= null;
+//		String			response	= null;
 
 		// If chapter does not exist
 		if (persisted == null)
@@ -86,12 +86,11 @@ public class ChapterService {
 			cdao.invalidateAllChapters();
 		} else {
 			if (entity.isValid()) {
-				response = "chapter.updated.disabled";
+//				response = "chapter.updated.disabled";
 				entity.setValid(false);
 			}
 		}
 
-		cdao.save(entity);
-		return response;
+		return RChapterDTO.toDTO(cdao.save(entity));
 	}
 }

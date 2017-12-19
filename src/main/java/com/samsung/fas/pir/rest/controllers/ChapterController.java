@@ -81,8 +81,7 @@ public class ChapterController {
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<?> create(@ApiBodyObject @RequestBody @Valid CChapterDTO dto) {
-		cservice.save(dto);
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(cservice.save(dto));
 	}
 
 	@ApiMethod(description="Update a chapter")

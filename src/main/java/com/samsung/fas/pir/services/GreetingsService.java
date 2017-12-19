@@ -34,10 +34,6 @@ public class GreetingsService {
 	}
 
 	public List<RGreetingsDTO> findAll() {
-		gdao.findAll().stream().map(item -> {
-			System.out.println(item.getChapter());
-			return RGreetingsDTO.toDTO(item);
-		}).collect(Collectors.toList());
 		return gdao.findAll().stream().map(RGreetingsDTO::toDTO).collect(Collectors.toList());
 	}
 
@@ -53,7 +49,7 @@ public class GreetingsService {
 		return gdao.findAll(predicate, pageable).map(RGreetingsDTO::toDTO);
 	}
 
-	public void save(CGreetingsDTO dto) {
+	public RGreetingsDTO save(CGreetingsDTO dto) {
 		Greetings	entity		= dto.getModel();
 		Chapter		chapter		= cdao.findOne(entity.getChapter().getId());
 
@@ -68,10 +64,10 @@ public class GreetingsService {
 		// Set chapter for greetings
 		entity.setChapter(chapter);
 		chapter.setGreetings(entity);
-		cdao.save(chapter);
+		return RGreetingsDTO.toDTO(cdao.save(chapter).getGreetings());
 	}
 
-	public void update(UGreetingsDTO dto) {
+	public RGreetingsDTO update(UGreetingsDTO dto) {
 		Greetings	entity		= dto.getModel();
 		Chapter		chapter		= cdao.findOne(entity.getChapter().getId());
 		Greetings	persisted	= gdao.findOne(entity.getId());
@@ -91,6 +87,6 @@ public class GreetingsService {
 		// Set chapter for greetings
 		entity.setChapter(chapter);
 		chapter.setGreetings(entity);
-		cdao.save(chapter);
+		return RGreetingsDTO.toDTO(cdao.save(chapter).getGreetings());
 	}
 }
