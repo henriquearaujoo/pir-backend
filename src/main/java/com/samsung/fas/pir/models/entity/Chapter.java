@@ -4,6 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+import org.hibernate.bytecode.internal.javassist.FieldHandled;
+import org.hibernate.bytecode.internal.javassist.FieldHandler;
 
 import javax.persistence.*;
 
@@ -11,7 +15,9 @@ import javax.persistence.*;
 @Table(name = "chapter", uniqueConstraints = @UniqueConstraint(columnNames= {"number", "version"}))
 @DynamicUpdate
 @DynamicInsert
-public class Chapter {
+public class Chapter implements FieldHandled {
+	private 	FieldHandler	handler;
+
 	@Getter
 	@Setter
 	@Id
@@ -31,37 +37,37 @@ public class Chapter {
 
 	@Getter
 	@Setter
-	@Column(name = "title", nullable = false)
+	@Column(name = "title", nullable = false, columnDefinition = "TEXT")
 	private 	String			title;
 
 	@Getter
 	@Setter
-	@Column(name = "subtitle")
+	@Column(name = "subtitle", nullable = false, columnDefinition = "TEXT")
 	private		String			subtitle;
 
 	@Getter
 	@Setter
-	@Column(name = "resources")
+	@Column(name = "resources", nullable = false, columnDefinition = "TEXT")
 	private 	String			resources;
 
 	@Getter
 	@Setter
-	@Column(name = "description", nullable = false)
+	@Column(name = "description", nullable = false, columnDefinition = "TEXT")
 	private 	String			description;
 
 	@Getter
 	@Setter
-	@Column(name = "content", nullable = false)
+	@Column(name = "content", nullable = false, columnDefinition = "TEXT")
 	private		String			content;
 
 	@Getter
 	@Setter
-	@Column(name = "purpose", nullable = false)
+	@Column(name = "purpose", nullable = false, columnDefinition = "TEXT")
 	private		String			purpose;
 
 	@Getter
 	@Setter
-	@Column(name = "family_tasks", nullable = false)
+	@Column(name = "family_tasks", nullable = false, columnDefinition = "TEXT")
 	private		String			familyTasks;
 
 	@Getter
@@ -79,21 +85,51 @@ public class Chapter {
 	@Column(name = "in_use", nullable = false)
 	private 	boolean			valid;
 
-	@Getter
 	@Setter
-	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "chapter", targetEntity = Intervention.class)
-//	@JoinColumn(name = "intervention_fk")
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "chapter", targetEntity = Intervention.class)
 	private 	Intervention	intervention;
 
-	@Getter
 	@Setter
-	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "chapter", targetEntity = Greetings.class)
-//	@JoinColumn(name = "greetings_fk")
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "chapter", targetEntity = Greetings.class)
 	private 	Greetings		greetings;
 
-	@Getter
 	@Setter
-	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "chapter", targetEntity = Conclusion.class)
-//	@JoinColumn(name = "conclusion_fk")
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "chapter", targetEntity = Conclusion.class)
 	private 	Conclusion		conclusion;
+
+	// region Lazy Getters
+	@LazyToOne(LazyToOneOption.NO_PROXY)
+	public Intervention getIntervention() {
+		if (handler != null) {
+			return (Intervention) handler.readObject(this, "intervention", intervention);
+		}
+		return intervention;
+	}
+
+	@LazyToOne(LazyToOneOption.NO_PROXY)
+	public Greetings getGreetings() {
+		if (handler != null) {
+			return (Greetings) handler.readObject(this, "greetings", greetings);
+		}
+		return greetings;
+	}
+
+	@LazyToOne(LazyToOneOption.NO_PROXY)
+	public Conclusion getConclusion() {
+		if (handler != null) {
+			return (Conclusion) handler.readObject(this, "conclusion", conclusion);
+		}
+		return conclusion;
+	}
+	// endregion
+
+	@Override
+	public void setFieldHandler(FieldHandler fieldHandler) {
+		handler = fieldHandler;
+	}
+
+	@Override
+	public FieldHandler getFieldHandler() {
+		return handler;
+	}
 }

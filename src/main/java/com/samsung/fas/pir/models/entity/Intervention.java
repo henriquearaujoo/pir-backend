@@ -21,12 +21,12 @@ public class Intervention {
 
 	@Getter
 	@Setter
-	@Column(name = "description", nullable = false)
+	@Column(name = "description", nullable = false, columnDefinition = "TEXT")
 	private 	String			description;
 
 	@Getter
 	@Setter
-	@Column(name = "activity", nullable = false)
+	@Column(name = "activity", nullable = false, columnDefinition = "TEXT")
 	private 	String			activity;
 
 	@Getter

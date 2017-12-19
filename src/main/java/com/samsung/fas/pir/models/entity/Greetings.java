@@ -21,12 +21,12 @@ public class Greetings {
 
 	@Getter
 	@Setter
-	@Column(name = "description", nullable = false)
+	@Column(name = "description", nullable = false, columnDefinition = "TEXT")
 	private 	String			description;
 
 	@Getter
 	@Setter
-	@Column(name = "eletronics", nullable = false)
+	@Column(name = "eletronics", nullable = false, columnDefinition = "TEXT")
 	private 	boolean			eletronics;
 
 	@Getter
