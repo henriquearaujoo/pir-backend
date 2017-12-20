@@ -73,16 +73,20 @@ public class ConclusionService {
 		Chapter		chapter		= chdao.findOne(entity.getChapter().getId());
 		Conclusion	persisted	= cdao.findOne(entity.getId());
 
-		// Verify if conclusion exists
-		if (persisted == null)
-			throw new RESTRuntimeException("chapter.conclusion.id.noutfound");
-
 		// Verify if chapter exists
 		if (chapter == null)
 			throw new RESTRuntimeException("chapter.conclusion.chapterid.notfound");
 
-		// Verify if this conclusion is in informed chapter id
-		if (chapter.getId() != entity.getChapter().getId())
+		// Verify if intervention exists
+		if (chapter.getConclusion() == null)
+			throw new RESTRuntimeException("chapter.conclusion.isnull");
+
+		// Verify if informed intervention exist
+		if (persisted == null)
+			throw new RESTRuntimeException("chapter.conclusion.notfound");
+
+		// Verify if intervention chapter id is euqal to informed chapter id
+		if (persisted.getChapter().getId() != entity.getChapter().getId())
 			throw new RESTRuntimeException("chapter.conclusion.id.differs");
 
 		// Set chapter for greetings
