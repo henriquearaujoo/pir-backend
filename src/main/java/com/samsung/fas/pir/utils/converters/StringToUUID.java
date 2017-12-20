@@ -12,7 +12,7 @@ public class StringToUUID implements Converter<String, UUID> {
 	@Override
 	public UUID convert(String source) throws RESTRuntimeException {
 		try {
-			return IDCoder.decode(source);
+			return IDCoder.decodeUUID(source);
 		} catch (Exception e) {
 			throw new RESTRuntimeException("id.invalid");
 		}

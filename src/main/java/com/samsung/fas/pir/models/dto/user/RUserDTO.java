@@ -67,7 +67,7 @@ public class RUserDTO {
     @JsonProperty("address")
     private 	AddressDTO 		addressDTO;
 
-	@ApiObjectField(name="person", order=9)
+	@ApiObjectField(name="IndividualPerson", order=9)
 	@Getter
 	@JsonProperty("pfis")
 	private 	PFisDTO 		pfis;
@@ -81,15 +81,15 @@ public class RUserDTO {
     private RUserDTO(User entity) {
         id				= Base64Utils.encodeToUrlSafeString(entity.getGuid().toString().getBytes());
         name			= entity.getName();
-        login			= entity.getLogin();
+        login			= entity.getLogin().getUsername();
         email			= entity.getEmail();
         type			= entity.getType();
-        active			= entity.isActive();
+        active			= entity.getLogin().isActive();
         registerDate	= entity.getRegisterDate();
         profile			= Base64Utils.encodeToUrlSafeString(entity.getProfile().getGuid().toString().getBytes());
         addressDTO		= AddressDTO.toDTO(entity.getAddress());
-        pfis			= PFisDTO.toDTO(entity.getPerson());
-        pjur			= PJurDTO.toDTO(entity.getOrganization());
+        pfis			= PFisDTO.toDTO(entity.getIndividualPerson());
+        pjur			= PJurDTO.toDTO(entity.getLegalPerson());
     }
 
     public static RUserDTO toDTO(User entity) {

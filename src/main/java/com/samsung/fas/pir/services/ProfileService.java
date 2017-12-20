@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.models.bo;
+package com.samsung.fas.pir.services;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.dao.ProfileDAO;
@@ -31,7 +31,7 @@ public class ProfileService {
 	}
 
 	public RProfileDTO findOne(String id) {
-		Profile profile = pdao.findOne(IDCoder.decode(id));
+		Profile profile = pdao.findOne(IDCoder.decodeUUID(id));
 		if (profile == null)
 			throw new RESTRuntimeException("profile.notfound");
 		return RProfileDTO.toDTO(profile);
@@ -54,7 +54,7 @@ public class ProfileService {
 	}
 
 	public List<RCompletePageDTO> findPagesByProfileID(String id) {
-		return rdao.findByProfileID(IDCoder.decode(id)).stream().map(m -> RCompletePageDTO.toDTO(m.getPage())).collect(Collectors.toList());
+		return rdao.findByProfileID(IDCoder.decodeUUID(id)).stream().map(m -> RCompletePageDTO.toDTO(m.getPage())).collect(Collectors.toList());
 	}
 	
 	public void save(CProfileDTO profile) {

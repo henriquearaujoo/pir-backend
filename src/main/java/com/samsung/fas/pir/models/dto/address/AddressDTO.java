@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.samsung.fas.pir.models.entity.user.embedded.Address;
+import com.samsung.fas.pir.models.entity.Address;
 import com.samsung.fas.pir.utils.serializers.LongJsonDeserializer;
 import lombok.Getter;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 
@@ -21,17 +20,13 @@ public class AddressDTO {
 	@ApiObjectField(name="neighborhood")
 	@Getter
 	@JsonProperty("neighborhood")
-	@NotNull(message="user.address.neighborhood.missing")
-	@NotEmpty(message="user.address.neighborhood.empty")
-	@NotBlank(message="user.address.neighborhood.blank")
+	@NotBlank(message="user.address.neighborhood.missing")
 	private		String			neighborhoodAddress;
 	
 	@ApiObjectField(name="street")
 	@Getter
 	@JsonProperty("street")
-	@NotNull(message="user.address.street.missing")
-	@NotEmpty(message="user.address.street.empty")
-	@NotBlank(message="user.address.street.blank")
+	@NotBlank(message="user.address.street.missing")
 	private		String			streetNameAddress;
 	
 	@ApiObjectField(name="complement", required=false)
@@ -42,9 +37,7 @@ public class AddressDTO {
 	@ApiObjectField(name="number")
 	@Getter
 	@JsonProperty("number")
-	@NotNull(message="user.address.number.missing")
-	@NotEmpty(message="user.address.number.empty")
-	@NotBlank(message="user.address.number.blank")
+	@NotBlank(message="user.address.number.missing")
 	private		String			numberAddress;
 	
 	@ApiObjectField(name="city")
@@ -57,9 +50,7 @@ public class AddressDTO {
 	@ApiObjectField(name="postalcode")
 	@Getter
 	@JsonProperty("postalcode")
-	@NotNull(message="user.address.postalcode.missing")
-	@NotEmpty(message="user.address.postalcode.empty")
-	@NotBlank(message="user.address.postalcode.blank")
+	@NotBlank(message="user.address.postalcode.missing")
 	@Size(min=4, message="user.address.postalcode.blank.short")
 	private		String			postalCode;
 	

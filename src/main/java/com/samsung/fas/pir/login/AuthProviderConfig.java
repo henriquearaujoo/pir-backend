@@ -27,7 +27,7 @@ public class AuthProviderConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests()
+		http.csrf().disable().authorizeRequests().anyRequest().permitAll()
 		
 //		// Permissions for users endpoint (Create, Read, Update, Delete)
 //		.antMatchers(HttpMethod.POST, "/users/**").hasAuthority("POST_USER")
@@ -51,7 +51,7 @@ public class AuthProviderConfig extends WebSecurityConfigurerAdapter {
 //		// Permissions for pages endpoint (Create, Read, Update, Delete)
 //		.antMatchers(HttpMethod.GET, "/pages/**").hasAuthority("GET_PAGE")
 //		.antMatchers(HttpMethod.POST, "/login/").permitAll()
-		.anyRequest().permitAll()
+//		.anyRequest().permitAll();
 //		.and().authorizeRequests()
 //		.antMatchers("/test/**").hasAuthority("POST_TEST").anyRequest().authenticated()
 //		.and()
@@ -62,7 +62,6 @@ public class AuthProviderConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.httpBasic()
 		.authenticationEntryPoint(handler);
-
 	}
 	
 	@Override

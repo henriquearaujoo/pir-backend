@@ -1,13 +1,13 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.models.bo.ProfileService;
 import com.samsung.fas.pir.models.dto.page.RCompletePageDTO;
 import com.samsung.fas.pir.models.dto.page.RSimplePageDTO;
 import com.samsung.fas.pir.models.dto.profile.CProfileDTO;
 import com.samsung.fas.pir.models.dto.profile.RProfileDTO;
 import com.samsung.fas.pir.models.dto.profile.UProfileDTO;
 import com.samsung.fas.pir.models.entity.Profile;
+import com.samsung.fas.pir.services.ProfileService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;
 import org.jsondoc.core.pojo.ApiVisibility;
@@ -27,7 +27,7 @@ import java.util.List;
 @Api(name = "Profile Services", description = "Methods managing user profiles", group = "Profiles", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/profiles/")
+@RequestMapping("/profiles")
 @Produces(MediaType.APPLICATION_JSON)
 @CrossOrigin
 public class ProfileController {
@@ -41,7 +41,7 @@ public class ProfileController {
 	// Get specific (GET)
 	@ApiMethod(description="Get a sepcific profile")
 	@ApiResponseObject(clazz = RProfileDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="{id}/")
+	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	@ResponseBody
 	public ResponseEntity<RProfileDTO> get(@ApiPathParam @PathVariable("id") String codedid) {
 		return ResponseEntity.ok(pservice.findOne(codedid));
@@ -59,7 +59,7 @@ public class ProfileController {
 	// Get all (GET)
 	@ApiMethod(description="Get all profiles saved in database (Pageable)")
 	@ApiResponseObject(clazz = CProfileDTO.class)
-	@RequestMapping(method=RequestMethod.GET, path = "page/")
+	@RequestMapping(method=RequestMethod.GET, path = "/page")
 	@ResponseBody
 	public ResponseEntity<Page<RProfileDTO>> getAll(Pageable pageable) {
 		return ResponseEntity.ok(pservice.findAll(pageable));
@@ -69,7 +69,7 @@ public class ProfileController {
 	@Deprecated
 	@ApiMethod(description="Get rules from spcific page")
 	@ApiResponseObject(clazz = RSimplePageDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="{id}/pages")
+	@RequestMapping(method=RequestMethod.GET, value="/{id}/pages")
 	@ResponseBody
 	public ResponseEntity<List<RCompletePageDTO>> getPages(@ApiPathParam @PathVariable("id") String codedid) {
 		return ResponseEntity.ok(pservice.findPagesByProfileID(codedid));
@@ -97,7 +97,7 @@ public class ProfileController {
 
 	@ApiMethod(description="Search profiles using specified filters on url")
 	@ApiResponseObject
-	@RequestMapping(method=RequestMethod.GET, value="search/")
+	@RequestMapping(method=RequestMethod.GET, value="/search")
 	@ResponseBody
 	public ResponseEntity<List<RProfileDTO>> search(@QuerydslPredicate(root = Profile.class) Predicate predicate) {
 		return ResponseEntity.ok(pservice.findAll(predicate));
@@ -105,7 +105,7 @@ public class ProfileController {
 
 	@ApiMethod(description="Search profiles using specified filters on url (Pageable)")
 	@ApiResponseObject
-	@RequestMapping(method=RequestMethod.GET, value="search/page/")
+	@RequestMapping(method=RequestMethod.GET, value="/search/page")
 	@ResponseBody
 	public ResponseEntity<Page<RProfileDTO>> search(@ApiPathParam @QuerydslPredicate(root = Profile.class) Predicate predicate, @ApiPathParam Pageable pageable) {
 		return ResponseEntity.ok(pservice.findAll(predicate, pageable));

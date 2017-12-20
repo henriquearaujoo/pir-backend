@@ -11,7 +11,19 @@ public class IDCoder {
 		return Base64Utils.encodeToUrlSafeString(uuid.toString().getBytes());
 	}
 
-	public static UUID decode(String string) throws RESTRuntimeException {
+	public static String encode(long id) {
+		return Base64Utils.encodeToUrlSafeString(String.valueOf(id).getBytes());
+	}
+
+	public static long decodeLong(String string) {
+		try {
+			return Long.parseLong(new String(Base64Utils.decodeFromUrlSafeString(string), StandardCharsets.UTF_8));
+		} catch (Exception e) {
+			throw new RESTRuntimeException("id.invalid");
+		}
+	}
+
+	public static UUID decodeUUID(String string) throws RESTRuntimeException {
 		try {
 			return UUID.fromString(new String(Base64Utils.decodeFromUrlSafeString(string), StandardCharsets.UTF_8));
 		} catch (Exception e) {

@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.rest.controllers;
 
-import com.samsung.fas.pir.models.bo.PageService;
 import com.samsung.fas.pir.models.dto.page.RSimplePageDTO;
+import com.samsung.fas.pir.services.PageService;
 import org.jsondoc.core.annotation.Api;
 import org.jsondoc.core.annotation.ApiAuthNone;
 import org.jsondoc.core.annotation.ApiMethod;

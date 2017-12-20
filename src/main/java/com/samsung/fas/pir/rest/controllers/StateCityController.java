@@ -1,8 +1,8 @@
 package com.samsung.fas.pir.rest.controllers;
 
-import com.samsung.fas.pir.models.bo.StateCityService;
 import com.samsung.fas.pir.models.dto.address.CityDTO;
 import com.samsung.fas.pir.models.dto.address.StateDTO;
+import com.samsung.fas.pir.services.StateCityService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;
 import org.jsondoc.core.pojo.ApiVisibility;
@@ -39,7 +39,7 @@ public class StateCityController {
 	
 	@ApiMethod(description="Get specific state info")
 	@ApiResponseObject(clazz = StateDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="/state/{id}/")
+	@RequestMapping(method=RequestMethod.GET, value="/state/{id}")
 	@ResponseBody
 	public ResponseEntity<StateDTO> get(@ApiPathParam @PathVariable("id") long id) {
 		return ResponseEntity.ok(scservice.findOneState(id));
@@ -55,7 +55,7 @@ public class StateCityController {
 
 	@ApiMethod(description="Get specific city info")
 	@ApiResponseObject(clazz = CityDTO.class)
-	@RequestMapping(method=RequestMethod.GET, value="/city/{id}/")
+	@RequestMapping(method=RequestMethod.GET, value="/city/{id}")
 	@ResponseBody
 	public ResponseEntity<CityDTO> getCity(@ApiPathParam @PathVariable("id") long id) {
 		return ResponseEntity.ok(scservice.findOneCity(id));

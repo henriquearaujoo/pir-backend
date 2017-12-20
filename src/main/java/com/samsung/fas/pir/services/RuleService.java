@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.models.bo;
+package com.samsung.fas.pir.services;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.dao.PageDAO;
@@ -49,25 +49,25 @@ public class RuleService {
 	}
 	
 	public List<RRuleDTO> findByProfileID(String id) {
-		return rdao.findByProfileID(IDCoder.decode(id)).stream().map(RRuleDTO::toDTO).collect(Collectors.toList());
+		return rdao.findByProfileID(IDCoder.decodeUUID(id)).stream().map(RRuleDTO::toDTO).collect(Collectors.toList());
 	}
 	
 	public RRuleDTO findOne(String id) {
-		Rule rule = rdao.findOne(IDCoder.decode(id));
+		Rule rule = rdao.findOne(IDCoder.decodeUUID(id));
 		if (rule == null)
 			throw new RESTRuntimeException("rule.notfound");
 		return RRuleDTO.toDTO(rule);
 	}
 
 	public void delete(String id) {
-		if (rdao.findOne(IDCoder.decode(id)) == null)
+		if (rdao.findOne(IDCoder.decodeUUID(id)) == null)
 			throw new RESTRuntimeException("rule.notfound");
-		rdao.delete(IDCoder.decode(id));
+		rdao.delete(IDCoder.decodeUUID(id));
 	}
 	
 	public void save(CRuleDTO rule) {
-		Profile		profile		= prodao.findOne(IDCoder.decode(rule.getProfile()));
-		Page		page		= pgdao.findOne(IDCoder.decode(rule.getPage()));
+		Profile		profile		= prodao.findOne(IDCoder.decodeUUID(rule.getProfile()));
+		Page		page		= pgdao.findOne(IDCoder.decodeUUID(rule.getPage()));
 		Rule		data		= rule.getModel();
 		
 		if (profile == null) 
@@ -85,9 +85,9 @@ public class RuleService {
 	}
 	
 	public void update(URuleDTO rule) {
-		Profile		profile		= prodao.findOne(IDCoder.decode(rule.getProfile()));
-		Page		page		= pgdao.findOne(IDCoder.decode(rule.getPage()));
-		Rule		model		= rdao.findOne(IDCoder.decode(rule.getId()));
+		Profile		profile		= prodao.findOne(IDCoder.decodeUUID(rule.getProfile()));
+		Page		page		= pgdao.findOne(IDCoder.decodeUUID(rule.getPage()));
+		Rule		model		= rdao.findOne(IDCoder.decodeUUID(rule.getId()));
 		Rule		data		= rule.getModel();
 		
 		if (model == null)
