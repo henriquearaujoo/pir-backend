@@ -6,7 +6,6 @@ import com.samsung.fas.pir.models.entity.QUser;
 import com.samsung.fas.pir.models.entity.User;
 import ext.java.util.QDate;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
@@ -25,11 +24,8 @@ public interface IUserRepository extends JpaRepository<User, UUID>, PagingAndSor
 	User findByLegalPersonCnpj(String cnpj);
 	User findByIndividualPersonCpf(String cpf);
 
-	@Query(value = "select * from \"user\" order by lower(\"full_name\")", nativeQuery = true)
-	List<User> findAll();
 	List<User> findByIndividualPersonRg(String rg);
 	List<User> findByLegalPersonIe(String ie);
-	List<User> findByProfileGuid(UUID id);
 
 	@Override
 	default void customize(QuerydslBindings bindings, QUser root) {
