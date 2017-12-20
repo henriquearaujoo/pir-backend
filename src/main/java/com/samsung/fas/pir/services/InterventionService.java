@@ -72,16 +72,20 @@ public class InterventionService {
 		Intervention	persisted	= idao.findOne(entity.getId());
 		Chapter			chapter		= cdao.findOne(entity.getChapter().getId());
 
-		// Verify if intervention exists in database
-		if (persisted == null)
-			throw new RESTRuntimeException("chapter.intervention.id.notfound");
-
-		// Verify if chapter exisits in database
+		// Verify if chapter exists
 		if (chapter == null)
-			throw new RESTRuntimeException("chapter.id.notfound");
+			throw new RESTRuntimeException("chapter.intervention.chapterid.notfound");
 
-		// Verify if this intervention is in informed chapter id
-		if (chapter.getIntervention().getId() != entity.getChapter().getId())
+		// Verify if intervention exists
+		if (chapter.getIntervention() == null)
+			throw new RESTRuntimeException("chapter.intervention.isnull");
+
+		// Verify if informed intervention exist
+		if (persisted == null)
+			throw new RESTRuntimeException("chapter.intervention.notfound");
+
+		// Verify if intervention chapter id is euqal to informed chapter id
+		if (persisted.getChapter().getId() != entity.getChapter().getId())
 			throw new RESTRuntimeException("chapter.intervention.id.differs");
 
 		// Set chapter for intervention
