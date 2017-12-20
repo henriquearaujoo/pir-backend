@@ -88,18 +88,20 @@ public class Chapter implements FieldHandled {
 
 	@Setter
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "chapter", targetEntity = Intervention.class)
+	@LazyToOne(LazyToOneOption.NO_PROXY)
 	private 	Intervention	intervention;
 
 	@Setter
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "chapter", targetEntity = Greetings.class)
+	@LazyToOne(LazyToOneOption.NO_PROXY)
 	private 	Greetings		greetings;
 
 	@Setter
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "chapter", targetEntity = Conclusion.class)
+	@LazyToOne(LazyToOneOption.NO_PROXY)
 	private 	Conclusion		conclusion;
 
 	// region Lazy Getters
-	@LazyToOne(LazyToOneOption.NO_PROXY)
 	public Intervention getIntervention() {
 		if (handler != null) {
 			return (Intervention) handler.readObject(this, "intervention", intervention);
@@ -107,7 +109,6 @@ public class Chapter implements FieldHandled {
 		return intervention;
 	}
 
-	@LazyToOne(LazyToOneOption.NO_PROXY)
 	public Greetings getGreetings() {
 		if (handler != null) {
 			return (Greetings) handler.readObject(this, "greetings", greetings);
@@ -115,7 +116,6 @@ public class Chapter implements FieldHandled {
 		return greetings;
 	}
 
-	@LazyToOne(LazyToOneOption.NO_PROXY)
 	public Conclusion getConclusion() {
 		if (handler != null) {
 			return (Conclusion) handler.readObject(this, "conclusion", conclusion);

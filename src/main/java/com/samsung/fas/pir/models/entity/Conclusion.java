@@ -32,7 +32,7 @@ public class Conclusion {
 
 	@Getter
 	@Setter
-	@OneToOne//(mappedBy = "conclusion", targetEntity = Chapter.class)
-	@JoinColumn(name = "conclusion_fk")
+	@OneToOne
+	@JoinColumn(name = "fk_chapter")
 	private 	Chapter			chapter;
 }

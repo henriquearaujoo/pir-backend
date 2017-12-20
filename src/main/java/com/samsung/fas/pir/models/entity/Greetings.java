@@ -46,7 +46,7 @@ public class Greetings {
 
 	@Getter
 	@Setter
-	@OneToOne//(mappedBy = "greetings", targetEntity = Chapter.class)
+	@OneToOne
 	@JoinColumn(name = "chapter_fk")
 	private 	Chapter			chapter;
 }
