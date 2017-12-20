@@ -61,7 +61,6 @@ public class GreetingsService {
 		if (chapter.getGreetings() != null)
 			throw new RESTRuntimeException("chapter.greetings.notnull");
 
-		// Set chapter for greetings
 		entity.setChapter(chapter);
 		chapter.setGreetings(entity);
 		return RGreetingsDTO.toDTO(cdao.save(chapter).getGreetings());
@@ -72,16 +71,20 @@ public class GreetingsService {
 		Chapter		chapter		= cdao.findOne(entity.getChapter().getId());
 		Greetings	persisted	= gdao.findOne(entity.getId());
 
-		// Verify if greetings exists
-		if (persisted == null)
-			throw new RESTRuntimeException("chapter.greetings.id.noutfound");
-
 		// Verify if chapter exists
 		if (chapter == null)
 			throw new RESTRuntimeException("chapter.greetings.chapterid.notfound");
 
-		// Verify if this greeting is in informed chapter id
-		if (chapter.getGreetings().getId() != entity.getChapter().getId())
+		// Verify if greetings exists
+		if (chapter.getGreetings() == null)
+			throw new RESTRuntimeException("chapter.greetings.isnull");
+
+		// Verify if informed greetings exist
+		if (persisted == null)
+			throw new RESTRuntimeException("chapter.greetings.notfound");
+
+		// Verify if greetings chapter id is euqal to informed chapter id
+		if (persisted.getChapter().getId() != entity.getChapter().getId())
 			throw new RESTRuntimeException("chapter.greetings.id.differs");
 
 		// Set chapter for greetings
