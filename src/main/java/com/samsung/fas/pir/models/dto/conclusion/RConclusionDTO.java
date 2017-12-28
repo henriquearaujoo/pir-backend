@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.models.dto.question.RQuestionDTO;
 import com.samsung.fas.pir.models.entity.Conclusion;
+import com.samsung.fas.pir.models.entity.Question;
 import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import org.jsondoc.core.annotation.ApiObject;
@@ -36,10 +37,12 @@ public class RConclusionDTO {
 	private 	Set<RQuestionDTO>	questions;
 
 	private RConclusionDTO(Conclusion e) {
-		this.id				= IDCoder.encode(e.getId());
-		this.description	= e.getDescription();
-		this.chapter		= IDCoder.encode(e.getChapter().getId());
-		this.questions		= e.getQuestions().stream().map(RQuestionDTO::toDTO).collect(Collectors.toSet());
+		Set<Question>	questions	= e.getQuestions();
+		this.id						= IDCoder.encode(e.getId());
+		this.description			= e.getDescription();
+		this.chapter				= IDCoder.encode(e.getChapter().getId());
+		if (questions != null && !questions.isEmpty())
+			this.questions		= questions.stream().map(RQuestionDTO::toDTO).collect(Collectors.toSet());
 	}
 
 	public static RConclusionDTO toDTO(Conclusion e) {
