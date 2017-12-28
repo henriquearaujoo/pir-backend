@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -48,6 +49,14 @@ public class RuleDAO {
 	
 	public Rule save(Rule entity) {
 		return repository.save(entity);
+	}
+
+	public List<Rule> save(List<Rule> entities) {
+		List<Rule>	persisted	= new ArrayList<>();
+		for (Rule rule : entities) {
+			persisted.add(repository.save(rule));
+		}
+		return persisted;
 	}
 	
 	public Rule update(Rule entity, UUID id) {
