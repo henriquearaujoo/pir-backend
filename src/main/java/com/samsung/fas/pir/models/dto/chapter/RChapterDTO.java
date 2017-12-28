@@ -2,10 +2,14 @@ package com.samsung.fas.pir.models.dto.chapter;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.models.entity.Chapter;
+import com.samsung.fas.pir.models.entity.Conclusion;
+import com.samsung.fas.pir.models.entity.Question;
 import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
+
+import java.util.Set;
 
 @ApiObject
 //@JsonInclude(JsonInclude.Include.NON_NULL)
@@ -81,6 +85,8 @@ public class RChapterDTO {
 	private 	float 			untilComplete		= 25.0f;	// Only chapter info exists
 
 	private RChapterDTO(Chapter entity) {
+		Conclusion	c	= entity.getConclusion();
+
 		id				= IDCoder.encode(entity.getId());
 		chapter			= entity.getChapter();
 		version			= entity.getVersion();
@@ -95,8 +101,19 @@ public class RChapterDTO {
 		status			= entity.isValid();
 		resources		= entity.getResources();
 
-		if (entity.getConclusion() != null) {
-			untilComplete	+= 25.0f;
+		if (c != null) {
+			Set<Question> qs = c.getQuestions();
+			untilComplete += 12.5f;
+			if (qs != null) {
+				final int[] questionsWithAnswers = {0};
+				qs.forEach(item -> {
+					if (item.getAnswers() != null) {
+						questionsWithAnswers[0]++;
+					}
+				});
+				if (qs.size() != 0)
+					untilComplete += (100 * questionsWithAnswers[0]/qs.size())/12.5f;
+			}
 		}
 
 		if (entity.getGreetings() != null) {
