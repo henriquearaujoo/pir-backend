@@ -31,10 +31,10 @@ public class RQuestionDTO {
 	@Getter
 	private 	EQuestionType 	type;
 
-//	@ApiObjectField(name="conclusion", order=3)
-//	@JsonProperty("conclusion")
-//	@Getter
-//	private 	String			conclusion;
+	@ApiObjectField(name="for_conclusion", order=3)
+	@JsonProperty("for_conclusion")
+	@Getter
+	private 	String			conclusion;
 
 	@ApiObjectField(name="answers", order=4)
 	@JsonProperty("answers")
@@ -46,7 +46,7 @@ public class RQuestionDTO {
 		this.type			= e.getType();
 		this.description	= e.getDescription();
 		this.answers		= e.getAnswers().stream().map(RAnswerDTO::toDTO).collect(Collectors.toSet());
-//		this.conclusion		= IDCoder.encode(e.getConclusion().getId());
+		this.conclusion		= IDCoder.encode(e.getConclusion().getId());
 	}
 
 	public static RQuestionDTO toDTO(Question e) {
