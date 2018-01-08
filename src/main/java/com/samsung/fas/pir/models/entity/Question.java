@@ -5,10 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.bytecode.internal.javassist.FieldHandled;
 import org.hibernate.bytecode.internal.javassist.FieldHandler;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "questions")
@@ -37,6 +40,7 @@ public class Question implements FieldHandled {
 
 	@Setter
 	@OneToMany(mappedBy = "question", targetEntity = Answer.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private 	Set<Answer>		answers;
 
 	@Getter
@@ -44,6 +48,11 @@ public class Question implements FieldHandled {
 	@ManyToOne
 	@JoinColumn(name="conclusion_fk")
 	private 	Conclusion		conclusion;
+
+	public Question() {
+		super();
+		answers = new HashSet<>();
+	}
 
 	public Set<Answer> getAnswers() {
 		if (handler != null) {

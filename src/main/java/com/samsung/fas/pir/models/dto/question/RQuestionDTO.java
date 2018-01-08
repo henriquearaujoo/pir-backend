@@ -3,6 +3,7 @@ package com.samsung.fas.pir.models.dto.question;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.models.dto.answer.RAnswerDTO;
+import com.samsung.fas.pir.models.entity.Answer;
 import com.samsung.fas.pir.models.entity.Question;
 import com.samsung.fas.pir.models.enums.EQuestionType;
 import com.samsung.fas.pir.utils.IDCoder;
@@ -42,11 +43,13 @@ public class RQuestionDTO {
 	private 	Set<RAnswerDTO> answers;
 
 	private RQuestionDTO(Question e) {
-		this.id				= IDCoder.encode(e.getId());
-		this.type			= e.getType();
-		this.description	= e.getDescription();
-		this.answers		= e.getAnswers().stream().map(RAnswerDTO::toDTO).collect(Collectors.toSet());
-		this.conclusion		= IDCoder.encode(e.getConclusion().getId());
+		Set<Answer>		answers	= e.getAnswers();
+		this.id					= IDCoder.encode(e.getId());
+		this.type				= e.getType();
+		this.description		= e.getDescription();
+		this.conclusion			= IDCoder.encode(e.getConclusion().getId());
+		if (answers != null && !answers.isEmpty())
+			this.answers		= answers.stream().map(RAnswerDTO::toDTO).collect(Collectors.toSet());
 	}
 
 	public static RQuestionDTO toDTO(Question e) {

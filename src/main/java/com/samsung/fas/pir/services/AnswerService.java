@@ -53,7 +53,7 @@ public class AnswerService {
 		adao.delete(IDCoder.decodeLong(id));
 	}
 
-	public Void save(CAnswerDTO dto) {
+	public RAnswerDTO save(CAnswerDTO dto) {
 		Answer		model		= dto.getModel();
 		Question	qentity		= qdao.findOne(model.getQuestion().getId());
 
@@ -68,12 +68,12 @@ public class AnswerService {
 		// If found, then add answer to question and save it
 		model.setQuestion(qentity);
 		qentity.getAnswers().add(model);
-//		adao.save(model);
-		qdao.save(qentity);
-		return null;
+		return RAnswerDTO.toDTO(adao.save(model));
+//		qdao.save(qentity);
+//		return null;
 	}
 
-	public Void update(UAnswerDTO dto) {
+	public RAnswerDTO update(UAnswerDTO dto) {
 		Answer		model		= dto.getModel();
 		Answer		aentity		= adao.findOne(model.getId());
 		Answer		exists		= null;
@@ -93,7 +93,8 @@ public class AnswerService {
 				throw new RESTRuntimeException("answer.exists");
 
 		model.setQuestion(qentity);
-		adao.save(model);
-		return null;
+		return RAnswerDTO.toDTO(adao.save(model));
+//		adao.save(model);
+//		return null;
 	}
 }

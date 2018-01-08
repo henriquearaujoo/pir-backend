@@ -53,7 +53,7 @@ public class QuestionService {
 		qdao.delete(IDCoder.decodeLong(id));
 	}
 
-	public Void save(CQuestionDTO dto) {
+	public RQuestionDTO save(CQuestionDTO dto) {
 		Question		model		= dto.getModel();
 		Question		exists		= null;
 		Conclusion		centity		= cdao.findOne(model.getConclusion().getId());
@@ -68,11 +68,10 @@ public class QuestionService {
 
 		model.setConclusion(centity);
 		centity.getQuestions().add(model);
-		qdao.save(model);
-		return null;
+		return RQuestionDTO.toDTO(qdao.save(model));
 	}
 
-	public Void update(UQuestionDTO dto) {
+	public RQuestionDTO update(UQuestionDTO dto) {
 		Question		model		= dto.getModel();
 		Question		qentity		= qdao.findOne(model.getId());
 		Question		exists		= null;
@@ -90,7 +89,6 @@ public class QuestionService {
 				throw new RESTRuntimeException("question.exists");
 
 		model.setConclusion(centity);
-		qdao.save(model);
-		return null;
+		return RQuestionDTO.toDTO(qdao.save(model));
 	}
 }
