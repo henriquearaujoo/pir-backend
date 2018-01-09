@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.services;
 
 import com.querydsl.core.types.Predicate;
+import com.samsung.fas.pir.dao.ChapterDAO;
 import com.samsung.fas.pir.dao.ConclusionDAO;
 import com.samsung.fas.pir.dao.QuestionDAO;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
@@ -22,11 +23,13 @@ import java.util.stream.Collectors;
 public class QuestionService {
 	private QuestionDAO 	qdao;
 	private ConclusionDAO	cdao;
+	private ChapterDAO		chdao;
 
 	@Autowired
-	public QuestionService(QuestionDAO qdao, ConclusionDAO cdao) {
+	public QuestionService(QuestionDAO qdao, ConclusionDAO cdao, ChapterDAO chdao) {
 		this.qdao 	= qdao;
 		this.cdao	= cdao;
+		this.chdao	= chdao;
 	}
 
 	public RQuestionDTO findOne(String id) {
@@ -50,12 +53,20 @@ public class QuestionService {
 	}
 
 	public void delete(String id) {
-		qdao.delete(IDCoder.decodeLong(id));
+		Question question = qdao.findOne(IDCoder.decodeLong(id));
+
+		if (question != null) {
+			Conclusion conclusion = question.getConclusion();
+			qdao.delete(question.getId());
+
+			if (conclusion.getQuestions().size() == 0) {
+				chdao.invalidateOne(conclusion.getChapter().getId());
+			}
+		}
 	}
 
 	public RQuestionDTO save(CQuestionDTO dto) {
 		Question		model		= dto.getModel();
-		Question		exists		= null;
 		Conclusion		centity		= cdao.findOne(model.getConclusion().getId());
 
 		// If there's no conclusion with given id
@@ -74,7 +85,7 @@ public class QuestionService {
 	public RQuestionDTO update(UQuestionDTO dto) {
 		Question		model		= dto.getModel();
 		Question		qentity		= qdao.findOne(model.getId());
-		Question		exists		= null;
+		Question		exists;
 		Conclusion		centity		= cdao.findOne(model.getConclusion().getId());
 
 		if (qentity == null)

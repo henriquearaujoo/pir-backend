@@ -2,6 +2,7 @@ package com.samsung.fas.pir.services;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.dao.AnswerDAO;
+import com.samsung.fas.pir.dao.ChapterDAO;
 import com.samsung.fas.pir.dao.QuestionDAO;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.models.dto.answer.CAnswerDTO;
@@ -22,11 +23,13 @@ import java.util.stream.Collectors;
 public class AnswerService {
 	private	AnswerDAO	adao;
 	private	QuestionDAO	qdao;
+	private ChapterDAO 	chdao;
 
 	@Autowired
-	public AnswerService(AnswerDAO adao, QuestionDAO qdao) {
+	public AnswerService(AnswerDAO adao, QuestionDAO qdao, ChapterDAO chdao) {
 		this.adao 	= adao;
 		this.qdao	= qdao;
+		this.chdao	= chdao;
 	}
 
 	public RAnswerDTO findOne(String id) {
@@ -50,7 +53,16 @@ public class AnswerService {
 	}
 
 	public void delete(String id) {
-		adao.delete(IDCoder.decodeLong(id));
+		Answer answer = adao.findOne(IDCoder.decodeLong(id));
+
+		if (answer != null) {
+			Question question = answer.getQuestion();
+			adao.delete(answer.getId());
+
+			if (question.getAnswers().size() == 0) {
+				chdao.invalidateOne(question.getConclusion().getChapter().getId());
+			}
+		}
 	}
 
 	public RAnswerDTO save(CAnswerDTO dto) {

@@ -7,8 +7,7 @@ import com.samsung.fas.pir.models.dto.chapter.CChapterDTO;
 import com.samsung.fas.pir.models.dto.chapter.RChapterDTO;
 import com.samsung.fas.pir.models.dto.chapter.UChapterDTO;
 import com.samsung.fas.pir.models.entity.Chapter;
-import com.samsung.fas.pir.models.entity.Conclusion;
-import com.samsung.fas.pir.models.entity.Question;
+import com.samsung.fas.pir.utils.ChapterTools;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +33,14 @@ public class ChapterService {
 		return cdao.findAll().stream().map(RChapterDTO::toDTO).collect(Collectors.toList());
 	}
 
+	public List<RChapterDTO> findAllValid() {
+		return cdao.findAllValid().stream().map(RChapterDTO::toDTO).collect(Collectors.toList());
+	}
+
+	public List<RChapterDTO> findAllInvalid() {
+		return cdao.findAllInvalid().stream().map(RChapterDTO::toDTO).collect(Collectors.toList());
+	}
+
 	public List<RChapterDTO> findAll(Predicate predicate) {
 		return cdao.findAll(predicate).stream().map(RChapterDTO::toDTO).collect(Collectors.toList());
 	}
@@ -45,6 +51,14 @@ public class ChapterService {
 
 	public Page<RChapterDTO> findAll(Predicate predicate, Pageable pageable) {
 		return cdao.findAll(predicate, pageable).map(RChapterDTO::toDTO);
+	}
+
+	public Page<RChapterDTO> findAllValid(Pageable pageable) {
+		return cdao.findAllValid(pageable).map(RChapterDTO::toDTO);
+	}
+
+	public Page<RChapterDTO> findAllInvalid(Pageable pageable) {
+		return cdao.findAllInvalid(pageable).map(RChapterDTO::toDTO);
 	}
 
 	public RChapterDTO save(CChapterDTO dto) {
@@ -69,8 +83,6 @@ public class ChapterService {
 	public RChapterDTO update(UChapterDTO dto) {
 		Chapter			entity			= dto.getModel();
 		Chapter			persisted		= cdao.findOne(entity.getId());
-		Conclusion 		c				= entity.getConclusion();
-		float 			untilComplete	= 25.0f;
 
 		// If chapter does not exist
 		if (persisted == null)
@@ -84,32 +96,9 @@ public class ChapterService {
 		if (persisted.getVersion() != entity.getVersion())
 			throw new RESTRuntimeException("chapter.version.differs");
 
-		if (c != null) {
-			Set<Question> qs = c.getQuestions();
-			untilComplete += 12.5f;
-			if (qs != null) {
-				final int[] questionsWithAnswers = {0};
-				qs.forEach(item -> {
-					if (item.getAnswers() != null) {
-						questionsWithAnswers[0]++;
-					}
-				});
-				if (qs.size() != 0)
-					untilComplete += (100 * questionsWithAnswers[0]/qs.size())/12.5f;
-			}
-		}
-
-		if (entity.getGreetings() != null) {
-			untilComplete	+= 25.0f;
-		}
-
-		if (entity.getIntervention() != null) {
-			untilComplete	+= 25.0f;
-		}
-
 		// Check if the chapter will be active, if true, will invalidate the others
-		if (untilComplete == 100.0f) {
-			cdao.invalidateAllChapters();
+		if (ChapterTools.calculate(persisted) == 100.0f) {
+			cdao.invalidateAllChapters(entity.getChapter());
 		} else {
 			if (entity.isValid()) {
 				entity.setValid(false);

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -41,6 +42,14 @@ public class ChapterDAO {
 		return StreamSupport.stream(repository.findAll(predicate).spliterator(),true).collect(Collectors.toList());
 	}
 
+	public Set<Chapter> findAllValid() {
+		return repository.findAllByValid();
+	}
+
+	public Set<Chapter> findAllInvalid() {
+		return repository.findAllByChapterNotIn(findAllValid().stream().map(Chapter::getChapter).collect(Collectors.toSet()));
+	}
+
 	public Page<Chapter> findAll(Pageable pageable) {
 		return repository.findAll(pageable);
 	}
@@ -49,12 +58,24 @@ public class ChapterDAO {
 		return repository.findAll(predicate, pageable);
 	}
 
+	public Page<Chapter> findAllValid(Pageable pageable) {
+		return repository.findAllByValid(pageable);
+	}
+
+	public Page<Chapter> findAllInvalid(Pageable pageable) {
+		return repository.findAllByChapterNotIn(findAllValid().stream().map(Chapter::getChapter).collect(Collectors.toSet()), pageable);
+	}
+
 	public Chapter save(Chapter user) {
 		return repository.save(user);
 	}
 
-	public void invalidateAllChapters() {
-		repository.invalidateAll();
+	public void invalidateAllChapters(long chapter) {
+		repository.invalidateAll(chapter);
+	}
+
+	public void invalidateOne(long id) {
+		repository.invalidateOne(id);
 	}
 
 	public void delete(long id) {
