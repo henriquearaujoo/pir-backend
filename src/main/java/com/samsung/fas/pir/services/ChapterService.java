@@ -7,8 +7,8 @@ import com.samsung.fas.pir.models.dto.chapter.CChapterDTO;
 import com.samsung.fas.pir.models.dto.chapter.RChapterDTO;
 import com.samsung.fas.pir.models.dto.chapter.UChapterDTO;
 import com.samsung.fas.pir.models.entity.Chapter;
-import com.samsung.fas.pir.utils.ChapterTools;
 import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.utils.Tools;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,6 +37,10 @@ public class ChapterService {
 		return cdao.findAllValid().stream().map(RChapterDTO::toDTO).collect(Collectors.toList());
 	}
 
+	public List<RChapterDTO> findAllValid(Predicate predicate) {
+		return cdao.findAllValid(predicate).stream().map(RChapterDTO::toDTO).collect(Collectors.toList());
+	}
+
 	public List<RChapterDTO> findAllInvalid() {
 		return cdao.findAllInvalid().stream().map(RChapterDTO::toDTO).collect(Collectors.toList());
 	}
@@ -57,9 +61,19 @@ public class ChapterService {
 		return cdao.findAllValid(pageable).map(RChapterDTO::toDTO);
 	}
 
+	public Page<RChapterDTO> findAllValid(Pageable pageable, Predicate predicate) {
+		return cdao.findAllValid(predicate, pageable).map(RChapterDTO::toDTO);
+	}
+
 	public Page<RChapterDTO> findAllInvalid(Pageable pageable) {
 		return cdao.findAllInvalid(pageable).map(RChapterDTO::toDTO);
 	}
+
+	public Page<RChapterDTO> findAllInvalid(Pageable pageable, Predicate predicate) {
+		return cdao.findAllInvalid(predicate, pageable).map(RChapterDTO::toDTO);
+	}
+
+
 
 	public RChapterDTO save(CChapterDTO dto) {
 		List<Chapter>	versions	= cdao.findAllByChapter(dto.getChapter());
@@ -97,7 +111,7 @@ public class ChapterService {
 			throw new RESTRuntimeException("chapter.version.differs");
 
 		// Check if the chapter will be active, if true, will invalidate the others
-		if (ChapterTools.calculate(persisted) == 100.0f) {
+		if (Tools.calculate(persisted) == 100.0f) {
 			cdao.invalidateAllChapters(entity.getChapter());
 		} else {
 			if (entity.isValid()) {

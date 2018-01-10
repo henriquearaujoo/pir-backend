@@ -32,10 +32,8 @@ public interface IChapterRepository extends JpaRepository<Chapter, Long>, Paging
 	@Query(value = "update chapter set in_use = false where pirdb.public.chapter.id = ?1", nativeQuery = true)
 	void invalidateOne(long id);
 
-	@Query(nativeQuery = true, value = "SELECT * FROM chapter as t JOIN (SELECT *  FROM chapter WHERE chapter.in_use = true) as t1 ON t.number = t1.number")
+	@Query(nativeQuery = true, value = "SELECT * FROM chapter as t JOIN (SELECT *  FROM chapter WHERE chapter.in_use = true) as t1 ON t.number = t1.number ORDER BY t.number, t.version")
 	Set<Chapter> findAllByValid();
-
-
 
 	@Query(nativeQuery = true, value = "SELECT * FROM chapter as t JOIN (SELECT *  FROM chapter WHERE chapter.in_use = true) as t1 ON t.number = t1.number ORDER BY ?#{#pageable}",
 		   countQuery = "SELECT count(*) FROM chapter as t JOIN (SELECT *  FROM chapter WHERE chapter.in_use = true) as t1 ON t.number = t1.number")

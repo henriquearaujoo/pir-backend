@@ -3,8 +3,8 @@ package com.samsung.fas.pir.models.dto.chapter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.models.entity.Chapter;
 import com.samsung.fas.pir.models.entity.Conclusion;
-import com.samsung.fas.pir.utils.ChapterTools;
 import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.utils.Tools;
 import lombok.Getter;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
@@ -98,7 +98,7 @@ public class RChapterDTO {
 		timeUntilNext	= entity.getTimeUntilNext()/1000/3600/24;
 		status			= entity.isValid();
 		resources		= entity.getResources();
-		untilComplete	= ChapterTools.calculate(entity);
+		untilComplete	= Tools.calculate(entity);
 
 	}
 
