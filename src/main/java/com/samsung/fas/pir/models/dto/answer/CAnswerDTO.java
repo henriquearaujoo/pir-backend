@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.models.entity.Answer;
 import com.samsung.fas.pir.models.entity.Question;
+import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
@@ -14,6 +15,13 @@ import org.jsondoc.core.annotation.ApiObjectField;
 @ApiObject
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CAnswerDTO {
+	@ApiObjectField(name="for_question", order=0)
+	@JsonProperty("for_question")
+	@NotBlank(message = "chapter.conclusion.question.id.missing")
+	@Getter
+	@Setter
+	private 	String			questionID;
+
 	@ApiObjectField(name="description", order=1)
 	@JsonProperty("description")
 	@NotBlank(message = "chapter.conclusion.question.answer.description.missing")
@@ -23,9 +31,12 @@ public class CAnswerDTO {
 
 	@JsonIgnore
 	public Answer getModel() {
-		Answer e = new Answer();
-		e.setQuestion(new Question());
-		e.setDescription(description);
-		return e;
+		Answer 		a	= new Answer();
+		Question	q	= new Question();
+
+		q.setId(IDCoder.decodeLong(questionID));
+		a.setQuestion(q);
+		a.setDescription(description);
+		return a;
 	}
 }

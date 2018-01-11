@@ -52,6 +52,62 @@ public class ChapterController {
 		return ResponseEntity.ok(cservice.findAll(pageable));
 	}
 
+	@ApiMethod(description="Get all active chapters")
+	@ApiResponseObject(clazz = RChapterDTO.class)
+	@RequestMapping(method=RequestMethod.GET, path="/active")
+	@ResponseBody
+	public ResponseEntity<List<RChapterDTO>> getAllValid() {
+		return ResponseEntity.ok(cservice.findAllValid());
+	}
+
+	@ApiMethod(description="Get all active chapters")
+	@ApiResponseObject(clazz = RChapterDTO.class)
+	@RequestMapping(method=RequestMethod.GET, path="/active/search")
+	@ResponseBody
+	public ResponseEntity<List<RChapterDTO>> getAllValid(@QuerydslPredicate(root = Chapter.class) Predicate predicate) {
+		return ResponseEntity.ok(cservice.findAllValid(predicate));
+	}
+
+	@ApiMethod(description="Get all active chapters (pageable / searchable)")
+	@ApiResponseObject(clazz = RChapterDTO.class)
+	@RequestMapping(method=RequestMethod.GET, path="/active/search/page")
+	@ResponseBody
+	public ResponseEntity<Page<RChapterDTO>> getAllValid(@ApiPathParam @QuerydslPredicate(root = Chapter.class) Predicate predicate, @ApiPathParam Pageable pageable) {
+		return ResponseEntity.ok(cservice.findAllValid(pageable, predicate));
+	}
+
+	@ApiMethod(description="Get all inactive chapters")
+	@ApiResponseObject(clazz = RChapterDTO.class)
+	@RequestMapping(method=RequestMethod.GET, path="/inactive")
+	@ResponseBody
+	public ResponseEntity<List<RChapterDTO>> getAllInvalid() {
+		return ResponseEntity.ok(cservice.findAllInvalid());
+	}
+
+	@ApiMethod(description="Get all inactive chapters (pageable)")
+	@ApiResponseObject(clazz = RChapterDTO.class)
+	@RequestMapping(method=RequestMethod.GET, path="/inactive/page")
+	@ResponseBody
+	public ResponseEntity<Page<RChapterDTO>> getAllInvalid(@ApiPathParam Pageable pageable) {
+		return ResponseEntity.ok(cservice.findAllInvalid(pageable));
+	}
+
+	@ApiMethod(description="Get all active chapters (pageable / searchable)")
+	@ApiResponseObject(clazz = RChapterDTO.class)
+	@RequestMapping(method=RequestMethod.GET, path="/inactive/search/page")
+	@ResponseBody
+	public ResponseEntity<Page<RChapterDTO>> getAllInvalid(@ApiPathParam @QuerydslPredicate(root = Chapter.class) Predicate predicate, @ApiPathParam Pageable pageable) {
+		return ResponseEntity.ok(cservice.findAllInvalid(pageable, predicate));
+	}
+
+	@ApiMethod(description="Get all active chapters")
+	@ApiResponseObject(clazz = RChapterDTO.class)
+	@RequestMapping(method=RequestMethod.GET, path="/active/page")
+	@ResponseBody
+	public ResponseEntity<Page<RChapterDTO>> getAllValid(Pageable pageable) {
+		return ResponseEntity.ok(cservice.findAllValid(pageable));
+	}
+
 	@ApiMethod(description="Get specific chapter")
 	@ApiResponseObject(clazz = RChapterDTO.class)
 	@RequestMapping(method=RequestMethod.GET, value="/{id}")

@@ -16,20 +16,20 @@ public class RAnswerDTO {
 	@Getter
 	private		String			id;
 
-	@ApiObjectField(name="description", order=1)
+	@ApiObjectField(name="description", order=2)
 	@JsonProperty("description")
 	@Getter
 	private 	String			description;
 
-//	@ApiObjectField(name="question", order=2)
-//	@JsonProperty("question")
-//	@Getter
-//	private 	String			question;
+	@ApiObjectField(name="for_question", order=1)
+	@JsonProperty("for_question")
+	@Getter
+	private 	String			question;
 
 	private RAnswerDTO(Answer e) {
 		this.id				= IDCoder.encode(e.getId());
 		this.description	= e.getDescription();
-//		this.question		= IDCoder.encode(e.getQuestion().getId());
+		this.question		= IDCoder.encode(e.getQuestion().getId());
 	}
 
 	public static RAnswerDTO toDTO(Answer e) {

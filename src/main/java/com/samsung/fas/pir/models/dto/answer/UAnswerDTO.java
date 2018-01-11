@@ -19,29 +19,32 @@ public class UAnswerDTO {
 	@JsonProperty("id")
 	@NotBlank(message = "chapter.conclusion.question.answer.id.missing")
 	@Getter
+	@Setter
 	private		String			id;
 
-	@ApiObjectField(name="description", order=1)
+	@ApiObjectField(name="description", order=2)
 	@JsonProperty("description")
 	@NotBlank(message = "chapter.conclusion.question.answer.description.missing")
 	@Getter
 	@Setter
 	private 	String			description;
 
-//	@ApiObjectField(name="question", order=2)
-//	@JsonProperty("question")
-//	@NotBlank(message = "chapter.conclusion.question.id.missing")
-//	@Getter
-//	@Setter
-//	private 	String			question;
+	@ApiObjectField(name="for_question", order=1)
+	@JsonProperty("for_question")
+	@NotBlank(message = "chapter.conclusion.question.id.missing")
+	@Getter
+	@Setter
+	private 	String			questionID;
 
 	@JsonIgnore
 	public Answer getModel() {
-		Answer e = new Answer();
-		e.setQuestion(new Question());
-		e.setDescription(description);
-//		e.getQuestion().setId(IDCoder.decodeLong(question));
-		e.setId(IDCoder.decodeLong(id));
-		return e;
+		Answer 		a	= new Answer();
+		Question	q	= new Question();
+
+		q.setId(IDCoder.decodeLong(questionID));
+		a.setQuestion(q);
+		a.setDescription(description);
+		a.setId(IDCoder.decodeLong(id));
+		return a;
 	}
 }

@@ -2,7 +2,9 @@ package com.samsung.fas.pir.models.dto.chapter;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.models.entity.Chapter;
+import com.samsung.fas.pir.models.entity.Conclusion;
 import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.utils.Tools;
 import lombok.Getter;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
@@ -81,6 +83,8 @@ public class RChapterDTO {
 	private 	float 			untilComplete		= 25.0f;	// Only chapter info exists
 
 	private RChapterDTO(Chapter entity) {
+		Conclusion	c	= entity.getConclusion();
+
 		id				= IDCoder.encode(entity.getId());
 		chapter			= entity.getChapter();
 		version			= entity.getVersion();
@@ -91,21 +95,11 @@ public class RChapterDTO {
 		purpose			= entity.getPurpose();
 		familyTasks		= entity.getFamilyTasks();
 		estimatedTime	= entity.getEstimatedTime();
-		timeUntilNext	= entity.getTimeUntilNext();
+		timeUntilNext	= entity.getTimeUntilNext()/1000/3600/24;
 		status			= entity.isValid();
 		resources		= entity.getResources();
+		untilComplete	= Tools.calculate(entity);
 
-		if (entity.getConclusion() != null) {
-			untilComplete	+= 25.0f;
-		}
-
-		if (entity.getGreetings() != null) {
-			untilComplete	+= 25.0f;
-		}
-
-		if (entity.getIntervention() != null) {
-			untilComplete	+= 25.0f;
-		}
 	}
 
 	public static RChapterDTO toDTO(Chapter entity) {

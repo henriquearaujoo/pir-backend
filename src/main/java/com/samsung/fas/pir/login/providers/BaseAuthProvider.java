@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public abstract class BaseAuthProvider implements AuthenticationProvider {
-
 	@Override
 	public Authentication authenticate(Authentication auth) throws AuthenticationException {
 		String		user		= auth.getName();

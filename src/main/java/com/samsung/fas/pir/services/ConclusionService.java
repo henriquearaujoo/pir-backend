@@ -92,6 +92,6 @@ public class ConclusionService {
 		// Set chapter for greetings
 		entity.setChapter(chapter);
 		chapter.setConclusion(entity);
-		return RConclusionDTO.toDTO(chdao.save(chapter).getConclusion());
+		return RConclusionDTO.toDTO(cdao.save(entity));
 	}
 }

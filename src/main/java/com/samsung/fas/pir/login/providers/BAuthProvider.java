@@ -22,7 +22,6 @@ public class BAuthProvider extends BaseAuthProvider {
 		this.uservice = service;
 	}
 
-
 	@Override
 	protected void checkUserCredentials(String username, String password) throws UsernameNotFoundException, BadCredentialsException {
 		if (!username.equals("test")) {
