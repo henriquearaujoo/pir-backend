@@ -4,9 +4,9 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
-import com.samsung.fas.pir.models.entity.Chapter;
-import com.samsung.fas.pir.models.entity.Conclusion;
-import com.samsung.fas.pir.models.entity.Question;
+import com.samsung.fas.pir.persistence.models.entity.Chapter;
+import com.samsung.fas.pir.persistence.models.entity.Conclusion;
+import com.samsung.fas.pir.persistence.models.entity.Question;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 

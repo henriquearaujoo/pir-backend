@@ -1,0 +1,101 @@
+package com.samsung.fas.pir.login.rest.controller;
+
+import com.samsung.fas.pir.login.auth.AuthManager;
+import com.samsung.fas.pir.login.auth.JWToken;
+import com.samsung.fas.pir.login.persistence.models.entity.Account;
+import com.samsung.fas.pir.login.providers.DeviceProvider;
+import com.samsung.fas.pir.login.rest.dto.AuthenticationDTO;
+import com.samsung.fas.pir.login.rest.service.AccountService;
+import org.jsondoc.core.annotation.Api;
+import org.jsondoc.core.annotation.ApiAuthNone;
+import org.jsondoc.core.pojo.ApiStage;
+import org.jsondoc.core.pojo.ApiVisibility;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mobile.device.Device;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.security.Principal;
+
+@Api(name = "Authentication Services", description = "Methods for managing authentication", group = "Authentication", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
+@ApiAuthNone
+@Controller
+@RequestMapping("/authentication")
+@Produces(MediaType.APPLICATION_JSON)
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.POST }, exposedHeaders = HttpHeaders.AUTHORIZATION)
+public class AuthenticationController {
+	private 	JWToken					token;
+	private 	AuthManager 			manager;
+	private 	AccountService 			service;
+	private 	DeviceProvider			provider;
+
+	@Autowired
+	public AuthenticationController(JWToken token, AuthManager manager, AccountService service, DeviceProvider provider) {
+		this.token		= token;
+		this.manager	= manager;
+		this.service	= service;
+		this.provider	= provider;
+	}
+
+	@RequestMapping(method = RequestMethod.POST, path = "/login")
+	public ResponseEntity authorize(@RequestBody @Valid AuthenticationDTO request, Device device) throws AuthenticationException {
+		try {
+			Authentication	authentication 	= manager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+			HttpHeaders 	headers 		= new HttpHeaders();
+
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			headers.add(HttpHeaders.AUTHORIZATION, token.generateToken((Account) authentication.getPrincipal(), device));
+
+			return new ResponseEntity(headers, HttpStatus.OK);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body("internal.error");
+		}
+	}
+
+	@RequestMapping(method = RequestMethod.POST, path = "/refresh")
+	public ResponseEntity refresh(HttpServletRequest request, Principal principal) {
+		String			authToken	= token.getToken(request);
+		Device			device		= provider.getCurrentDevice(request);
+		HttpHeaders		headers		= new HttpHeaders();
+
+		if (authToken != null && principal != null) {
+			// TODO check user password last update
+			headers.add(HttpHeaders.AUTHORIZATION, token.refreshToken(authToken, device));
+			// Client already have type and id
+			return new ResponseEntity(headers, HttpStatus.OK);
+		} else {
+			headers.add(HttpHeaders.AUTHORIZATION, authToken);
+			return ResponseEntity.ok(null);
+		}
+	}
+
+//	@RequestMapping(value = "/change-password", method = RequestMethod.POST)
+//	@PreAuthorize("hasRole('USER')")
+//	public ResponseEntity<?> changePassword(@RequestBody PasswordChanger passwordChanger) {
+//		userDetailsService.changePassword(passwordChanger.oldPassword, passwordChanger.newPassword);
+//		Map<String, String> result = new HashMap<>();
+//		result.put( "result", "success" );
+//		return ResponseEntity.accepted().body(result);
+//	}
+//
+//	static class PasswordChanger {
+//		public String oldPassword;
+//		public String newPassword;
+//	}
+
+}

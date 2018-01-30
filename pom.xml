@@ -96,6 +96,10 @@
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jooq</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
@@ -133,6 +137,15 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mobile</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -141,6 +154,53 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+			<!--&lt;!&ndash; jOOQ (Apache v2.0) (Test) &ndash;&gt;-->
+			<!--<plugin>-->
+				<!--&lt;!&ndash; Use org.jooq            for the Open Source Edition-->
+						 <!--org.jooq.pro        for commercial editions,-->
+						 <!--org.jooq.pro-java-6 for commercial editions with Java 6 support,-->
+						 <!--org.jooq.trial      for the free trial edition &ndash;&gt;-->
+				<!--<groupId>org.jooq</groupId>-->
+				<!--<artifactId>jooq-codegen-maven</artifactId>-->
+
+				<!--<executions>-->
+					<!--<execution>-->
+						<!--<id>jooq-codegen</id>-->
+						<!--<phase>generate-sources</phase>-->
+						<!--<goals>-->
+							<!--<goal>generate</goal>-->
+						<!--</goals>-->
+						<!--<configuration>-->
+
+							<!--&lt;!&ndash; JDBC connection parameters &ndash;&gt;-->
+							<!--<jdbc>-->
+								<!--<driver>org.postgresql.Driver</driver>-->
+								<!--<url>jdbc:postgresql://localhost:5432/pirdb</url>-->
+								<!--<user>postgres</user>-->
+								<!--<password>postgres</password>-->
+								<!--<autocommit>true</autocommit>-->
+							<!--</jdbc>-->
+
+							<!--&lt;!&ndash; Generator parameters &ndash;&gt;-->
+							<!--<generator>-->
+								<!--<database>-->
+									<!--<name>org.jooq.util.postgres.PostgresDatabase</name>-->
+									<!--<includes>.*</includes>-->
+									<!--<inputSchema>public</inputSchema>-->
+								<!--</database>-->
+								<!--<target>-->
+									<!--<packageName>com.samsung.fas.pir.models.entity</packageName>-->
+									<!--<directory>target/generated-sources/jooq</directory>-->
+								<!--</target>-->
+							<!--</generator>-->
+						<!--</configuration>-->
+					<!--</execution>-->
+				<!--</executions>-->
+			<!--</plugin>-->
+
+		 	<!-- QueryDSL -->
+			<!-- There is no activity on project repository, may be deleted in near future -->
 			<plugin>
 				<groupId>com.mysema.maven</groupId>
 				<artifactId>apt-maven-plugin</artifactId>
@@ -151,7 +211,7 @@
 							<goal>process</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>target/generated-sources/java</outputDirectory>
+							<outputDirectory>target/generated-sources/querydsl</outputDirectory>
 							<processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
 						</configuration>
 					</execution>
