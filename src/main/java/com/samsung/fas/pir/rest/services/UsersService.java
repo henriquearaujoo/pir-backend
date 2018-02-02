@@ -76,22 +76,18 @@ public class UsersService {
 			throw new RESTRuntimeException("user.email.exists");
 
 		// Type of user
-		try {
-			if (user instanceof CPFisDTO) {
-				pfis = (CPFisDTO) user;
-				// Verify if CPF exists in database
-				if (udao.findOneByCpf(pfis.getCpf()) != null)
-					throw new RESTRuntimeException("user.type.pfis.cpf.exists");
-			} else if (user instanceof CPJurDTO) {
-				pjur = (CPJurDTO) user;
-				// Verify if CPF exists in database
-				if (udao.findOneByCnpj(pjur.getCnpj()) != null)
-					throw new RESTRuntimeException("user.type.pjur.cnpj.exists");
-			} else {
-				throw new RESTRuntimeException("user.type.data.missing");
-			}
-		} catch (Exception e) {
-			throw new RESTRuntimeException("user.type.mismatch");
+		if (user instanceof CPFisDTO) {
+			pfis = (CPFisDTO) user;
+			// Verify if CPF exists in database
+			if (udao.findOneByCpf(pfis.getCpf()) != null)
+				throw new RESTRuntimeException("user.type.pfis.cpf.exists");
+		} else if (user instanceof CPJurDTO) {
+			pjur = (CPJurDTO) user;
+			// Verify if CPF exists in database
+			if (udao.findOneByCnpj(pjur.getCnpj()) != null)
+				throw new RESTRuntimeException("user.type.pjur.cnpj.exists");
+		} else {
+			throw new RESTRuntimeException("user.type.data.missing");
 		}
 
 		// Redudant
