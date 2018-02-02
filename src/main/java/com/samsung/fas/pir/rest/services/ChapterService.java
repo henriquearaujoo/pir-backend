@@ -4,7 +4,6 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.models.entity.Chapter;
-import com.samsung.fas.pir.persistence.models.entity.MDataFile;
 import com.samsung.fas.pir.persistence.repository.IFileRepository;
 import com.samsung.fas.pir.rest.dto.chapter.CChapterDTO;
 import com.samsung.fas.pir.rest.dto.chapter.RChapterDTO;
@@ -17,9 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -100,8 +97,6 @@ public class ChapterService {
 	public RChapterDTO update(UChapterDTO dto) {
 		Chapter					entity			= dto.getModel();
 		Chapter					persisted		= cdao.findOne(entity.getId());
-		Set<MDataFile>			files			= new HashSet<>();
-		Set<MDataFile> 			thumbs			= new HashSet<>();
 
 		// If chapter does not exist
 		if (persisted == null)
@@ -124,22 +119,13 @@ public class ChapterService {
 			}
 		}
 
-		if (entity.getMedias() != null) {
-			entity.getMedias().forEach(item -> files.add(frepository.findOne(item.getId())));
+		if (entity.getMedias() != null && entity.getMedias().size() > 0) {
+			entity.getMedias().forEach(item -> item.setChapter(persisted.getId()));
 		}
 
-		if (entity.getThumbnails() != null) {
-			entity.getThumbnails().forEach(item -> thumbs.add(frepository.findOne(item.getId())));
+		if (entity.getThumbnails() != null && entity.getThumbnails().size() > 0) {
+			entity.getThumbnails().forEach(item -> item.setChapter(persisted.getId()));
 		}
-
-		files.forEach(item -> item.setChapter(entity.getId()));
-		thumbs.forEach(item -> item.setChapter(entity.getId()));
-
-		frepository.save(files);
-		frepository.save(thumbs);
-
-		entity.setMedias(files);
-		entity.setThumbnails(thumbs);
 
 		return RChapterDTO.toDTO(cdao.save(entity));
 	}

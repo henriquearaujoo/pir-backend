@@ -89,13 +89,13 @@ public class Chapter implements FieldHandled {
 
 	@Getter
 	@Setter
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
 	@JoinColumn(name = "chapter")
 	private 	Set<MDataFile>	medias;
 
 	@Getter
 	@Setter
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
 	@JoinColumn(name = "chapter")
 	private 	Set<MDataFile>	thumbnails;
 

@@ -1,6 +1,5 @@
 package com.samsung.fas.pir.persistence.models.entity;
 
-import com.samsung.fas.pir.persistence.models.enums.EMediaType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -23,7 +22,7 @@ public class MDataFile {
 
 	@Getter
 	@Setter
-	@Column(name = "path")
+	@Column(name = "path", updatable = false)
 	private		String		path;
 
 	@Getter
@@ -38,9 +37,8 @@ public class MDataFile {
 
 	@Getter
 	@Setter
-	@Column(name = "type", nullable = false)
-	@Enumerated(EnumType.STRING)
-	private 	EMediaType	type;
+	@Column(name = "content", nullable = false)
+	private 	String		content;
 
 	@Getter
 	@Setter
