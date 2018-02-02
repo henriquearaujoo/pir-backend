@@ -5,7 +5,9 @@ import com.samsung.fas.pir.login.auth.JWToken;
 import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.login.providers.DeviceProvider;
 import com.samsung.fas.pir.login.rest.dto.AuthenticationDTO;
+import com.samsung.fas.pir.login.rest.dto.ResetPasswordDTO;
 import com.samsung.fas.pir.login.rest.service.AccountService;
+import org.hibernate.validator.constraints.Email;
 import org.jsondoc.core.annotation.Api;
 import org.jsondoc.core.annotation.ApiAuthNone;
 import org.jsondoc.core.pojo.ApiStage;
@@ -20,16 +22,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.security.Principal;
 
 @Api(name = "Authentication Services", description = "Methods for managing authentication", group = "Authentication", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
@@ -38,21 +35,13 @@ import java.security.Principal;
 @Produces(MediaType.APPLICATION_JSON)
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.POST }, exposedHeaders = HttpHeaders.AUTHORIZATION)
 public class AuthenticationController {
-	private 	JWToken					token;
-	private 	AuthManager 			manager;
-	private 	AccountService 			service;
-	private 	DeviceProvider			provider;
-
-	@Autowired
-	public AuthenticationController(JWToken token, AuthManager manager, AccountService service, DeviceProvider provider) {
-		this.token		= token;
-		this.manager	= manager;
-		this.service	= service;
-		this.provider	= provider;
-	}
+	@Autowired	private 	JWToken				token;
+	@Autowired 	private 	AuthManager 		manager;
+	@Autowired 	private 	AccountService 		service;
+	@Autowired 	private 	DeviceProvider		provider;
 
 	@RequestMapping(method = RequestMethod.POST, path = "/login")
-	public ResponseEntity authorize(@RequestBody @Valid AuthenticationDTO request, Device device) throws AuthenticationException {
+	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO request, Device device) throws AuthenticationException {
 		try {
 			Authentication	authentication 	= manager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 			HttpHeaders 	headers 		= new HttpHeaders();
@@ -67,22 +56,32 @@ public class AuthenticationController {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.POST, path = "/refresh")
-	public ResponseEntity refresh(HttpServletRequest request, Principal principal) {
-		String			authToken	= token.getToken(request);
-		Device			device		= provider.getCurrentDevice(request);
-		HttpHeaders		headers		= new HttpHeaders();
-
-		if (authToken != null && principal != null) {
-			// TODO check user password last update
-			headers.add(HttpHeaders.AUTHORIZATION, token.refreshToken(authToken, device));
-			// Client already have type and id
-			return new ResponseEntity(headers, HttpStatus.OK);
-		} else {
-			headers.add(HttpHeaders.AUTHORIZATION, authToken);
-			return ResponseEntity.ok(null);
-		}
+	@RequestMapping(method = RequestMethod.POST, path = "/recover")
+	public ResponseEntity recover(@RequestParam("email") @Email String request) {
+		return ResponseEntity.ok(service.recoverPasswordByUserEmail(request));
 	}
+
+	@RequestMapping(method = RequestMethod.POST, path = "/reset")
+	public ResponseEntity reset(@RequestBody @Valid ResetPasswordDTO request) {
+		return ResponseEntity.ok(service.resetPassword(request));
+	}
+
+//	@RequestMapping(method = RequestMethod.POST, path = "/refresh")
+//	public ResponseEntity refresh(HttpServletRequest request, Principal principal) {
+//		String			authToken	= token.getToken(request);
+//		Device			device		= provider.getCurrentDevice(request);
+//		HttpHeaders		headers		= new HttpHeaders();
+//
+//		if (authToken != null && principal != null) {
+//			// TODO check user password last update
+//			headers.add(HttpHeaders.AUTHORIZATION, token.refreshToken(authToken, device));
+//			// Client already have type and id
+//			return new ResponseEntity(headers, HttpStatus.OK);
+//		} else {
+//			headers.add(HttpHeaders.AUTHORIZATION, authToken);
+//			return ResponseEntity.ok(null);
+//		}
+//	}
 
 //	@RequestMapping(value = "/change-password", method = RequestMethod.POST)
 //	@PreAuthorize("hasRole('USER')")

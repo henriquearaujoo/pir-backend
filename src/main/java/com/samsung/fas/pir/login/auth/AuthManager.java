@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.login.auth;
 
+import com.google.common.hash.Hashing;
 import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.login.rest.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.nio.charset.StandardCharsets;
 
 @Component
 public class AuthManager implements AuthenticationManager {
@@ -27,7 +30,7 @@ public class AuthManager implements AuthenticationManager {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		String			username		= (String) authentication.getPrincipal();
-		String			password		= (String) authentication.getCredentials();
+		String			password		= Hashing.sha256().hashString((String) authentication.getCredentials(), StandardCharsets.UTF_8).toString();
 		Account			account			= (Account) service.loadUserByUsername(username);
 
 		if (account == null)

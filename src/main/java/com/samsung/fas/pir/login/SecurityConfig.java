@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) {
 		web.ignoring()
 		.antMatchers(HttpMethod.OPTIONS)
-		.antMatchers(HttpMethod.POST, "/authentication/login")
+		.antMatchers(HttpMethod.POST, "/authentication/**")
 		.antMatchers("/assets/**", "/webjars/**", "/api-docs/**")
 		.antMatchers("/jsondoc/**", "/jsondoc-ui.html");
 	}
