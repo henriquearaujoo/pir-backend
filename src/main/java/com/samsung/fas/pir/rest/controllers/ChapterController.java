@@ -1,11 +1,11 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.models.dto.chapter.CChapterDTO;
-import com.samsung.fas.pir.models.dto.chapter.RChapterDTO;
-import com.samsung.fas.pir.models.dto.chapter.UChapterDTO;
-import com.samsung.fas.pir.models.entity.Chapter;
-import com.samsung.fas.pir.services.ChapterService;
+import com.samsung.fas.pir.persistence.models.entity.Chapter;
+import com.samsung.fas.pir.rest.dto.chapter.CChapterDTO;
+import com.samsung.fas.pir.rest.dto.chapter.RChapterDTO;
+import com.samsung.fas.pir.rest.dto.chapter.UChapterDTO;
+import com.samsung.fas.pir.rest.services.ChapterService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;
 import org.jsondoc.core.pojo.ApiVisibility;

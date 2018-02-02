@@ -1,11 +1,9 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.models.dto.user.CUserDTO;
-import com.samsung.fas.pir.models.dto.user.RUserDTO;
-import com.samsung.fas.pir.models.dto.user.UUserDTO;
-import com.samsung.fas.pir.models.entity.User;
-import com.samsung.fas.pir.services.UsersService;
+import com.samsung.fas.pir.persistence.models.entity.User;
+import com.samsung.fas.pir.rest.dto.user.*;
+import com.samsung.fas.pir.rest.services.UsersService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;
 import org.jsondoc.core.pojo.ApiVisibility;
@@ -29,7 +27,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT})
 public class UserController {
-	private						UsersService	uservice;
+	private		UsersService	uservice;
 
 	@Autowired
 	public UserController(UsersService uservice) {
@@ -60,20 +58,38 @@ public class UserController {
 		return ResponseEntity.ok(uservice.findByID(codedid));
 	}
 
-	@ApiMethod(description="Create a new user (If user is PJUR, then send only OrgDTO, else if PFIS, send PersonDTO)")
+	@ApiMethod(description="Create a new user (PJUR)")
 	@ApiResponseObject
-	@RequestMapping(method=RequestMethod.POST)
+	@RequestMapping(method=RequestMethod.POST, path = "/entity")
 	@ResponseBody
-	public ResponseEntity<?> add(@ApiBodyObject @RequestBody @Valid CUserDTO user) {
+	public ResponseEntity<?> add(@ApiBodyObject @RequestBody @Valid CPJurDTO user) {
 		uservice.save(user);
 		return ResponseEntity.ok(null);
 	}
 
-	@ApiMethod(description="Update an user (If user is PJUR, then send only OrgDTO, else if PFIS, send PersonDTO)")
+	@ApiMethod(description="Create a new user (PFIS)")
 	@ApiResponseObject
-	@RequestMapping(method=RequestMethod.PUT)
+	@RequestMapping(method=RequestMethod.POST, path = "/person")
 	@ResponseBody
-	public ResponseEntity<?> update(@ApiBodyObject @RequestBody @Valid UUserDTO user) {
+	public ResponseEntity<?> add(@ApiBodyObject @RequestBody @Valid CPFisDTO user) {
+		uservice.save(user);
+		return ResponseEntity.ok(null);
+	}
+
+	@ApiMethod(description="Update an user (PFIS)")
+	@ApiResponseObject
+	@RequestMapping(method=RequestMethod.PUT, path = "/person")
+	@ResponseBody
+	public ResponseEntity<?> update(@ApiBodyObject @RequestBody @Valid UPFisDTO user) {
+		uservice.update(user);
+		return ResponseEntity.ok(null);
+	}
+
+	@ApiMethod(description="Update an user (PJUR)")
+	@ApiResponseObject
+	@RequestMapping(method=RequestMethod.PUT, path = "/entity")
+	@ResponseBody
+	public ResponseEntity<?> update(@ApiBodyObject @RequestBody @Valid UPJurDTO user) {
 		uservice.update(user);
 		return ResponseEntity.ok(null);
 	}

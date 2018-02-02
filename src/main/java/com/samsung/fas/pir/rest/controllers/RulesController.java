@@ -1,11 +1,10 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.models.dto.rule.CRuleDTO;
-import com.samsung.fas.pir.models.dto.rule.RRuleDTO;
-import com.samsung.fas.pir.models.dto.rule.URuleDTO;
-import com.samsung.fas.pir.models.entity.Rule;
-import com.samsung.fas.pir.services.RuleService;
+import com.samsung.fas.pir.persistence.models.entity.Rule;
+import com.samsung.fas.pir.rest.dto.rule.RRuleDTO;
+import com.samsung.fas.pir.rest.dto.rule.URuleDTO;
+import com.samsung.fas.pir.rest.services.RuleService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;
 import org.jsondoc.core.pojo.ApiVisibility;
@@ -63,15 +62,15 @@ public class RulesController {
 		return ResponseEntity.ok(rservice.findOne(codedid));
 	}
 	
-	// Create (POST)
-	@ApiMethod(description="Save a rule in database (Permissions: Edit, View, Delete, Update) (Relative to: Web Application View Pages)")
-	@ApiResponseObject
-	@RequestMapping(method=RequestMethod.POST)
-	@ResponseBody
-	public ResponseEntity<?> add(@ApiBodyObject @Valid @RequestBody CRuleDTO rule) {
-		rservice.save(rule);
-		return ResponseEntity.ok(null);
-	}
+//	// Create (POST)
+//	@ApiMethod(description="Save a rule in database (Permissions: Edit, View, Delete, Update) (Relative to: Web Application View Pages)")
+//	@ApiResponseObject
+//	@RequestMapping(method=RequestMethod.POST)
+//	@ResponseBody
+//	public ResponseEntity<?> add(@ApiBodyObject @Valid @RequestBody CRuleDTO rule) {
+//		rservice.save(rule);
+//		return ResponseEntity.ok(null);
+//	}
 	
 	// Update (PUT)
 	@ApiMethod(description="Update a specific rule (Permissions: Edit, View, Delete, Update) (Relative to: Web Application View Pages)")

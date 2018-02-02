@@ -1,11 +1,11 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.models.dto.greetings.CGreetingsDTO;
-import com.samsung.fas.pir.models.dto.greetings.RGreetingsDTO;
-import com.samsung.fas.pir.models.dto.greetings.UGreetingsDTO;
-import com.samsung.fas.pir.models.entity.Greetings;
-import com.samsung.fas.pir.services.GreetingsService;
+import com.samsung.fas.pir.persistence.models.entity.Greetings;
+import com.samsung.fas.pir.rest.dto.greetings.CGreetingsDTO;
+import com.samsung.fas.pir.rest.dto.greetings.RGreetingsDTO;
+import com.samsung.fas.pir.rest.dto.greetings.UGreetingsDTO;
+import com.samsung.fas.pir.rest.services.GreetingsService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;
 import org.jsondoc.core.pojo.ApiVisibility;
