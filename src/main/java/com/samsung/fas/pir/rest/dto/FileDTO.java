@@ -2,7 +2,6 @@ package com.samsung.fas.pir.rest.dto;
 
 import com.fasterxml.jackson.annotation.*;
 import com.samsung.fas.pir.persistence.models.entity.MDataFile;
-import com.samsung.fas.pir.persistence.models.enums.EMediaType;
 import lombok.Getter;
 import lombok.Setter;
 import org.jsondoc.core.annotation.ApiObject;
@@ -35,8 +34,8 @@ public class FileDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty(value="type")
-	private		String		type;
+	@JsonProperty(value="content")
+	private		String		content;
 
 	@Getter
 	@Setter
@@ -64,7 +63,7 @@ public class FileDTO {
 		name		= entity.getName();
 		extension	= entity.getExtension();
 		creation	= entity.getCreatedAt();
-		type		= entity.getType().toString();
+		content		= entity.getContent();
 	}
 
 	@JsonIgnore
@@ -75,7 +74,7 @@ public class FileDTO {
 		model.setExtension(extension);
 		model.setPath(path);
 		model.setCreatedAt(creation);
-		model.setType(EMediaType.parse(type));
+		model.setContent(content);
 		return model;
 	}
 

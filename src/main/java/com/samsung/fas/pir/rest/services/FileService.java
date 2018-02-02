@@ -2,7 +2,6 @@ package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.persistence.models.entity.MDataFile;
-import com.samsung.fas.pir.persistence.models.enums.EMediaType;
 import com.samsung.fas.pir.persistence.repository.IFileRepository;
 import com.samsung.fas.pir.rest.dto.FileDTO;
 import org.apache.commons.io.FilenameUtils;
@@ -18,66 +17,36 @@ import java.util.Date;
 
 @Service
 public class FileService {
-	private	final 	String 				UPLOAD_DIR		= "/uploads/";
-	private	final	String 				STATIC_DIR		= "static/files";
-	private 		IFileRepository 	repository;
+	@Autowired
 	private			HttpServletRequest	request;
 
 	@Autowired
-	public FileService(IFileRepository repository, HttpServletRequest request) {
-		this.repository		= repository;
-		this.request		= request;
-	}
+	private 		IFileRepository 	repository;
 
-	public FileDTO writeFile(String name, EMediaType type, byte[] data) {
+	public FileDTO save(String name, String contentType, byte[] data) {
 		try {
 			String				extension		= FilenameUtils.getExtension(name);
-			File				fileLocation	= getNewFile(extension);
-			FileOutputStream	fos				= new FileOutputStream(fileLocation);
+			File 				fileLocation	= getNewFile(extension);
+			FileOutputStream 	fos				= new FileOutputStream(fileLocation);
 			MDataFile 			metadata		= new MDataFile();
 
-			validateFile(name, type);
 			fos.write(data);
 			fos.close();
-			metadata.setPath(Paths.get(STATIC_DIR, fileLocation.getName()).toString());
+			metadata.setPath(Paths.get("/", fileLocation.getName()).toString());
 			metadata.setExtension(extension);
 			metadata.setName(name);
-			metadata.setType(type);
+			metadata.setContent(contentType);
 			metadata.setCreatedAt(new Date());
 			return FileDTO.toDTO(repository.save(metadata));
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RESTRuntimeException("file.error");
-		}
-	}
-
-	private void validateFile(String name, EMediaType type) {
-		switch (type) {
-			case PICTURE2D:
-				break;
-
-			case PICTURE360:
-				if(!name.matches("(.*/)*.+\\.(png|jpg|gif|bmp|jpeg|PNG|JPG|GIF|BMP)$"))
-					throw new RESTRuntimeException("file.format.unsupported");
-				break;
-
-			case VIDEO2D:
-				break;
-
-			case VIDEO360:
-				if(!name.matches("(.*/)*.+\\.(mp4|MP4)$"))
-					throw new RESTRuntimeException("file.format.unsupported");
-				break;
+			return null;
 		}
 	}
 
 	private File getNewFile(String ext) throws IOException {
-		if(ext == null || ext.trim().isEmpty()) {
-			ext = ".dat";
-		}
-
-		String	name	= String.format("%s.%s", java.util.UUID.randomUUID(), ext);
-		File	dir		= new File(getUploadDir(), STATIC_DIR);
+		String	name	= java.util.UUID.randomUUID().toString();
+		File	dir		= new File(getUploadDir(), "/");
 		File	file	= new File(dir, name);
 
 		if (!dir.mkdirs() && !file.createNewFile())
@@ -87,17 +56,31 @@ public class FileService {
 	}
 
 	private String getUploadDir() {
-		String	uploadPath	=  request.getServletContext().getRealPath(UPLOAD_DIR);
+		String	uploadPath	=  request.getServletContext().getRealPath("data/files");
 
 		if(!new File(uploadPath).exists())
-			if (!new File(uploadPath).mkdir())
+			if (!new File(uploadPath).mkdirs())
 				throw new RESTRuntimeException("file.internal.error");
 
 		return uploadPath;
 	}
 
-	public FileDTO getFile(long fileId) {
-		return FileDTO.toDTO(repository.findOne(fileId));
+	public boolean delete(long fileid) {
+		try {
+			MDataFile	metadata	= repository.findOne(fileid);
+			boolean 	deleted 	= new File(getUploadDir(), metadata.getPath()).delete();
+
+			if (deleted)
+				repository.delete(metadata.getId());
+
+			return deleted;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	public FileDTO findOne(long fileid) {
+		return FileDTO.toDTO(repository.findOne(fileid));
 	}
 
 	public File getFile(FileDTO file) {

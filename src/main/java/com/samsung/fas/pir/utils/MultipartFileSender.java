@@ -17,20 +17,21 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 /**
  * Created by kevin on 10/02/15.
  * See full code here : https://github.com/davinkevin/Podcast-Server/blob/d927d9b8cb9ea1268af74316cd20b7192ca92da7/src/main/java/lan/dk/podcastserver/utils/multipart/MultipartFileSender.java
  */
 public class MultipartFileSender {
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private static final int DEFAULT_BUFFER_SIZE = 20480; // ..bytes = 20KB.
-	private static final long DEFAULT_EXPIRE_TIME = 604800000L; // ..ms = 1 week.
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final int DEFAULT_BUFFER_SIZE = 20480;
+	private static final long DEFAULT_EXPIRE_TIME = 604800000L;
 	private static final String MULTIPART_BOUNDARY = "MULTIPART_BYTERANGES";
-	Path filepath;
-	HttpServletRequest request;
-	HttpServletResponse response;
+	private Path filepath;
+	private HttpServletRequest request;
+	private HttpServletResponse response;
+
 	public MultipartFileSender() {
+		super();
 	}
 	public static MultipartFileSender fromPath(Path path) {
 		return new MultipartFileSender().setFilepath(path);
@@ -66,7 +67,7 @@ public class MultipartFileSender {
 		Long length = Files.size(filepath);
 		String fileName = filepath.getFileName().toString();
 		FileTime lastModifiedObj = Files.getLastModifiedTime(filepath);
-		if (fileName == null || fileName.isEmpty() || lastModifiedObj == null) {
+		if (fileName == null || fileName.isEmpty()) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
@@ -151,18 +152,14 @@ public class MultipartFileSender {
 		}
 		// Prepare and initialize response --------------------------------------------------------
 		// Get content type by file name and set content disposition.
-		String disposition = "inline";
+		String disposition;
 		// If content type is unknown, then set the default value.
 		// For all content types, see: http://www.w3schools.com/media/media_mimeref.asp
 		// To add new content types, add new mime-mapping entry in web.xml.
-		if (contentType == null) {
-			contentType = "application/octet-stream";
-		} else if (!contentType.startsWith("image")) {
-			// Else, expect for images, determine content disposition. If content type is supported by
-			// the browser, then set to inline, else attachment which will pop a 'save as' dialogue.
-			String accept = request.getHeader("Accept");
-			disposition = accept != null && HttpUtils.accepts(accept, contentType) ? "inline" : "attachment";
-		}
+		// Else, expect for images, determine content disposition. If content type is supported by
+		// the browser, then set to inline, else attachment which will pop a 'save as' dialogue.
+		String accept = request.getHeader("Accept");
+		disposition = accept != null && HttpUtils.accepts(accept, contentType) ? "inline" : "attachment";
 		logger.debug("Content-Type : {}", contentType);
 		// Initialize response.
 		response.reset();
@@ -232,13 +229,14 @@ public class MultipartFileSender {
 		 * @param end End of the byte range.
 		 * @param total Total length of the byte source.
 		 */
-		public Range(long start, long end, long total) {
+		Range(long start, long end, long total) {
 			this.start = start;
 			this.end = end;
 			this.length = end - start + 1;
 			this.total = total;
 		}
-		public static long sublong(String value, int beginIndex, int endIndex) {
+
+		static long sublong(String value, int beginIndex, int endIndex) {
 			String substring = value.substring(beginIndex, endIndex);
 			return (substring.length() > 0) ? Long.parseLong(substring) : -1;
 		}
@@ -274,8 +272,8 @@ public class MultipartFileSender {
 		 * @param toAccept The value to be accepted.
 		 * @return True if the given accept header accepts the given value.
 		 */
-		public static boolean accepts(String acceptHeader, String toAccept) {
-			String[] acceptValues = acceptHeader.split("\\s*(,|;)\\s*");
+		static boolean accepts(String acceptHeader, String toAccept) {
+			String[] acceptValues = acceptHeader.split("\\s*([,;])\\s*");
 			Arrays.sort(acceptValues);
 			return Arrays.binarySearch(acceptValues, toAccept) > -1
 						   || Arrays.binarySearch(acceptValues, toAccept.replaceAll("/.*$", "/*")) > -1
@@ -287,7 +285,7 @@ public class MultipartFileSender {
 		 * @param toMatch The value to be matched.
 		 * @return True if the given match header matches the given value.
 		 */
-		public static boolean matches(String matchHeader, String toMatch) {
+		static boolean matches(String matchHeader, String toMatch) {
 			String[] matchValues = matchHeader.split("\\s*,\\s*");
 			Arrays.sort(matchValues);
 			return Arrays.binarySearch(matchValues, toMatch) > -1
