@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 @CrossOrigin
@@ -24,11 +24,12 @@ public class ExceptionController {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<?> handleException(MethodArgumentNotValidException e) {
-		List<FieldError> fieldErrors 	= e.getBindingResult().getFieldErrors();
-		Set<String> errors				= new HashSet<>();
-		fieldErrors.forEach((error) -> errors.add(error.getDefaultMessage()));
-		Log.error(errors.toString());
-		return ResponseEntity.badRequest().body(errors);
+		return ResponseEntity.badRequest().body(e.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage).collect(Collectors.toList()));
+	}
+
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<?> handleException(ConstraintViolationException e) {
+		return ResponseEntity.badRequest().body(e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.toList()));
 	}
 
 	@ExceptionHandler(RESTRuntimeException.class)
