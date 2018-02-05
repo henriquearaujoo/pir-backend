@@ -200,7 +200,7 @@ public class UsersService {
 
 		// If login changes, generate new token
 		// Verify if editing is for same user
-		if (model.getId() == account.getId() && udao.save(model) != null) {
+		if (udao.save(model) != null && model.getId() == account.getId()) {
 			try {
 				Authentication	authentication 	= manager.reAuthenticate(new UsernamePasswordAuthenticationToken(model.getAccount().getUsername(), model.getAccount().getPassword()));
 				SecurityContextHolder.getContext().setAuthentication(authentication);
