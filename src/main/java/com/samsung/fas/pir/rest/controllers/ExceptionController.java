@@ -19,7 +19,7 @@ import java.util.Set;
 
 @ControllerAdvice
 @CrossOrigin
-public class BaseController {
+public class ExceptionController {
 	private		static 			Logger 			Log			= LoggerFactory.getLogger(UserController.class);
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)

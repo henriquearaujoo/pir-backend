@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
+import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.models.entity.User;
 import com.samsung.fas.pir.rest.dto.user.*;
 import com.samsung.fas.pir.rest.services.UsersService;
@@ -11,7 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mobile.device.Device;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,8 +85,13 @@ public class UserController {
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.PUT, path = "/person")
 	@ResponseBody
-	public ResponseEntity<?> update(@ApiBodyObject @RequestBody @Valid UPFisDTO user) {
-		uservice.update(user);
+	public ResponseEntity<?> update(@ApiBodyObject @RequestBody @Valid UPFisDTO user, @AuthenticationPrincipal Account principal, Device device) {
+		String token = uservice.update(user, principal, device);
+		if (token != null) {
+			HttpHeaders 	headers 		= new HttpHeaders();
+			headers.add(HttpHeaders.AUTHORIZATION, token);
+			return new ResponseEntity<>(headers, HttpStatus.OK);
+		}
 		return ResponseEntity.ok(null);
 	}
 
@@ -89,8 +99,13 @@ public class UserController {
 	@ApiResponseObject
 	@RequestMapping(method=RequestMethod.PUT, path = "/entity")
 	@ResponseBody
-	public ResponseEntity<?> update(@ApiBodyObject @RequestBody @Valid UPJurDTO user) {
-		uservice.update(user);
+	public ResponseEntity<?> update(@ApiBodyObject @RequestBody @Valid UPJurDTO user, @AuthenticationPrincipal Account principal, Device device) {
+		String token = uservice.update(user, principal, device);
+		if (token != null) {
+			HttpHeaders 	headers 		= new HttpHeaders();
+			headers.add(HttpHeaders.AUTHORIZATION, token);
+			return new ResponseEntity<>(headers, HttpStatus.OK);
+		}
 		return ResponseEntity.ok(null);
 	}
 

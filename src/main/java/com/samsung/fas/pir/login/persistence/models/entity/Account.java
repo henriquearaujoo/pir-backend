@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.login.persistence.models.entity;
 
+import com.samsung.fas.pir.login.listeners.AccountChanged;
 import com.samsung.fas.pir.persistence.models.entity.Profile;
 import com.samsung.fas.pir.persistence.models.entity.User;
 import lombok.Getter;
@@ -16,6 +17,7 @@ import java.util.Collection;
 @Table(name = "account")
 @DynamicUpdate
 @DynamicInsert
+@EntityListeners(value = AccountChanged.class)
 public class Account implements UserDetails {
 	@Getter
 	@Setter

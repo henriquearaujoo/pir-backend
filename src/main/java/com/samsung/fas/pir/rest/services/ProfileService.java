@@ -97,7 +97,7 @@ public class ProfileService {
 		
 		// Verify if title exists in another profile
 		Profile ptitle = pdao.findOneByTitle(profile.getTitle());
-		if (ptitle != null && ptitle.getId() == model.getId())
+		if (ptitle != null && ptitle.getId() != model.getId())
 			throw new RESTRuntimeException("profile.title.exists");
 		
 		// If all OK

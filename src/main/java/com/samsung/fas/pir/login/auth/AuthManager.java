@@ -44,4 +44,17 @@ public class AuthManager implements AuthenticationManager {
 
 		return new UsernamePasswordAuthenticationToken(account, password, account.getAuthorities());
 	}
+
+	public Authentication reAuthenticate(Authentication authentication) throws AuthenticationException {
+		String			username		= (String) authentication.getPrincipal();
+		Account			account			= (Account) service.loadUserByUsername(username);
+
+		if (account == null)
+			throw new UsernameNotFoundException("user.notfound");
+
+		if (!account.isEnabled())
+			throw new DisabledException("user.disabled");
+
+		return new UsernamePasswordAuthenticationToken(account, authentication.getCredentials(), account.getAuthorities());
+	}
 }
