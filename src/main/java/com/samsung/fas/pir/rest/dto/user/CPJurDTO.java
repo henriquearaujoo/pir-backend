@@ -13,6 +13,8 @@ import org.hibernate.validator.constraints.br.CNPJ;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 
+import javax.validation.constraints.Pattern;
+
 @ApiObject
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CPJurDTO extends CUserBaseDTO {
@@ -21,6 +23,7 @@ public class CPJurDTO extends CUserBaseDTO {
 	@JsonProperty("cnpj")
 	@CNPJ(message = "user.type.pjur.cnpj.invalid")
 	@NotBlank(message="user.type.pjur.cnpj.blank")
+	@Pattern(regexp="^(0|[0-9][0-9]*)$", message = "user.pjur.cnpj.invalid.chars")
 	private		String			cnpj;
 	
 	@ApiObjectField(name="ie")
