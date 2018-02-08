@@ -47,7 +47,7 @@ public class Tools {
 	public static Query setupPage(JPAQuery query, Pageable pageable, PathBuilder entityPath) {
 		JPAQuery result = (JPAQuery) query.clone();
 
-		if (pageable.getSort() != null) {
+		if (pageable != null) {
 			query.offset(pageable.getOffset());
 			query.limit(pageable.getPageSize());
 			if (pageable.getSort() != null) {
