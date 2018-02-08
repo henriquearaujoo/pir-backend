@@ -3,19 +3,14 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 /* Pages */
 INSERT INTO pirdb.public.pages (title_url, url_path)
-VALUES 	('user-list',					'user-list'),
-				('profile-list',			'profile-list'),
-				('user', 							'user'),
-				('user-edit', 				'user-edit'),
-				('user-details', 			'user-details'),
-				('page-list', 				'page-list'),
-				('template-chapter', 	'template-chapter'),
-				('chapter-dashboard',	'chapter-dashboard')
+VALUES ('user-list', 'user-list'), ('profile-list', 'profile-list'), ('user', 'user'), ('user-edit', 'user-edit'),
+('user-details', 'user-details'), ('page-list', 'page-list'), ('template-chapter', 'template-chapter'),
+('chapter-dashboard',	'chapter-dashboard')
 ON CONFLICT DO NOTHING;
 
 /* Profile */
 INSERT INTO pirdb.public.profile (status, created_at, description, title, updated_at, created_by, modified_by)
-VALUES 	(TRUE, current_date, 'Administrator ROLE', 'Administrator', current_date, NULL, NULL)
+VALUES (TRUE, current_date, 'Administrator ROLE', 'Administrator', current_date, NULL, NULL)
 ON CONFLICT DO NOTHING;
 
 /* Page Profile Permissions */
