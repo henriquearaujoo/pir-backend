@@ -30,7 +30,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/users")
 @Produces(MediaType.APPLICATION_JSON)
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT})
 public class UserController {
 	private		UsersService	uservice;
 

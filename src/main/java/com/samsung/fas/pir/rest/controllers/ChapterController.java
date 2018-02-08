@@ -27,7 +27,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/chapters")
 @Produces(MediaType.APPLICATION_JSON)
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT})
 public class ChapterController {
 	private ChapterService cservice;
 

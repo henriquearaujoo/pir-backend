@@ -27,7 +27,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/chapters/greeting")
 @Produces(MediaType.APPLICATION_JSON)
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
 public class GreetingsController {
 	private GreetingsService service;
 

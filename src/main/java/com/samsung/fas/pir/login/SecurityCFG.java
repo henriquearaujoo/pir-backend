@@ -19,19 +19,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityCFG extends WebSecurityConfigurerAdapter {
 	private 	AccountService 			service;
 	private 	AuthEntryPoint 			entry;
 	private 	JWToken 				token;
 
 	@Autowired
-	public SecurityConfig(AccountService service, AuthEntryPoint entry, JWToken token) {
+	public SecurityCFG(AccountService service, AuthEntryPoint entry, JWToken token) {
 		this.service	= service;
 		this.entry		= entry;
 		this.token		= token;
@@ -58,12 +58,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		web.ignoring()
 		.antMatchers(HttpMethod.OPTIONS)
 		.antMatchers(HttpMethod.POST, "/authentication/**")
+		.antMatchers(HttpMethod.GET, "/file/**")
 		.antMatchers("/assets/**", "/webjars/**", "/api-docs/**")
 		.antMatchers("/jsondoc/**", "/jsondoc-ui.html");
 	}
 
 	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
+	public CorsFilter corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
@@ -75,7 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		config.addAllowedMethod("PUT");
 		config.addAllowedMethod("DELETE");
 		source.registerCorsConfiguration("/**", config);
-		return source;
+		return new CorsFilter(source);
 	}
 
 	@Bean

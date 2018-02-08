@@ -26,7 +26,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/rules")
 @Produces(MediaType.APPLICATION_JSON)
-@CrossOrigin
 public class RulesController {
 	private		RuleService		rservice;
 

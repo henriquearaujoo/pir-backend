@@ -18,7 +18,6 @@ import java.util.HashSet;
 
 @Controller
 @RequestMapping("/file")
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.DELETE } )
 public class FileController {
 	@Autowired
 	private FileService service;

@@ -10,7 +10,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.validation.ConstraintViolation;
@@ -18,7 +17,6 @@ import javax.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
-@CrossOrigin
 public class ExceptionController {
 	private		static 			Logger 			Log			= LoggerFactory.getLogger(UserController.class);
 
