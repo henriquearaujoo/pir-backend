@@ -17,11 +17,14 @@ import java.util.Date;
 
 @Service
 public class FileService {
-	@Autowired
-	private			HttpServletRequest	request;
+	private	final	HttpServletRequest	request;
+	private	final	IFileRepository 	repository;
 
 	@Autowired
-	private 		IFileRepository 	repository;
+	public FileService(HttpServletRequest request, IFileRepository repository) {
+		this.request 	= request;
+		this.repository	= repository;
+	}
 
 	public FileDTO save(String name, String contentType, byte[] data) {
 		try {
@@ -32,7 +35,7 @@ public class FileService {
 
 			fos.write(data);
 			fos.close();
-			metadata.setPath(Paths.get("/", fileLocation.getName()).toString());
+			metadata.setPath(Paths.get("", fileLocation.getName()).toString());
 			metadata.setExtension(extension);
 			metadata.setName(name);
 			metadata.setContent(contentType);
