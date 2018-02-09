@@ -48,8 +48,8 @@ public class Tools {
 		JPAQuery result = (JPAQuery) query.clone();
 
 		if (pageable != null) {
-			query.offset(pageable.getOffset());
-			query.limit(pageable.getPageSize());
+//			query.offset(pageable.getOffset());
+//			query.limit(pageable.getPageSize());
 			if (pageable.getSort() != null) {
 				for (Sort.Order order : pageable.getSort()) {
 					PathBuilder path = entityPath.get(order.getProperty());
