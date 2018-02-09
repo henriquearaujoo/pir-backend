@@ -77,6 +77,8 @@ public class ChapterDAO {
 		query 	= Tools.setupPage(result, pageable, entityPath);
 		//noinspection unchecked
 		try {
+			if (pageable.getPageSize() > query.getResultList().size())
+				return new PageImpl<Chapter>(query.getResultList().subList(pageable.getOffset(), pageable.getOffset() + query.getResultList().size()), pageable, query.getResultList().size());
 			return new PageImpl<Chapter>(query.getResultList().subList(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize()), pageable, query.getResultList().size());
 		} catch (Exception e) {
 			return new PageImpl<Chapter>(new ArrayList<>(), pageable, query.getResultList().size());
@@ -107,6 +109,8 @@ public class ChapterDAO {
 		query 	= Tools.setupPage(result, pageable, entityPath);
 		//noinspection unchecked
 		try {
+			if (pageable.getPageSize() > query.getResultList().size())
+				return new PageImpl<Chapter>(query.getResultList().subList(pageable.getOffset(), pageable.getOffset() + query.getResultList().size()), pageable, query.getResultList().size());
 			return new PageImpl<Chapter>(query.getResultList().subList(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize()), pageable, query.getResultList().size());
 		} catch (Exception e) {
 			return new PageImpl<Chapter>(new ArrayList<>(), pageable, query.getResultList().size());
