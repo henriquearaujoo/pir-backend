@@ -27,7 +27,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/chapters/conclusion/question")
 @Produces(MediaType.APPLICATION_JSON)
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE})
 public class QuestionController {
 	private QuestionService service;
 

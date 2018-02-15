@@ -29,7 +29,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/profiles")
 @Produces(MediaType.APPLICATION_JSON)
-@CrossOrigin
 public class ProfileController {
 	private ProfileService pservice;
 

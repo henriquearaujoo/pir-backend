@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -75,7 +76,13 @@ public class ChapterDAO {
 		result	= queryChapter.from(chapter).where(chapter.chapter.in(queryActive.from(chapter).select(chapter.chapter).where(chapter.valid.eq(true)).fetch()).and(predicate));
 		query 	= Tools.setupPage(result, pageable, entityPath);
 		//noinspection unchecked
-		return new PageImpl<Chapter>(query.getResultList(), pageable, query.getResultList().size());
+		try {
+			if (pageable.getPageSize() > query.getResultList().size())
+				return new PageImpl<Chapter>(query.getResultList().subList(pageable.getOffset(), pageable.getOffset() + query.getResultList().size()), pageable, query.getResultList().size());
+			return new PageImpl<Chapter>(query.getResultList().subList(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize()), pageable, query.getResultList().size());
+		} catch (Exception e) {
+			return new PageImpl<Chapter>(new ArrayList<>(), pageable, query.getResultList().size());
+		}
 	}
 
 	public Set<Chapter> findAllInvalid() {
@@ -101,7 +108,13 @@ public class ChapterDAO {
 		result 	= queryChapter.from(chapter).where(chapter.chapter.notIn(queryActive.from(chapter).select(chapter.chapter).where(chapter.valid.eq(true)).fetch()).and(predicate));
 		query 	= Tools.setupPage(result, pageable, entityPath);
 		//noinspection unchecked
-		return new PageImpl<Chapter>(query.getResultList(), pageable, query.getResultList().size());
+		try {
+			if (pageable.getPageSize() > query.getResultList().size())
+				return new PageImpl<Chapter>(query.getResultList().subList(pageable.getOffset(), pageable.getOffset() + query.getResultList().size()), pageable, query.getResultList().size());
+			return new PageImpl<Chapter>(query.getResultList().subList(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize()), pageable, query.getResultList().size());
+		} catch (Exception e) {
+			return new PageImpl<Chapter>(new ArrayList<>(), pageable, query.getResultList().size());
+		}
 	}
 
 	public Page<Chapter> findAll(Pageable pageable) {

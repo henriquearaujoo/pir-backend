@@ -27,7 +27,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/chapters/intervention")
 @Produces(MediaType.APPLICATION_JSON)
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
 public class InterventionController {
 	private InterventionService service;
 

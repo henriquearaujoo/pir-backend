@@ -22,6 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,6 +35,7 @@ import javax.ws.rs.core.MediaType;
 @RequestMapping("/authentication")
 @Produces(MediaType.APPLICATION_JSON)
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.POST }, exposedHeaders = HttpHeaders.AUTHORIZATION)
+@Validated
 public class AuthenticationController {
 	@Autowired	private 	JWToken				token;
 	@Autowired 	private 	AuthManager 		manager;
@@ -57,7 +59,7 @@ public class AuthenticationController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, path = "/recover")
-	public ResponseEntity recover(@RequestParam("email") @Email String request) {
+	public ResponseEntity recover(@Email(message = "email.invalid") @RequestParam("email") String request) {
 		return ResponseEntity.ok(service.recoverPasswordByUserEmail(request));
 	}
 

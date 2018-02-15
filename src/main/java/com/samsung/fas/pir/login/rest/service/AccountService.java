@@ -9,14 +9,7 @@ import com.samsung.fas.pir.login.persistence.repository.IPasswordRecoverReposito
 import com.samsung.fas.pir.login.rest.dto.ResetPasswordDTO;
 import freemarker.template.TemplateException;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,13 +27,18 @@ import java.util.UUID;
 
 @Service
 public class AccountService implements UserDetailsService {
-	private	static	final	Log						LOG						= LogFactory.getLog(AccountService.class);
+	private	final	IAccountRepository 			repository;
+	private	final 	IPasswordRecoverRepository	prepository;
+	private	final	EmailService				emailservice;
+	private final	PasswordEncoder 			encoder;
 
-	@Autowired			private		IAccountRepository 			repository;
-	@Autowired 			private 	IPasswordRecoverRepository	prepository;
-	@Autowired			private 	EmailService				emailservice;
-	@Autowired	@Lazy	private 	PasswordEncoder 			encoder;
-	@Autowired	@Lazy	private 	AuthenticationManager 		manager;
+	@Autowired
+	public AccountService(IAccountRepository repository, IPasswordRecoverRepository prepository, EmailService emailservice, PasswordEncoder encoder) {
+		this.repository		= repository;
+		this.prepository	= prepository;
+		this.emailservice	= emailservice;
+		this.encoder		= encoder;
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) {
@@ -103,23 +101,5 @@ public class AccountService implements UserDetailsService {
 			return "password.reseted";
 
 		throw new RESTRuntimeException("password.reset.error");
-	}
-
-	public void changePassword(String oldPassword, String newPassword) {
-		Authentication	currentUser = SecurityContextHolder.getContext().getAuthentication();
-		String			username	= currentUser.getName();
-
-		if (manager != null) {
-			LOG.debug("Re-authenticating user '"+ username + "' for password change request.");
-			manager.authenticate(new UsernamePasswordAuthenticationToken(username, oldPassword));
-		} else {
-			LOG.debug("No authentication manager set. can't change Password!");
-			return;
-		}
-		LOG.debug("Changing password for user '"+ username + "'");
-
-		Account 		account 	= (Account) loadUserByUsername(username);
-		account.setPassword(encoder.encode(newPassword));
-		repository.save(account);
 	}
 }

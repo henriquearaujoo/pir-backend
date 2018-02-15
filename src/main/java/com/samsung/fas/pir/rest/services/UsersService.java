@@ -3,6 +3,11 @@ package com.samsung.fas.pir.rest.services;
 import com.google.common.hash.Hashing;
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
+import com.samsung.fas.pir.login.auth.AuthManager;
+import com.samsung.fas.pir.login.auth.JWToken;
+import com.samsung.fas.pir.login.persistence.models.entity.Account;
+import com.samsung.fas.pir.login.providers.DeviceProvider;
+import com.samsung.fas.pir.login.rest.service.AccountService;
 import com.samsung.fas.pir.persistence.dao.CityDAO;
 import com.samsung.fas.pir.persistence.dao.ProfileDAO;
 import com.samsung.fas.pir.persistence.dao.UsersDAO;
@@ -15,6 +20,10 @@ import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mobile.device.Device;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
@@ -26,18 +35,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class UsersService {
-	private 		UsersDAO 			udao;
-	private 		CityDAO 			cdao;
-	private 		ProfileDAO 			pdao;
-	private 		PasswordEncoder		encoder;
+	@Autowired	private 	UsersDAO 			udao;
+	@Autowired	private 	CityDAO 			cdao;
+	@Autowired	private 	ProfileDAO 			pdao;
+	@Autowired	private 	PasswordEncoder		encoder;
 
-	@Autowired
-	public UsersService(UsersDAO udao, CityDAO cdao, ProfileDAO pdao, PasswordEncoder encoder) {
-		this.udao		= udao;
-		this.pdao		= pdao;
-		this.cdao		= cdao;
-		this.encoder	= encoder;
-	}
+	@Autowired	private 	JWToken				token;
+	@Autowired 	private 	AuthManager 		manager;
+	@Autowired 	private 	AccountService 		service;
+	@Autowired 	private 	DeviceProvider		provider;
 
 	public List<RUserDTO> findAll() {
 		return udao.findAll().stream().map(RUserDTO::toDTO).collect(Collectors.toList());
@@ -118,9 +124,10 @@ public class UsersService {
 	// endregion
 
 	// region update model
-	public void update(UUserBaseDTO dto) {
+	public String update(UUserBaseDTO dto, Account account, Device device) {
 		User 				entity			= udao.findOne(dto.getModel().getGuid());
 		User 				model 			= dto.getModel();
+		String				tokien;
 
 		// Verify if user exists
 		if (entity == null)
@@ -191,7 +198,18 @@ public class UsersService {
 		model.getAccount().setUser(model);
 		model.getAddress().setUser(model);
 
-		udao.save(model);
+		// If login changes, generate new token
+		// Verify if editing is for same user
+		if (udao.save(model) != null && model.getId() == account.getId()) {
+			try {
+				Authentication	authentication 	= manager.reAuthenticate(new UsernamePasswordAuthenticationToken(model.getAccount().getUsername(), model.getAccount().getPassword()));
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+				return token.generateToken((Account) authentication.getPrincipal(), device);
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 	// endregion
 	// endregion

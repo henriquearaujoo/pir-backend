@@ -13,6 +13,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @ApiObject
@@ -37,6 +38,7 @@ public class CPFisDTO extends CUserBaseDTO {
 	@JsonProperty("cpf")
 	@CPF(message = "user.type.pfis.cpf.invalid")
 	@NotBlank(message="user.type.pfis.cpf.blank")
+	@Pattern(regexp="^(0|[0-9][0-9]*)$", message = "user.pfis.cpf.invalid.chars")
 	private		String			cpf;
 	
 	private CPFisDTO(IndividualPerson model) {
