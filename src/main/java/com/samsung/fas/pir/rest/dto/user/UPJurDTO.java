@@ -52,23 +52,26 @@ public class UPJurDTO extends UUserBaseDTO {
 	@JsonIgnore
 	@Override
 	public User getModel() {
-		LegalPerson 	user 			= new LegalPerson();
-		Account 		account			= new Account();
+		User 		user 		= new User();
+		LegalPerson	legal		= new LegalPerson();
+		Account 	account		= new Account();
 
 		account.setEnabled(isActive());
 		account.setUsername(getLogin());
 		account.setPassword(getPassword());
 
-		user.setGuid(IDCoder.decodeUUID(getId()));
+		legal.setSocialName(getSocial());
+		legal.setIe(getIe());
+		legal.setCnpj(getCnpj());
+		legal.setFantasyName(getFantasy());
+
+		user.setUuid(IDCoder.decode(getId()));
 		user.setAddress(getAddressDTO().getModel());
 		user.setAccount(account);
 		user.setName(getName());
 		user.setType(getType());
 		user.setEmail(getEmail());
-		user.setSocialName(getSocial());
-		user.setIe(getIe());
-		user.setCnpj(getCnpj());
-		user.setFantasyName(getFantasy());
+		user.setLegal(legal);
 
 		return user;
 	}

@@ -2,30 +2,33 @@ package com.samsung.fas.pir.persistence.models.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
-import org.hibernate.bytecode.internal.javassist.FieldHandled;
-import org.hibernate.bytecode.internal.javassist.FieldHandler;
+import org.hibernate.annotations.*;
 
+import javax.persistence.CascadeType;
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Set;
+import java.util.UUID;
 
-// TODO: Change mapping
-@Entity(name="chapter")
+@Entity
 @Table(name = "chapter", uniqueConstraints = @UniqueConstraint(columnNames= {"number", "version"}))
 @DynamicUpdate
 @DynamicInsert
-public class Chapter implements FieldHandled {
-	private 	FieldHandler	handler;
-
+public class Chapter {
 	@Getter
 	@Setter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id", nullable = false)
+	@Column
 	private		long			id;
+
+	@Getter
+	@Setter
+	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
+	@Generated(GenerationTime.INSERT)
+	private 	UUID 			uuid;
 
 	@Getter
 	@Setter
@@ -90,60 +93,27 @@ public class Chapter implements FieldHandled {
 	@Getter
 	@Setter
 	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
-	@JoinColumn(name = "chapter")
+	@JoinColumn(name = "chapter_id")
 	private 	Set<MDataFile>	medias;
 
 	@Getter
 	@Setter
 	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
-	@JoinColumn(name = "chapter")
+	@JoinColumn(name = "chapter_id")
 	private 	Set<MDataFile>	thumbnails;
 
+	@Getter
 	@Setter
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "chapter", targetEntity = Intervention.class)
-	@LazyToOne(LazyToOneOption.NO_PROXY)
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "chapter")
 	private 	Intervention	intervention;
 
+	@Getter
 	@Setter
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "chapter", targetEntity = Greetings.class)
-	@LazyToOne(LazyToOneOption.NO_PROXY)
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "chapter")
 	private 	Greetings		greetings;
 
+	@Getter
 	@Setter
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "chapter", targetEntity = Conclusion.class)
-	@LazyToOne(LazyToOneOption.NO_PROXY)
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "chapter")
 	private 	Conclusion		conclusion;
-
-	// region Lazy Getters
-	public Intervention getIntervention() {
-		if (handler != null) {
-			return (Intervention) handler.readObject(this, "intervention", intervention);
-		}
-		return intervention;
-	}
-
-	public Greetings getGreetings() {
-		if (handler != null) {
-			return (Greetings) handler.readObject(this, "greetings", greetings);
-		}
-		return greetings;
-	}
-
-	public Conclusion getConclusion() {
-		if (handler != null) {
-			return (Conclusion) handler.readObject(this, "conclusion", conclusion);
-		}
-		return conclusion;
-	}
-	// endregion
-
-	@Override
-	public void setFieldHandler(FieldHandler fieldHandler) {
-		handler = fieldHandler;
-	}
-
-	@Override
-	public FieldHandler getFieldHandler() {
-		return handler;
-	}
 }

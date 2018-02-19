@@ -1,31 +1,23 @@
 package com.samsung.fas.pir.utils;
 
 import com.samsung.fas.pir.exception.RESTRuntimeException;
-import org.springframework.util.Base64Utils;
+import org.apache.commons.codec.binary.Base64;
 
-import java.nio.charset.StandardCharsets;
+import java.nio.ByteBuffer;
 import java.util.UUID;
 
 public class IDCoder {
 	public static String encode(UUID uuid) {
-		return Base64Utils.encodeToUrlSafeString(uuid.toString().getBytes());
+		ByteBuffer	buffer	= ByteBuffer.wrap(new byte[16]);
+		buffer.putLong(uuid.getMostSignificantBits());
+		buffer.putLong(uuid.getLeastSignificantBits());
+		return Base64.encodeBase64URLSafeString(buffer.array());
 	}
 
-	public static String encode(long id) {
-		return Base64Utils.encodeToUrlSafeString(String.valueOf(id).getBytes());
-	}
-
-	public static long decodeLong(String string) {
+	public static UUID decode(String string) throws RESTRuntimeException {
 		try {
-			return Long.parseLong(new String(Base64Utils.decodeFromUrlSafeString(string), StandardCharsets.UTF_8));
-		} catch (Exception e) {
-			throw new RESTRuntimeException("id.invalid");
-		}
-	}
-
-	public static UUID decodeUUID(String string) throws RESTRuntimeException {
-		try {
-			return UUID.fromString(new String(Base64Utils.decodeFromUrlSafeString(string), StandardCharsets.UTF_8));
+			ByteBuffer buffer = ByteBuffer.wrap(Base64.decodeBase64(string));
+			return new UUID(buffer.getLong(), buffer.getLong());
 		} catch (Exception e) {
 			throw new RESTRuntimeException("id.invalid");
 		}

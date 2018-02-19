@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.entity.Intervention;
 import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
+import lombok.Setter;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 
@@ -14,28 +15,32 @@ public class RInterventionDTO {
 	@ApiObjectField(name="id", order=0)
 	@JsonProperty("id")
 	@Getter
+	@Setter
 	private		String			id;
 
 	@ApiObjectField(name="descritpion", order=1)
 	@JsonProperty("description")
 	@Getter
+	@Setter
 	private 	String			description;
 
 	@ApiObjectField(name="activity", order=2)
 	@JsonProperty("activity")
 	@Getter
+	@Setter
 	private 	String			activity;
 
 	@ApiObjectField(name="chapter", order=3)
 	@JsonProperty("chapter")
 	@Getter
+	@Setter
 	private 	String			chapter;
 
 	private RInterventionDTO(Intervention e) {
-		this.id				= IDCoder.encode(e.getId());
-		this.description	= e.getDescription();
-		this.chapter		= IDCoder.encode(e.getChapter().getId());
-		this.activity		= e.getActivity();
+		setId(IDCoder.encode(e.getUuid()));
+		setDescription(e.getDescription());
+		setChapter(IDCoder.encode(e.getChapter().getUuid()));
+		setActivity(e.getActivity());
 	}
 
 	public static RInterventionDTO toDTO(Intervention e) {

@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.UUID;
 
 @Api(name = "Chapters Services", description = "Methods for managing chapters", group = "Chapters", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
@@ -111,7 +112,7 @@ public class ChapterController {
 	@ApiResponseObject(clazz = RChapterDTO.class)
 	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	@ResponseBody
-	public ResponseEntity<RChapterDTO> get(@ApiPathParam @PathVariable("id") String codedid) {
+	public ResponseEntity<RChapterDTO> get(@ApiPathParam @PathVariable("id") UUID codedid) {
 		return ResponseEntity.ok(cservice.findOne(codedid));
 	}
 

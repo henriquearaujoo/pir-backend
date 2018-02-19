@@ -1,6 +1,5 @@
 package com.samsung.fas.pir.login.persistence.models.entity;
 
-import com.samsung.fas.pir.login.listeners.AccountChanged;
 import com.samsung.fas.pir.persistence.models.entity.Profile;
 import com.samsung.fas.pir.persistence.models.entity.User;
 import lombok.Getter;
@@ -17,17 +16,16 @@ import java.util.Collection;
 @Table(name = "account")
 @DynamicUpdate
 @DynamicInsert
-@EntityListeners(value = AccountChanged.class)
 public class Account implements UserDetails {
 	@Getter
 	@Setter
 	@Id
-	private 	long 			id;
+	private 	long 				id;
 
 	@Getter
 	@Setter
-	@OneToOne
 	@MapsId
+	@OneToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id")
 	private 	User				user;
 
@@ -59,7 +57,7 @@ public class Account implements UserDetails {
 
 	@Getter
 	@Setter
-	@ManyToOne(cascade = CascadeType.ALL, optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	private 	Profile				profile;
 
 	// region Overrides

@@ -1,192 +1,125 @@
 package com.samsung.fas.pir.persistence.models.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.data.geo.Point;
+import com.samsung.fas.pir.persistence.models.enums.EChildGender;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Date;
 import java.util.UUID;
 
-@Entity(name="child")
+@Entity
+@Table(name = "child")
+@DynamicUpdate
+@DynamicInsert
 public class Child {
+	@Getter
+	@Setter
 	@Id
-	@GeneratedValue(generator = "UUID")
-	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-	@Column(name="id", updatable=false, nullable = false, unique = true)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
+	private		long			id;
+
+	@Getter
+	@Setter
+	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
 	@Type(type = "org.hibernate.type.PostgresUUIDType")
-	private 	UUID		id;
-	
-	@Column(name="name")
-	@NotNull(message = "Invalid value for name field (NULL)")
-	@NotEmpty(message = "Invalid value for name field (EMPTY)")
-	private 	String 		name;
-	
-	@Column(name="mother_name")
-	@NotNull(message = "Invalid value for mother's name field (NULL)")
-	@NotEmpty(message = "Invalid value for mother's field (EMPTY)")
-	private		String		motherName;
-	
-	@Column(name="father_name")
-	private		String		fatherName;
-	
-	@Column(name="birth")
-	@NotNull(message = "Invalid value for birthday field (NULL)")
-	@NotEmpty(message = "Invalid value for birthday field (EMPTY)")
-	private 	Date 		birth;
-	
-	@Column(name="genre")
-	private		String		genre;
-	
-	@Column(name="status")
-	@NotNull(message = "Invalid value for status field (NULL)")
-	@NotEmpty(message = "Invalid value for status field (EMPTY)")
-	private		boolean		status;
-	
-	@Column(name="dt_register")
-	@NotNull(message = "Invalid value for registration date field (NULL)")
-	@NotEmpty(message = "Invalid value for registration date field (EMPTY)")
-	private		Date		registerDate;
-	
-	@Column(name="location")
-	private		Point		location;
-	
-	@Column(name="neighborhood")
-	private		String			neighborhoodAddress;
-	
-	@Column(name="street")
-	private		String			streetAddress;
-	
-	@Column(name="complement")
-	private		String			complementAdress;
-	
-	@Column(name="number")
-	private		String			numberAddress;
-	
-	@Column(name="postal_code")
-	private		String			postalCode;
+	@Generated(GenerationTime.INSERT)
+	private 	UUID 			uuid;
 
-	@ManyToOne
-	@JoinColumn(name="agent_id_fk")
-	@NotNull(message = "Invalid value for agent id field (NULL)")
-	@NotEmpty(message = "Invalid value for agent id field (EMPTY)")
-	private		User		agent;
+	@Getter
+	@Setter
+	@Column(nullable = false)
+	private 	String			name;
 
-	public UUID getId() {
-		return id;
-	}
+	@Getter
+	@Setter
+	@Temporal(TemporalType.DATE)
+	@Column(nullable = false)
+	private 	Date			birth;
 
-	public String getName() {
-		return name;
-	}
+	@Getter
+	@Setter
+	@Column
+	private 	String			fatherName;
 
-	public String getMotherName() {
-		return motherName;
-	}
+	@Getter
+	@Setter
+	@Column(nullable = false)
+	private 	String			motherName;
 
-	public String getFatherName() {
-		return fatherName;
-	}
+	@Getter
+	@Setter
+	@Enumerated(EnumType.STRING)
+	@Column
+	private 	EChildGender 	gender;
 
-	public Date getBirth() {
-		return birth;
-	}
+	@Getter
+	@Setter
+	@Column(nullable = false)
+	private 	boolean			hasCivilRegistration;
 
-	public String getGenre() {
-		return genre;
-	}
+	@Getter
+	@Setter
+	@Column(columnDefinition = "TEXT")
+	private 	String			civilRegistrationJustificative;
 
-	public boolean isStatus() {
-		return status;
-	}
+	@Getter
+	@Setter
+	@Column(nullable = false)
+	private 	boolean			hasEducationDifficulty;
 
-	public Date getRegisterDate() {
-		return registerDate;
-	}
+	@Getter
+	@Setter
+	@Column(columnDefinition = "TEXT")
+	private 	String			educationDifficultySpecification;
 
-	public Point getLocation() {
-		return location;
-	}
+	@Getter
+	@Setter
+	@Column(nullable = false)
+	private 	boolean			prematureBorn;
 
-	public String getNeighborhoodAddress() {
-		return neighborhoodAddress;
-	}
+	@Getter
+	@Setter
+	@Column(columnDefinition = "VARCHAR(6)")
+	private 	String			weekBorn;
 
-	public String getStreetAddress() {
-		return streetAddress;
-	}
+	@Getter
+	@Setter
+	@Column(columnDefinition = "VARCHAR(16)", nullable = false)
+	private 	String			whoTakeCare;
 
-	public String getComplementAdress() {
-		return complementAdress;
-	}
+	@Getter
+	@Setter
+	@Column(columnDefinition = "VARCHAR(16)", nullable = false)
+	private 	String			playsWithWho;
 
-	public String getNumberAddress() {
-		return numberAddress;
-	}
+	@Getter
+	@Setter
+	@Column(nullable = false)
+	private 	boolean			mensalWeight;
 
-	public String getPostalCode() {
-		return postalCode;
-	}
+	@Getter
+	@Setter
+	@Column(nullable = false)
+	private 	boolean			socialEducationalPrograms;
 
-	public User getAgent() {
-		return agent;
-	}
+	@Getter
+	@Setter
+	@Column(nullable = false)
+	private 	boolean			vacinationUpToDate;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+	@Getter
+	@Setter
+	@Column(nullable = false)
+	private 	boolean			relationDifficulties;
 
-	public void setMotherName(String motherName) {
-		this.motherName = motherName;
-	}
-
-	public void setFatherName(String fatherName) {
-		this.fatherName = fatherName;
-	}
-
-	public void setBirth(Date birth) {
-		this.birth = birth;
-	}
-
-	public void setGenre(String genre) {
-		this.genre = genre;
-	}
-
-	public void setStatus(boolean status) {
-		this.status = status;
-	}
-
-	public void setRegisterDate(Date registerDate) {
-		this.registerDate = registerDate;
-	}
-
-	public void setLocation(Point location) {
-		this.location = location;
-	}
-
-	public void setNeighborhoodAddress(String neighborhoodAddress) {
-		this.neighborhoodAddress = neighborhoodAddress;
-	}
-
-	public void setStreetAddress(String streetAddress) {
-		this.streetAddress = streetAddress;
-	}
-
-	public void setComplementAdress(String complementAdress) {
-		this.complementAdress = complementAdress;
-	}
-
-	public void setNumberAddress(String numberAddress) {
-		this.numberAddress = numberAddress;
-	}
-
-	public void setPostalCode(String postalCode) {
-		this.postalCode = postalCode;
-	}
-
-	public void setAgent(User agent) {
-		this.agent = agent;
-	}
+	@Getter
+	@Setter
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "community_id")
+	private 	Community		community;
 }

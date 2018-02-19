@@ -3,16 +3,13 @@ package com.samsung.fas.pir.rest.dto.profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.entity.Profile;
+import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
-import org.springframework.util.Base64Utils;
-
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 
 @ApiObject
 public class UProfileDTO {
@@ -47,10 +44,10 @@ public class UProfileDTO {
 	@JsonIgnore
 	public Profile getModel() {
 		Profile profile = new Profile();
-		profile.setGuid(UUID.fromString(new String(Base64Utils.decodeFromUrlSafeString(id), StandardCharsets.UTF_8)));
-		profile.setTitle(title);
-		profile.setActive(active);
-		profile.setDescription(description);
+		profile.setUuid(IDCoder.decode(getId()));
+		profile.setTitle(getTitle());
+		profile.setActive(isActive());
+		profile.setDescription(getDescription());
 		return profile;
 	}
 }

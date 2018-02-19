@@ -47,10 +47,10 @@ public class UInterventionDTO {
 	public Intervention getModel() {
 		Intervention e = new Intervention();
 		e.setChapter(new Chapter());
-		e.setDescription(description);
-		e.setActivity(activity);
-		e.setId(IDCoder.decodeLong(id));
-		e.getChapter().setId(IDCoder.decodeLong(chapterdID));
+		e.setDescription(getDescription());
+		e.setActivity(getActivity());
+		e.setUuid(IDCoder.decode(getId()));
+		e.getChapter().setUuid(IDCoder.decode(getChapterdID()));
 		return e;
 	}
 }

@@ -5,12 +5,14 @@ import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 
+import java.util.UUID;
+
 @Configuration
-public class Base64ToLong implements Converter<String, Long> {
+public class UUIDToString implements Converter<UUID, String> {
 	@Override
-	public Long convert(String source) throws RESTRuntimeException {
+	public String convert(UUID source) throws RESTRuntimeException {
 		try {
-			return IDCoder.decodeLong(source);
+			return IDCoder.encode(source);
 		} catch (Exception e) {
 			throw new RESTRuntimeException("id.invalid");
 		}

@@ -49,13 +49,13 @@ public class UQuestionDTO {
 	@JsonIgnore
 	public Question getModel() {
 		Question 	q 	= new Question();
-		Conclusion c	= new Conclusion();
+		Conclusion	c	= new Conclusion();
 
-		c.setId(IDCoder.decodeLong(conclusionID));
-		q.setId(IDCoder.decodeLong(id));
+		c.setUuid(IDCoder.decode(getConclusionID()));
+		q.setUuid(IDCoder.decode(getId()));
 		q.setConclusion(new Conclusion());
-		q.setDescription(description);
-		q.setType(type);
+		q.setDescription(getDescription());
+		q.setType(getType());
 		q.setConclusion(c);
 		return q;
 	}

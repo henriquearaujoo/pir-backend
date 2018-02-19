@@ -57,12 +57,11 @@ public class CGreetingsDTO {
 	public Greetings getModel() {
 		Greetings e = new Greetings();
 		e.setChapter(new Chapter());
-		e.setDescription(description);
-		e.setGoback(goback);
-		e.setSit(sit);
-		e.setEletronics(eletronics);
-		e.setStove(stove);
-		e.getChapter().setId(IDCoder.decodeLong(chapterID));
+		e.setDescription(getDescription());
+		e.setGoback(isGoback());
+		e.setSit(isSit());
+		e.setStove(isStove());
+		e.getChapter().setUuid(IDCoder.decode(getChapterID()));
 		return e;
 	}
 }

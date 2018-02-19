@@ -2,37 +2,28 @@ package com.samsung.fas.pir.rest.services;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
+import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.login.persistence.models.entity.Authority;
-import com.samsung.fas.pir.login.persistence.repository.IAuthorityRepository;
-import com.samsung.fas.pir.persistence.dao.PageDAO;
-import com.samsung.fas.pir.persistence.dao.ProfileDAO;
 import com.samsung.fas.pir.persistence.dao.RuleDAO;
 import com.samsung.fas.pir.persistence.models.entity.Page;
 import com.samsung.fas.pir.persistence.models.entity.Profile;
 import com.samsung.fas.pir.persistence.models.entity.Rule;
 import com.samsung.fas.pir.rest.dto.rule.RRuleDTO;
 import com.samsung.fas.pir.rest.dto.rule.URuleDTO;
-import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class RuleService {
 	private		RuleDAO					rdao;
-	private		ProfileDAO				prodao;
-	private		PageDAO					pgdao;
-	private 	IAuthorityRepository	arepository;
 
 	@Autowired
-	public RuleService(RuleDAO rdao, ProfileDAO prodao, PageDAO pgdao, IAuthorityRepository arepository) {
-		this.pgdao			= pgdao;
-		this.prodao			= prodao;
+	public RuleService(RuleDAO rdao) {
 		this.rdao			= rdao;
-		this.arepository	= arepository;
 	}
 	
 	public List<RRuleDTO> findAll() {
@@ -51,40 +42,29 @@ public class RuleService {
 		return rdao.findAll(predicate, pageable).map(RRuleDTO::toDTO);
 	}
 	
-	public List<RRuleDTO> findByProfileID(String id) {
-		return rdao.findByProfileID(IDCoder.decodeUUID(id)).stream().map(RRuleDTO::toDTO).collect(Collectors.toList());
-	}
-	
-	public RRuleDTO findOne(String id) {
-		Rule rule = rdao.findOne(IDCoder.decodeUUID(id));
+	public RRuleDTO findOne(UUID id) {
+		Rule rule = rdao.findOne(id);
 		if (rule == null)
 			throw new RESTRuntimeException("rule.notfound");
 		return RRuleDTO.toDTO(rule);
 	}
 
-	public void delete(String id) {
-		if (rdao.findOne(IDCoder.decodeUUID(id)) == null)
+	public void delete(UUID id) {
+		if (rdao.findOne(id) == null)
 			throw new RESTRuntimeException("rule.notfound");
-		rdao.delete(IDCoder.decodeUUID(id));
+		rdao.delete(id);
 	}
 	
-	public void update(URuleDTO rule) {
-		Profile		profile		= prodao.findOne(IDCoder.decodeUUID(rule.getProfile()));
-		Page		page		= pgdao.findOne(IDCoder.decodeUUID(rule.getPage()));
-		Rule		model		= rdao.findOne(IDCoder.decodeUUID(rule.getId()));
-		Rule		data		= rule.getModel();
-		
-		if (model == null)
-			throw new RESTRuntimeException("rule.id.notfound");
-		
-		if (profile == null) 
-			throw new RESTRuntimeException("rule.profile.notfound");
-		
-		if (page == null)
-			throw new RESTRuntimeException("rule.page.notfound");
+	public RRuleDTO update(URuleDTO dto, Account account) {
+		final	Rule					model		= dto.getModel();
+		final	Rule					rule		= Optional.ofNullable(rdao.findOne(model.getUuid())).orElseThrow(() -> new RESTRuntimeException("rule.id.notfound"));
+		final	Profile					profile		= Optional.ofNullable(rule.getProfile()).orElseThrow(() -> new RESTRuntimeException("rule.profile.notfound"));
+		final	Page					page		= Optional.ofNullable(rule.getPage()).orElseThrow(() -> new RESTRuntimeException("rule.page.notfound"));
+		final	Collection<Authority>	authorities	= Optional.ofNullable(profile.getAuthorities()).orElse(new ArrayList<>());
 
-		if (data.isCreate()) {
-			Authority	authority	= arepository.findByAuthority("CREATE::" + page.getTitle().toUpperCase());
+		if (model.isCreate()) {
+//			Authority	authority	= arepository.findByAuthority("CREATE::" + page.getTitle().toUpperCase());
+			Authority	authority	= authorities.stream().filter(item -> item.getAuthority().equalsIgnoreCase("CREATE::" + page.getTitle().toUpperCase())).findFirst().orElse(null);
 			if (authority != null) {
 				authority.addProfile(profile);
 				profile.addAuthority(authority);
@@ -98,8 +78,9 @@ public class RuleService {
 			profile.getAuthorities().removeIf(item -> item.getAuthority().equalsIgnoreCase("CREATE::" + page.getTitle().toUpperCase()));
 		}
 
-		if (data.isRead()) {
-			Authority	authority	= arepository.findByAuthority("READ::" + page.getTitle().toUpperCase());
+		if (model.isRead()) {
+//			Authority	authority	= arepository.findByAuthority("READ::" + page.getTitle().toUpperCase());
+			Authority	authority	= authorities.stream().filter(item -> item.getAuthority().equalsIgnoreCase("READ::" + page.getTitle().toUpperCase())).findFirst().orElse(null);
 			if (authority != null) {
 				authority.addProfile(profile);
 				profile.addAuthority(authority);
@@ -113,8 +94,9 @@ public class RuleService {
 			profile.getAuthorities().removeIf(item -> item.getAuthority().equalsIgnoreCase("READ::" + page.getTitle().toUpperCase()));
 		}
 
-		if (data.isUpdate()) {
-			Authority	authority	= arepository.findByAuthority("UPDATE::" + page.getTitle().toUpperCase());
+		if (model.isUpdate()) {
+//			Authority	authority	= arepository.findByAuthority("UPDATE::" + page.getTitle().toUpperCase());
+			Authority	authority	= authorities.stream().filter(item -> item.getAuthority().equalsIgnoreCase("UPDATE::" + page.getTitle().toUpperCase())).findFirst().orElse(null);
 			if (authority != null) {
 				authority.addProfile(profile);
 				profile.addAuthority(authority);
@@ -125,15 +107,15 @@ public class RuleService {
 				profile.addAuthority(authority);
 			}
 		} else {
-			profile.getAuthorities().removeIf(item -> item.getAuthority().equalsIgnoreCase("UPDATE::" +page.getTitle().toUpperCase()));
+			profile.getAuthorities().removeIf(item -> item.getAuthority().equalsIgnoreCase("UPDATE::" + page.getTitle().toUpperCase()));
 		}
 
-		if (data.isDelete()) {
-			Authority	authority	= arepository.findByAuthority("DELETE::" + page.getTitle().toUpperCase());
+		if (model.isDelete()) {
+//			Authority	authority	= arepository.findByAuthority("DELETE::" + page.getTitle().toUpperCase());
+			Authority	authority	= authorities.stream().filter(item -> item.getAuthority().equalsIgnoreCase("DELETE::" + page.getTitle().toUpperCase())).findFirst().orElse(null);
 			if (authority != null) {
 				authority.addProfile(profile);
 				profile.addAuthority(authority);
-//				arepository.save(authority);
 			} else {
 				authority = new Authority();
 				authority.setAuthority("DELETE::" + page.getTitle().toUpperCase());
@@ -143,10 +125,14 @@ public class RuleService {
 		} else {
 			profile.getAuthorities().removeIf(item -> item.getAuthority().equalsIgnoreCase("DELETE::" + page.getTitle().toUpperCase()));
 		}
-		
-		data.setPage(page);
-		data.setProfile(profile);
-		data.setId(model.getId());
-		rdao.save(data);
+
+		rule.setPage(page);
+		rule.setProfile(profile);
+		rule.setCreate(model.isCreate());
+		rule.setDelete(model.isDelete());
+		rule.setRead(model.isRead());
+		rule.setUpdate(model.isUpdate());
+		rule.getProfile().setWhoUpdated(account.getUser());
+		return RRuleDTO.toDTO(rdao.save(rule));
 	}
 }

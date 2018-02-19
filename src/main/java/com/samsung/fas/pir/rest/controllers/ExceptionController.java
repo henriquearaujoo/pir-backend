@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -32,6 +33,13 @@ public class ExceptionController {
 
 	@ExceptionHandler(RESTRuntimeException.class)
 	public ResponseEntity<?> handleException(RESTRuntimeException e) {
+		Log.error(e.toString());
+		e.printStackTrace();
+		return ResponseEntity.badRequest().body(e.getMessage());
+	}
+
+	@ExceptionHandler(RequestRejectedException.class)
+	public ResponseEntity<?> handleException(RequestRejectedException e) {
 		Log.error(e.toString());
 		e.printStackTrace();
 		return ResponseEntity.badRequest().body(e.getMessage());

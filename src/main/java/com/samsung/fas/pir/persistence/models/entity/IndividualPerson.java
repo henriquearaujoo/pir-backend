@@ -5,15 +5,25 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity(name="individual_person")
 @Table(name = "individual_person")
 @DynamicUpdate
 @DynamicInsert
-public class IndividualPerson extends User {
+public class IndividualPerson {
+	@Getter
+	@Setter
+	@Id
+	private 	long 			id;
+
+	@Getter
+	@Setter
+	@MapsId
+	@OneToOne(optional = false)
+	@JoinColumn(name = "id")
+	private 	User			user;
+
 	@Getter
 	@Setter
 	@Column(name="rg", length=32)

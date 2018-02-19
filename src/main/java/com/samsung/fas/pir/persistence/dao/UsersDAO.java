@@ -1,6 +1,8 @@
 package com.samsung.fas.pir.persistence.dao;
 
 import com.querydsl.core.types.Predicate;
+import com.samsung.fas.pir.persistence.models.entity.IndividualPerson;
+import com.samsung.fas.pir.persistence.models.entity.LegalPerson;
 import com.samsung.fas.pir.persistence.models.entity.User;
 import com.samsung.fas.pir.persistence.repository.IIndividualPersonRepository;
 import com.samsung.fas.pir.persistence.repository.ILegalPersonRepository;
@@ -49,14 +51,14 @@ public class UsersDAO {
 	}
 	
 	public User findOne(UUID id) {
-		return repository.findOneByGuid(id);
+		return repository.findOneByUuid(id);
 	}
 	
 	public User findOneByLogin(String login) {
 		return repository.findByAccountUsernameIgnoreCase(login);
 	}
 	
-	public User findOneByCpf(String cpf) {
+	public IndividualPerson findOneByCpf(String cpf) {
 		return prepository.findByCpf(cpf);
 	}
 
@@ -64,15 +66,15 @@ public class UsersDAO {
 		return repository.findByEmail(email);
 	}
 	
-	public List<User> findByRg(String rg) {
-		return prepository.findByRg(rg).stream().map(item -> (User) item).collect(Collectors.toList());
+	public List<IndividualPerson> findByRg(String rg) {
+		return prepository.findByRg(rg).stream().map(item -> item).collect(Collectors.toList());
 	}
 	
-	public User findOneByCnpj(String cnpj) {
+	public LegalPerson findOneByCnpj(String cnpj) {
 		return lrepository.findByCnpj(cnpj);
 	}
 	
-	public List<User> findByIe(String ie) {
-		return lrepository.findByIe(ie).stream().map(item -> (User) item).collect(Collectors.toList());
+	public List<LegalPerson> findByIe(String ie) {
+		return lrepository.findByIe(ie).stream().map(item -> item).collect(Collectors.toList());
 	}
 }

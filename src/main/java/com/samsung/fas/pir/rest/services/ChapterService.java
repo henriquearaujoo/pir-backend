@@ -4,11 +4,9 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.models.entity.Chapter;
-import com.samsung.fas.pir.persistence.repository.IFileRepository;
 import com.samsung.fas.pir.rest.dto.chapter.CChapterDTO;
 import com.samsung.fas.pir.rest.dto.chapter.RChapterDTO;
 import com.samsung.fas.pir.rest.dto.chapter.UChapterDTO;
-import com.samsung.fas.pir.utils.IDCoder;
 import com.samsung.fas.pir.utils.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,18 +15,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class ChapterService {
-	@Autowired
-	private		ChapterDAO 			cdao;
+	private	final	ChapterDAO		cdao;
 
 	@Autowired
-	private 	IFileRepository		frepository;
+	public ChapterService(ChapterDAO cdao) {
+		this.cdao = cdao;
+	}
 
-	public RChapterDTO findOne(String id) {
-		return RChapterDTO.toDTO(cdao.findOne(IDCoder.decodeLong(id)));
+	public RChapterDTO findOne(UUID id) {
+		return RChapterDTO.toDTO(cdao.findOne(id));
 	}
 
 	public List<RChapterDTO> findAll() {
@@ -93,40 +93,43 @@ public class ChapterService {
 		return RChapterDTO.toDTO(cdao.save(entity));
 	}
 
-	// TODO: Rewrite this
 	public RChapterDTO update(UChapterDTO dto) {
-		Chapter					entity			= dto.getModel();
-		Chapter					persisted		= cdao.findOne(entity.getId());
+		Chapter					model		= dto.getModel();
+		Chapter					chapter		= cdao.findOne(model.getUuid());
 
 		// If chapter does not exist
-		if (persisted == null)
+		if (chapter == null)
 			throw new RESTRuntimeException("chapter.notfound");
 
 		// If chapter differs from persisted chapter
-		if (persisted.getChapter() != entity.getChapter())
+		if (chapter.getChapter() != model.getChapter())
 			throw new RESTRuntimeException("chapter.differs");
 
 		// If chapter version differs from persited chapter version
-		if (persisted.getVersion() != entity.getVersion())
+		if (chapter.getVersion() != model.getVersion())
 			throw new RESTRuntimeException("chapter.version.differs");
 
 		// Check if the chapter will be active, if true, will invalidate the others
-		if (Tools.calculate(persisted) == 100.0f) {
-			cdao.invalidateAllChapters(entity.getChapter());
+		if (Tools.calculate(chapter) == 100.0f) {
+			cdao.invalidateAllChapters(model.getChapter());
 		} else {
-			if (entity.isValid()) {
-				entity.setValid(false);
+			if (model.isValid()) {
+				chapter.setValid(false);
 			}
 		}
 
-		if (entity.getMedias() != null && entity.getMedias().size() > 0) {
-			entity.getMedias().forEach(item -> item.setChapter(persisted.getId()));
-		}
-
-		if (entity.getThumbnails() != null && entity.getThumbnails().size() > 0) {
-			entity.getThumbnails().forEach(item -> item.setChapter(persisted.getId()));
-		}
-
-		return RChapterDTO.toDTO(cdao.save(entity));
+		chapter.setTitle(model.getTitle());
+		chapter.setSubtitle(model.getSubtitle());
+		chapter.setResources(model.getResources());
+		chapter.setDescription(model.getDescription());
+		chapter.setContent(model.getContent());
+		chapter.setPurpose(model.getPurpose());
+		chapter.setFamilyTasks(model.getFamilyTasks());
+		chapter.setEstimatedTime(model.getEstimatedTime());
+		chapter.setTimeUntilNext(model.getTimeUntilNext());
+		chapter.setValid(model.isValid());
+		chapter.setMedias(model.getMedias());
+		chapter.setThumbnails(model.getThumbnails());
+		return RChapterDTO.toDTO(cdao.save(model));
 	}
 }

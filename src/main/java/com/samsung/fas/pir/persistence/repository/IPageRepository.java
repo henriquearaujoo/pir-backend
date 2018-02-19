@@ -8,5 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface IPageRepository extends JpaRepository<Page, UUID> {
-	Page findOneByGuid(UUID id);
+	Page findOneByUuid(UUID id);
 }

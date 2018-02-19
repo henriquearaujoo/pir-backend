@@ -2,15 +2,16 @@ package com.samsung.fas.pir.rest.dto.question;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.persistence.models.entity.Answer;
 import com.samsung.fas.pir.persistence.models.entity.Question;
 import com.samsung.fas.pir.persistence.models.enums.EQuestionType;
 import com.samsung.fas.pir.rest.dto.answer.RAnswerDTO;
 import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
+import lombok.Setter;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,37 +20,40 @@ import java.util.stream.Collectors;
 public class RQuestionDTO {
 	@ApiObjectField(name="id", order=0)
 	@JsonProperty("id")
+	@Setter
 	@Getter
 	private		String			id;
 
 	@ApiObjectField(name="description", order=1)
 	@JsonProperty("description")
+	@Setter
 	@Getter
 	private 	String 			description;
 
 	@ApiObjectField(name="type", order=2)
 	@JsonProperty("type")
+	@Setter
 	@Getter
 	private EQuestionType type;
 
 	@ApiObjectField(name="for_conclusion", order=3)
 	@JsonProperty("for_conclusion")
+	@Setter
 	@Getter
 	private 	String			conclusion;
 
 	@ApiObjectField(name="answers", order=4)
 	@JsonProperty("answers")
+	@Setter
 	@Getter
 	private 	Set<RAnswerDTO> answers;
 
 	private RQuestionDTO(Question e) {
-		Set<Answer>		answers	= e.getAnswers();
-		this.id					= IDCoder.encode(e.getId());
-		this.type				= e.getType();
-		this.description		= e.getDescription();
-		this.conclusion			= IDCoder.encode(e.getConclusion().getId());
-		if (answers != null && !answers.isEmpty())
-			this.answers		= answers.stream().map(RAnswerDTO::toDTO).collect(Collectors.toSet());
+		setId(IDCoder.encode(e.getUuid()));
+		setType(e.getType());
+		setDescription(e.getDescription());
+		setConclusion(IDCoder.encode(e.getConclusion().getUuid()));
+		Optional.of(e.getAnswers()).ifPresent(item -> setAnswers(item.stream().map(RAnswerDTO::toDTO).collect(Collectors.toSet())));
 	}
 
 	public static RQuestionDTO toDTO(Question e) {

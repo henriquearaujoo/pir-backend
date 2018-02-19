@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,7 +34,7 @@ public class AnswerService {
 	}
 
 	public RAnswerDTO findOne(String id) {
-		return RAnswerDTO.toDTO(adao.findOne(IDCoder.decodeLong(id)));
+		return RAnswerDTO.toDTO(adao.findOne(IDCoder.decode(id)));
 	}
 
 	public List<RAnswerDTO> findAll() {
@@ -52,8 +53,8 @@ public class AnswerService {
 		return adao.findAll(predicate, pageable).map(RAnswerDTO::toDTO);
 	}
 
-	public void delete(String id) {
-		Answer answer = adao.findOne(IDCoder.decodeLong(id));
+	public void delete(UUID id) {
+		Answer answer = adao.findOne(id);
 
 		if (answer != null) {
 			Question question = answer.getQuestion();
@@ -81,32 +82,28 @@ public class AnswerService {
 		model.setQuestion(qentity);
 		qentity.getAnswers().add(model);
 		return RAnswerDTO.toDTO(adao.save(model));
-//		qdao.save(qentity);
-//		return null;
 	}
 
 	public RAnswerDTO update(UAnswerDTO dto) {
 		Answer		model		= dto.getModel();
-		Answer		aentity		= adao.findOne(model.getId());
-		Answer		exists		= null;
-		Question	qentity		= qdao.findOne(model.getQuestion().getId());
+		Answer		answer		= adao.findOne(model.getId());
+		Question	question	= qdao.findOne(model.getQuestion().getId());
 
 		// If no entity with given id
-		if (aentity == null)
+		if (answer == null)
 			throw new RESTRuntimeException("answer.notfound");
 
 		// If no question with given id
-		if (qentity == null)
+		if (question == null)
 			throw new RESTRuntimeException("answer.question.notfound");
 
-		exists = qentity.getAnswers().stream().filter(item -> item.getDescription().equalsIgnoreCase(model.getDescription())).findAny().orElse(null);
+		Answer		exists 		= question.getAnswers().stream().filter(item -> item.getDescription().equalsIgnoreCase(model.getDescription())).findAny().orElse(null);
 		if (exists != null)
 			if (exists.getId() != model.getId())
 				throw new RESTRuntimeException("answer.exists");
 
-		model.setQuestion(qentity);
-		return RAnswerDTO.toDTO(adao.save(model));
-//		adao.save(model);
-//		return null;
+		answer.setDescription(model.getDescription());
+		answer.setQuestion(question);
+		return RAnswerDTO.toDTO(adao.save(answer));
 	}
 }

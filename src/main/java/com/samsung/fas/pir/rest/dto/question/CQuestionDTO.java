@@ -23,7 +23,7 @@ public class CQuestionDTO {
 	@NotNull(message = "chapter.conclusion.question.type.missing")
 	@Getter
 	@Setter
-	private EQuestionType type;
+	private 	EQuestionType 	type;
 
 	@ApiObjectField(name="for_conclusion", order=2, required = true)
 	@JsonProperty("for_conclusion")
@@ -42,9 +42,9 @@ public class CQuestionDTO {
 	@JsonIgnore
 	public Question getModel() {
 		Question 	q 	= new Question();
-		Conclusion c	= new Conclusion();
+		Conclusion	c	= new Conclusion();
 
-		c.setId(IDCoder.decodeLong(conclusionID));
+		c.setUuid(IDCoder.decode(conclusionID));
 		q.setConclusion(new Conclusion());
 		q.setDescription(description);
 		q.setType(type);

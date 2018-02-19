@@ -10,6 +10,7 @@ import com.samsung.fas.pir.login.rest.dto.ResetPasswordDTO;
 import freemarker.template.TemplateException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,7 +34,7 @@ public class AccountService implements UserDetailsService {
 	private final	PasswordEncoder 			encoder;
 
 	@Autowired
-	public AccountService(IAccountRepository repository, IPasswordRecoverRepository prepository, EmailService emailservice, PasswordEncoder encoder) {
+	public AccountService(IAccountRepository repository, IPasswordRecoverRepository prepository, EmailService emailservice, @Lazy PasswordEncoder encoder) {
 		this.repository		= repository;
 		this.prepository	= prepository;
 		this.emailservice	= emailservice;

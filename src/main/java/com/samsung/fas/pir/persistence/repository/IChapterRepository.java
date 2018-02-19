@@ -19,9 +19,12 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Repository
 public interface IChapterRepository extends JpaRepository<Chapter, Long>, PagingAndSortingRepository<Chapter, Long>, QueryDslPredicateExecutor<Chapter>, QuerydslBinderCustomizer<QChapter> {
+	Chapter findByUuid(UUID uuid);
+
 	@Transactional
 	@Modifying(clearAutomatically = true)
 	@Query(value = "update chapter set in_use = false where pirdb.public.chapter.number = ?1", nativeQuery = true)

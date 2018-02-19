@@ -9,13 +9,13 @@ import com.samsung.fas.pir.persistence.models.entity.Greetings;
 import com.samsung.fas.pir.rest.dto.greetings.CGreetingsDTO;
 import com.samsung.fas.pir.rest.dto.greetings.RGreetingsDTO;
 import com.samsung.fas.pir.rest.dto.greetings.UGreetingsDTO;
-import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,8 +29,8 @@ public class GreetingsService {
 		this.cdao	= cdao;
 	}
 
-	public RGreetingsDTO findOne(String id) {
-		return RGreetingsDTO.toDTO(gdao.findOne(IDCoder.decodeLong(id)));
+	public RGreetingsDTO findOne(UUID id) {
+		return RGreetingsDTO.toDTO(gdao.findOne(id));
 	}
 
 	public List<RGreetingsDTO> findAll() {
@@ -50,8 +50,8 @@ public class GreetingsService {
 	}
 
 	public RGreetingsDTO save(CGreetingsDTO dto) {
-		Greetings	entity		= dto.getModel();
-		Chapter		chapter		= cdao.findOne(entity.getChapter().getId());
+		Greetings	model		= dto.getModel();
+		Chapter		chapter		= cdao.findOne(model.getChapter().getId());
 
 		// Verify if chapter exists
 		if (chapter == null)
@@ -61,15 +61,14 @@ public class GreetingsService {
 		if (chapter.getGreetings() != null)
 			throw new RESTRuntimeException("chapter.greetings.notnull");
 
-		entity.setChapter(chapter);
-		chapter.setGreetings(entity);
-		return RGreetingsDTO.toDTO(cdao.save(chapter).getGreetings());
+		model.setChapter(chapter);
+		return RGreetingsDTO.toDTO(gdao.save(model));
 	}
 
 	public RGreetingsDTO update(UGreetingsDTO dto) {
-		Greetings	entity		= dto.getModel();
-		Chapter		chapter		= cdao.findOne(entity.getChapter().getId());
-		Greetings	persisted	= gdao.findOne(entity.getId());
+		Greetings	model		= dto.getModel();
+		Chapter		chapter		= cdao.findOne(model.getChapter().getId());
+		Greetings	greetings	= gdao.findOne(model.getId());
 
 		// Verify if chapter exists
 		if (chapter == null)
@@ -80,16 +79,20 @@ public class GreetingsService {
 			throw new RESTRuntimeException("chapter.greetings.isnull");
 
 		// Verify if informed greetings exist
-		if (persisted == null)
+		if (greetings == null)
 			throw new RESTRuntimeException("chapter.greetings.notfound");
 
 		// Verify if greetings chapter id is euqal to informed chapter id
-		if (persisted.getChapter().getId() != entity.getChapter().getId())
+		if (greetings.getChapter().getId() != model.getChapter().getId())
 			throw new RESTRuntimeException("chapter.greetings.id.differs");
 
 		// Set chapter for greetings
-		entity.setChapter(chapter);
-		chapter.setGreetings(entity);
-		return RGreetingsDTO.toDTO(cdao.save(chapter).getGreetings());
+		greetings.setDescription(model.getDescription());
+		greetings.setChapter(chapter);
+		greetings.setEletronics(model.isEletronics());
+		greetings.setStove(model.isStove());
+		greetings.setSit(model.isSit());
+		greetings.setGoback(model.isGoback());
+		return RGreetingsDTO.toDTO(gdao.save(greetings));
 	}
 }

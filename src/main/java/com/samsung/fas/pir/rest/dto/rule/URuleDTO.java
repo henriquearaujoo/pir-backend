@@ -4,17 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.entity.Rule;
+import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
-import org.springframework.util.Base64Utils;
-
-import javax.validation.constraints.NotNull;
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 
 @ApiObject
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -27,19 +23,19 @@ public class URuleDTO {
 	@NotEmpty(message = "rule.id.missing")
 	private 	String 			id;
 
-	@ApiObjectField(name="profile_id", order=1)
-	@Getter
-	@Setter
-	@JsonProperty("profile_id")
-	@NotNull(message="rule.profile.missing")
-	private		String			profile;
-
-	@ApiObjectField(name="page_id", order=2)
-	@Getter
-	@Setter
-	@JsonProperty("page_id")
-	@NotNull(message="rule.page.missing")
-	private		String			page;
+//	@ApiObjectField(name="profile_id", order=1)
+//	@Getter
+//	@Setter
+//	@JsonProperty("profile_id")
+//	@NotNull(message="rule.profile.missing")
+//	private		String			profile;
+//
+//	@ApiObjectField(name="page_id", order=2)
+//	@Getter
+//	@Setter
+//	@JsonProperty("page_id")
+//	@NotNull(message="rule.page.missing")
+//	private		String			page;
 
 	@ApiObjectField(name="create", order=5)
 	@Getter
@@ -68,11 +64,11 @@ public class URuleDTO {
 	@JsonIgnore
 	public Rule getModel() {
 		Rule rule = new Rule();
-		rule.setGuid(UUID.fromString(new String(Base64Utils.decodeFromUrlSafeString(id), StandardCharsets.UTF_8)));
-		rule.setCreate(create);
-		rule.setDelete(delete);
-		rule.setRead(read);
-		rule.setUpdate(update);
+		rule.setUuid(IDCoder.decode(getId()));
+		rule.setCreate(isCreate());
+		rule.setDelete(isDelete());
+		rule.setRead(isRead());
+		rule.setUpdate(isUpdate());
 		return rule;
 	}
 }

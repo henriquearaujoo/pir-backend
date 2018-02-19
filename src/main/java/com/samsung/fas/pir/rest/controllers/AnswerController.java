@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.UUID;
 
 @Api(name = "Answer Services", description = "Methods for managing conclusion answers", group = "Chapters", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
@@ -62,7 +63,7 @@ public class AnswerController {
 	@ApiMethod(description="Delete specific answer")
 	@RequestMapping(method=RequestMethod.DELETE, value="/{id}")
 	@ResponseBody
-	public ResponseEntity delete(@ApiPathParam @PathVariable("id") String codedid) {
+	public ResponseEntity delete(@ApiPathParam @PathVariable("id") UUID codedid) {
 		service.delete(codedid);
 		return ResponseEntity.ok(null);
 	}

@@ -64,13 +64,13 @@ public class UGreetingsDTO {
 	public Greetings getModel() {
 		Greetings e = new Greetings();
 		e.setChapter(new Chapter());
-		e.setId(IDCoder.decodeLong(id));
-		e.setDescription(description);
-		e.setGoback(goback);
-		e.setSit(sit);
-		e.setEletronics(eletronics);
-		e.setStove(stove);
-		e.getChapter().setId(IDCoder.decodeLong(chapterID));
+		e.setUuid(IDCoder.decode(getId()));
+		e.setDescription(getDescription());
+		e.setGoback(isGoback());
+		e.setSit(isSit());
+		e.setEletronics(isEletronics());
+		e.setStove(isStove());
+		e.getChapter().setUuid(IDCoder.decode(chapterID));
 		return e;
 	}
 }

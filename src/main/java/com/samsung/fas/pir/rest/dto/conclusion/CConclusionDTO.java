@@ -34,7 +34,7 @@ public class CConclusionDTO {
 		Conclusion e = new Conclusion();
 		e.setChapter(new Chapter());
 		e.setDescription(description);
-		e.getChapter().setId(IDCoder.decodeLong(chapterID));
+		e.getChapter().setUuid(IDCoder.decode(chapterID));
 		return e;
 	}
 }

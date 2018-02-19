@@ -12,8 +12,11 @@ import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
 public interface IInterventionRepository extends JpaRepository<Intervention, Long>, PagingAndSortingRepository<Intervention, Long>, QueryDslPredicateExecutor<Intervention>, QuerydslBinderCustomizer<QIntervention> {
+	Intervention findByUuid(UUID uuid);
 
 	@Override
 	default void customize(QuerydslBindings bindings, QIntervention root) {

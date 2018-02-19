@@ -22,6 +22,6 @@ public class PageDAO {
 	}
 
 	public Page findOne(UUID id) {
-		return repository.findOneByGuid(id);
+		return repository.findOneByUuid(id);
 	}
 }
