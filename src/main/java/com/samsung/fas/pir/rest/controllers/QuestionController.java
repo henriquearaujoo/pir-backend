@@ -26,7 +26,7 @@ import java.util.UUID;
 @Api(name = "Question Services", description = "Methods for managing conclusion questions", group = "Chapters", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/chapters/conclusion/question")
+@RequestMapping("/rest/chapters/conclusion/question")
 @Produces(MediaType.APPLICATION_JSON)
 public class QuestionController {
 	private QuestionService service;

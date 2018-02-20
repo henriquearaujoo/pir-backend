@@ -26,7 +26,7 @@ import java.util.UUID;
 @Api(name = "Conclusion Service", description = "Methods for managing chapter's conclusion", group = "Chapters", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/chapters/conclusion")
+@RequestMapping("/rest/chapters/conclusion")
 @Produces(MediaType.APPLICATION_JSON)
 public class ConclusionController {
 	private ConclusionService service;

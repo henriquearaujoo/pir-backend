@@ -26,7 +26,7 @@ import java.util.UUID;
 @Api(name = "Greetings Service", description = "Methods for managing chapters greetings'", group = "Chapters", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/chapters/greeting")
+@RequestMapping("/rest/chapters/greeting")
 @Produces(MediaType.APPLICATION_JSON)
 public class GreetingsController {
 	private GreetingsService service;

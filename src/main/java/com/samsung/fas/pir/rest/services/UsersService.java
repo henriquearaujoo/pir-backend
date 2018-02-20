@@ -155,17 +155,18 @@ public class UsersService {
 		entity.getAccount().setPassword(dto.getPassword() != null && !dto.getPassword().isEmpty()? encoder.encode(Hashing.sha256().hashString(dto.getPassword(), StandardCharsets.UTF_8).toString()) : entity.getAccount().getPassword());
 
 		if (dto instanceof UPJurDTO) {
+			entity.setType(EUserType.PJUR);
 			entity.setLegal(model.getLegal());
 			entity.getLegal().setId(entity.getId());
 			entity.getLegal().setUser(entity);
 			entity.setIndividual(null);
 		} else if (dto instanceof UPFisDTO) {
+			entity.setType(EUserType.PFIS);
 			entity.setIndividual(model.getIndividual());
 			entity.getIndividual().setId(entity.getId());
 			entity.getIndividual().setUser(entity);
 			entity.setLegal(null);
 		}
-
 		return RUserDTO.toDTO(udao.save(entity));
 	}
 }

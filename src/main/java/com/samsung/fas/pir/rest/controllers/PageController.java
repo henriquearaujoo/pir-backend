@@ -22,7 +22,7 @@ import java.util.List;
 @Api(name = "Page Services", description = "Methods for listing pages", group = "Profiles", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/pages")
+@RequestMapping("/rest/pages")
 @Produces(MediaType.APPLICATION_JSON)
 public class PageController {
 	private PageService pservice;

@@ -17,10 +17,14 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Controller
-@RequestMapping("/file")
+@RequestMapping("/rest/file")
 public class FileController {
+	private final FileService service;
+
 	@Autowired
-	private FileService service;
+	public FileController(FileService service) {
+		this.service = service;
+	}
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	@ResponseBody

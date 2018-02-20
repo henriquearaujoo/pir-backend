@@ -26,7 +26,7 @@ import java.util.UUID;
 @Api(name = "Chapters Services", description = "Methods for managing chapters", group = "Chapters", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/chapters")
+@RequestMapping("/rest/chapters")
 @Produces(MediaType.APPLICATION_JSON)
 public class ChapterController {
 	private ChapterService cservice;

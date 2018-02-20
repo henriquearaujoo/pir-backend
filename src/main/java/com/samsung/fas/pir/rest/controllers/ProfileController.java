@@ -28,7 +28,7 @@ import java.util.UUID;
 @Api(name = "Profile Services", description = "Methods managing user profiles", group = "Profiles", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/profiles")
+@RequestMapping("/rest/profiles")
 @Produces(MediaType.APPLICATION_JSON)
 public class ProfileController {
 	private ProfileService pservice;
