@@ -21,7 +21,7 @@ import java.util.List;
 @Api(name = "State City Services", description = "Methods for getting state and cities", group = "Address", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/states")
+@RequestMapping("/rest/states")
 @Produces(MediaType.APPLICATION_JSON)
 public class StateCityController {
 	private		StateCityService	scservice;

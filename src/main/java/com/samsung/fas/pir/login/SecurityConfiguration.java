@@ -39,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override 
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.anyRequest().fullyAuthenticated()
+		.antMatchers("/rest/**").fullyAuthenticated()
 		.and()
 		.addFilterBefore(new TokenAuthenticationFilter(token, service), BasicAuthenticationFilter.class)
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -56,10 +56,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) {
 		web.ignoring()
 		.antMatchers(HttpMethod.OPTIONS)
-		.antMatchers(HttpMethod.POST, "/authentication/**")
-		.antMatchers(HttpMethod.GET, "/file/**")
-		.antMatchers("/assets/**", "/webjars/**", "/api-docs/**")
-		.antMatchers("/jsondoc/**", "/jsondoc-ui.html");
+		.antMatchers(HttpMethod.POST, "/rest/authentication/**")
+		.antMatchers(HttpMethod.GET, "/rest/file/**")
+		.antMatchers("/pir/assets/**", "/pir/webjars/**", "/pir/api-docs/**")
+		.antMatchers("/pir/jsondoc/**", "/pir/jsondoc-ui.html");
 	}
 
 	@Bean

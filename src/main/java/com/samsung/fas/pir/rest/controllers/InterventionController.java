@@ -25,7 +25,7 @@ import java.util.List;
 @Api(name = "Intervention Services", description = "Methods for managing chapters' intervention", group = "Chapters", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/chapters/intervention")
+@RequestMapping("/rest/chapters/intervention")
 @Produces(MediaType.APPLICATION_JSON)
 public class InterventionController {
 	private InterventionService service;

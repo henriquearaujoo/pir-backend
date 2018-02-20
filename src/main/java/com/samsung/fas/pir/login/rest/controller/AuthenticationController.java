@@ -32,7 +32,7 @@ import javax.ws.rs.core.MediaType;
 @Api(name = "Authentication Services", description = "Methods for managing authentication", group = "Authentication", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/authentication")
+@RequestMapping("/rest/authentication")
 @Produces(MediaType.APPLICATION_JSON)
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.POST }, exposedHeaders = HttpHeaders.AUTHORIZATION)
 @Validated

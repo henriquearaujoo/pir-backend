@@ -25,7 +25,7 @@ import java.util.List;
 @Api(name = "Answer Services", description = "Methods for managing conclusion answers", group = "Chapters", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/chapters/conclusion/question/answer")
+@RequestMapping("/rest/chapters/conclusion/question/answer")
 @Produces(MediaType.APPLICATION_JSON)
 public class AnswerController {
 	private AnswerService service;

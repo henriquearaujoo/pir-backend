@@ -28,7 +28,7 @@ import java.util.List;
 @Api(name = "User Services", description = "Methods managing users", group = "Users", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/rest/users")
 @Produces(MediaType.APPLICATION_JSON)
 public class UserController {
 	private		UsersService	uservice;

@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Controller
-@RequestMapping("/file")
+@RequestMapping("/rest/file")
 public class FileController {
 	@Autowired
 	private FileService service;

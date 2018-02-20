@@ -24,7 +24,7 @@ import java.util.List;
 @Api(name = "Rules Services", description = "Methods managing user profiles rules (permissions)", group = "Profiles", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
 @Controller
-@RequestMapping("/rules")
+@RequestMapping("/rest/rules")
 @Produces(MediaType.APPLICATION_JSON)
 public class RulesController {
 	private		RuleService		rservice;
