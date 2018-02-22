@@ -4,8 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.persistence.dao.MotherDAO;
 import com.samsung.fas.pir.persistence.models.entity.Mother;
 import com.samsung.fas.pir.rest.controllers.base.BController;
-import com.samsung.fas.pir.rest.dto.mother.CUMotherDTO;
-import com.samsung.fas.pir.rest.dto.mother.RMotherDTO;
+import com.samsung.fas.pir.rest.dto.mother.CRUMotherDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import org.jsondoc.core.annotation.ApiPathParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +20,10 @@ import javax.ws.rs.core.MediaType;
 
 @Controller
 @RequestMapping(value = "/rest/mother", produces = MediaType.APPLICATION_JSON)
-public class MotherController extends BController<Mother, CUMotherDTO, RMotherDTO, CUMotherDTO, MotherDAO> {
+public class MotherController extends BController<Mother, CRUMotherDTO, CRUMotherDTO, CRUMotherDTO, MotherDAO> {
 
 	@Autowired
-	public MotherController(BService<Mother, CUMotherDTO, RMotherDTO, CUMotherDTO, MotherDAO, Long> service) {
+	public MotherController(BService<Mother, CRUMotherDTO, CRUMotherDTO, CRUMotherDTO, MotherDAO, Long> service) {
 		super(service);
 	}
 

@@ -6,8 +6,7 @@ import com.samsung.fas.pir.persistence.dao.CommunityDAO;
 import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
 import com.samsung.fas.pir.persistence.models.entity.Community;
 import com.samsung.fas.pir.persistence.models.entity.Responsible;
-import com.samsung.fas.pir.rest.dto.responsible.CUResponsibleDTO;
-import com.samsung.fas.pir.rest.dto.responsible.RResponsibleDTO;
+import com.samsung.fas.pir.rest.dto.responsible.CRUResponsibleDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,25 +15,25 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class ResponsibleService extends BService<Responsible, CUResponsibleDTO, RResponsibleDTO, CUResponsibleDTO, ResponsibleDAO, Long> {
+public class ResponsibleService extends BService<Responsible, CRUResponsibleDTO, CRUResponsibleDTO, CRUResponsibleDTO, ResponsibleDAO, Long> {
 	private		CommunityDAO		cdao;
 
 	@Autowired
 	public ResponsibleService(ResponsibleDAO dao, CommunityDAO cdao) {
-		super(dao, Responsible.class, RResponsibleDTO.class);
+		super(dao, Responsible.class, CRUResponsibleDTO.class);
 		this.cdao = cdao;
 	}
 
 	@Override
-	public RResponsibleDTO save(CUResponsibleDTO create, Account account) {
+	public CRUResponsibleDTO save(CRUResponsibleDTO create, Account account) {
 		Responsible		model		= create.getModel();
 		Community		community	= Optional.ofNullable(cdao.findOne(IDCoder.decode(create.getCommunityID()))).orElseThrow(() -> new RESTRuntimeException("community.notfound"));
 		model.setCommunity(community);
-		return new RResponsibleDTO(dao.save(model));
+		return new CRUResponsibleDTO(dao.save(model));
 	}
 
 	@Override
-	public RResponsibleDTO update(CUResponsibleDTO update, Account account) {
+	public CRUResponsibleDTO update(CRUResponsibleDTO update, Account account) {
 		Responsible		model		= update.getModel();
 		Responsible		responsible	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("responsible.notfound"));
 		Community		community	= Optional.ofNullable(cdao.findOne(IDCoder.decode(update.getCommunityID()))).orElseThrow(() -> new RESTRuntimeException("community.notfound"));
@@ -53,6 +52,6 @@ public class ResponsibleService extends BService<Responsible, CUResponsibleDTO, 
 		responsible.setHasWaterTreatment(model.isHasWaterTreatment());
 		responsible.setObservations(model.getObservations());
 
-		return new RResponsibleDTO(dao.save(responsible));
+		return new CRUResponsibleDTO(dao.save(responsible));
 	}
 }

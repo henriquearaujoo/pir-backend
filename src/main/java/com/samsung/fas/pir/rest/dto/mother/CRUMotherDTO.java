@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.entity.Mother;
 import com.samsung.fas.pir.persistence.models.enums.ECivilState;
-import com.samsung.fas.pir.rest.dto.responsible.CUResponsibleDTO;
+import com.samsung.fas.pir.rest.dto.responsible.CRUResponsibleDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.validation.constraints.Min;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CUMotherDTO extends CUResponsibleDTO {
+public class CRUMotherDTO extends CRUResponsibleDTO {
 	@Getter
 	@Setter
 	@JsonProperty("name")
@@ -31,6 +31,17 @@ public class CUMotherDTO extends CUResponsibleDTO {
 	@JsonProperty("civil_state")
 	@NotBlank(message = "civil.state.missing")
 	private 	String		civilState;
+
+	public CRUMotherDTO() {
+		super();
+	}
+
+	public CRUMotherDTO(Mother mother) {
+		super(mother);
+		setName(mother.getName());
+		setChildren(mother.getChildren());
+		setCivilState(mother.getCivilState().toString());
+	}
 
 	@JsonIgnore
 	public Mother getModel() {

@@ -4,8 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
 import com.samsung.fas.pir.persistence.models.entity.Responsible;
 import com.samsung.fas.pir.rest.controllers.base.BController;
-import com.samsung.fas.pir.rest.dto.responsible.CUResponsibleDTO;
-import com.samsung.fas.pir.rest.dto.responsible.RResponsibleDTO;
+import com.samsung.fas.pir.rest.dto.responsible.CRUResponsibleDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import org.jsondoc.core.annotation.ApiPathParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +20,10 @@ import javax.ws.rs.core.MediaType;
 
 @Controller
 @RequestMapping(value = "/rest/responsible", produces = MediaType.APPLICATION_JSON)
-public class ResponsibleController extends BController<Responsible, CUResponsibleDTO, RResponsibleDTO, CUResponsibleDTO, ResponsibleDAO> {
+public class ResponsibleController extends BController<Responsible, CRUResponsibleDTO, CRUResponsibleDTO, CRUResponsibleDTO, ResponsibleDAO> {
 
 	@Autowired
-	public ResponsibleController(BService<Responsible, CUResponsibleDTO, RResponsibleDTO, CUResponsibleDTO, ResponsibleDAO, Long> service) {
+	public ResponsibleController(BService<Responsible, CRUResponsibleDTO, CRUResponsibleDTO, CRUResponsibleDTO, ResponsibleDAO, Long> service) {
 		super(service);
 	}
 

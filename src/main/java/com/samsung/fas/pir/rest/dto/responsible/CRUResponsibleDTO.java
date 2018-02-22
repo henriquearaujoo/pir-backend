@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat;
 
 // CREATE & UPDATE
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CUResponsibleDTO {
+public class CRUResponsibleDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
@@ -101,6 +101,27 @@ public class CUResponsibleDTO {
 	@Setter
 	@JsonProperty("observations")
 	private 	String			observations;
+
+	public CRUResponsibleDTO() {
+		super();
+	}
+
+	public CRUResponsibleDTO(Responsible responsible) {
+		setId(IDCoder.encode(responsible.getUuid()));
+		setCommunityID(IDCoder.encode(responsible.getCommunity().getUuid()));
+		setBirth(new SimpleDateFormat("dd-MM-yyyy").format(responsible.getBirth()));
+		setInSocialProgram(responsible.isInSocialProgram());
+		setHabitationMembersCount(responsible.getHabitationMembersCount());
+		setHabitationType(responsible.getHabitationType().toString());
+		setLiveWith(responsible.getLiveWith());
+		setFamilyIncome(responsible.getFamilyIncome());
+		setIncomeParticipation(responsible.getIncomeParticipation());
+		setDrinkingWaterTreatment(responsible.getDrinkingWaterTreatment());
+		hasHospital(responsible.isHasHospital());
+		hasSanitation(responsible.isHasSanitation());
+		hasWaterTreatment(responsible.isHasWaterTreatment());
+		setObservations(responsible.getObservations());
+	}
 
 	@JsonIgnore
 	public Responsible getModel() {
