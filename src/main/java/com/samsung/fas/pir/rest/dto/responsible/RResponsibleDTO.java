@@ -1,23 +1,20 @@
 package com.samsung.fas.pir.rest.dto.responsible;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.entity.Responsible;
-import com.samsung.fas.pir.persistence.models.enums.EHabitationType;
+import com.samsung.fas.pir.rest.dto.IReadDTO;
+import com.samsung.fas.pir.rest.dto.community.RCommunityDTO;
 import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-// CREATE & UPDATE
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class CUResponsibleDTO {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class RResponsibleDTO implements IReadDTO<Responsible, RResponsibleDTO> {
 	@Getter
 	@Setter
 	@JsonProperty("id")
@@ -26,12 +23,12 @@ public class CUResponsibleDTO {
 	@Getter
 	@Setter
 	@JsonProperty("community_id")
-	private 	String			communityID;
+	private 	RCommunityDTO	communityID;
 
 	@Getter
 	@Setter
 	@JsonProperty("birth")
-	@NotNull(message = "date.missing")
+	@JsonFormat(pattern = "dd-MM-yyyy", shape = JsonFormat.Shape.STRING)
 	private 	Date 			birth;
 
 	@Getter
@@ -42,37 +39,31 @@ public class CUResponsibleDTO {
 	@Getter
 	@Setter
 	@JsonProperty("habitation_type")
-	@NotBlank(message = "habitation.type.missing")
 	private 	String			habitationType;
 
 	@Getter
 	@Setter
 	@JsonProperty("habitation_members_count")
-	@Min(value = 1, message = "invalid.counter")
 	private 	int				habitationMembersCount;
 
 	@Getter
 	@Setter
 	@JsonProperty("live_with")
-	@NotBlank(message = "live.with.missing")
 	private 	String			liveWith;
 
 	@Getter
 	@Setter
 	@JsonProperty("family_income")
-	@NotBlank(message = "family.income.missing")
 	private 	String			familyIncome;
 
 	@Getter
 	@Setter
 	@JsonProperty("income_participation")
-	@NotBlank(message = "income.participation.missing")
 	private 	String			incomeParticipation;
 
 	@Getter
 	@Setter
 	@JsonProperty("drinking_water_treatment")
-	@NotBlank(message = "drinking.water.missing")
 	private 	String			drinkingWaterTreatment;
 
 	@Accessors(fluent = true)
@@ -98,24 +89,29 @@ public class CUResponsibleDTO {
 	@JsonProperty("observations")
 	private 	String			observations;
 
-	@JsonIgnore
-	public Responsible getModel() {
-		Responsible model = new Responsible();
+	public RResponsibleDTO() {
+		super();
+	}
 
-		model.setUuid(getId() != null? IDCoder.decode(getId()) : null);
-		model.setBirth(getBirth());
-		model.setInSocialProgram(isInSocialProgram());
-		model.setHabitationType(EHabitationType.valueOf(getHabitationType()));
-		model.setHabitationMembersCount(getHabitationMembersCount());
-		model.setLiveWith(getLiveWith());
-		model.setFamilyIncome(getFamilyIncome());
-		model.setIncomeParticipation(getIncomeParticipation());
-		model.setDrinkingWaterTreatment(getDrinkingWaterTreatment());
-		model.setHasHospital(hasHospital());
-		model.setHasSanitation(hasSanitation());
-		model.setHasWaterTreatment(hasWaterTreatment());
-		model.setObservations(getObservations());
+	private RResponsibleDTO(Responsible responsible) {
+		setId(IDCoder.encode(responsible.getUuid()));
+		setCommunityID(new RCommunityDTO().toDTO(responsible.getCommunity()));
+		setBirth(responsible.getBirth());
+		setInSocialProgram(responsible.isInSocialProgram());
+		setHabitationMembersCount(responsible.getHabitationMembersCount());
+		setHabitationType(responsible.getHabitationType().toString());
+		setLiveWith(responsible.getLiveWith());
+		setFamilyIncome(responsible.getFamilyIncome());
+		setIncomeParticipation(responsible.getIncomeParticipation());
+		setDrinkingWaterTreatment(responsible.getDrinkingWaterTreatment());
+		hasHospital(responsible.isHasHospital());
+		hasSanitation(responsible.isHasSanitation());
+		hasWaterTreatment(responsible.isHasWaterTreatment());
+		setObservations(responsible.getObservations());
+	}
 
-		return model;
+	@Override
+	public RResponsibleDTO toDTO(Responsible responsible) {
+		return responsible != null? new RResponsibleDTO(responsible) : null;
 	}
 }
