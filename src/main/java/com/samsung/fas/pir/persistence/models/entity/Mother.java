@@ -27,5 +27,5 @@ public class Mother extends Responsible {
 	@Setter
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private ECivilState civilState;
+	private 	ECivilState 	civilState;
 }

@@ -1,11 +1,11 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
-import com.samsung.fas.pir.persistence.models.entity.Responsible;
+import com.samsung.fas.pir.persistence.dao.MotherDAO;
+import com.samsung.fas.pir.persistence.models.entity.Mother;
 import com.samsung.fas.pir.rest.controllers.base.BController;
-import com.samsung.fas.pir.rest.dto.responsible.CUResponsibleDTO;
-import com.samsung.fas.pir.rest.dto.responsible.RResponsibleDTO;
+import com.samsung.fas.pir.rest.dto.mother.CUMotherDTO;
+import com.samsung.fas.pir.rest.dto.mother.RMotherDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import org.jsondoc.core.annotation.ApiPathParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,23 +20,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.ws.rs.core.MediaType;
 
 @Controller
-@RequestMapping(value = "/rest/responsible", produces = MediaType.APPLICATION_JSON)
-public class ResponsibleController extends BController<Responsible, CUResponsibleDTO, RResponsibleDTO, CUResponsibleDTO, ResponsibleDAO> {
+@RequestMapping(value = "/rest/mother", produces = MediaType.APPLICATION_JSON)
+public class MotherController extends BController<Mother, CUMotherDTO, RMotherDTO, CUMotherDTO, MotherDAO> {
 
 	@Autowired
-	public ResponsibleController(BService<Responsible, CUResponsibleDTO, RResponsibleDTO, CUResponsibleDTO, ResponsibleDAO, Long> service) {
+	public MotherController(BService<Mother, CUMotherDTO, RMotherDTO, CUMotherDTO, MotherDAO, Long> service) {
 		super(service);
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/search")
 	@ResponseBody
-	public ResponseEntity<?> search(@QuerydslPredicate(root = Responsible.class) Predicate predicate) {
+	public ResponseEntity<?> search(@QuerydslPredicate(root = Mother.class) Predicate predicate) {
 		return ResponseEntity.ok(service.findAll(predicate));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/search/page")
 	@ResponseBody
-	public ResponseEntity<?> search(@QuerydslPredicate(root = Responsible.class) Predicate predicate, @ApiPathParam Pageable pageable) {
+	public ResponseEntity<?> search(@QuerydslPredicate(root = Mother.class) Predicate predicate, @ApiPathParam Pageable pageable) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable));
 	}
 }

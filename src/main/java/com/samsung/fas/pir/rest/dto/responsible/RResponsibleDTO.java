@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.entity.Responsible;
-import com.samsung.fas.pir.rest.dto.IReadDTO;
-import com.samsung.fas.pir.rest.dto.community.RCommunityDTO;
 import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +12,7 @@ import lombok.experimental.Accessors;
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RResponsibleDTO implements IReadDTO<Responsible, RResponsibleDTO> {
+public class RResponsibleDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
@@ -23,7 +21,7 @@ public class RResponsibleDTO implements IReadDTO<Responsible, RResponsibleDTO> {
 	@Getter
 	@Setter
 	@JsonProperty("community_id")
-	private 	RCommunityDTO	communityID;
+	private 	String			communityID;
 
 	@Getter
 	@Setter
@@ -93,9 +91,9 @@ public class RResponsibleDTO implements IReadDTO<Responsible, RResponsibleDTO> {
 		super();
 	}
 
-	private RResponsibleDTO(Responsible responsible) {
+	public RResponsibleDTO(Responsible responsible) {
 		setId(IDCoder.encode(responsible.getUuid()));
-		setCommunityID(new RCommunityDTO().toDTO(responsible.getCommunity()));
+		setCommunityID(IDCoder.encode(responsible.getCommunity().getUuid()));
 		setBirth(responsible.getBirth());
 		setInSocialProgram(responsible.isInSocialProgram());
 		setHabitationMembersCount(responsible.getHabitationMembersCount());
@@ -108,10 +106,5 @@ public class RResponsibleDTO implements IReadDTO<Responsible, RResponsibleDTO> {
 		hasSanitation(responsible.isHasSanitation());
 		hasWaterTreatment(responsible.isHasWaterTreatment());
 		setObservations(responsible.getObservations());
-	}
-
-	@Override
-	public RResponsibleDTO toDTO(Responsible responsible) {
-		return responsible != null? new RResponsibleDTO(responsible) : null;
 	}
 }

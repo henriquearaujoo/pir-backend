@@ -2,13 +2,12 @@ package com.samsung.fas.pir.rest.dto.community;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.entity.Community;
-import com.samsung.fas.pir.rest.dto.IReadDTO;
 import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-public class RCommunityDTO implements IReadDTO<Community, RCommunityDTO> {
+public class RCommunityDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
@@ -123,7 +122,7 @@ public class RCommunityDTO implements IReadDTO<Community, RCommunityDTO> {
 		super();
 	}
 
-	private RCommunityDTO(Community entity) {
+	public RCommunityDTO(Community entity) {
 		setId(IDCoder.encode(entity.getUuid()));
 		setName(entity.getName());
 		setWaterSupply(entity.getWaterSupply());
@@ -145,10 +144,5 @@ public class RCommunityDTO implements IReadDTO<Community, RCommunityDTO> {
 		setCity(entity.getCity().getId());
 		setCulturalProductions(entity.getCulturalProductions());
 		setCommunityZone(entity.getCommunityZone().toString());
-	}
-
-	@Override
-	public RCommunityDTO toDTO(Community community) {
-		return community != null? new RCommunityDTO(community) : null;
 	}
 }

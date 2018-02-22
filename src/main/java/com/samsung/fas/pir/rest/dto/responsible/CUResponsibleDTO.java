@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.rest.dto.responsible;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,7 +14,8 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 // CREATE & UPDATE
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -26,13 +28,15 @@ public class CUResponsibleDTO {
 	@Getter
 	@Setter
 	@JsonProperty("community_id")
+	@NotBlank(message = "community.id.missing")
 	private 	String			communityID;
 
 	@Getter
 	@Setter
 	@JsonProperty("birth")
 	@NotNull(message = "date.missing")
-	private 	Date 			birth;
+	@JsonFormat(pattern = "dd-MM-yyyy", shape = JsonFormat.Shape.STRING)
+	private 	String 			birth;
 
 	@Getter
 	@Setter
@@ -103,7 +107,6 @@ public class CUResponsibleDTO {
 		Responsible model = new Responsible();
 
 		model.setUuid(getId() != null? IDCoder.decode(getId()) : null);
-		model.setBirth(getBirth());
 		model.setInSocialProgram(isInSocialProgram());
 		model.setHabitationType(EHabitationType.valueOf(getHabitationType()));
 		model.setHabitationMembersCount(getHabitationMembersCount());
@@ -115,6 +118,12 @@ public class CUResponsibleDTO {
 		model.setHasSanitation(hasSanitation());
 		model.setHasWaterTreatment(hasWaterTreatment());
 		model.setObservations(getObservations());
+
+		try {
+			model.setBirth(new SimpleDateFormat("dd-MM-yyyy").parse(getBirth()));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
 		return model;
 	}

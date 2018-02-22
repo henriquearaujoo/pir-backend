@@ -21,7 +21,7 @@ public class CommunityService extends BService<Community, CCommunityDTO, RCommun
 
 	@Autowired
 	public CommunityService(CommunityDAO dao, CityDAO cdao) {
-		super(dao, RCommunityDTO.class);
+		super(dao, Community.class, RCommunityDTO.class);
 		this.cdao = cdao;
 	}
 
@@ -36,7 +36,7 @@ public class CommunityService extends BService<Community, CCommunityDTO, RCommun
 
 		model.setCity(city);
 
-		return new RCommunityDTO().toDTO(dao.save(model));
+		return new RCommunityDTO(dao.save(model));
 	}
 
 	@Override
@@ -69,6 +69,6 @@ public class CommunityService extends BService<Community, CCommunityDTO, RCommun
 		community.setCommunityZone(model.getCommunityZone());
 		community.setCity(city);
 
-		return new RCommunityDTO().toDTO(dao.save(community));
+		return new RCommunityDTO(dao.save(community));
 	}
 }

@@ -21,7 +21,7 @@ public class ResponsibleService extends BService<Responsible, CUResponsibleDTO, 
 
 	@Autowired
 	public ResponsibleService(ResponsibleDAO dao, CommunityDAO cdao) {
-		super(dao, RResponsibleDTO.class);
+		super(dao, Responsible.class, RResponsibleDTO.class);
 		this.cdao = cdao;
 	}
 
@@ -30,13 +30,13 @@ public class ResponsibleService extends BService<Responsible, CUResponsibleDTO, 
 		Responsible		model		= create.getModel();
 		Community		community	= Optional.ofNullable(cdao.findOne(IDCoder.decode(create.getCommunityID()))).orElseThrow(() -> new RESTRuntimeException("community.notfound"));
 		model.setCommunity(community);
-		return new RResponsibleDTO().toDTO(dao.save(model));
+		return new RResponsibleDTO(dao.save(model));
 	}
 
 	@Override
 	public RResponsibleDTO update(CUResponsibleDTO update, Account account) {
 		Responsible		model		= update.getModel();
-		Responsible		responsible	= Optional.ofNullable(dao.findOne(model.getUuid())).orElseThrow(() -> new RESTRuntimeException("responsible.notfound"));
+		Responsible		responsible	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("responsible.notfound"));
 		Community		community	= Optional.ofNullable(cdao.findOne(IDCoder.decode(update.getCommunityID()))).orElseThrow(() -> new RESTRuntimeException("community.notfound"));
 
 		responsible.setCommunity(community);
@@ -53,6 +53,6 @@ public class ResponsibleService extends BService<Responsible, CUResponsibleDTO, 
 		responsible.setHasWaterTreatment(model.isHasWaterTreatment());
 		responsible.setObservations(model.getObservations());
 
-		return new RResponsibleDTO().toDTO(dao.save(responsible));
+		return new RResponsibleDTO(dao.save(responsible));
 	}
 }

@@ -2,7 +2,6 @@ package com.samsung.fas.pir.rest.controllers.base;
 
 import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.base.IBaseDAO;
-import com.samsung.fas.pir.rest.dto.IReadDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.jsondoc.core.annotation.Api;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @Api(name = "Common Services", description = "Common methods for REST API", group = "Common", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
-public abstract class BController<TEntity, TCreate, TRead extends IReadDTO<TEntity, TRead>, TUpdate, TDAO extends IBaseDAO<TEntity, Long>> {
+public abstract class BController<TEntity, TCreate, TRead, TUpdate, TDAO extends IBaseDAO<TEntity, Long>> {
 	protected BService<TEntity, TCreate, TRead, TUpdate, TDAO, Long> service;
 
 	public BController(BService<TEntity, TCreate, TRead, TUpdate, TDAO, Long> service) {
