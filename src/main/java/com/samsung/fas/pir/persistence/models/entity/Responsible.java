@@ -16,7 +16,7 @@ import java.util.UUID;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DynamicUpdate
 @DynamicInsert
-abstract class Responsible {
+public class Responsible {
 	@Getter
 	@Setter
 	@Id
@@ -71,7 +71,7 @@ abstract class Responsible {
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	private 	String			drinkingWatterTreatment;
+	private 	String			drinkingWaterTreatment;
 
 	@Getter
 	@Setter
@@ -86,10 +86,16 @@ abstract class Responsible {
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	private 	boolean			hasWatterTreatment;
+	private 	boolean			hasWaterTreatment;
 
 	@Getter
 	@Setter
 	@Column(columnDefinition = "TEXT")
 	private 	String			observations;
+
+	@Getter
+	@Setter
+	@ManyToOne(optional = false)
+	@JoinColumn
+	private 	Community		community;
 }

@@ -8,55 +8,62 @@ import com.samsung.fas.pir.persistence.models.enums.ECommunityZone;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.pojo.ApiStage;
 import org.jsondoc.core.pojo.ApiVisibility;
 
-@ApiObject(visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA, show = true)
+import javax.validation.constraints.NotNull;
+
+@ApiObject(visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CCommunityDTO {
 	@Getter
 	@Setter
 	@JsonProperty("name")
-	@NotEmpty(message = "name.missing")
+	@NotBlank(message = "name.missing")
 	private 	String			name;
 
 	@Getter
 	@Setter
 	@JsonProperty("zone")
-	@NotEmpty(message = "zone.missing")
+	@NotBlank(message = "zone.missing")
 	private 	String			communityZone;
 
 	@Getter
 	@Setter
 	@JsonProperty("water_supply")
-	@NotEmpty(message = "water.supply.missing")
+	@NotBlank(message = "water.supply.missing")
 	private 	String			waterSupply;
 
 	@Getter
 	@Setter
 	@JsonProperty("garbage_destination")
-	@NotEmpty(message = "garbage.destination.missing")
+	@NotBlank(message = "garbage.destination.missing")
 	private 	String			garbageDestination;
 
 	@Getter
 	@Setter
 	@JsonProperty("access_via")
-	@NotEmpty(message = "access.via.missing")
+	@NotBlank(message = "access.via.missing")
 	private 	String			access;
 
 	@Getter
 	@Setter
 	@JsonProperty("health_service")
-	@NotEmpty(message = "health.service.missing")
+	@NotBlank(message = "health.service.missing")
 	private 	String			healthServices;
 
 	@Getter
 	@Setter
 	@JsonProperty("main_income")
-	@NotEmpty(message = "income.missing")
+	@NotBlank(message = "income.missing")
 	private 	String			mainIncome;
+
+	@Getter
+	@Setter
+	@JsonProperty("cultural_production")
+	private 	String			culturalProductions;
 
 	@Accessors(fluent = true)
 	@Getter
@@ -115,19 +122,13 @@ public class CCommunityDTO {
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
-	@JsonProperty("has_cultural_production")
-	private 	boolean			hasCulturalProductions;
-
-	@Accessors(fluent = true)
-	@Getter
-	@Setter
 	@JsonProperty("has_community_leaders")
 	private 	boolean			hasCommunityLeaders;
 
 	@Getter
 	@Setter
 	@JsonProperty("city_id")
-	@NotEmpty(message = "city.id.missing")
+	@NotNull(message = "city.id.missing")
 	private 	Long			city;
 
 	@JsonIgnore
@@ -139,6 +140,7 @@ public class CCommunityDTO {
 		model.setAccess(getAccess());
 		model.setHealthServices(getHealthServices());
 		model.setMainIncome(getMainIncome());
+		model.setCulturalProductions(getCulturalProductions());
 		model.hasKindergarten(hasKindergarten());
 		model.hasElementarySchool(hasElementarySchool());
 		model.hasHighSchool(hasHighSchool());
@@ -148,7 +150,6 @@ public class CCommunityDTO {
 		model.hasReligiousPlace(hasReligiousPlace());
 		model.hasCulturalEvents(hasCulturalEvents());
 		model.hasPatron(hasPatron());
-		model.hasCulturalProductions(hasCulturalProductions());
 		model.hasCommunityLeaders(hasCommunityLeaders());
 		model.setCommunityZone(ECommunityZone.parse(getCommunityZone()));
 		return model;

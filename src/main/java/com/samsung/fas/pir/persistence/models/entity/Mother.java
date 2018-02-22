@@ -28,10 +28,4 @@ public class Mother extends Responsible {
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private ECivilState civilState;
-
-	@Getter
-	@Setter
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "community_id")
-	private 	Community		community;
 }

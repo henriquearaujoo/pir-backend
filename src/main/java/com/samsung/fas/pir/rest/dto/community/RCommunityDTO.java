@@ -49,6 +49,11 @@ public class RCommunityDTO implements IReadDTO<Community, RCommunityDTO> {
 	@JsonProperty("main_income")
 	private 	String			mainIncome;
 
+	@Getter
+	@Setter
+	@JsonProperty("cultural_production")
+	private 	String			culturalProductions;
+
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
@@ -106,12 +111,6 @@ public class RCommunityDTO implements IReadDTO<Community, RCommunityDTO> {
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
-	@JsonProperty("has_cultural_production")
-	private 	boolean			hasCulturalProductions;
-
-	@Accessors(fluent = true)
-	@Getter
-	@Setter
 	@JsonProperty("has_community_leaders")
 	private 	boolean			hasCommunityLeaders;
 
@@ -141,9 +140,10 @@ public class RCommunityDTO implements IReadDTO<Community, RCommunityDTO> {
 		hasReligiousPlace(entity.hasReligiousPlace());
 		hasCulturalEvents(entity.hasCulturalEvents());
 		hasPatron(entity.hasPatron());
-		hasCulturalProductions(entity.hasCulturalProductions());
+		setCommunityZone(entity.getCommunityZone().toString());
 		hasCommunityLeaders(entity.hasCommunityLeaders());
 		setCity(entity.getCity().getId());
+		setCulturalProductions(entity.getCulturalProductions());
 		setCommunityZone(entity.getCommunityZone().toString());
 	}
 

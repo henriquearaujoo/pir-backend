@@ -46,7 +46,7 @@ public class CommunityService extends BService<Community, CCommunityDTO, RCommun
 		City		city		= Optional.ofNullable(cdao.findCityByID(communityDTO.getCity())).orElseThrow(() -> new RESTRuntimeException("city.notfound"));
 		Community	temp		= dao.findOne(model.getName(), city.getId());
 
-		if (temp.getId() != community.getId())
+		if (temp != null && temp.getId() != community.getId())
 			throw new RESTRuntimeException("community.found");
 
 		community.setName(model.getName());
@@ -64,7 +64,7 @@ public class CommunityService extends BService<Community, CCommunityDTO, RCommun
 		community.hasReligiousPlace(model.hasReligiousPlace());
 		community.hasCulturalEvents(model.hasCulturalEvents());
 		community.hasPatron(model.hasPatron());
-		community.hasCulturalProductions(model.hasCulturalProductions());
+		community.setCulturalProductions(model.getCulturalProductions());
 		community.hasCommunityLeaders(model.hasCommunityLeaders());
 		community.setCommunityZone(model.getCommunityZone());
 		community.setCity(city);

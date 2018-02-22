@@ -22,7 +22,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<start-class>com.samsung.fas.pir.PirApplication</start-class>
+		<start-class>com.samsung.fas.pir.PIRApplication</start-class>
 	</properties>
 
 	<dependencies>
@@ -93,6 +93,14 @@
 			<version>1.6</version>
 		</dependency>
 		<!-- Apache Commons -->
+
+		<!-- Firebase -->
+		<dependency>
+			<groupId>com.google.firebase</groupId>
+			<artifactId>firebase-admin</artifactId>
+			<version>5.5.0</version>
+		</dependency>
+		<!-- Firebase -->
 
 		<dependency>
 			<groupId>javax.servlet</groupId>

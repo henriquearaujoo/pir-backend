@@ -69,6 +69,11 @@ public class Community {
 	@Column(name = "income", nullable = false)
 	private 	String			mainIncome;
 
+	@Getter
+	@Setter
+	@Column
+	private 	String			culturalProductions;
+
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
@@ -127,23 +132,17 @@ public class Community {
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	private 	boolean			hasCulturalProductions;
-
-	@Accessors(fluent = true)
-	@Getter
-	@Setter
-	@Column(nullable = false)
 	private 	boolean			hasCommunityLeaders;
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "community")
-	private 	Collection<Child>	children;
+	private 	Collection<Child>		children;
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "community")
-	private 	Collection<Mother>	mothers;
+	private 	Collection<Responsible>	responsibles;
 
 	@Getter
 	@Setter
