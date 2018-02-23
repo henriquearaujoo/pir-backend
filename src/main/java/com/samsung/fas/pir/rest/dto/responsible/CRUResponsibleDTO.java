@@ -103,6 +103,12 @@ public class CRUResponsibleDTO {
 	@JsonProperty("has_water_treatment")
 	private 	boolean			hasWaterTreatment;
 
+	@Accessors(fluent = true)
+	@Getter
+	@Setter
+	@JsonProperty("has_other_children")
+	private 	boolean			hasOtherChildren;
+
 	@Getter
 	@Setter
 	@JsonProperty("observations")
@@ -128,12 +134,14 @@ public class CRUResponsibleDTO {
 		hasSanitation(responsible.isHasSanitation());
 		hasWaterTreatment(responsible.isHasWaterTreatment());
 		setObservations(responsible.getObservations());
+		hasOtherChildren(responsible.isFamilyHasChildren());
 	}
 
 	@JsonIgnore
 	public Responsible getModel() {
 		Responsible model = new Responsible();
 
+		model.setFamilyHasChildren(hasOtherChildren());
 		model.setName(getName());
 		model.setUuid(getId() != null? IDCoder.decode(getId()) : null);
 		model.setInSocialProgram(isInSocialProgram());

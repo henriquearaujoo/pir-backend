@@ -38,6 +38,7 @@ public class MotherService extends BService<Mother, CRUMotherDTO, CRUMotherDTO, 
 		Mother			mother		= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("responsible.notfound"));
 		Community		community	= Optional.ofNullable(cdao.findOne(IDCoder.decode(update.getCommunityID()))).orElseThrow(() -> new RESTRuntimeException("community.notfound"));
 
+		mother.setFamilyHasChildren(model.isFamilyHasChildren());
 		mother.setCommunity(community);
 		mother.setBirth(model.getBirth());
 		mother.setInSocialProgram(model.isInSocialProgram());

@@ -95,6 +95,11 @@ public class Responsible {
 
 	@Getter
 	@Setter
+	@Column(nullable = false)
+	private 	boolean			familyHasChildren;
+
+	@Getter
+	@Setter
 	@Column(columnDefinition = "TEXT")
 	private 	String			observations;
 
