@@ -5,9 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
 
+import javax.persistence.CascadeType;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
 
@@ -22,90 +24,100 @@ public class Responsible {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
-	private		long			id;
+	private		long				id;
 
 	@Getter
 	@Setter
 	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
 	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	@Generated(GenerationTime.INSERT)
-	private 	UUID 			uuid;
+	private 	UUID 				uuid;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	private 	String			name;
+	private 	String				name;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
-	private 	Date			birth;
+	private 	Date				birth;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	private 	boolean			inSocialProgram;
+	private 	boolean				inSocialProgram;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private 	EHabitationType	habitationType;
+	private 	EHabitationType		habitationType;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	private 	int				habitationMembersCount;
+	private 	int					habitationMembersCount;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	private 	String			liveWith;
+	private 	String				liveWith;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	private 	String			familyIncome;
+	private 	String				familyIncome;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	private 	String			incomeParticipation;
+	private 	String				incomeParticipation;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	private 	String			drinkingWaterTreatment;
+	private 	String				drinkingWaterTreatment;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	private 	boolean			hasHospital;
+	private 	boolean				hasHospital;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	private 	boolean			hasSanitation;
+	private 	boolean				hasSanitation;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	private 	boolean			hasWaterTreatment;
+	private 	boolean				hasWaterTreatment;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	private 	boolean			familyHasChildren;
+	private 	boolean				familyHasChildren;
 
 	@Getter
 	@Setter
 	@Column(columnDefinition = "TEXT")
-	private 	String			observations;
+	private 	String				observations;
+
+	@Getter
+	@Setter
+	@OneToOne(mappedBy = "responsible", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	private 	Mother				mother;
+
+	@Getter
+	@Setter
+	@OneToMany
+	private 	Collection<Child>	children;
 
 	@Getter
 	@Setter
 	@ManyToOne(optional = false)
 	@JoinColumn
-	private 	Community		community;
+	private 	Community			community;
 }

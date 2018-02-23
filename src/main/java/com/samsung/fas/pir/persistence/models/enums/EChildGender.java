@@ -3,7 +3,7 @@ package com.samsung.fas.pir.persistence.models.enums;
 public enum EChildGender {
 	FEMALE		("FEMALE"),
 	MALE		("MALE"),
-	UNSPECIFIED	("UNSPECIFIED");
+	UNDEFINED	("UNDEFINED");
 
 	private final String val;
 
@@ -23,6 +23,6 @@ public enum EChildGender {
 		for (EChildGender v : EChildGender.values())
 			if (v.val.equalsIgnoreCase(s))
 				return v;
-		return UNSPECIFIED;
+		return UNDEFINED;
 	}
 }

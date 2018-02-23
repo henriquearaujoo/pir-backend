@@ -74,7 +74,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers(HttpMethod.POST, "/rest/authentication/**")
 		.antMatchers(HttpMethod.GET, "/rest/file/**")
 		.antMatchers("/assets/**", "/webjars/**", "/api-docs/**")
-		.antMatchers("/jsondoc/**", "/jsondoc-ui.html");
+		.antMatchers("/jsondoc/**", "/jsondoc-ui.html", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs");
 	}
 
 	@Bean

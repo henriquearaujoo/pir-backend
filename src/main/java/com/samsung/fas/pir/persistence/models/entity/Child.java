@@ -48,11 +48,6 @@ public class Child {
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
-	private 	String			motherName;
-
-	@Getter
-	@Setter
 	@Enumerated(EnumType.STRING)
 	@Column
 	private 	EChildGender 	gender;
@@ -84,17 +79,17 @@ public class Child {
 
 	@Getter
 	@Setter
-	@Column(columnDefinition = "VARCHAR(6)")
-	private 	String			weekBorn;
+	@Column
+	private 	int				bornWeek;
 
 	@Getter
 	@Setter
-	@Column(columnDefinition = "VARCHAR(16)", nullable = false)
+	@Column(nullable = false)
 	private 	String			whoTakeCare;
 
 	@Getter
 	@Setter
-	@Column(columnDefinition = "VARCHAR(16)", nullable = false)
+	@Column(nullable = false)
 	private 	String			playsWithWho;
 
 	@Getter
@@ -120,6 +115,18 @@ public class Child {
 	@Getter
 	@Setter
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "community_id")
+	@JoinColumn
 	private 	Community		community;
+
+	@Getter
+	@Setter
+	@ManyToOne(optional = false)
+	@JoinColumn
+	private 	Mother			mother;
+
+	@Getter
+	@Setter
+	@ManyToOne(optional = false)
+	@JoinColumn
+	private 	Responsible		responsible;
 }

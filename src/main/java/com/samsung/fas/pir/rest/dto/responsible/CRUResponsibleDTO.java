@@ -1,23 +1,22 @@
 package com.samsung.fas.pir.rest.dto.responsible;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.samsung.fas.pir.persistence.models.entity.Responsible;
 import com.samsung.fas.pir.persistence.models.enums.EHabitationType;
+import com.samsung.fas.pir.rest.dto.mother.CRUMotherDTO;
 import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-// CREATE & UPDATE
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CRUResponsibleDTO {
 	@Getter
@@ -114,9 +113,10 @@ public class CRUResponsibleDTO {
 	@JsonProperty("observations")
 	private 	String			observations;
 
-	public CRUResponsibleDTO() {
-		super();
-	}
+	@Getter
+	@Setter
+	@Valid
+	private 	CRUMotherDTO	mother;
 
 	public CRUResponsibleDTO(Responsible responsible) {
 		setName(responsible.getName());
@@ -135,6 +135,7 @@ public class CRUResponsibleDTO {
 		hasWaterTreatment(responsible.isHasWaterTreatment());
 		setObservations(responsible.getObservations());
 		hasOtherChildren(responsible.isFamilyHasChildren());
+		setMother(responsible.getMother() != null? new CRUMotherDTO(responsible.getMother()) : null);
 	}
 
 	@JsonIgnore
@@ -155,6 +156,7 @@ public class CRUResponsibleDTO {
 		model.setHasSanitation(hasSanitation());
 		model.setHasWaterTreatment(hasWaterTreatment());
 		model.setObservations(getObservations());
+		model.setMother(getMother() != null? getMother().getModel() : null);
 
 		try {
 			model.setBirth(new SimpleDateFormat("dd-MM-yyyy").parse(getBirth()));
