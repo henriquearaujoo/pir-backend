@@ -113,6 +113,7 @@ public class CRUResponsibleDTO {
 	}
 
 	public CRUResponsibleDTO(Responsible responsible) {
+		setName(responsible.getName());
 		setId(IDCoder.encode(responsible.getUuid()));
 		setCommunityID(IDCoder.encode(responsible.getCommunity().getUuid()));
 		setBirth(new SimpleDateFormat("dd-MM-yyyy").format(responsible.getBirth()));
@@ -133,6 +134,7 @@ public class CRUResponsibleDTO {
 	public Responsible getModel() {
 		Responsible model = new Responsible();
 
+		model.setName(getName());
 		model.setUuid(getId() != null? IDCoder.decode(getId()) : null);
 		model.setInSocialProgram(isInSocialProgram());
 		model.setHabitationType(EHabitationType.valueOf(getHabitationType()));
