@@ -27,7 +27,7 @@ public class CRUMotherDTO extends CRUResponsibleDTO {
 	@Getter
 	@Setter
 	@JsonProperty("children_count")
-	@Min(value = 1, message = "invalid.count")
+	@Min(value = 0, message = "invalid.count")
 	private 	long		children;
 
 	@Getter

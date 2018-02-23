@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.rest.services.base;
 
 import com.querydsl.core.types.Predicate;
+import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.base.IBaseDAO;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -24,11 +26,11 @@ public abstract class BService<TEntity, TCreate, TRead, TUpdate, TDAO extends IB
 	}
 
 	public TRead findOne(TPK id) {
-		return toDTO(dao.findOne(id));
+		return toDTO(Optional.ofNullable(dao.findOne(id)).orElseThrow(() -> new RESTRuntimeException("notfound")));
 	}
 
 	public TRead findOne(UUID uuid) {
-		return toDTO(dao.findOne(uuid));
+		return toDTO(Optional.ofNullable(dao.findOne(uuid)).orElseThrow(() -> new RESTRuntimeException("notfound")));
 	}
 
 	public Collection<TRead> findAll() {
