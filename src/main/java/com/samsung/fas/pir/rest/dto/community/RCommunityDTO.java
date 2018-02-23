@@ -118,10 +118,6 @@ public class RCommunityDTO {
 	@JsonProperty("city_id")
 	private 	long			city;
 
-	public RCommunityDTO() {
-		super();
-	}
-
 	public RCommunityDTO(Community entity) {
 		setId(IDCoder.encode(entity.getUuid()));
 		setName(entity.getName());
