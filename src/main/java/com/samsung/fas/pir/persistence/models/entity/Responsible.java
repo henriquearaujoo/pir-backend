@@ -34,6 +34,11 @@ public class Responsible {
 	@Getter
 	@Setter
 	@Column(nullable = false)
+	private 	String			name;
+
+	@Getter
+	@Setter
+	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
 	private 	Date			birth;
 

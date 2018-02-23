@@ -38,6 +38,7 @@ public class ResponsibleService extends BService<Responsible, CRUResponsibleDTO,
 		Responsible		responsible	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("responsible.notfound"));
 		Community		community	= Optional.ofNullable(cdao.findOne(IDCoder.decode(update.getCommunityID()))).orElseThrow(() -> new RESTRuntimeException("community.notfound"));
 
+		responsible.setName(model.getName());
 		responsible.setCommunity(community);
 		responsible.setBirth(model.getBirth());
 		responsible.setInSocialProgram(model.isInSocialProgram());

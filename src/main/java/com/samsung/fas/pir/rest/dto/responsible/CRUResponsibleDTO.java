@@ -33,6 +33,12 @@ public class CRUResponsibleDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("name")
+	@NotBlank(message = "name.missing")
+	private 	String			name;
+
+	@Getter
+	@Setter
 	@JsonProperty("birth")
 	@NotNull(message = "date.missing")
 	@JsonFormat(pattern = "dd-MM-yyyy", shape = JsonFormat.Shape.STRING)

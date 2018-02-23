@@ -16,11 +16,6 @@ public class Mother extends Responsible {
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	private 	String			name;
-
-	@Getter
-	@Setter
-	@Column(nullable = false)
 	private 	long			children;
 
 	@Getter
