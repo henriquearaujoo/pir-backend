@@ -27,6 +27,7 @@ public class ResponsibleService extends BService<Responsible, CRUResponsibleDTO,
 	@Override
 	public CRUResponsibleDTO save(CRUResponsibleDTO create, Account account) {
 		Responsible		model		= create.getModel();
+
 		Community		community	= Optional.ofNullable(cdao.findOne(IDCoder.decode(create.getCommunityID()))).orElseThrow(() -> new RESTRuntimeException("community.notfound"));
 		model.setCommunity(community);
 		return new CRUResponsibleDTO(dao.save(model));

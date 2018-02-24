@@ -25,7 +25,7 @@ public class Mother {
 	@Setter
 	@OneToOne(optional = false)
 	@MapsId
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "id", updatable = false)
 	private 	Responsible			responsible;
 
 	@Getter
