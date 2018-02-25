@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.entity.Child;
+import com.samsung.fas.pir.persistence.models.enums.EChildGender;
 import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +13,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Min;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -29,12 +32,6 @@ public class CRUChildDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty("community_id")
-	@NotBlank(message = "community.id.missing")
-	private 	String			communityID;
-
-	@Getter
-	@Setter
 	@JsonProperty("name")
 	@NotBlank(message = "name.missing")
 	private 	String			name;
@@ -49,12 +46,6 @@ public class CRUChildDTO {
 	@Setter
 	@JsonProperty("father_name")
 	private 	String			fatherName;
-
-	@Getter
-	@Setter
-	@JsonProperty("mother_name")
-	@NotBlank(message = "mother.name.missing")
-	private 	String			motherName;
 
 	@Getter
 	@Setter
@@ -131,12 +122,37 @@ public class CRUChildDTO {
 	@JsonProperty("has_relation_diff")
 	private 	boolean			hasRelationDifficulties;
 
+	@Getter
+	@Setter
+	@JsonProperty("is_mother_responsible")
+	private 	boolean			motherResponsible;
+
 	@JsonIgnore
 	public Child getModel() {
 		Child model = new Child();
 
 		model.setUuid(getId() != null && !getId().replaceAll("\\+", "").isEmpty()? IDCoder.decode(getId()) : null);
-//		model.
+		model.setName(getName());
+		model.setFatherName(getFatherName());
+		model.setGender(EChildGender.valueOf(getGender()));
+		model.setHasCivilRegistration(hasCivilRegistration());
+		model.setCivilRegistrationJustificative(getCivilRegistrationJustificative());
+		model.setHasEducationDifficulty(hasEducationDifficulty());
+		model.setEducationDifficultySpecification(getEducationDifficultySpecification());
+		model.setPrematureBorn(isPrematureBorn());
+		model.setBornWeek(getBornWeek());
+		model.setWhoTakeCare(getWhoTakeCare());
+		model.setPlaysWithWho(getPlaysWithWho());
+		model.setMensalWeight(mensalWeight());
+		model.setSocialEducationalPrograms(isInSocialEducationalPrograms());
+		model.setVacinationUpToDate(vacinationUpToDate());
+		model.setRelationDifficulties(hasRelationDifficulties());
+
+		try {
+			model.setBirth(new SimpleDateFormat("dd-MM-yyyy").parse(getBirth()));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
 		return model;
 	}

@@ -116,12 +116,6 @@ public class Child {
 	@Setter
 	@ManyToOne(optional = false)
 	@JoinColumn
-	private 	Community		community;
-
-	@Getter
-	@Setter
-	@ManyToOne(optional = false)
-	@JoinColumn
 	private 	Mother			mother;
 
 	@Getter

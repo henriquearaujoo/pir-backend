@@ -137,11 +137,6 @@ public class Community {
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "community")
-	private 	Collection<Child>		children;
-
-	@Getter
-	@Setter
-	@OneToMany(mappedBy = "community")
 	private 	Collection<Responsible>	responsibles;
 
 	@Getter
