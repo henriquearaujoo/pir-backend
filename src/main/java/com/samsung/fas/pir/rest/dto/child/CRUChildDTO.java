@@ -124,8 +124,34 @@ public class CRUChildDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty("is_mother_responsible")
-	private 	boolean			motherResponsible;
+	@JsonProperty("mohter_id")
+	@NotBlank(message = "mother.id.missing")
+	private 	String			motherID;
+
+	public CRUChildDTO() {
+		super();
+	}
+
+	public CRUChildDTO(Child child) {
+		setId(IDCoder.encode(child.getUuid()));
+		setResponsibleID(IDCoder.encode(child.getResponsible().getUuid()));
+		setName(child.getName());
+		setBirth(new SimpleDateFormat("dd-MM-yyyy").format(child.getBirth()));
+		setFatherName(child.getFatherName());
+		setGender(child.getGender().toString());
+		hasCivilRegistration(child.isHasCivilRegistration());
+		setCivilRegistrationJustificative(child.getCivilRegistrationJustificative());
+		hasEducationDifficulty(child.isHasEducationDifficulty());
+		setEducationDifficultySpecification(child.getEducationDifficultySpecification());
+		isPrematureBorn(child.isPrematureBorn());
+		setBornWeek(child.getBornWeek());
+		setWhoTakeCare(child.getWhoTakeCare());
+		setPlaysWithWho(child.getPlaysWithWho());
+		mensalWeight(child.isMensalWeight());
+		isInSocialEducationalPrograms(child.isSocialEducationalPrograms());
+		vacinationUpToDate(child.isVacinationUpToDate());
+		hasRelationDifficulties(child.isRelationDifficulties());
+	}
 
 	@JsonIgnore
 	public Child getModel() {
