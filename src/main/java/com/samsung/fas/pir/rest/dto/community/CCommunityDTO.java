@@ -26,6 +26,18 @@ public class CCommunityDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("uc")
+//	@NotBlank(message = "name.missing")
+	private 	String			uc;
+
+	@Getter
+	@Setter
+	@JsonProperty("regional")
+//	@NotBlank(message = "name.missing")
+	private 	String			regional;
+
+	@Getter
+	@Setter
 	@JsonProperty("zone")
 	@NotBlank(message = "zone.missing")
 	private 	String			communityZone;
@@ -152,6 +164,8 @@ public class CCommunityDTO {
 		model.hasPatron(hasPatron());
 		model.hasCommunityLeaders(hasCommunityLeaders());
 		model.setCommunityZone(ECommunityZone.parse(getCommunityZone()));
+		model.setUc(getUc());
+		model.setRegional(getRegional());
 		return model;
 	}
 }

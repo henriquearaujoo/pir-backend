@@ -15,6 +15,18 @@ public class RCommunityDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("uc")
+//	@NotBlank(message = "name.missing")
+	private 	String			uc;
+
+	@Getter
+	@Setter
+	@JsonProperty("regional")
+//	@NotBlank(message = "name.missing")
+	private 	String			regional;
+
+	@Getter
+	@Setter
 	@JsonProperty("name")
 	private 	String			name;
 
@@ -140,5 +152,7 @@ public class RCommunityDTO {
 		setCity(entity.getCity().getId());
 		setCulturalProductions(entity.getCulturalProductions());
 		setCommunityZone(entity.getCommunityZone().toString());
+		setRegional(entity.getRegional());
+		setUc(entity.getUc());
 	}
 }

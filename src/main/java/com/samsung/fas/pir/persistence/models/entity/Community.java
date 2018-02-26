@@ -34,6 +34,16 @@ public class Community {
 
 	@Getter
 	@Setter
+	@Column
+	private 	String			uc;
+
+	@Getter
+	@Setter
+	@Column
+	private 	String			regional;
+
+	@Getter
+	@Setter
 	@Column(nullable = false)
 	private 	String			name;
 
