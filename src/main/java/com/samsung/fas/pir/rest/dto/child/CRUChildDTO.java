@@ -151,6 +151,7 @@ public class CRUChildDTO {
 		isInSocialEducationalPrograms(child.isSocialEducationalPrograms());
 		vacinationUpToDate(child.isVacinationUpToDate());
 		hasRelationDifficulties(child.isRelationDifficulties());
+		setMotherID(IDCoder.encode(child.getMother().getResponsible().getUuid()));
 	}
 
 	@JsonIgnore
