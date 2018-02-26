@@ -67,6 +67,7 @@ public class CRUChildDTO {
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
+	@JsonProperty("has_education_diff")
 	private 	boolean			hasEducationDifficulty;
 
 	@Getter
