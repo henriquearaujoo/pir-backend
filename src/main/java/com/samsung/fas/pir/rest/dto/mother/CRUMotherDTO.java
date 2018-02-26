@@ -27,6 +27,9 @@ public class CRUMotherDTO {
 	@NotBlank(message = "civil.state.missing")
 	private 	String		civilState;
 
+	public CRUMotherDTO() {
+		super();
+	}
 
 	public CRUMotherDTO(Mother mother) {
 		setChildrenCount(mother.getChildrenCount());

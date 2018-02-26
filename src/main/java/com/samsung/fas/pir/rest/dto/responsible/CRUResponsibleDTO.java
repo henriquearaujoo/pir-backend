@@ -118,6 +118,10 @@ public class CRUResponsibleDTO {
 	@Valid
 	private 	CRUMotherDTO	mother;
 
+	public CRUResponsibleDTO() {
+		super();
+	}
+
 	public CRUResponsibleDTO(Responsible responsible) {
 		setName(responsible.getName());
 		setId(IDCoder.encode(responsible.getUuid()));
@@ -157,6 +161,10 @@ public class CRUResponsibleDTO {
 		model.setHasWaterTreatment(hasWaterTreatment());
 		model.setObservations(getObservations());
 		model.setMother(getMother() != null? getMother().getModel() : null);
+
+		if (model.getMother() != null) {
+			model.getMother().setResponsible(model);
+		}
 
 		try {
 			model.setBirth(new SimpleDateFormat("dd-MM-yyyy").parse(getBirth()));
