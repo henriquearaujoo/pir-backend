@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.rest.dto.responsible;
 
 import com.fasterxml.jackson.annotation.*;
+import com.samsung.fas.pir.persistence.models.entity.Mother;
 import com.samsung.fas.pir.persistence.models.entity.Responsible;
 import com.samsung.fas.pir.persistence.models.enums.EHabitationType;
 import com.samsung.fas.pir.rest.dto.mother.CRUMotherDTO;
@@ -125,6 +126,11 @@ public class CRUResponsibleDTO {
 
 	public CRUResponsibleDTO() {
 		super();
+	}
+
+	public CRUResponsibleDTO(Mother mother) {
+		this(mother.getResponsible());
+		setMother(new CRUMotherDTO(mother));
 	}
 
 	public CRUResponsibleDTO(Responsible responsible) {

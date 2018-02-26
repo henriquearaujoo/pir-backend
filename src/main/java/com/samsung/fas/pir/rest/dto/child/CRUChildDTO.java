@@ -125,7 +125,7 @@ public class CRUChildDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty("mohter_id")
+	@JsonProperty("mother_id")
 	private 	String			motherID;
 
 	public CRUChildDTO() {

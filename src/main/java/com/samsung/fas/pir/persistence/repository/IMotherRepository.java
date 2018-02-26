@@ -13,5 +13,6 @@ public interface IMotherRepository extends BRepository<Mother, Long, QMother> {
 	@Override
 	default void customize(QuerydslBindings bindings, QMother root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+		bindings.bind(root.responsible.name).as("mother.name").withDefaultBinding();
 	}
 }
