@@ -26,6 +26,11 @@ public class CRUResponsibleDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("agent_id")
+	private 	String 			agentID;
+
+	@Getter
+	@Setter
 	@JsonProperty("community_id")
 	@NotBlank(message = "community.id.missing")
 	private 	String			communityID;
