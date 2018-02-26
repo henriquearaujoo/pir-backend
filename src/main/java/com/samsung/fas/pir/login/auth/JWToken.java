@@ -49,9 +49,9 @@ public class JWToken {
 
 		// Account
 		data.setUserlogin(account.getUsername());
-		data.setUserid(IDCoder.encode(account.getUser().getGuid()));
+		data.setUserid(IDCoder.encode(account.getUser().getUuid()));
 		data.setUsername(account.getUser().getName());
-		data.setPerfil(IDCoder.encode(account.getProfile().getGuid()));
+		data.setPerfil(IDCoder.encode(account.getProfile().getUuid()));
 
 		// Token generation
 		builder.setClaims(new ObjectMapper().convertValue(data, Map.class));

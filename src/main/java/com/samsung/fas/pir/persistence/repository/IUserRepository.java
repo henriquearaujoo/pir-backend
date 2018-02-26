@@ -18,20 +18,15 @@ import java.util.UUID;
 @Repository
 public interface IUserRepository extends JpaRepository<User, UUID>, PagingAndSortingRepository<User, UUID>, QueryDslPredicateExecutor<User>, QuerydslBinderCustomizer<QUser> {
 	User findByAccountUsernameIgnoreCase(String login);
-	User findOneByGuid(UUID guid);
+	User findOneByUuid(UUID guid);
 	User findByEmail(String email);
-//	User findByLegalPersonCnpj(String cnpj);
-//	User findByIndividualPersonCpf(String cpf);
-//
-//	List<User> findByIndividualPersonRg(String rg);
-//	List<User> findByLegalPersonIe(String ie);
 
 	@Override
 	default void customize(QuerydslBindings bindings, QUser root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
-		bindings.bind(root.guid).as("id").withDefaultBinding();
+		bindings.bind(root.uuid).as("id").withDefaultBinding();
 		bindings.bind(root.account.enabled).as("status").withDefaultBinding();
-		bindings.bind(root.account.profile.guid).as("profile").withDefaultBinding();
+		bindings.bind(root.account.profile.uuid).as("profile").withDefaultBinding();
 		bindings.bind(root.address.city.name).as("city").withDefaultBinding();
 		bindings.bind(root.registerDate).as("date").all(QDate::between);
 		bindings.excluding(

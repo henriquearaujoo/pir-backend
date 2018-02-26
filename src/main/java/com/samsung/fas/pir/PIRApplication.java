@@ -10,13 +10,13 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @EnableAsync
 @EnableJSONDoc
-public class PirApplication extends SpringBootServletInitializer {
+public class PIRApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
-		SpringApplication.run(PirApplication.class, args);
+		SpringApplication.run(PIRApplication.class, args);
 	}
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(PirApplication.class);
+		return application.sources(PIRApplication.class);
 	}
 }

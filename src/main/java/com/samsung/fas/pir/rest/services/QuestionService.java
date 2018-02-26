@@ -10,13 +10,13 @@ import com.samsung.fas.pir.persistence.models.entity.Question;
 import com.samsung.fas.pir.rest.dto.question.CQuestionDTO;
 import com.samsung.fas.pir.rest.dto.question.RQuestionDTO;
 import com.samsung.fas.pir.rest.dto.question.UQuestionDTO;
-import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,8 +32,8 @@ public class QuestionService {
 		this.chdao	= chdao;
 	}
 
-	public RQuestionDTO findOne(String id) {
-		return RQuestionDTO.toDTO(qdao.findOne(IDCoder.decodeLong(id)));
+	public RQuestionDTO findOne(UUID id) {
+		return RQuestionDTO.toDTO(qdao.findOne(id));
 	}
 
 	public List<RQuestionDTO> findAll() {
@@ -52,8 +52,8 @@ public class QuestionService {
 		return qdao.findAll(predicate, pageable).map(RQuestionDTO::toDTO);
 	}
 
-	public void delete(String id) {
-		Question question = qdao.findOne(IDCoder.decodeLong(id));
+	public void delete(UUID id) {
+		Question question = qdao.findOne(id);
 
 		if (question != null) {
 			Conclusion conclusion = question.getConclusion();
@@ -84,22 +84,23 @@ public class QuestionService {
 
 	public RQuestionDTO update(UQuestionDTO dto) {
 		Question		model		= dto.getModel();
-		Question		qentity		= qdao.findOne(model.getId());
-		Question		exists;
-		Conclusion		centity		= cdao.findOne(model.getConclusion().getId());
+		Question		question	= qdao.findOne(model.getId());
+		Conclusion		conclusion	= cdao.findOne(model.getConclusion().getId());
 
-		if (qentity == null)
+		if (question == null)
 			throw new RESTRuntimeException("question.notfound");
 
-		if (centity == null)
+		if (conclusion == null)
 			throw new RESTRuntimeException("question.conclusion.notfound");
 
-		exists = centity.getQuestions().stream().filter(item -> item.getDescription().equalsIgnoreCase(model.getDescription())).findAny().orElse(null);
+		Question		exists		= conclusion.getQuestions().stream().filter(item -> item.getDescription().equalsIgnoreCase(model.getDescription())).findAny().orElse(null);
 		if (exists != null)
 			if (exists.getId() != model.getId())
 				throw new RESTRuntimeException("question.exists");
 
-		model.setConclusion(centity);
-		return RQuestionDTO.toDTO(qdao.save(model));
+		question.setConclusion(conclusion);
+		question.setDescription(model.getDescription());
+		question.setType(model.getType());
+		return RQuestionDTO.toDTO(qdao.save(question));
 	}
 }

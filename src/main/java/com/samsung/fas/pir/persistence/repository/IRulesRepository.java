@@ -18,18 +18,20 @@ import java.util.UUID;
 
 @Repository
 public interface IRulesRepository extends JpaRepository<Rule, UUID>, PagingAndSortingRepository<Rule, UUID>, QueryDslPredicateExecutor<Rule>, QuerydslBinderCustomizer<QRule> {
-	List<Rule> findByProfileGuid(UUID id);
-	Rule findByProfileIdAndPageId(long profile, UUID page);
-	Rule findOneByGuid(UUID id);
+	List<Rule> findByProfileUuid(UUID id);
+
+	Rule findByProfileIdAndPageId(long profile, long page);
+	Rule findOneByUuid(UUID id);
+
 	@Transactional
-	void deleteByGuid(UUID id);
+	void deleteByUuid(UUID id);
 
 	@Override
 	default void customize(QuerydslBindings bindings, QRule root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
-		bindings.bind(root.guid).as("id").withDefaultBinding();
-		bindings.bind(root.profile.guid).as("profile").withDefaultBinding();
-		bindings.bind(root.page.guid).as("page").withDefaultBinding();
+		bindings.bind(root.uuid).as("id").withDefaultBinding();
+		bindings.bind(root.profile.uuid).as("profile").withDefaultBinding();
+		bindings.bind(root.page.uuid).as("page").withDefaultBinding();
 		bindings.excluding(root.profile.id, root.page.id);
 	}
 }

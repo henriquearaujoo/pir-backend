@@ -5,7 +5,7 @@
 
 	<groupId>com.samsung.fas</groupId>
 	<artifactId>pir</artifactId>
-	<version>0.0.5</version>
+	<version>0.0.6</version>
 	<packaging>war</packaging>
 
 	<name>PIR</name>
@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.8.RELEASE</version>
+		<version>1.5.10.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -22,7 +22,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<start-class>com.samsung.fas.pir.PirApplication</start-class>
+		<start-class>com.samsung.fas.pir.PIRApplication</start-class>
 	</properties>
 
 	<dependencies>
@@ -78,20 +78,43 @@
 		</dependency>
 		<!-- Json Doc -->
 
+		<!-- Swagger DOC -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.8.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<!-- Swagger DOC -->
+
 		<!-- Freemarker (Email Templates) -->
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
+			<version>${freemarker.version}</version>
 		</dependency>
 		<!-- Freemarker (Email Templates) -->
 
-		<!-- File Upload -->
+		<!-- Apache Commons -->
 		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>1.3.3</version>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.6</version>
 		</dependency>
-		<!-- File Upload -->
+		<!-- Apache Commons -->
+
+		<!-- Firebase -->
+		<dependency>
+			<groupId>com.google.firebase</groupId>
+			<artifactId>firebase-admin</artifactId>
+			<version>5.5.0</version>
+		</dependency>
+		<!-- Firebase -->
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -107,11 +130,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<!--<scope>provided</scope>-->
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jooq</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -174,53 +192,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-
-			<!--&lt;!&ndash; jOOQ (Apache v2.0) (Test) &ndash;&gt;-->
-			<!--<plugin>-->
-				<!--&lt;!&ndash; Use org.jooq            for the Open Source Edition-->
-						 <!--org.jooq.pro        for commercial editions,-->
-						 <!--org.jooq.pro-java-6 for commercial editions with Java 6 support,-->
-						 <!--org.jooq.trial      for the free trial edition &ndash;&gt;-->
-				<!--<groupId>org.jooq</groupId>-->
-				<!--<artifactId>jooq-codegen-maven</artifactId>-->
-
-				<!--<executions>-->
-					<!--<execution>-->
-						<!--<id>jooq-codegen</id>-->
-						<!--<phase>generate-sources</phase>-->
-						<!--<goals>-->
-							<!--<goal>generate</goal>-->
-						<!--</goals>-->
-						<!--<configuration>-->
-
-							<!--&lt;!&ndash; JDBC connection parameters &ndash;&gt;-->
-							<!--<jdbc>-->
-								<!--<driver>org.postgresql.Driver</driver>-->
-								<!--<url>jdbc:postgresql://localhost:5432/pirdb</url>-->
-								<!--<user>postgres</user>-->
-								<!--<password>postgres</password>-->
-								<!--<autocommit>true</autocommit>-->
-							<!--</jdbc>-->
-
-							<!--&lt;!&ndash; Generator parameters &ndash;&gt;-->
-							<!--<generator>-->
-								<!--<database>-->
-									<!--<name>org.jooq.util.postgres.PostgresDatabase</name>-->
-									<!--<includes>.*</includes>-->
-									<!--<inputSchema>public</inputSchema>-->
-								<!--</database>-->
-								<!--<target>-->
-									<!--<packageName>com.samsung.fas.pir.models.entity</packageName>-->
-									<!--<directory>target/generated-sources/jooq</directory>-->
-								<!--</target>-->
-							<!--</generator>-->
-						<!--</configuration>-->
-					<!--</execution>-->
-				<!--</executions>-->
-			<!--</plugin>-->
-
-		 	<!-- QueryDSL -->
-			<!-- There is no activity on project repository, may be deleted in near future -->
 			<plugin>
 				<groupId>com.mysema.maven</groupId>
 				<artifactId>apt-maven-plugin</artifactId>

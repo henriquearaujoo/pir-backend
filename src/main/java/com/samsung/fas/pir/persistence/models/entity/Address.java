@@ -6,12 +6,13 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity(name="address")
 @Table(name = "address")
 @DynamicUpdate
 @DynamicInsert
-public class Address {
+public class Address implements Serializable {
 	@Getter
 	@Setter
 	@Id
@@ -19,8 +20,8 @@ public class Address {
 
 	@Getter
 	@Setter
-	@OneToOne
 	@MapsId
+	@OneToOne(optional = false)
 	@JoinColumn(name = "id")
 	private 	User			user;
 

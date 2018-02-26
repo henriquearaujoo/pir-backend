@@ -2,38 +2,38 @@ package com.samsung.fas.pir.persistence.models.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity(name="pages")
-@Table(uniqueConstraints= {@UniqueConstraint(columnNames= {"id", "guid"})})
+@Entity
+@Table(name = "pages")
 @DynamicUpdate
 @DynamicInsert
 public class Page {
-	@Setter
 	@Getter
+	@Setter
 	@Id
-	@Column(name="id", updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
-	@Type(type = "org.hibernate.type.PostgresUUIDType")
-	private		UUID			id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
+	private		long			id;
 
-	@Setter
 	@Getter
-	@Column(name="guid", updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+	@Setter
+	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
 	@Type(type = "org.hibernate.type.PostgresUUIDType")
-	private 	UUID			guid;
+	@Generated(GenerationTime.INSERT)
+	private 	UUID 			uuid;
 	
 	@Setter
 	@Getter
 	@Column(name="title_url", nullable=false, unique=true)
 	private		String			title;
-	
-	
+
 	@Setter
 	@Getter
 	@Column(name="url_path", nullable=false)
@@ -51,6 +51,7 @@ public class Page {
 	
 	@Getter
 	@Setter
-	@OneToMany(mappedBy="page", targetEntity=Rule.class)
+	@OneToMany
+	@JoinColumn(name = "page_id")
 	private 	Set<Rule> 		rules;
 }

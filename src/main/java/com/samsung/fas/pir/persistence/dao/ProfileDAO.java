@@ -23,7 +23,7 @@ public class ProfileDAO {
 	}
 	
 	public Profile findOne(UUID id) {
-		return repository.findOneByGuid(id);
+		return repository.findOneByUuid(id);
 	}
 
 	public Profile findOneByTitle(String title) {
@@ -48,13 +48,6 @@ public class ProfileDAO {
 	
 	public Profile save(Profile entity) {
 		return repository.save(entity);
-	}
-	
-	public Profile update(Profile toUpdate, long id) {
-		//Profile model = repository.findOne(id);
-		toUpdate.setId(id);
-		//toUpdate.setCreatedAt(model.getCreatedAt());
-		return repository.save(toUpdate);
 	}
 }
 

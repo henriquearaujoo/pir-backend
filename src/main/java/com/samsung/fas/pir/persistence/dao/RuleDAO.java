@@ -41,10 +41,10 @@ public class RuleDAO {
 	}
 	
 	public List<Rule> findByProfileID(UUID id) {
-		return repository.findByProfileGuid(id);
+		return repository.findByProfileUuid(id);
 	}
 	
-	public Rule findByProfileAndPageIDs(long profileID, UUID pageID) {
+	public Rule findByProfileAndPageIDs(long profileID, long pageID) {
 		return repository.findByProfileIdAndPageId(profileID, pageID);
 	}
 	
@@ -66,10 +66,10 @@ public class RuleDAO {
 	}
 	
 	public Rule findOne(UUID id) {
-		return repository.findOneByGuid(id);
+		return repository.findOneByUuid(id);
 	}
 	
 	public void delete(UUID id) {
-		repository.deleteByGuid(id);
+		repository.deleteByUuid(id);
 	}
 }

@@ -29,7 +29,7 @@ public class Authority implements GrantedAuthority {
 
 	@Getter
 	@Setter
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "authorities")
+	@ManyToMany(fetch = FetchType.EAGER)
 	private 	Collection<Profile>	profiles;
 
 	public void addProfile(Profile profile) {

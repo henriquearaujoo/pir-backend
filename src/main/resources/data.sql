@@ -1,27 +1,26 @@
-/* Create UUID Extension */
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 /* Pages */
 INSERT INTO pirdb.public.pages (title_url, url_path)
 VALUES ('user-list', 'user-list'), ('profile-list', 'profile-list'), ('user', 'user'), ('user-edit', 'user-edit'),
 ('user-details', 'user-details'), ('page-list', 'page-list'), ('template-chapter', 'template-chapter'),
-('chapter-dashboard',	'chapter-dashboard')
-ON CONFLICT DO NOTHING;
-
-/* Profile */
-INSERT INTO pirdb.public.profile (status, created_at, description, title, updated_at, created_by, modified_by)
-VALUES (TRUE, current_date, 'Administrator ROLE', 'Administrator', current_date, NULL, NULL)
-ON CONFLICT DO NOTHING;
-
-/* Page Profile Permissions */
-INSERT INTO profile_pages (can_create, can_delete, can_view, can_update, page, profile)
-(SELECT cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), pages.id, profile.id
-FROM pirdb.public.profile, public.pages)
+('chapter-dashboard',	'chapter-dashboard'), ('community-list', 'community-list'), ('community', 'community'),
+('mother', 'mother'), ('mother-list', 'mother-list'), ('child-list', 'child-list'),
+	('responsible-list', 'responsible-list'), ('responsible', 'responsible'), ('child', 'child')
 ON CONFLICT DO NOTHING;
 
 /* User */
 INSERT INTO "user" (email, full_name, dt_register, type)
 VALUES ('example@example.com', 'Administrator', current_date, 'PFIS')
+ON CONFLICT DO NOTHING;
+
+/* Profile */
+INSERT INTO pirdb.public.profile (status, created_at, description, title, updated_at, created_by, modified_by)
+VALUES (TRUE, current_date, 'Administrator ROLE', 'Administrator', current_date, (SELECT id FROM "user" WHERE full_name = 'Administrator'), (SELECT id FROM "user" WHERE full_name = 'Administrator'))
+ON CONFLICT DO NOTHING;
+
+/* Page Profile Permissions */
+INSERT INTO profile_pages (can_create, can_delete, can_view, can_update, page_id, profile_id)
+	(SELECT cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), pages.id, profile.id
+	 FROM pirdb.public.profile, public.pages)
 ON CONFLICT DO NOTHING;
 
 /* Account */

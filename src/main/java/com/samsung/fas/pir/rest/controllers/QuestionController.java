@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.UUID;
 
 @Api(name = "Question Services", description = "Methods for managing conclusion questions", group = "Chapters", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
@@ -55,7 +56,7 @@ public class QuestionController {
 	@ApiResponseObject(clazz = RQuestionDTO.class)
 	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	@ResponseBody
-	public ResponseEntity<RQuestionDTO> get(@ApiPathParam @PathVariable("id") String codedid) {
+	public ResponseEntity<RQuestionDTO> get(@ApiPathParam @PathVariable("id") UUID codedid) {
 		return ResponseEntity.ok(service.findOne(codedid));
 	}
 
@@ -78,7 +79,7 @@ public class QuestionController {
 	@ApiMethod(description="Delete specific answer")
 	@RequestMapping(method=RequestMethod.DELETE, value="/{id}")
 	@ResponseBody
-	public ResponseEntity delete(@ApiPathParam @PathVariable("id") String codedid) {
+	public ResponseEntity delete(@ApiPathParam @PathVariable("id") UUID codedid) {
 		service.delete(codedid);
 		return ResponseEntity.ok(null);
 	}

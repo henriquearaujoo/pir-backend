@@ -63,14 +63,14 @@ public abstract class CUserBaseDTO {
     @Getter
     @JsonProperty("type")
     @NotNull(message="user.type.null")
-    private EUserType type;
+    private 	EUserType 		type;
 
     @ApiObjectField(name="profile", order=6)
     @Setter
     @Getter
     @JsonProperty("profile")
     @NotBlank(message="user.profile.blank")
-    private		String		profile;
+    private		String			profile;
 
     // Other properties
     @ApiObjectField(name="address", order=8)
@@ -79,7 +79,7 @@ public abstract class CUserBaseDTO {
     @JsonProperty("address")
     @NotNull(message="user.address.missing")
     @Valid
-    private 	AddressDTO 	addressDTO;
+    private 	AddressDTO 		address;
 
     @JsonIgnore
     public abstract User getModel();

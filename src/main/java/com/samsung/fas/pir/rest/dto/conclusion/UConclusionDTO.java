@@ -40,8 +40,8 @@ public class UConclusionDTO {
 		Conclusion e = new Conclusion();
 		e.setChapter(new Chapter());
 		e.setDescription(description);
-		e.getChapter().setId(IDCoder.decodeLong(chapterID));
-		e.setId(IDCoder.decodeLong(id));
+		e.getChapter().setUuid(IDCoder.decode(chapterID));
+		e.setUuid(IDCoder.decode(id));
 		return e;
 	}
 

@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.UUID;
 
 @Api(name = "Intervention Services", description = "Methods for managing chapters' intervention", group = "Chapters", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
 @ApiAuthNone
@@ -55,7 +56,7 @@ public class InterventionController {
 	@ApiResponseObject(clazz = RInterventionDTO.class)
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	@ResponseBody
-	public ResponseEntity<RInterventionDTO> get(@ApiPathParam @PathVariable("id") String codedid) {
+	public ResponseEntity<RInterventionDTO> get(@ApiPathParam @PathVariable("id") UUID codedid) {
 		return ResponseEntity.ok(service.findOne(codedid));
 	}
 

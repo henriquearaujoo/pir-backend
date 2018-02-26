@@ -3,13 +3,14 @@ package com.samsung.fas.pir.rest.dto.conclusion;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.entity.Conclusion;
-import com.samsung.fas.pir.persistence.models.entity.Question;
 import com.samsung.fas.pir.rest.dto.question.RQuestionDTO;
 import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
+import lombok.Setter;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,30 +20,32 @@ public class RConclusionDTO {
 	@ApiObjectField(name="id", order=0)
 	@JsonProperty("id")
 	@Getter
+	@Setter
 	private		String				id;
 
 	@ApiObjectField(name="description", order=1)
 	@JsonProperty("description")
 	@Getter
+	@Setter
 	private 	String				description;
 
 	@ApiObjectField(name="chapter", order=2)
 	@JsonProperty("chapter")
 	@Getter
+	@Setter
 	private 	String				chapter;
 
 	@ApiObjectField(name="questions", order=3)
 	@JsonProperty("questions")
 	@Getter
+	@Setter
 	private 	Set<RQuestionDTO>	questions;
 
 	private RConclusionDTO(Conclusion e) {
-		Set<Question>	questions	= e.getQuestions();
-		this.id						= IDCoder.encode(e.getId());
-		this.description			= e.getDescription();
-		this.chapter				= IDCoder.encode(e.getChapter().getId());
-		if (questions != null && !questions.isEmpty())
-			this.questions		= questions.stream().map(RQuestionDTO::toDTO).collect(Collectors.toSet());
+		setId(IDCoder.encode(e.getUuid()));
+		setDescription(e.getDescription());
+		setChapter(IDCoder.encode(e.getChapter().getUuid()));
+		Optional.of(e.getQuestions()).ifPresent(item -> setQuestions(item.stream().map(RQuestionDTO::toDTO).collect(Collectors.toSet())));
 	}
 
 	public static RConclusionDTO toDTO(Conclusion e) {

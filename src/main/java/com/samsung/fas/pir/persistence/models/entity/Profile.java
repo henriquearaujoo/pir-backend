@@ -15,8 +15,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.UUID;
 
-@Entity(name="profile")
-@Table(uniqueConstraints= {@UniqueConstraint(columnNames= {"id", "guid"})})
+@Entity
+@Table(name = "profile")
 @DynamicUpdate
 @DynamicInsert
 public class Profile {
@@ -24,14 +24,15 @@ public class Profile {
 	@Setter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column
 	private		long					id;
 
-	@Setter
 	@Getter
-	@Column(name="guid", updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+	@Setter
+	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
 	@Type(type = "org.hibernate.type.PostgresUUIDType")
-	private 	UUID					guid;
+	@Generated(GenerationTime.INSERT)
+	private 	UUID 					uuid;
 	
 	@Getter
 	@Setter
@@ -50,14 +51,14 @@ public class Profile {
 	
 	@Getter
 	@Setter
-	@OneToOne
-	@JoinColumn(name="created_by", nullable=true, updatable=false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumn(name="created_by", updatable=false)
 	private		User					whoCreated;
 	
 	@Getter
 	@Setter
-	@OneToOne
-	@JoinColumn(name="modified_by", nullable=true)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumn(name="modified_by")
 	private		User					whoUpdated;
 	
 	@Getter
@@ -81,13 +82,14 @@ public class Profile {
 
 	@Getter
 	@Setter
-	@ManyToMany(cascade = CascadeType.ALL)
-	@Fetch(FetchMode.JOIN)
+	@ManyToMany(mappedBy = "profiles", fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	private 	Collection<Authority>	authorities;
 	
 	@Getter
 	@Setter
-	@OneToMany(mappedBy="profile")
+	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	@JoinColumn(name = "profile_id")
 	private		Collection<Rule>		rules;
 
 	public void addAuthority(Authority authority) {

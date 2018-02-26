@@ -37,10 +37,18 @@ import javax.ws.rs.core.MediaType;
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.POST }, exposedHeaders = HttpHeaders.AUTHORIZATION)
 @Validated
 public class AuthenticationController {
-	@Autowired	private 	JWToken				token;
-	@Autowired 	private 	AuthManager 		manager;
-	@Autowired 	private 	AccountService 		service;
-	@Autowired 	private 	DeviceProvider		provider;
+	private	final	JWToken				token;
+	private	final	AuthManager 		manager;
+	private	final	AccountService 		service;
+	private	final	DeviceProvider		provider;
+
+	@Autowired
+	public AuthenticationController(JWToken token, AuthManager manager, AccountService service, DeviceProvider provider) {
+		this.token = token;
+		this.manager = manager;
+		this.service = service;
+		this.provider = provider;
+	}
 
 	@RequestMapping(method = RequestMethod.POST, path = "/login")
 	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO request, Device device) throws AuthenticationException {

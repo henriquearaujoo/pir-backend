@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -23,6 +24,10 @@ public class QuestionDAO {
 
 	public Question findOne(long id) {
 		return repository.findOne(id);
+	}
+
+	public Question findOne(UUID id) {
+		return repository.findByUuid(id);
 	}
 
 	public List<Question> findAll() {

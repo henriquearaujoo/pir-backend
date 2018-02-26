@@ -2,6 +2,7 @@ package com.samsung.fas.pir.rest.services;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
+import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.PageDAO;
 import com.samsung.fas.pir.persistence.dao.ProfileDAO;
 import com.samsung.fas.pir.persistence.dao.RuleDAO;
@@ -13,7 +14,6 @@ import com.samsung.fas.pir.rest.dto.page.RCompletePageDTO;
 import com.samsung.fas.pir.rest.dto.profile.CProfileDTO;
 import com.samsung.fas.pir.rest.dto.profile.RProfileDTO;
 import com.samsung.fas.pir.rest.dto.profile.UProfileDTO;
-import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,8 +37,8 @@ public class ProfileService {
 		this.pagedao	= pagedao;
 	}
 
-	public RProfileDTO findOne(String id) {
-		Profile profile = pdao.findOne(IDCoder.decodeUUID(id));
+	public RProfileDTO findOne(UUID id) {
+		Profile profile = pdao.findOne(id);
 		if (profile == null)
 			throw new RESTRuntimeException("profile.notfound");
 		return RProfileDTO.toDTO(profile);
@@ -59,11 +60,12 @@ public class ProfileService {
 		return pdao.findAll(predicate, pageable).map(RProfileDTO::toDTO);
 	}
 
-	public List<RCompletePageDTO> findPagesByProfileID(String id) {
-		return rdao.findByProfileID(IDCoder.decodeUUID(id)).stream().map(m -> RCompletePageDTO.toDTO(m.getPage())).collect(Collectors.toList());
+	public List<RCompletePageDTO> findPagesByProfileID(UUID id) {
+		return null;
+//		return rdao.findByProfileID(id).stream().map(m -> RCompletePageDTO.toDTO(m.getPage())).collect(Collectors.toList());
 	}
 	
-	public void save(CProfileDTO profile) {
+	public RProfileDTO save(CProfileDTO profile, Account account) {
 		// Verify if title exists, if exists, may the user want to update the profile
 		if (pdao.findOneByTitle(profile.getTitle()) != null) 
 			throw new RESTRuntimeException("profile.title.exists");
@@ -84,23 +86,31 @@ public class ProfileService {
 			rules.add(rule);
 			page.setRules(rules);
 		}
+
+		model.setWhoCreated(account.getUser());
+		model.setWhoUpdated(account.getUser());
 		model.setRules(rules);
-		pdao.save(model);
-		rdao.save(rules);
+		return RProfileDTO.toDTO(pdao.save(model));
 	}
 	
-	public void update(UProfileDTO profile) {
-		Profile model = pdao.findOne(profile.getModel().getGuid());
+	public RProfileDTO update(UProfileDTO dto, Account account) {
+		Profile	model	= dto.getModel();
+		Profile profile	= pdao.findOne(model.getUuid());
 
-		if (model == null)
+		if (profile == null)
 			throw new RESTRuntimeException("profile.id.notfound");
 		
 		// Verify if title exists in another profile
-		Profile ptitle = pdao.findOneByTitle(profile.getTitle());
-		if (ptitle != null && ptitle.getId() != model.getId())
+		Profile	title	= pdao.findOneByTitle(model.getTitle());
+		if (title != null && title.getId() != profile.getId())
 			throw new RESTRuntimeException("profile.title.exists");
+
+		profile.setActive(model.isActive());
+		profile.setDescription(model.getDescription());
+		profile.setTitle(model.getTitle());
+		profile.setWhoUpdated(account.getUser());
 		
 		// If all OK
-		pdao.update(profile.getModel(), model.getId());
+		return RProfileDTO.toDTO(pdao.save(profile));
 	}
 }

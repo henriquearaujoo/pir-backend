@@ -12,8 +12,12 @@ import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
 public interface IGreetingsRepository extends JpaRepository<Greetings, Long>, PagingAndSortingRepository<Greetings, Long>, QueryDslPredicateExecutor<Greetings>, QuerydslBinderCustomizer<QGreetings> {
+	Greetings findByUuid(UUID uuid);
+
 	@Override
 	default void customize(QuerydslBindings bindings, QGreetings root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

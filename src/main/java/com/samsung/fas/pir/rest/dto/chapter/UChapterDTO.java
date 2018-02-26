@@ -13,6 +13,7 @@ import org.jsondoc.core.annotation.ApiObjectField;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -127,26 +128,21 @@ public class UChapterDTO {
 	@JsonIgnore
 	public Chapter getModel() {
 		Chapter e = new Chapter();
-		e.setId(IDCoder.decodeLong(id));
-		e.setVersion(version);
-		e.setChapter(chapter);
-		e.setContent(content);
-		e.setDescription(description);
-		e.setEstimatedTime(estimatedTime);
-		e.setFamilyTasks(familyTasks);
-		e.setPurpose(purpose);
-		e.setTimeUntilNext(timeUntilNext * 1000 * 3600 * 24);
-		e.setTitle(title);
-		e.setValid(status);
-		e.setResources(resources);
-		e.setSubtitle(subtitle);
-
-		if (medias != null)
-			e.setMedias(medias.stream().map(FileDTO::getModel).collect(Collectors.toSet()));
-
-//		if (thumbnails != null)
-//			e.setThumbnails(thumbnails.stream().map(FileDTO::getModel).collect(Collectors.toSet()));
-
+		e.setUuid(IDCoder.decode(getId()));
+		e.setVersion(getVersion());
+		e.setChapter(getChapter());
+		e.setContent(getContent());
+		e.setDescription(getDescription());
+		e.setEstimatedTime(getEstimatedTime());
+		e.setFamilyTasks(getFamilyTasks());
+		e.setPurpose(getPurpose());
+		e.setTimeUntilNext(getTimeUntilNext() * 1000 * 3600 * 24);
+		e.setTitle(getTitle());
+		e.setValid(isStatus());
+		e.setResources(getResources());
+		e.setSubtitle(getSubtitle());
+		Optional.of(getMedias()).ifPresent(item -> e.setMedias(item.stream().map(FileDTO::getModel).collect(Collectors.toSet())));
+		Optional.of(getThumbnails()).ifPresent(item -> e.setThumbnails(item.stream().map(FileDTO::getModel).collect(Collectors.toSet())));
 		return e;
 	}
 }

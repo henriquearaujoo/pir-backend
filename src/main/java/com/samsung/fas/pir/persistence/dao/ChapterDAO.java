@@ -7,7 +7,6 @@ import com.samsung.fas.pir.persistence.models.entity.Chapter;
 import com.samsung.fas.pir.persistence.models.entity.QChapter;
 import com.samsung.fas.pir.persistence.repository.IChapterRepository;
 import com.samsung.fas.pir.utils.Tools;
-import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,6 +18,7 @@ import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -28,9 +28,13 @@ public class ChapterDAO {
 	private 	EntityManager			emanager;
 
 	@Autowired
-	public ChapterDAO(IChapterRepository repository, EntityManager emanager, DSLContext context) {
+	public ChapterDAO(IChapterRepository repository, EntityManager emanager) {
 		this.repository = repository;
 		this.emanager	= emanager;
+	}
+
+	public Chapter findOne(UUID id) {
+		return repository.findByUuid(id);
 	}
 
 	public Chapter findOne(long id) {

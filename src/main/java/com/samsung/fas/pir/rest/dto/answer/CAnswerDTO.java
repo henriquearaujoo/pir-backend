@@ -32,11 +32,11 @@ public class CAnswerDTO {
 	@JsonIgnore
 	public Answer getModel() {
 		Answer 		a	= new Answer();
-		Question q	= new Question();
+		Question	q	= new Question();
 
-		q.setId(IDCoder.decodeLong(questionID));
+		q.setUuid(IDCoder.decode(getQuestionID()));
 		a.setQuestion(q);
-		a.setDescription(description);
+		a.setDescription(getDescription());
 		return a;
 	}
 }

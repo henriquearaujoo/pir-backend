@@ -54,21 +54,24 @@ public class CPFisDTO extends CUserBaseDTO {
 	@JsonIgnore
 	@Override
 	public User getModel() {
-		IndividualPerson 	user 			= new IndividualPerson();
-		Account				account			= new Account();
+		User 				user 		= new User();
+		IndividualPerson	individual	= new IndividualPerson();
+		Account				account		= new Account();
 
 		account.setEnabled(isActive());
 		account.setUsername(getLogin());
 		account.setPassword(getPassword());
 
-		user.setAddress(getAddressDTO().getModel());
+		individual.setRg(getRg());
+		individual.setCpf(getCpf());
+		individual.setEmitter(getEmitter());
+
+		user.setAddress(getAddress().getModel());
 		user.setAccount(account);
 		user.setName(getName());
 		user.setType(getType());
 		user.setEmail(getEmail());
-		user.setRg(getRg());
-		user.setCpf(getCpf());
-		user.setEmitter(getEmitter());
+		user.setIndividual(individual);
 
 		return user;
 	}

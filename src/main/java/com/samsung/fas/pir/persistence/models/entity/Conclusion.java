@@ -2,63 +2,48 @@ package com.samsung.fas.pir.persistence.models.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.bytecode.internal.javassist.FieldHandled;
-import org.hibernate.bytecode.internal.javassist.FieldHandler;
+import org.hibernate.annotations.*;
 
+import javax.persistence.CascadeType;
 import javax.persistence.*;
-import java.util.HashSet;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity(name = "conclusions")
 @Table(name = "conslusions")
 @DynamicUpdate
 @DynamicInsert
-public class Conclusion implements FieldHandled {
-	private 	FieldHandler	handler;
-
+public class Conclusion {
 	@Getter
 	@Setter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column
 	private		long			id;
+
+	@Getter
+	@Setter
+	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
+	@Generated(GenerationTime.INSERT)
+	private 	UUID 			uuid;
 
 	@Getter
 	@Setter
 	@Column(name = "description", nullable = false, columnDefinition = "TEXT")
 	private 	String			description;
 
+	@Getter
 	@Setter
-	@OneToMany(mappedBy = "conclusion", targetEntity = Question.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "conclusion", cascade = CascadeType.ALL, orphanRemoval = true)
 	private 	Set<Question>	questions;
 
 	@Getter
 	@Setter
-	@OneToOne
-	@JoinColumn(name = "fk_chapter")
+	@OneToOne(optional = false, fetch = FetchType.LAZY)
+	@LazyToOne(LazyToOneOption.PROXY)
+	@JoinColumn(name = "chapter_id")
 	private 	Chapter			chapter;
-
-	public Conclusion() {
-		super();
-		questions = new HashSet<>();
-	}
-
-	public Set<Question> getQuestions() {
-		if (handler != null) {
-			return (Set<Question>) handler.readObject(this, "questions", questions);
-		}
-		return questions;
-	}
-
-	@Override
-	public void setFieldHandler(FieldHandler handler) {
-		this.handler = handler;
-	}
-
-	@Override
-	public FieldHandler getFieldHandler() {
-		return handler;
-	}
 }

@@ -9,13 +9,13 @@ import com.samsung.fas.pir.persistence.models.entity.Conclusion;
 import com.samsung.fas.pir.rest.dto.conclusion.CConclusionDTO;
 import com.samsung.fas.pir.rest.dto.conclusion.RConclusionDTO;
 import com.samsung.fas.pir.rest.dto.conclusion.UConclusionDTO;
-import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,8 +29,8 @@ public class ConclusionService {
 		this.chdao 	= chdao;
 	}
 
-	public RConclusionDTO findOne(String id) {
-		return RConclusionDTO.toDTO(cdao.findOne(IDCoder.decodeLong(id)));
+	public RConclusionDTO findOne(UUID id) {
+		return RConclusionDTO.toDTO(cdao.findOne(id));
 	}
 
 	public List<RConclusionDTO> findAll() {
@@ -69,9 +69,9 @@ public class ConclusionService {
 	}
 
 	public RConclusionDTO update(UConclusionDTO dto) {
-		Conclusion	entity		= dto.getModel();
-		Chapter		chapter		= chdao.findOne(entity.getChapter().getId());
-		Conclusion	persisted	= cdao.findOne(entity.getId());
+		Conclusion	model		= dto.getModel();
+		Chapter		chapter		= chdao.findOne(model.getChapter().getId());
+		Conclusion	conclusion	= cdao.findOne(model.getId());
 
 		// Verify if chapter exists
 		if (chapter == null)
@@ -82,16 +82,16 @@ public class ConclusionService {
 			throw new RESTRuntimeException("chapter.conclusion.isnull");
 
 		// Verify if informed intervention exist
-		if (persisted == null)
+		if (conclusion == null)
 			throw new RESTRuntimeException("chapter.conclusion.notfound");
 
 		// Verify if intervention chapter id is euqal to informed chapter id
-		if (persisted.getChapter().getId() != entity.getChapter().getId())
+		if (conclusion.getChapter().getId() != model.getChapter().getId())
 			throw new RESTRuntimeException("chapter.conclusion.id.differs");
 
 		// Set chapter for greetings
-		entity.setChapter(chapter);
-		chapter.setConclusion(entity);
-		return RConclusionDTO.toDTO(cdao.save(entity));
+		model.setChapter(chapter);
+		chapter.setConclusion(model);
+		return RConclusionDTO.toDTO(cdao.save(model));
 	}
 }

@@ -1,10 +1,16 @@
 package com.samsung.fas.pir.login;
 
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.samsung.fas.pir.login.auth.AuthEntryPoint;
 import com.samsung.fas.pir.login.auth.JWToken;
 import com.samsung.fas.pir.login.auth.TokenAuthenticationFilter;
+import com.samsung.fas.pir.login.firebase.FirebaseAuthenticationFilter;
 import com.samsung.fas.pir.login.rest.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,10 +21,15 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 @Configuration
 @EnableWebSecurity
@@ -27,12 +38,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private	final	AccountService 			service;
 	private	final	AuthEntryPoint 			entry;
 	private	final	JWToken 				token;
+	private final 	ApplicationContext		context;
 
 	@Autowired
-	public SecurityConfiguration(AuthEntryPoint entry, JWToken token, AccountService service, AuthenticationManagerBuilder builder) throws Exception {
+	public SecurityConfiguration(AuthEntryPoint entry, JWToken token, AccountService service, AuthenticationManagerBuilder builder, ApplicationContext context) throws Exception {
 		this.service	= service;
 		this.entry		= entry;
 		this.token		= token;
+		this.context	= context;
 		builder.userDetailsService(this.service);
 	}
 
@@ -42,6 +55,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers("/rest/**").fullyAuthenticated()
 		.and()
 		.addFilterBefore(new TokenAuthenticationFilter(token, service), BasicAuthenticationFilter.class)
+		.addFilterBefore(new FirebaseAuthenticationFilter(), BasicAuthenticationFilter.class)
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
 		.exceptionHandling().authenticationEntryPoint(entry)
@@ -56,10 +70,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) {
 		web.ignoring()
 		.antMatchers(HttpMethod.OPTIONS)
+		.antMatchers(HttpMethod.POST, "/rest/firebase/authentication/**")
 		.antMatchers(HttpMethod.POST, "/rest/authentication/**")
 		.antMatchers(HttpMethod.GET, "/rest/file/**")
-		.antMatchers("/pir/assets/**", "/pir/webjars/**", "/pir/api-docs/**")
-		.antMatchers("/pir/jsondoc/**", "/pir/jsondoc-ui.html");
+		.antMatchers("/assets/**", "/webjars/**", "/api-docs/**")
+		.antMatchers("/jsondoc/**", "/jsondoc-ui.html", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs");
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public FirebaseAuth firebaseAuth() throws IOException {
+		InputStream		input	= context.getResource("classpath:firebase-admin.json").getInputStream();
+		FirebaseOptions	options	= new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(input)).setDatabaseUrl("https://pir-development.firebaseio.com/").build();
+		FirebaseApp.initializeApp(options);
+		return FirebaseAuth.getInstance();
 	}
 
 	@Bean
@@ -70,6 +98,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		config.addAllowedOrigin("*");
 		config.addAllowedHeader("*");
 		config.addExposedHeader("Authorization");
+		config.addExposedHeader("X-Firebase-Auth");
 		config.addAllowedMethod("GET");
 		config.addAllowedMethod("POST");
 		config.addAllowedMethod("PUT");

@@ -49,22 +49,25 @@ public class UPFisDTO extends UUserBaseDTO {
 	@JsonIgnore
 	@Override
 	public User getModel() {
-		IndividualPerson 	user 			= new IndividualPerson();
-		Account 			account			= new Account();
+		User 				user 		= new User();
+		IndividualPerson	individual	= new IndividualPerson();
+		Account 			account		= new Account();
 
 		account.setEnabled(isActive());
 		account.setUsername(getLogin());
 		account.setPassword(getPassword());
 
-		user.setGuid(IDCoder.decodeUUID(getId()));
+		individual.setRg(getRg());
+		individual.setCpf(getCpf());
+		individual.setEmitter(getEmitter());
+
+		user.setUuid(IDCoder.decode(getId()));
 		user.setAddress(getAddressDTO().getModel());
 		user.setAccount(account);
 		user.setName(getName());
 		user.setType(getType());
 		user.setEmail(getEmail());
-		user.setRg(getRg());
-		user.setCpf(getCpf());
-		user.setEmitter(getEmitter());
+		user.setIndividual(individual);
 
 		return user;
 	}

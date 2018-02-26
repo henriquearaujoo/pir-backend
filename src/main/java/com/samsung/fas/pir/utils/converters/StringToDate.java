@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Configuration
-public class StringLongToDate implements Converter<String, Date> {
+public class StringToDate implements Converter<String, Date> {
 	@Override
 	public Date convert(String source) {
 		try {
