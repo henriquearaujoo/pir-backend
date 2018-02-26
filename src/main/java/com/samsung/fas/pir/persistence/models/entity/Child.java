@@ -114,7 +114,7 @@ public class Child {
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false)
+	@ManyToOne
 	@JoinColumn
 	private 	Mother			mother;
 

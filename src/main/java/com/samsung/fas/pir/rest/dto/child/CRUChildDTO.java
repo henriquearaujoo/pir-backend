@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.rest.dto.child;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,7 +10,6 @@ import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Min;
@@ -125,7 +125,6 @@ public class CRUChildDTO {
 	@Getter
 	@Setter
 	@JsonProperty("mohter_id")
-	@NotBlank(message = "mother.id.missing")
 	private 	String			motherID;
 
 	public CRUChildDTO() {

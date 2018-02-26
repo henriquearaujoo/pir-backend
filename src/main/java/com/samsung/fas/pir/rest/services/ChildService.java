@@ -8,16 +8,13 @@ import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
 import com.samsung.fas.pir.persistence.models.entity.Child;
 import com.samsung.fas.pir.persistence.models.entity.Mother;
 import com.samsung.fas.pir.persistence.models.entity.Responsible;
-import com.samsung.fas.pir.persistence.models.enums.EChildGender;
 import com.samsung.fas.pir.rest.dto.child.CRUChildDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class ChildService extends BService<Child, CRUChildDTO, CRUChildDTO, CRUChildDTO, ChildDAO, Long> {
@@ -35,7 +32,7 @@ public class ChildService extends BService<Child, CRUChildDTO, CRUChildDTO, CRUC
 	public CRUChildDTO save(CRUChildDTO create, Account account) {
 		Child		model		= create.getModel();
 		Responsible	responsible	= Optional.ofNullable(rdao.findOne(IDCoder.decode(create.getResponsibleID()))).orElseThrow(() -> new RESTRuntimeException("responsible.notfound"));
-		Mother		mother		= responsible.getMother() != null? responsible.getMother() : Optional.ofNullable(mdao.findOne(IDCoder.decode(create.getMotherID()))).orElseThrow(() -> new RESTRuntimeException("mother.notfound"));
+		Mother		mother		= model.getMother() != null? responsible.getMother() : create.getMotherID() != null && !create.getMotherID().trim().isEmpty()? Optional.ofNullable(mdao.findOne(IDCoder.decode(create.getMotherID()))).orElseThrow(() -> new RESTRuntimeException("mother.notfound")) : null;
 
 		model.setMother(mother);
 		model.setResponsible(responsible);
@@ -48,7 +45,7 @@ public class ChildService extends BService<Child, CRUChildDTO, CRUChildDTO, CRUC
 		Child		model		= update.getModel();
 		Child		child		= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("child.id.missing")))).orElseThrow(() -> new RESTRuntimeException("child.notfound"));
 		Responsible	responsible	= Optional.ofNullable(rdao.findOne(IDCoder.decode(update.getResponsibleID()))).orElseThrow(() -> new RESTRuntimeException("responsible.notfound"));
-		Mother		mother		= responsible.getMother() != null? responsible.getMother() : Optional.ofNullable(mdao.findOne(IDCoder.decode(update.getMotherID()))).orElseThrow(() -> new RESTRuntimeException("mother.notfound"));
+		Mother		mother		= model.getMother() != null? responsible.getMother() : update.getMotherID() != null && !update.getMotherID().trim().isEmpty()? Optional.ofNullable(mdao.findOne(IDCoder.decode(update.getMotherID()))).orElseThrow(() -> new RESTRuntimeException("mother.notfound")) : null;
 
 		child.setName(model.getName());
 		child.setFatherName(model.getFatherName());
