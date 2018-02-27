@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
@@ -92,15 +93,15 @@ public class Chapter {
 
 	@Getter
 	@Setter
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "chapter_id")
-	private 	Set<MDataFile>	medias;
+	@OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
+	@JoinColumn(name = "media")
+	private 	Collection<MDataFile>	medias;
 
 	@Getter
 	@Setter
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "chapter_id")
-	private 	Set<MDataFile>	thumbnails;
+	@OneToMany(orphanRemoval = true)
+	@JoinColumn(name = "thumbnail")
+	private 	Collection<MDataFile>	thumbnails;
 
 	@Getter
 	@Setter

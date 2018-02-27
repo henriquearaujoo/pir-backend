@@ -4,6 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.models.entity.Chapter;
+import com.samsung.fas.pir.persistence.models.entity.MDataFile;
 import com.samsung.fas.pir.rest.dto.chapter.CChapterDTO;
 import com.samsung.fas.pir.rest.dto.chapter.RChapterDTO;
 import com.samsung.fas.pir.rest.dto.chapter.UChapterDTO;
@@ -130,9 +131,9 @@ public class ChapterService {
 		chapter.setTimeUntilNext(model.getTimeUntilNext());
 		chapter.setValid(model.isValid());
 		chapter.getMedias().clear();
-		chapter.getThumbnails().clear();
-		chapter.getMedias().addAll(model.getMedias() != null? model.getMedias() : new ArrayList<>());
-		chapter.getThumbnails().addAll(model.getThumbnails() != null? model.getThumbnails() : new ArrayList<>());
+//		chapter.getThumbnails().clear();
+		chapter.getMedias().addAll(model.getMedias());
+//		chapter.getThumbnails().addAll(model.getThumbnails());
 		return RChapterDTO.toDTO(cdao.save(chapter));
 	}
 }
