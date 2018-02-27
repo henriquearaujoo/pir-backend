@@ -51,7 +51,7 @@ public class ConclusionService {
 
 	public RConclusionDTO save(CConclusionDTO dto) {
 		Conclusion 	entity		= dto.getModel();
-		Chapter 	chapter		= chdao.findOne(entity.getChapter().getId());
+		Chapter 	chapter		= chdao.findOne(entity.getChapter().getUuid());
 
 		// Verify if chapter exists
 		if (chapter == null)

@@ -45,7 +45,7 @@ public class RConclusionDTO {
 		setId(IDCoder.encode(e.getUuid()));
 		setDescription(e.getDescription());
 		setChapter(IDCoder.encode(e.getChapter().getUuid()));
-		Optional.of(e.getQuestions()).ifPresent(item -> setQuestions(item.stream().map(RQuestionDTO::toDTO).collect(Collectors.toSet())));
+		setQuestions(e.getQuestions() != null? e.getQuestions().stream().map(RQuestionDTO::toDTO).collect(Collectors.toSet()) : null);
 	}
 
 	public static RConclusionDTO toDTO(Conclusion e) {

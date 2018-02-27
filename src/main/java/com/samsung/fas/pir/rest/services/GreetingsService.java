@@ -51,7 +51,7 @@ public class GreetingsService {
 
 	public RGreetingsDTO save(CGreetingsDTO dto) {
 		Greetings	model		= dto.getModel();
-		Chapter		chapter		= cdao.findOne(model.getChapter().getId());
+		Chapter		chapter		= cdao.findOne(model.getChapter().getUuid());
 
 		// Verify if chapter exists
 		if (chapter == null)

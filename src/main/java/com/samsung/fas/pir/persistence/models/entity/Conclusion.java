@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity(name = "conclusions")
+@Entity
 @Table(name = "conslusions")
 @DynamicUpdate
 @DynamicInsert
@@ -37,13 +37,12 @@ public class Conclusion {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "conclusion", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "conclusion", orphanRemoval = true)
 	private 	Set<Question>	questions;
 
 	@Getter
 	@Setter
 	@OneToOne(optional = false, fetch = FetchType.LAZY)
-	@LazyToOne(LazyToOneOption.PROXY)
-	@JoinColumn(name = "chapter_id")
+	@JoinColumn
 	private 	Chapter			chapter;
 }
