@@ -67,7 +67,7 @@ public class QuestionService {
 
 	public RQuestionDTO save(CQuestionDTO dto) {
 		Question		model		= dto.getModel();
-		Conclusion		centity		= cdao.findOne(model.getConclusion().getId());
+		Conclusion		centity		= cdao.findOne(model.getConclusion().getUuid());
 
 		// If there's no conclusion with given id
 		if (centity == null)

@@ -53,7 +53,7 @@ public class RQuestionDTO {
 		setType(e.getType());
 		setDescription(e.getDescription());
 		setConclusion(IDCoder.encode(e.getConclusion().getUuid()));
-		Optional.of(e.getAnswers()).ifPresent(item -> setAnswers(item.stream().map(RAnswerDTO::toDTO).collect(Collectors.toSet())));
+		setAnswers(e.getAnswers() != null? e.getAnswers().stream().map(RAnswerDTO::toDTO).collect(Collectors.toSet()) : null);
 	}
 
 	public static RQuestionDTO toDTO(Question e) {

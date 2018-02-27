@@ -26,6 +26,7 @@ public interface IConclusionRepository extends JpaRepository<Conclusion, Long>, 
 		bindings.bind(root.chapter.valid).as("chapter_status").withDefaultBinding();
 		bindings.bind(root.chapter.title).as("chapter_title").withDefaultBinding();
 		bindings.bind(root.chapter.id).as("chapter_id").withDefaultBinding();
+		bindings.bind(root.uuid).as("id").withDefaultBinding();
 		bindings.excluding(
 				root.id,
 				root.description,
