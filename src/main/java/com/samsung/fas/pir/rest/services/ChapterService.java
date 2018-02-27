@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -128,8 +129,10 @@ public class ChapterService {
 		chapter.setEstimatedTime(model.getEstimatedTime());
 		chapter.setTimeUntilNext(model.getTimeUntilNext());
 		chapter.setValid(model.isValid());
-		chapter.setMedias(model.getMedias());
-		chapter.setThumbnails(model.getThumbnails());
-		return RChapterDTO.toDTO(cdao.save(model));
+		chapter.getMedias().clear();
+		chapter.getThumbnails().clear();
+		chapter.getMedias().addAll(model.getMedias() != null? model.getMedias() : new ArrayList<>());
+		chapter.getThumbnails().addAll(model.getThumbnails() != null? model.getThumbnails() : new ArrayList<>());
+		return RChapterDTO.toDTO(cdao.save(chapter));
 	}
 }
