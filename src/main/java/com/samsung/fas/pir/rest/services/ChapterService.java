@@ -130,10 +130,12 @@ public class ChapterService {
 		chapter.setEstimatedTime(model.getEstimatedTime());
 		chapter.setTimeUntilNext(model.getTimeUntilNext());
 		chapter.setValid(model.isValid());
-		chapter.getMedias().clear();
-//		chapter.getThumbnails().clear();
-		chapter.getMedias().addAll(model.getMedias());
-//		chapter.getThumbnails().addAll(model.getThumbnails());
+		if (model.getMedias() != null) {
+			if (chapter.getMedias() == null)
+				chapter.setMedias(new ArrayList<>());
+			chapter.getMedias().clear();
+			chapter.getMedias().addAll(model.getMedias());
+		}
 		return RChapterDTO.toDTO(cdao.save(chapter));
 	}
 }
