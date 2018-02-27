@@ -84,8 +84,8 @@ public class QuestionService {
 
 	public RQuestionDTO update(UQuestionDTO dto) {
 		Question		model		= dto.getModel();
-		Question		question	= qdao.findOne(model.getId());
-		Conclusion		conclusion	= cdao.findOne(model.getConclusion().getId());
+		Question		question	= qdao.findOne(model.getUuid());
+		Conclusion		conclusion	= cdao.findOne(model.getConclusion().getUuid());
 
 		if (question == null)
 			throw new RESTRuntimeException("question.notfound");

@@ -71,8 +71,8 @@ public class InterventionService {
 
 	public RInterventionDTO update(UInterventionDTO dto) {
 		Intervention	model			= dto.getModel();
-		Intervention	intervention	= idao.findOne(model.getId());
-		Chapter			chapter			= cdao.findOne(model.getChapter().getId());
+		Intervention	intervention	= idao.findOne(model.getUuid());
+		Chapter			chapter			= cdao.findOne(model.getChapter().getUuid());
 
 		// Verify if chapter exists
 		if (chapter == null)
@@ -87,7 +87,7 @@ public class InterventionService {
 			throw new RESTRuntimeException("chapter.intervention.notfound");
 
 		// Verify if intervention chapter id is euqal to informed chapter id
-		if (intervention.getChapter().getId() != model.getChapter().getId())
+		if (intervention.getChapter().getUuid().compareTo(model.getChapter().getUuid()) != 0)
 			throw new RESTRuntimeException("chapter.intervention.id.differs");
 
 		// Set chapter for intervention

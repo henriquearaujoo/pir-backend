@@ -92,13 +92,13 @@ public class Chapter {
 
 	@Getter
 	@Setter
-	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "chapter_id")
 	private 	Set<MDataFile>	medias;
 
 	@Getter
 	@Setter
-	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "chapter_id")
 	private 	Set<MDataFile>	thumbnails;
 

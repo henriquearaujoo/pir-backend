@@ -70,8 +70,8 @@ public class ConclusionService {
 
 	public RConclusionDTO update(UConclusionDTO dto) {
 		Conclusion	model		= dto.getModel();
-		Chapter		chapter		= chdao.findOne(model.getChapter().getId());
-		Conclusion	conclusion	= cdao.findOne(model.getId());
+		Chapter		chapter		= chdao.findOne(model.getChapter().getUuid());
+		Conclusion	conclusion	= cdao.findOne(model.getUuid());
 
 		// Verify if chapter exists
 		if (chapter == null)
@@ -86,12 +86,12 @@ public class ConclusionService {
 			throw new RESTRuntimeException("chapter.conclusion.notfound");
 
 		// Verify if intervention chapter id is euqal to informed chapter id
-		if (conclusion.getChapter().getId() != model.getChapter().getId())
+		if (conclusion.getChapter().getUuid().compareTo(model.getChapter().getUuid()) != 0)
 			throw new RESTRuntimeException("chapter.conclusion.id.differs");
 
 		// Set chapter for greetings
-		model.setChapter(chapter);
-		chapter.setConclusion(model);
-		return RConclusionDTO.toDTO(cdao.save(model));
+		conclusion.setDescription(model.getDescription());
+		conclusion.setChapter(chapter);
+		return RConclusionDTO.toDTO(cdao.save(conclusion));
 	}
 }
