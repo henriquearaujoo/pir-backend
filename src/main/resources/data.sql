@@ -2,7 +2,9 @@
 INSERT INTO pirdb.public.pages (title_url, url_path)
 VALUES ('user-list', 'user-list'), ('profile-list', 'profile-list'), ('user', 'user'), ('user-edit', 'user-edit'),
 ('user-details', 'user-details'), ('page-list', 'page-list'), ('template-chapter', 'template-chapter'),
-('chapter-dashboard',	'chapter-dashboard')
+('chapter-dashboard',	'chapter-dashboard'), ('community-list', 'community-list'), ('community', 'community'),
+('mother', 'mother'), ('mother-list', 'mother-list'), ('child-list', 'child-list'),
+	('responsible-list', 'responsible-list'), ('responsible', 'responsible'), ('child', 'child')
 ON CONFLICT DO NOTHING;
 
 /* User */

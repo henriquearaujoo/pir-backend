@@ -68,6 +68,8 @@ public class CommunityService extends BService<Community, CCommunityDTO, RCommun
 		community.hasCommunityLeaders(model.hasCommunityLeaders());
 		community.setCommunityZone(model.getCommunityZone());
 		community.setCity(city);
+		community.setUc(model.getUc());
+		community.setRegional(model.getRegional());
 
 		return new RCommunityDTO(dao.save(community));
 	}

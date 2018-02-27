@@ -149,6 +149,7 @@ public class UsersService {
 		// All above conditions are satisfied
 		entity.setEmail(model.getEmail());
 		entity.setName(model.getName());
+		entity.getAccount().setUsername(dto.getLogin());
 		entity.getAccount().setProfile(profile);
 		entity.getAddress().setCity(city);
 		entity.getAccount().setEnabled(dto.isActive());
