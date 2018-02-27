@@ -86,7 +86,7 @@ public class AnswerService {
 
 	public RAnswerDTO update(UAnswerDTO dto) {
 		Answer		model		= dto.getModel();
-		Answer		answer		= adao.findOne(model.getId());
+		Answer		answer		= adao.findOne(model.getUuid());
 		Question	question	= qdao.findOne(model.getQuestion().getUuid());
 
 		// If no entity with given id
