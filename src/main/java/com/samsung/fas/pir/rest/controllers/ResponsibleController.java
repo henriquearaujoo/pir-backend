@@ -5,6 +5,7 @@ import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
 import com.samsung.fas.pir.persistence.models.entity.Responsible;
 import com.samsung.fas.pir.rest.controllers.base.BController;
 import com.samsung.fas.pir.rest.dto.responsible.CRUResponsibleDTO;
+import com.samsung.fas.pir.rest.services.ResponsibleService;
 import com.samsung.fas.pir.rest.services.base.BService;
 import org.jsondoc.core.annotation.ApiPathParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,30 @@ public class ResponsibleController extends BController<Responsible, CRUResponsib
 		super(service);
 	}
 
+	@RequestMapping(method= RequestMethod.GET, path = "/responsibles")
+	@ResponseBody
+	public ResponseEntity<?> findAllResponsbiles() {
+		return ResponseEntity.ok(((ResponsibleService) service).findAllResponsible());
+	}
+
+	@RequestMapping(method= RequestMethod.GET, path = "/responsibles/page")
+	@ResponseBody
+	public ResponseEntity<?> findAllResponsbiles(Pageable pageable) {
+		return ResponseEntity.ok(((ResponsibleService) service).findAllResponsible(pageable));
+	}
+
+	@RequestMapping(method= RequestMethod.GET, path = "/responsibles/search")
+	@ResponseBody
+	public ResponseEntity<?> findAllResponsbiles(@QuerydslPredicate(root = Responsible.class) Predicate predicate) {
+		return ResponseEntity.ok(((ResponsibleService) service).findAllResponsible(predicate));
+	}
+
+	@RequestMapping(method= RequestMethod.GET, path = "/responsibles/search/page")
+	@ResponseBody
+	public ResponseEntity<?> findAllResponsbiles(@QuerydslPredicate(root = Responsible.class) Predicate predicate, Pageable pageable) {
+		return ResponseEntity.ok(((ResponsibleService) service).findAllResponsible(pageable, predicate));
+	}
+
 	@RequestMapping(method= RequestMethod.GET, path = "/search")
 	@ResponseBody
 	public ResponseEntity<?> search(@QuerydslPredicate(root = Responsible.class) Predicate predicate) {
@@ -35,7 +60,7 @@ public class ResponsibleController extends BController<Responsible, CRUResponsib
 
 	@RequestMapping(method= RequestMethod.GET, path = "/search/page")
 	@ResponseBody
-	public ResponseEntity<?> search(@QuerydslPredicate(root = Responsible.class) Predicate predicate, @ApiPathParam Pageable pageable) {
+	public ResponseEntity<?> search(@QuerydslPredicate(root = Responsible.class) Predicate predicate, Pageable pageable) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable));
 	}
 }

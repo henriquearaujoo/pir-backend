@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.rest.services;
 
+import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.CommunityDAO;
@@ -10,13 +11,33 @@ import com.samsung.fas.pir.rest.dto.responsible.CRUResponsibleDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ResponsibleService extends BService<Responsible, CRUResponsibleDTO, CRUResponsibleDTO, CRUResponsibleDTO, ResponsibleDAO, Long> {
 	private		CommunityDAO		cdao;
+
+	public Collection<CRUResponsibleDTO> findAllResponsible() {
+		return dao.findAllResponsible().stream().map(CRUResponsibleDTO::new).collect(Collectors.toSet());
+	}
+
+	public Collection<CRUResponsibleDTO> findAllResponsible(Predicate predicate) {
+		return dao.findAllResponsible(predicate).stream().map(CRUResponsibleDTO::new).collect(Collectors.toSet());
+	}
+
+	public Page<CRUResponsibleDTO> findAllResponsible(Pageable pageable) {
+		return dao.findAllResponsible(pageable).map(CRUResponsibleDTO::new);
+	}
+
+	public Page<CRUResponsibleDTO> findAllResponsible(Pageable pageable, Predicate predicate) {
+		return dao.findAllResponsible(predicate, pageable).map(CRUResponsibleDTO::new);
+	}
 
 	@Autowired
 	public ResponsibleService(ResponsibleDAO dao, CommunityDAO cdao) {
