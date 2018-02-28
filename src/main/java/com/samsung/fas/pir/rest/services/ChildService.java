@@ -60,6 +60,7 @@ public class ChildService extends BService<Child, CRUChildDTO, CRUChildDTO, CRUC
 		child.setVacinationUpToDate(model.isVacinationUpToDate());
 		child.setRelationDifficulties(model.isHasEducationDifficulty());
 		child.setResponsible(responsible);
+		child.setBirth(model.getBirth());
 		child.setMother(mother);
 
 		return new CRUChildDTO(dao.save(child));
