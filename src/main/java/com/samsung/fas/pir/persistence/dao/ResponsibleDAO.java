@@ -39,7 +39,7 @@ public class ResponsibleDAO extends BaseDAO<Responsible, Long, QResponsible> {
 		JPAQuery<Mother>		motherQuery			= new JPAQuery<>(emanager);
 		QResponsible 			responsible			= QResponsible.responsible;
 		QMother					mother				= QMother.mother;
-		return responsibleQuery.from(responsible).where(responsible.id.notIn(motherQuery.from(mother).select(mother.id))).fetch();
+		return responsibleQuery.from(responsible).where(responsible.id.notIn(motherQuery.from(mother).select(mother.id)).and(predicate)).fetch();
 	}
 
 	public Page<Responsible> findAllResponsible(Pageable pageable) {
@@ -53,7 +53,7 @@ public class ResponsibleDAO extends BaseDAO<Responsible, Long, QResponsible> {
 		PathBuilder<Responsible> 	entityPath 	= new PathBuilder<>(Responsible.class, "responsible");
 		QResponsible				responsible	= QResponsible.responsible;
 		QMother						mother		= QMother.mother;
-		JPAQuery<Responsible>		result		= jpaquery.from(responsible).where(responsible.id.notIn(motherQuery.from(mother).select(mother.id)));
+		JPAQuery<Responsible>		result		= jpaquery.from(responsible).where(responsible.id.notIn(motherQuery.from(mother).select(mother.id)).and(predicate));
 		Query						query		= Tools.setupPage(result, pageable, entityPath);
 
 		try {
