@@ -9,8 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.UUID;
 
-@Entity(name = "answers")
-@Table(name = "answers")
+@Entity
+@Table(name = "answers", uniqueConstraints = @UniqueConstraint(columnNames = {"description", "question_id"}, name = "answer"))
 @DynamicUpdate
 @DynamicInsert
 public class Answer {
@@ -30,12 +30,12 @@ public class Answer {
 
 	@Getter
 	@Setter
-	@Column(name = "description", nullable = false, columnDefinition = "TEXT")
+	@Column(nullable = false, columnDefinition = "citext")
 	private 	String			description;
 
 	@Getter
 	@Setter
 	@ManyToOne
-	@JoinColumn(name="question_id")
+	@JoinColumn
 	private 	Question		question;
 }

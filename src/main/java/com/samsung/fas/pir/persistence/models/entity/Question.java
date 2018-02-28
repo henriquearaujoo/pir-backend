@@ -12,8 +12,8 @@ import javax.persistence.Table;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity(name = "questions")
-@Table(name = "questions")
+@Entity
+@Table(name = "questions", uniqueConstraints = @UniqueConstraint(columnNames = {"conclusion_id", "description"}, name = "question"))
 @DynamicUpdate
 @DynamicInsert
 public class Question {
@@ -33,7 +33,7 @@ public class Question {
 
 	@Getter
 	@Setter
-	@Column(name = "description", nullable = false, columnDefinition = "TEXT")
+	@Column(name = "description", nullable = false, columnDefinition = "citext")
 	private 	String			description;
 
 	@Getter
@@ -43,14 +43,13 @@ public class Question {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "question", targetEntity = Answer.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private 	Set<Answer>		answers;
 
 	@Getter
 	@Setter
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name="conclusion_fk")
-	@LazyToOne(LazyToOneOption.PROXY)
+	@JoinColumn
 	private 	Conclusion		conclusion;
 }

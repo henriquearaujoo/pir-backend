@@ -1,27 +1,11 @@
 package com.samsung.fas.pir.persistence.dao;
 
+import com.samsung.fas.pir.persistence.dao.base.BaseDAO;
 import com.samsung.fas.pir.persistence.models.entity.Page;
-import com.samsung.fas.pir.persistence.repository.IPageRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.samsung.fas.pir.persistence.models.entity.QPage;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
-
 @Service
-public class PageDAO {
-	private 	IPageRepository 		repository;
-
-	@Autowired
-	public PageDAO(IPageRepository repository) {
-		this.repository = repository;
-	}
-
-	public List<Page> findAll() {
-		return repository.findAll();
-	}
-
-	public Page findOne(UUID id) {
-		return repository.findOneByUuid(id);
-	}
+public class PageDAO extends BaseDAO<Page, Long, QPage> {
+	//
 }

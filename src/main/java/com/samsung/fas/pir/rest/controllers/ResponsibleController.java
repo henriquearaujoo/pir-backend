@@ -20,10 +20,10 @@ import javax.ws.rs.core.MediaType;
 
 @Controller
 @RequestMapping(value = "/rest/responsible", produces = MediaType.APPLICATION_JSON)
-public class ResponsibleController extends BController<Responsible, CRUResponsibleDTO, CRUResponsibleDTO, CRUResponsibleDTO, ResponsibleDAO> {
+public class ResponsibleController extends BController<Responsible, CRUResponsibleDTO, ResponsibleDAO> {
 
 	@Autowired
-	public ResponsibleController(BService<Responsible, CRUResponsibleDTO, CRUResponsibleDTO, CRUResponsibleDTO, ResponsibleDAO, Long> service) {
+	public ResponsibleController(BService<Responsible, CRUResponsibleDTO, ResponsibleDAO, Long> service) {
 		super(service);
 	}
 

@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "chapter", uniqueConstraints = @UniqueConstraint(columnNames= {"number", "version"}))
+@Table(name = "chapter", uniqueConstraints = @UniqueConstraint(columnNames= {"number", "version"}, name = "chapter"))
 @DynamicUpdate
 @DynamicInsert
 public class Chapter {

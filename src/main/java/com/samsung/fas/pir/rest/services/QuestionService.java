@@ -1,106 +1,50 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
-import com.samsung.fas.pir.persistence.dao.ChapterDAO;
+import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.ConclusionDAO;
 import com.samsung.fas.pir.persistence.dao.QuestionDAO;
 import com.samsung.fas.pir.persistence.models.entity.Conclusion;
 import com.samsung.fas.pir.persistence.models.entity.Question;
-import com.samsung.fas.pir.rest.dto.question.CQuestionDTO;
-import com.samsung.fas.pir.rest.dto.question.RQuestionDTO;
-import com.samsung.fas.pir.rest.dto.question.UQuestionDTO;
+import com.samsung.fas.pir.rest.dto.question.CRUQuestionDTO;
+import com.samsung.fas.pir.rest.services.base.BService;
+import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
-public class QuestionService {
-	private QuestionDAO 	qdao;
+public class QuestionService extends BService<Question, CRUQuestionDTO, QuestionDAO, Long> {
 	private ConclusionDAO	cdao;
-	private ChapterDAO		chdao;
 
 	@Autowired
-	public QuestionService(QuestionDAO qdao, ConclusionDAO cdao, ChapterDAO chdao) {
-		this.qdao 	= qdao;
-		this.cdao	= cdao;
-		this.chdao	= chdao;
+	public QuestionService(QuestionDAO dao, ConclusionDAO cdao) {
+		super(dao, Question.class, CRUQuestionDTO.class);
+		this.cdao = cdao;
 	}
 
-	public RQuestionDTO findOne(UUID id) {
-		return RQuestionDTO.toDTO(qdao.findOne(id));
+	@Override
+	public CRUQuestionDTO save(CRUQuestionDTO create, Account account) {
+		Question		model			= create.getModel();
+		UUID			conclusionID	= Optional.ofNullable(create.getConclusionID() != null && !create.getConclusionID().trim().isEmpty()? IDCoder.decode(create.getConclusionID()) : null).orElseThrow(() -> new RESTRuntimeException("conclusion.id.missing"));
+		Conclusion		conclusion		= Optional.ofNullable(cdao.findOne(conclusionID)).orElseThrow(() -> new RESTRuntimeException("conclusion.notfound"));
+
+		model.setConclusion(conclusion);
+		conclusion.getQuestions().add(model);
+
+		return new CRUQuestionDTO(dao.save(model));
 	}
 
-	public List<RQuestionDTO> findAll() {
-		return qdao.findAll().stream().map(RQuestionDTO::toDTO).collect(Collectors.toList());
-	}
+	@Override
+	public CRUQuestionDTO update(CRUQuestionDTO update, Account account) {
+		Question		model		= update.getModel();
+		Question		question	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("question.notfound"));
 
-	public List<RQuestionDTO> findAll(Predicate predicate) {
-		return qdao.findAll(predicate).stream().map(RQuestionDTO::toDTO).collect(Collectors.toList());
-	}
-
-	public Page<RQuestionDTO> findAll(Pageable pageable) {
-		return qdao.findAll(pageable).map(RQuestionDTO::toDTO);
-	}
-
-	public Page<RQuestionDTO> findAll(Predicate predicate, Pageable pageable) {
-		return qdao.findAll(predicate, pageable).map(RQuestionDTO::toDTO);
-	}
-
-	public void delete(UUID id) {
-		Question question = qdao.findOne(id);
-
-		if (question != null) {
-			Conclusion conclusion = question.getConclusion();
-			qdao.delete(question.getId());
-
-			if (conclusion.getQuestions().size() == 0) {
-				chdao.invalidateOne(conclusion.getChapter().getId());
-			}
-		}
-	}
-
-	public RQuestionDTO save(CQuestionDTO dto) {
-		Question		model		= dto.getModel();
-		Conclusion		centity		= cdao.findOne(model.getConclusion().getId());
-
-		// If there's no conclusion with given id
-		if (centity == null)
-			throw new RESTRuntimeException("question.conclusion.notfound");
-
-		// If same question exists
-		if (centity.getQuestions().stream().filter(item -> item.getDescription().equalsIgnoreCase(model.getDescription())).findAny().orElse(null) != null)
-			throw new RESTRuntimeException("question.exists");
-
-		model.setConclusion(centity);
-		centity.getQuestions().add(model);
-		return RQuestionDTO.toDTO(qdao.save(model));
-	}
-
-	public RQuestionDTO update(UQuestionDTO dto) {
-		Question		model		= dto.getModel();
-		Question		question	= qdao.findOne(model.getId());
-		Conclusion		conclusion	= cdao.findOne(model.getConclusion().getId());
-
-		if (question == null)
-			throw new RESTRuntimeException("question.notfound");
-
-		if (conclusion == null)
-			throw new RESTRuntimeException("question.conclusion.notfound");
-
-		Question		exists		= conclusion.getQuestions().stream().filter(item -> item.getDescription().equalsIgnoreCase(model.getDescription())).findAny().orElse(null);
-		if (exists != null)
-			if (exists.getId() != model.getId())
-				throw new RESTRuntimeException("question.exists");
-
-		question.setConclusion(conclusion);
 		question.setDescription(model.getDescription());
 		question.setType(model.getType());
-		return RQuestionDTO.toDTO(qdao.save(question));
+
+		return new CRUQuestionDTO(dao.save(question));
 	}
 }

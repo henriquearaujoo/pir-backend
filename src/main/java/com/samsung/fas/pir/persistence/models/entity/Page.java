@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "pages")
+@Table(name = "pages", uniqueConstraints = @UniqueConstraint(columnNames = "title_url", name = "title"))
 @DynamicUpdate
 @DynamicInsert
 public class Page {
@@ -31,23 +31,13 @@ public class Page {
 	
 	@Setter
 	@Getter
-	@Column(name="title_url", nullable=false, unique=true)
+	@Column(name="title_url", nullable=false)
 	private		String			title;
 
 	@Setter
 	@Getter
 	@Column(name="url_path", nullable=false)
 	private		String			url;
-	
-//	@Setter
-//	@Getter
-//	@Column(name="created_by", updatable=false, nullable=false)
-//	private		User			whoCreated;
-//	
-//	@Setter
-//	@Getter
-//	@Column(name="updated_by", nullable=false)
-//	private		User			whoUpdated;
 	
 	@Getter
 	@Setter

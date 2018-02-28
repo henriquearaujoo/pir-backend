@@ -2,108 +2,73 @@ package com.samsung.fas.pir.rest.services;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
+import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.models.entity.Chapter;
-import com.samsung.fas.pir.rest.dto.chapter.CChapterDTO;
-import com.samsung.fas.pir.rest.dto.chapter.RChapterDTO;
-import com.samsung.fas.pir.rest.dto.chapter.UChapterDTO;
+import com.samsung.fas.pir.rest.dto.chapter.CRUChapterDTO;
+import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class ChapterService {
-	private	final	ChapterDAO		cdao;
-
+public class ChapterService extends BService<Chapter, CRUChapterDTO, ChapterDAO, Long> {
 	@Autowired
-	public ChapterService(ChapterDAO cdao) {
-		this.cdao = cdao;
+	public ChapterService(ChapterDAO dao) {
+		super(dao, Chapter.class, CRUChapterDTO.class);
 	}
 
-	public RChapterDTO findOne(UUID id) {
-		return RChapterDTO.toDTO(cdao.findOne(id));
+	public Collection<CRUChapterDTO> findAllValid() {
+		return dao.findAllValid().stream().map(CRUChapterDTO::new).collect(Collectors.toSet());
 	}
 
-	public List<RChapterDTO> findAll() {
-		return cdao.findAll().stream().map(RChapterDTO::toDTO).collect(Collectors.toList());
+	public Collection<CRUChapterDTO> findAllValid(Predicate predicate) {
+		return dao.findAllValid(predicate).stream().map(CRUChapterDTO::new).collect(Collectors.toSet());
 	}
 
-	public List<RChapterDTO> findAllValid() {
-		return cdao.findAllValid().stream().map(RChapterDTO::toDTO).collect(Collectors.toList());
+	public Collection<CRUChapterDTO> findAllInvalid() {
+		return dao.findAllInvalid().stream().map(CRUChapterDTO::new).collect(Collectors.toSet());
 	}
 
-	public List<RChapterDTO> findAllValid(Predicate predicate) {
-		return cdao.findAllValid(predicate).stream().map(RChapterDTO::toDTO).collect(Collectors.toList());
+	public Page<CRUChapterDTO> findAllValid(Pageable pageable) {
+		return dao.findAllValid(pageable).map(CRUChapterDTO::new);
 	}
 
-	public List<RChapterDTO> findAllInvalid() {
-		return cdao.findAllInvalid().stream().map(RChapterDTO::toDTO).collect(Collectors.toList());
+	public Page<CRUChapterDTO> findAllValid(Pageable pageable, Predicate predicate) {
+		return dao.findAllValid(predicate, pageable).map(CRUChapterDTO::new);
 	}
 
-	public List<RChapterDTO> findAll(Predicate predicate) {
-		return cdao.findAll(predicate).stream().map(RChapterDTO::toDTO).collect(Collectors.toList());
+	public Page<CRUChapterDTO> findAllInvalid(Pageable pageable) {
+		return dao.findAllInvalid(pageable).map(CRUChapterDTO::new);
 	}
 
-	public Page<RChapterDTO> findAll(Pageable pageable) {
-		return cdao.findAll(pageable).map(RChapterDTO::toDTO);
+	public Page<CRUChapterDTO> findAllInvalid(Pageable pageable, Predicate predicate) {
+		return dao.findAllInvalid(predicate, pageable).map(CRUChapterDTO::new);
 	}
 
-	public Page<RChapterDTO> findAll(Predicate predicate, Pageable pageable) {
-		return cdao.findAll(predicate, pageable).map(RChapterDTO::toDTO);
-	}
+	@Override
+	public CRUChapterDTO save(CRUChapterDTO create, Account account) {
+		Chapter			model		= create.getModel();
+		List<Chapter>	versions	= new ArrayList<>(dao.findAllByChapter(create.getChapter()));
 
-	public Page<RChapterDTO> findAllValid(Pageable pageable) {
-		return cdao.findAllValid(pageable).map(RChapterDTO::toDTO);
-	}
-
-	public Page<RChapterDTO> findAllValid(Pageable pageable, Predicate predicate) {
-		return cdao.findAllValid(predicate, pageable).map(RChapterDTO::toDTO);
-	}
-
-	public Page<RChapterDTO> findAllInvalid(Pageable pageable) {
-		return cdao.findAllInvalid(pageable).map(RChapterDTO::toDTO);
-	}
-
-	public Page<RChapterDTO> findAllInvalid(Pageable pageable, Predicate predicate) {
-		return cdao.findAllInvalid(predicate, pageable).map(RChapterDTO::toDTO);
-	}
-
-	public RChapterDTO save(CChapterDTO dto) {
-		List<Chapter>	versions	= cdao.findAllByChapter(dto.getChapter());
-		Chapter			entity		= dto.getModel();
-
+		// Version + 1
 		if (versions.size() > 0) {
-			// Chapter exists, sort by version
 			versions.sort(Comparator.comparingInt(Chapter::getVersion).reversed());
-			// Set last version + 1
-			entity.setVersion(versions.get(0).getVersion() + 1);
+			model.setVersion(versions.get(0).getVersion() + 1);
 		}
 
-		// The above code will validate this, but we'll keep it anyway
-		if (cdao.findOneByChapterAndVersion(entity.getChapter(), entity.getVersion()) != null)
-			throw new RESTRuntimeException("chapter.exists");
-
-		return RChapterDTO.toDTO(cdao.save(entity));
+		return new CRUChapterDTO(dao.save(model));
 	}
 
-	public RChapterDTO update(UChapterDTO dto) {
-		Chapter					model		= dto.getModel();
-		Chapter					chapter		= cdao.findOne(model.getUuid());
-
-		// If chapter does not exist
-		if (chapter == null)
-			throw new RESTRuntimeException("chapter.notfound");
-
-		// If chapter differs from persisted chapter
-		if (chapter.getChapter() != model.getChapter())
-			throw new RESTRuntimeException("chapter.differs");
+	@Override
+	public CRUChapterDTO update(CRUChapterDTO update, Account account) {
+		Chapter			model		= update.getModel();
+		Chapter			chapter		= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("chapter.notfound"));
 
 		// If chapter version differs from persited chapter version
 		if (chapter.getVersion() != model.getVersion())
@@ -111,13 +76,14 @@ public class ChapterService {
 
 		// Check if the chapter will be active, if true, will invalidate the others
 		if (Tools.calculate(chapter) == 100.0f) {
-			cdao.invalidateAllChapters(model.getChapter());
+			dao.invalidateAllChapters(model.getChapter());
 		} else {
 			if (model.isValid()) {
 				chapter.setValid(false);
 			}
 		}
 
+		chapter.setChapter(model.getChapter());
 		chapter.setTitle(model.getTitle());
 		chapter.setSubtitle(model.getSubtitle());
 		chapter.setResources(model.getResources());
@@ -130,6 +96,7 @@ public class ChapterService {
 		chapter.setValid(model.isValid());
 		chapter.setMedias(model.getMedias());
 		chapter.setThumbnails(model.getThumbnails());
-		return RChapterDTO.toDTO(cdao.save(model));
+
+		return new CRUChapterDTO(dao.save(model));
 	}
 }

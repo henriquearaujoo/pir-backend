@@ -14,46 +14,46 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public abstract class BService<TEntity, TCreate, TRead, TUpdate, TDAO extends IBaseDAO<TEntity, TPK>, TPK extends Serializable> {
+public abstract class BService<TEntity, TDTO, TDAO extends IBaseDAO<TEntity, TPK>, TPK extends Serializable> {
 	protected  	TDAO			dao;
-	private 	Class<TRead>	readClass;
+	private 	Class<TDTO>		readClass;
 	private 	Class<TEntity>	entityClass;
 
-	public BService(TDAO dao, Class<TEntity> entityClass, Class<TRead> readClass) {
+	public BService(TDAO dao, Class<TEntity> entityClass, Class<TDTO> readClass) {
 		this.dao 			= dao;
 		this.readClass		= readClass;
 		this.entityClass	= entityClass;
 	}
 
-	public TRead findOne(TPK id) {
+	public TDTO findOne(TPK id) {
 		return toDTO(Optional.ofNullable(dao.findOne(id)).orElseThrow(() -> new RESTRuntimeException("notfound")));
 	}
 
-	public TRead findOne(UUID uuid) {
+	public TDTO findOne(UUID uuid) {
 		return toDTO(Optional.ofNullable(dao.findOne(uuid)).orElseThrow(() -> new RESTRuntimeException("notfound")));
 	}
 
-	public Collection<TRead> findAll() {
+	public Collection<TDTO> findAll() {
 		return dao.findAll().stream().map(this::toDTO).collect(Collectors.toSet());
 	}
 
-	public Collection<TRead> findAll(Predicate predicate) {
+	public Collection<TDTO> findAll(Predicate predicate) {
 		return dao.findAll(predicate).stream().map(this::toDTO).collect(Collectors.toSet());
 	}
 
-	public Page<TRead> findAll(Predicate predicate, Pageable pageable) {
+	public Page<TDTO> findAll(Predicate predicate, Pageable pageable) {
 		return dao.findAll(predicate, pageable).map(this::toDTO);
 	}
 
-	public Page<TRead> findAll(Pageable pageable) {
+	public Page<TDTO> findAll(Pageable pageable) {
 		return dao.findAll(pageable).map(this::toDTO);
 	}
 
-	public abstract TRead save(TCreate create, Account account);
-	public abstract TRead update(TUpdate update, Account account);
+	public abstract TDTO save(TDTO create, Account account);
+	public abstract TDTO update(TDTO update, Account account);
 
 	//================================================================================================================//
-	private TRead toDTO(TEntity item) {
+	private TDTO toDTO(TEntity item) {
 		try {
 			return readClass.getConstructor(entityClass).newInstance(item);
 		} catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {

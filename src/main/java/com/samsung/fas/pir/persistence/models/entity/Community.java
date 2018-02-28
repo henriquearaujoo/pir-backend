@@ -1,6 +1,5 @@
 package com.samsung.fas.pir.persistence.models.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.enums.ECommunityZone;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +13,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @Entity
-@Table(name = "community", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "city_id"}))
+@Table(name = "community", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "city_id"}, name = "community"))
 @DynamicUpdate
 @DynamicInsert
 public class Community {
@@ -44,13 +43,12 @@ public class Community {
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "citext")
 	private 	String			name;
 
 	@Getter
 	@Setter
-	@JsonProperty("zone")
-	@Column(name = "zone", nullable = false)
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private 	ECommunityZone	communityZone;
 
@@ -152,6 +150,6 @@ public class Community {
 	@Getter
 	@Setter
 	@OneToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "city_id")
+	@JoinColumn
 	private 	City			city;
 }

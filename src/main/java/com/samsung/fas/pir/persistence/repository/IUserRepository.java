@@ -4,23 +4,14 @@ import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
 import com.samsung.fas.pir.persistence.models.entity.QUser;
 import com.samsung.fas.pir.persistence.models.entity.User;
+import com.samsung.fas.pir.persistence.repository.base.BRepository;
 import ext.java.util.QDate;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
-import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.querydsl.binding.SingleValueBinding;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
-
 @Repository
-public interface IUserRepository extends JpaRepository<User, UUID>, PagingAndSortingRepository<User, UUID>, QueryDslPredicateExecutor<User>, QuerydslBinderCustomizer<QUser> {
-	User findByAccountUsernameIgnoreCase(String login);
-	User findOneByUuid(UUID guid);
-	User findByEmail(String email);
-
+public interface IUserRepository extends BRepository<User, Long, QUser> {
 	@Override
 	default void customize(QuerydslBindings bindings, QUser root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

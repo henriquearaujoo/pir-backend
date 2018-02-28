@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity(name="intervention")
-@Table(name = "intervention" /*,uniqueConstraints = @UniqueConstraint(columnNames= {"number", "version"})*/)
+@Table(name = "intervention")
 @DynamicUpdate
 @DynamicInsert
 public class Intervention {
@@ -23,10 +23,17 @@ public class Intervention {
 
 	@Getter
 	@Setter
-	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+	@Column(insertable = false, updatable = false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
 	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	@Generated(GenerationTime.INSERT)
 	private 	UUID 			uuid;
+
+	@Getter
+	@Setter
+	@MapsId
+	@OneToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumn(name = "id")
+	private 	Chapter			chapter;
 
 	@Getter
 	@Setter
@@ -37,10 +44,4 @@ public class Intervention {
 	@Setter
 	@Column(name = "activity", nullable = false, columnDefinition = "TEXT")
 	private 	String			activity;
-
-	@Getter
-	@Setter
-	@OneToOne
-	@JoinColumn(name = "chapter_fk")
-	private 	Chapter			chapter;
 }

@@ -6,9 +6,7 @@ import com.samsung.fas.pir.persistence.dao.CityDAO;
 import com.samsung.fas.pir.persistence.dao.CommunityDAO;
 import com.samsung.fas.pir.persistence.models.entity.City;
 import com.samsung.fas.pir.persistence.models.entity.Community;
-import com.samsung.fas.pir.rest.dto.community.CCommunityDTO;
-import com.samsung.fas.pir.rest.dto.community.RCommunityDTO;
-import com.samsung.fas.pir.rest.dto.community.UCommunityDTO;
+import com.samsung.fas.pir.rest.dto.community.CRUCommunityDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,38 +14,28 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class CommunityService extends BService<Community, CCommunityDTO, RCommunityDTO, UCommunityDTO, CommunityDAO, Long> {
+public class CommunityService extends BService<Community, CRUCommunityDTO, CommunityDAO, Long> {
 	private CityDAO cdao;
 
 	@Autowired
 	public CommunityService(CommunityDAO dao, CityDAO cdao) {
-		super(dao, Community.class, RCommunityDTO.class);
+		super(dao, Community.class, CRUCommunityDTO.class);
 		this.cdao = cdao;
 	}
 
 	@Override
-	public RCommunityDTO save(CCommunityDTO communityDTO, Account account) {
+	public CRUCommunityDTO save(CRUCommunityDTO communityDTO, Account account) {
 		Community	model		= communityDTO.getModel();
-		City		city		= Optional.ofNullable(cdao.findCityByID(communityDTO.getCity())).orElseThrow(() -> new RESTRuntimeException("city.notfound"));
-		Community	community	= dao.findOne(model.getName(), city.getId());
-
-		if (community != null)
-			throw new RESTRuntimeException("community.found");
-
+		City		city		= Optional.ofNullable(cdao.findOne(communityDTO.getCity())).orElseThrow(() -> new RESTRuntimeException("city.notfound"));
 		model.setCity(city);
-
-		return new RCommunityDTO(dao.save(model));
+		return new CRUCommunityDTO(dao.save(model));
 	}
 
 	@Override
-	public RCommunityDTO update(UCommunityDTO communityDTO, Account account) {
+	public CRUCommunityDTO update(CRUCommunityDTO communityDTO, Account account) {
 		Community	model		= communityDTO.getModel();
-		Community	community	= Optional.ofNullable(dao.findOne(model.getUuid())).orElseThrow(() -> new RESTRuntimeException("community.notfound"));
-		City		city		= Optional.ofNullable(cdao.findCityByID(communityDTO.getCity())).orElseThrow(() -> new RESTRuntimeException("city.notfound"));
-		Community	temp		= dao.findOne(model.getName(), city.getId());
-
-		if (temp != null && temp.getId() != community.getId())
-			throw new RESTRuntimeException("community.found");
+		Community	community	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("community.notfound"));
+		City		city		= Optional.ofNullable(cdao.findOne(communityDTO.getCity())).orElseThrow(() -> new RESTRuntimeException("city.notfound"));
 
 		community.setName(model.getName());
 		community.setWaterSupply(model.getWaterSupply());
@@ -71,6 +59,6 @@ public class CommunityService extends BService<Community, CCommunityDTO, RCommun
 		community.setUc(model.getUc());
 		community.setRegional(model.getRegional());
 
-		return new RCommunityDTO(dao.save(community));
+		return new CRUCommunityDTO(dao.save(community));
 	}
 }

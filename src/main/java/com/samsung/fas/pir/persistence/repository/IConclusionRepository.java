@@ -4,20 +4,13 @@ import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
 import com.samsung.fas.pir.persistence.models.entity.Conclusion;
 import com.samsung.fas.pir.persistence.models.entity.QConclusion;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
-import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
+import com.samsung.fas.pir.persistence.repository.base.BRepository;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.querydsl.binding.SingleValueBinding;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
-
 @Repository
-public interface IConclusionRepository extends JpaRepository<Conclusion, Long>, PagingAndSortingRepository<Conclusion, Long>, QueryDslPredicateExecutor<Conclusion>, QuerydslBinderCustomizer<QConclusion>  {
-	Conclusion findByUuid(UUID uuid);
-
+public interface IConclusionRepository extends BRepository<Conclusion, Long, QConclusion> {
 	@Override
 	default void customize(QuerydslBindings bindings, QConclusion root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

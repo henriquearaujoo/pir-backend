@@ -2,6 +2,7 @@ package com.samsung.fas.pir.persistence.models.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
@@ -10,7 +11,7 @@ import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity(name="profile_pages")
-@Table(uniqueConstraints= {@UniqueConstraint(columnNames= {"profile_id", "page_id"})})
+@Table(uniqueConstraints= {@UniqueConstraint(columnNames= {"profile_id", "page_id"}, name = "rule")})
 @DynamicUpdate
 @DynamicInsert
 public class Rule {
@@ -31,32 +32,36 @@ public class Rule {
 	@Getter
 	@Setter
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name="profile_id")
+	@JoinColumn
 	private		Profile			profile;
 
 	@Getter
 	@Setter
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name="page_id")
+	@JoinColumn
 	private		Page			page;
 
+	@Accessors(fluent = true)
 	@Getter
 	@Setter
-	@Column(name="can_create")
-	private		boolean			create;
+	@Column
+	private		boolean			canCreate;
 
+	@Accessors(fluent = true)
 	@Getter
 	@Setter
-	@Column(name="can_view")
-	private		boolean			read;
+	@Column
+	private		boolean			canRead;
 
+	@Accessors(fluent = true)
 	@Getter
 	@Setter
-	@Column(name="can_update")
-	private		boolean			update;
+	@Column
+	private		boolean			canUpdate;
 
+	@Accessors(fluent = true)
 	@Getter
 	@Setter
-	@Column(name="can_delete")
-	private		boolean			delete;
+	@Column
+	private		boolean			canDelete;
 }

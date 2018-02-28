@@ -1,30 +1,11 @@
 package com.samsung.fas.pir.persistence.dao;
 
+import com.samsung.fas.pir.persistence.dao.base.BaseDAO;
 import com.samsung.fas.pir.persistence.models.entity.City;
-import com.samsung.fas.pir.persistence.repository.ICityRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.samsung.fas.pir.persistence.models.entity.QCity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-public class CityDAO {
-	@Autowired
-	private 	ICityRepository 		repository;
-	
-	public boolean save(City city) {
-		return repository.save(city) != null;
-	}
-	
-	public List<City> findCitiesByStateID(long stateID) {
-		return repository.findByStateId(stateID);
-	}
-	
-	public City findCityByID(long cityID) {
-		return repository.findOne(cityID);
-	}
-	
-	public void deleteByID(long cityID) {
-		repository.delete(cityID);
-	}
+public class CityDAO extends BaseDAO<City, Long, QCity> {
+	//
 }

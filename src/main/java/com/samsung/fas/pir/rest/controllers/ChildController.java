@@ -19,10 +19,9 @@ import javax.ws.rs.core.MediaType;
 
 @Controller
 @RequestMapping(value = "/rest/child", produces = MediaType.APPLICATION_JSON)
-public class ChildController extends BController<Child, CRUChildDTO, CRUChildDTO, CRUChildDTO, ChildDAO> {
-
+public class ChildController extends BController<Child, CRUChildDTO, ChildDAO> {
 	@Autowired
-	public ChildController(BService<Child, CRUChildDTO, CRUChildDTO, CRUChildDTO, ChildDAO, Long> service) {
+	public ChildController(BService<Child, CRUChildDTO, ChildDAO, Long> service) {
 		super(service);
 	}
 

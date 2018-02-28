@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 
-@Entity(name="account")
-@Table(name = "account")
+@Entity
+@Table(name = "account", uniqueConstraints = @UniqueConstraint(columnNames = "login", name = "login"))
 @DynamicUpdate
 @DynamicInsert
 public class Account implements UserDetails {
@@ -31,7 +31,7 @@ public class Account implements UserDetails {
 
 	@Getter
 	@Setter
-	@Column(name="login", unique=true, nullable=false)
+	@Column(name="login", nullable=false)
 	private		String				username;
 
 	@Getter

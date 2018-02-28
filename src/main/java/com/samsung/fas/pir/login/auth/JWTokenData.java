@@ -23,5 +23,10 @@ public class JWTokenData {
 	@Getter
 	@Setter
 	@JsonProperty(value = "pfl")
+	private 	String		perfilID;
+
+	@Getter
+	@Setter
+	@JsonProperty(value = "pnm")
 	private 	String		perfil;
 }

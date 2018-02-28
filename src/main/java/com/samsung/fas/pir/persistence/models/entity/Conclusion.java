@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity(name = "conclusions")
+@Entity
 @Table(name = "conslusions")
 @DynamicUpdate
 @DynamicInsert
@@ -25,25 +25,25 @@ public class Conclusion {
 
 	@Getter
 	@Setter
-	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+	@Column(insertable = false, updatable = false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
 	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	@Generated(GenerationTime.INSERT)
 	private 	UUID 			uuid;
 
 	@Getter
 	@Setter
-	@Column(name = "description", nullable = false, columnDefinition = "TEXT")
+	@MapsId
+	@OneToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumn(name = "id")
+	private 	Chapter			chapter;
+
+	@Getter
+	@Setter
+	@Column(nullable = false, columnDefinition = "TEXT")
 	private 	String			description;
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "conclusion", cascade = CascadeType.ALL, orphanRemoval = true)
 	private 	Set<Question>	questions;
-
-	@Getter
-	@Setter
-	@OneToOne(optional = false, fetch = FetchType.LAZY)
-	@LazyToOne(LazyToOneOption.PROXY)
-	@JoinColumn(name = "chapter_id")
-	private 	Chapter			chapter;
 }

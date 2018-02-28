@@ -23,10 +23,17 @@ public class Greetings {
 
 	@Getter
 	@Setter
-	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+	@Column(insertable = false, updatable = false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
 	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	@Generated(GenerationTime.INSERT)
 	private 	UUID 			uuid;
+
+	@Getter
+	@Setter
+	@MapsId
+	@OneToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumn(name = "id")
+	private 	Chapter			chapter;
 
 	@Getter
 	@Setter
@@ -52,10 +59,4 @@ public class Greetings {
 	@Setter
 	@Column(name = "stove", nullable = false)
 	private 	boolean			stove;
-
-	@Getter
-	@Setter
-	@OneToOne
-	@JoinColumn(name = "chapter_id")
-	private 	Chapter			chapter;
 }

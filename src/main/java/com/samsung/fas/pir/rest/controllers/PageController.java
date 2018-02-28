@@ -1,44 +1,40 @@
 package com.samsung.fas.pir.rest.controllers;
 
-import com.samsung.fas.pir.rest.dto.page.RSimplePageDTO;
-import com.samsung.fas.pir.rest.services.PageService;
-import org.jsondoc.core.annotation.Api;
-import org.jsondoc.core.annotation.ApiAuthNone;
-import org.jsondoc.core.annotation.ApiMethod;
-import org.jsondoc.core.annotation.ApiResponseObject;
-import org.jsondoc.core.pojo.ApiStage;
-import org.jsondoc.core.pojo.ApiVisibility;
+import com.querydsl.core.types.Predicate;
+import com.samsung.fas.pir.persistence.dao.PageDAO;
+import com.samsung.fas.pir.persistence.models.entity.Page;
+import com.samsung.fas.pir.persistence.models.entity.Rule;
+import com.samsung.fas.pir.rest.controllers.base.BController;
+import com.samsung.fas.pir.rest.dto.page.CRUPageDTO;
+import com.samsung.fas.pir.rest.services.base.BService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
-@Api(name = "Page Services", description = "Methods for listing pages", group = "Profiles", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
-@ApiAuthNone
 @Controller
-@RequestMapping("/rest/pages")
-@Produces(MediaType.APPLICATION_JSON)
-public class PageController {
-	private PageService pservice;
-
+@RequestMapping(value = "/rest/pages", produces = MediaType.APPLICATION_JSON)
+public class PageController extends BController<Page, CRUPageDTO, PageDAO> {
 	@Autowired
-	public PageController(PageService pservice) {
-		this.pservice		= pservice;
+	public PageController(BService<Page, CRUPageDTO, PageDAO, Long> service) {
+		super(service);
 	}
 
-	// Get all (GET)
-	@ApiMethod(description="Get all pages saved in database")
-	@ApiResponseObject(clazz = RSimplePageDTO.class)
-	@RequestMapping(method=RequestMethod.GET)
+	@RequestMapping(method= RequestMethod.GET, path = "/search")
 	@ResponseBody
-	public ResponseEntity<List<RSimplePageDTO>> getAll() {
-		return ResponseEntity.ok(pservice.findAll());
+	public ResponseEntity<?> search(@QuerydslPredicate(root = Rule.class) Predicate predicate) {
+		return ResponseEntity.ok(service.findAll(predicate));
 	}
 
+	@RequestMapping(method= RequestMethod.GET, path = "/search/page")
+	@ResponseBody
+	public ResponseEntity<?> search(@QuerydslPredicate(root = Rule.class) Predicate predicate, Pageable pageable) {
+		return ResponseEntity.ok(service.findAll(predicate, pageable));
+	}
 }

@@ -14,8 +14,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
-@Entity(name="user")
-@Table(name = "user")
+@Entity
+@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email", name = "email"))
 @DynamicUpdate
 @DynamicInsert
 public class User implements Serializable {
@@ -24,57 +24,55 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
-	private		long				id;
+	private		long			id;
 
 	@Setter
 	@Getter
 	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
 	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	@Generated(GenerationTime.INSERT)
-	private 	UUID				uuid;
+	private 	UUID			uuid;
 
 	@Getter
 	@Setter
-	@Column(name="full_name", nullable=false)
-	private		String				name;
+	@Column(nullable=false)
+	private		String			name;
 
 	@Getter
 	@Setter
-	@Column(name="email", nullable=false, unique = true)
-	private		String				email;
+	@Column(nullable=false)
+	private		String			email;
 
 	@Getter
 	@Setter
-	@Column(name="type", nullable=false)
+	@Column(nullable=false)
 	@Enumerated(EnumType.STRING)
-	private 	EUserType 			type;
+	private 	EUserType 		type;
 
 	@Getter
 	@Setter
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="dt_register", updatable=false, nullable=false)
-	private 	Date 				registerDate;
-
-	//////////
-	@Getter
-	@Setter
-	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "user", orphanRemoval = true)
-	private 	IndividualPerson	individual;
+	@Column(updatable=false, nullable=false)
+	private 	Date 			registerDate;
 
 	@Getter
 	@Setter
 	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "user", orphanRemoval = true)
-	private 	LegalPerson			legal;
-	//////////
+	private 	Person			person;
 
 	@Getter
 	@Setter
 	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "user", orphanRemoval = true)
-	private		Address				address;
+	private 	LegalEntity		entity;
 
 	@Getter
 	@Setter
 	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "user", orphanRemoval = true)
-	private 	Account				account;
+	private		Address			address;
+
+	@Getter
+	@Setter
+	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "user", orphanRemoval = true)
+	private 	Account			account;
 }

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class ResponsibleService extends BService<Responsible, CRUResponsibleDTO, CRUResponsibleDTO, CRUResponsibleDTO, ResponsibleDAO, Long> {
+public class ResponsibleService extends BService<Responsible, CRUResponsibleDTO, ResponsibleDAO, Long> {
 	private		CommunityDAO		cdao;
 
 	@Autowired

@@ -2,11 +2,13 @@ package com.samsung.fas.pir.persistence.models.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.UUID;
 
 @Entity(name="address")
 @Table(name = "address")
@@ -17,6 +19,13 @@ public class Address implements Serializable {
 	@Setter
 	@Id
 	private 	long 			id;
+
+	@Getter
+	@Setter
+	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+	@Type(type = "org.hibernate.type.PostgresUUIDType")
+	@Generated(GenerationTime.INSERT)
+	private 	UUID 			uuid;
 
 	@Getter
 	@Setter

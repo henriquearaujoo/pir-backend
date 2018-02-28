@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.UUID;
 
 @Entity
-@Table(name = "profile")
+@Table(name = "profile", uniqueConstraints = @UniqueConstraint(columnNames = "title", name = "title"))
 @DynamicUpdate
 @DynamicInsert
 public class Profile {
@@ -36,7 +36,7 @@ public class Profile {
 	
 	@Getter
 	@Setter
-	@Column(name="title", nullable=false, unique=true)
+	@Column(name="title", nullable=false)
 	private		String					title;
 	
 	@Getter

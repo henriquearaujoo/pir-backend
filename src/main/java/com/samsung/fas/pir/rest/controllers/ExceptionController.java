@@ -3,6 +3,8 @@ package com.samsung.fas.pir.rest.controllers;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ExceptionController {
-	private		static 			Logger 			Log			= LoggerFactory.getLogger(UserController.class);
+	private		static 			Logger 			Log			= LoggerFactory.getLogger(ExceptionController.class);
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<?> handleException(MethodArgumentNotValidException e) {
@@ -69,5 +71,12 @@ public class ExceptionController {
 		Log.error(e.getMessage());
 		e.printStackTrace();
 		return ResponseEntity.badRequest().build();
+	}
+
+	public ResponseEntity<?> handleException(DataIntegrityViolationException e) {
+		if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException)
+			return new ResponseEntity<>(((org.hibernate.exception.ConstraintViolationException) e.getCause()).getConstraintName() + ".found", HttpStatus.BAD_REQUEST);
+
+		return new ResponseEntity<>("database.violation", HttpStatus.BAD_REQUEST);
 	}
 }

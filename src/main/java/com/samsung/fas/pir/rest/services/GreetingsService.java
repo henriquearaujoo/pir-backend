@@ -1,98 +1,50 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
+import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.dao.GreetingsDAO;
 import com.samsung.fas.pir.persistence.models.entity.Chapter;
 import com.samsung.fas.pir.persistence.models.entity.Greetings;
-import com.samsung.fas.pir.rest.dto.greetings.CGreetingsDTO;
-import com.samsung.fas.pir.rest.dto.greetings.RGreetingsDTO;
-import com.samsung.fas.pir.rest.dto.greetings.UGreetingsDTO;
+import com.samsung.fas.pir.rest.dto.greetings.CRUGreetingsDTO;
+import com.samsung.fas.pir.rest.services.base.BService;
+import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
-public class GreetingsService {
-	private		GreetingsDAO	gdao;
+public class GreetingsService extends BService<Greetings, CRUGreetingsDTO, GreetingsDAO, Long> {
 	private		ChapterDAO		cdao;
 
 	@Autowired
-	public GreetingsService(GreetingsDAO gdao, ChapterDAO cdao) {
-		this.gdao 	= gdao;
-		this.cdao	= cdao;
+	public GreetingsService(GreetingsDAO dao, ChapterDAO cdao) {
+		super(dao, Greetings.class, CRUGreetingsDTO.class);
+		this.cdao = cdao;
 	}
 
-	public RGreetingsDTO findOne(UUID id) {
-		return RGreetingsDTO.toDTO(gdao.findOne(id));
-	}
-
-	public List<RGreetingsDTO> findAll() {
-		return gdao.findAll().stream().map(RGreetingsDTO::toDTO).collect(Collectors.toList());
-	}
-
-	public List<RGreetingsDTO> findAll(Predicate predicate) {
-		return gdao.findAll(predicate).stream().map(RGreetingsDTO::toDTO).collect(Collectors.toList());
-	}
-
-	public Page<RGreetingsDTO> findAll(Pageable pageable) {
-		return gdao.findAll(pageable).map(RGreetingsDTO::toDTO);
-	}
-
-	public Page<RGreetingsDTO> findAll(Predicate predicate, Pageable pageable) {
-		return gdao.findAll(predicate, pageable).map(RGreetingsDTO::toDTO);
-	}
-
-	public RGreetingsDTO save(CGreetingsDTO dto) {
-		Greetings	model		= dto.getModel();
-		Chapter		chapter		= cdao.findOne(model.getChapter().getId());
-
-		// Verify if chapter exists
-		if (chapter == null)
-			throw new RESTRuntimeException("chapter.greetings.chapterid.notfound");
-
-		// Verify if chapter greetings is null (consider updating instead creating)
-		if (chapter.getGreetings() != null)
-			throw new RESTRuntimeException("chapter.greetings.notnull");
-
+	@Override
+	public CRUGreetingsDTO save(CRUGreetingsDTO create, Account account) {
+		Greetings	model		= create.getModel();
+		UUID 		chapterID	= create.getChapterID() != null && !create.getChapterID().trim().isEmpty()? IDCoder.decode(create.getChapterID()) : null;
+		Chapter		chapter		= Optional.ofNullable(cdao.findOne(Optional.ofNullable(chapterID).orElseThrow(() -> new RESTRuntimeException("chapter.id.missing")))).orElseThrow(() -> new RESTRuntimeException("chapter.notfound"));
 		model.setChapter(chapter);
-		return RGreetingsDTO.toDTO(gdao.save(model));
+		return new CRUGreetingsDTO(dao.save(model));
 	}
 
-	public RGreetingsDTO update(UGreetingsDTO dto) {
-		Greetings	model		= dto.getModel();
-		Chapter		chapter		= cdao.findOne(model.getChapter().getId());
-		Greetings	greetings	= gdao.findOne(model.getId());
+	@Override
+	public CRUGreetingsDTO update(CRUGreetingsDTO update, Account account) {
+		Greetings	model		= update.getModel();
+		Greetings	greetings	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("greetings.notfound"));
 
-		// Verify if chapter exists
-		if (chapter == null)
-			throw new RESTRuntimeException("chapter.greetings.chapterid.notfound");
-
-		// Verify if greetings exists
-		if (chapter.getGreetings() == null)
-			throw new RESTRuntimeException("chapter.greetings.isnull");
-
-		// Verify if informed greetings exist
-		if (greetings == null)
-			throw new RESTRuntimeException("chapter.greetings.notfound");
-
-		// Verify if greetings chapter id is euqal to informed chapter id
-		if (greetings.getChapter().getId() != model.getChapter().getId())
-			throw new RESTRuntimeException("chapter.greetings.id.differs");
-
-		// Set chapter for greetings
 		greetings.setDescription(model.getDescription());
-		greetings.setChapter(chapter);
 		greetings.setEletronics(model.isEletronics());
 		greetings.setStove(model.isStove());
 		greetings.setSit(model.isSit());
 		greetings.setGoback(model.isGoback());
-		return RGreetingsDTO.toDTO(gdao.save(greetings));
+
+		return new CRUGreetingsDTO(dao.save(greetings));
 	}
 }

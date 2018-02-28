@@ -15,7 +15,6 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "responsible")
-@Inheritance(strategy = InheritanceType.JOINED)
 @DynamicUpdate
 @DynamicInsert
 public class Responsible {

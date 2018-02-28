@@ -9,7 +9,6 @@ import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.querydsl.binding.SingleValueBinding;
 
 public interface IResponsibleRepository extends BRepository<Responsible, Long, QResponsible> {
-
 	@Override
 	default void customize(QuerydslBindings bindings, QResponsible root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MotherService extends BService<Mother, CRUResponsibleDTO, CRUResponsibleDTO, CRUResponsibleDTO, MotherDAO, Long> {
+public class MotherService extends BService<Mother, CRUResponsibleDTO, MotherDAO, Long> {
 
 	@Autowired
 	public MotherService(MotherDAO dao) {
