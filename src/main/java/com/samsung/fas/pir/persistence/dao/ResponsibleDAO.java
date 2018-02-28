@@ -20,6 +20,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class ResponsibleDAO extends BaseDAO<Responsible, Long, QResponsible> {
@@ -55,13 +56,18 @@ public class ResponsibleDAO extends BaseDAO<Responsible, Long, QResponsible> {
 		QMother						mother		= QMother.mother;
 		JPAQuery<Responsible>		result		= jpaquery.from(responsible).where(responsible.id.notIn(motherQuery.from(mother).select(mother.id)).and(predicate));
 		Query						query		= Tools.setupPage(result, pageable, entityPath);
+		List<Responsible>			list		= query.getResultList();
 
 		try {
-			if (pageable.getPageSize() > query.getResultList().size())
-				return new PageImpl<Responsible>(query.getResultList().subList(pageable.getOffset(), pageable.getOffset() + query.getResultList().size()), pageable, query.getResultList().size());
-			return new PageImpl<Responsible>(query.getResultList().subList(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize()), pageable, query.getResultList().size());
+			if (pageable.getPageSize() > list.size())
+				return new PageImpl<>(list.subList(pageable.getOffset(), pageable.getOffset() + list.size()), pageable, list.size());
+			return new PageImpl<>(list.subList(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize()), pageable, list.size());
 		} catch (Exception e) {
-			return new PageImpl<>(new ArrayList<>(), pageable, query.getResultList().size());
+			try {
+				return new PageImpl<>(list.subList(pageable.getOffset() - 1, pageable.getOffset()), pageable, list.size());
+			} catch (Exception e1) {
+				return new PageImpl<>(new ArrayList<>(), pageable, query.getResultList().size());
+			}
 		}
 	}
 }
