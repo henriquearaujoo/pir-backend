@@ -4,6 +4,8 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.samsung.fas.pir.persistence.dao.base.BaseDAO;
+import com.samsung.fas.pir.persistence.models.entity.Mother;
+import com.samsung.fas.pir.persistence.models.entity.QMother;
 import com.samsung.fas.pir.persistence.models.entity.QResponsible;
 import com.samsung.fas.pir.persistence.models.entity.Responsible;
 import com.samsung.fas.pir.persistence.repository.IResponsibleRepository;
@@ -33,10 +35,11 @@ public class ResponsibleDAO extends BaseDAO<Responsible, Long, QResponsible> {
 	}
 
 	public Collection<Responsible> findAllResponsible(Predicate predicate) {
-		JPAQuery<Responsible>	query 			= new JPAQuery<>(emanager);
-		QResponsible 			responsible		= QResponsible.responsible;
-		// SELECT * FROM chapter WHERE chapter.number IN (SELECT chapter.number FROM chapter WHERE chapter.in_use = true)
-		return query.from(responsible).where(responsible.mother.isNull().and(predicate)).fetch();
+		JPAQuery<Responsible>	responsibleQuery 	= new JPAQuery<>(emanager);
+		JPAQuery<Mother>		motherQuery			= new JPAQuery<>(emanager);
+		QResponsible 			responsible			= QResponsible.responsible;
+		QMother					mother				= QMother.mother;
+		return responsibleQuery.from(responsible).where(responsible.id.notIn(motherQuery.from(mother).select(mother.id))).fetch();
 	}
 
 	public Page<Responsible> findAllResponsible(Pageable pageable) {
@@ -46,9 +49,11 @@ public class ResponsibleDAO extends BaseDAO<Responsible, Long, QResponsible> {
 	@SuppressWarnings("unchecked")
 	public Page<Responsible> findAllResponsible(Predicate predicate, Pageable pageable) {
 		JPAQuery<Responsible>		jpaquery	= new JPAQuery<>(emanager);
+		JPAQuery<Mother>			motherQuery	= new JPAQuery<>(emanager);
 		PathBuilder<Responsible> 	entityPath 	= new PathBuilder<>(Responsible.class, "responsible");
 		QResponsible				responsible	= QResponsible.responsible;
-		JPAQuery<Responsible>		result		= jpaquery.from(responsible).where(responsible.mother.isNull().and(predicate));
+		QMother						mother		= QMother.mother;
+		JPAQuery<Responsible>		result		= jpaquery.from(responsible).where(responsible.id.notIn(motherQuery.from(mother).select(mother.id)));
 		Query						query		= Tools.setupPage(result, pageable, entityPath);
 
 		try {
