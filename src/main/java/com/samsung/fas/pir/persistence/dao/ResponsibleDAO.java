@@ -64,7 +64,7 @@ public class ResponsibleDAO extends BaseDAO<Responsible, Long, QResponsible> {
 			return new PageImpl<>(list.subList(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize()), pageable, list.size());
 		} catch (Exception e) {
 			try {
-				return new PageImpl<>(list.subList(pageable.getOffset() - 1, pageable.getOffset()), pageable, list.size());
+				return new PageImpl<>(list.subList(pageable.getOffset(), pageable.getOffset() + 1), pageable, list.size());
 			} catch (Exception e1) {
 				return new PageImpl<>(new ArrayList<>(), pageable, query.getResultList().size());
 			}
