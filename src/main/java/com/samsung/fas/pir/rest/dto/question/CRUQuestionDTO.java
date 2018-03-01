@@ -11,7 +11,6 @@ import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
-import org.jsondoc.core.annotation.ApiObjectField;
 
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
@@ -42,7 +41,6 @@ public class CRUQuestionDTO {
 	@NotBlank(message = "description.missing")
 	private 	String						description;
 
-	@ApiObjectField(name="answers", order=4)
 	@JsonProperty("answers")
 	@Setter
 	@Getter

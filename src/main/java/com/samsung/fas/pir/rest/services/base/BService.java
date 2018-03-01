@@ -2,10 +2,10 @@ package com.samsung.fas.pir.rest.services.base;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
-import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.base.IBaseDAO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -25,32 +25,32 @@ public abstract class BService<TEntity, TDTO, TDAO extends IBaseDAO<TEntity, TPK
 		this.entityClass	= entityClass;
 	}
 
-	public TDTO findOne(TPK id) {
+	public TDTO findOne(TPK id, UserDetails details) {
 		return toDTO(Optional.ofNullable(dao.findOne(id)).orElseThrow(() -> new RESTRuntimeException("notfound")));
 	}
 
-	public TDTO findOne(UUID uuid) {
+	public TDTO findOne(UUID uuid, UserDetails details) {
 		return toDTO(Optional.ofNullable(dao.findOne(uuid)).orElseThrow(() -> new RESTRuntimeException("notfound")));
 	}
 
-	public Collection<TDTO> findAll() {
+	public Collection<TDTO> findAll(UserDetails details) {
 		return dao.findAll().stream().map(this::toDTO).collect(Collectors.toSet());
 	}
 
-	public Collection<TDTO> findAll(Predicate predicate) {
+	public Collection<TDTO> findAll(Predicate predicate, UserDetails details) {
 		return dao.findAll(predicate).stream().map(this::toDTO).collect(Collectors.toSet());
 	}
 
-	public Page<TDTO> findAll(Predicate predicate, Pageable pageable) {
+	public Page<TDTO> findAll(Predicate predicate, Pageable pageable, UserDetails details) {
 		return dao.findAll(predicate, pageable).map(this::toDTO);
 	}
 
-	public Page<TDTO> findAll(Pageable pageable) {
+	public Page<TDTO> findAll(Pageable pageable, UserDetails details) {
 		return dao.findAll(pageable).map(this::toDTO);
 	}
 
-	public abstract TDTO save(TDTO create, Account account);
-	public abstract TDTO update(TDTO update, Account account);
+	public abstract TDTO save(TDTO create, UserDetails account);
+	public abstract TDTO update(TDTO update, UserDetails account);
 
 	//================================================================================================================//
 	private TDTO toDTO(TEntity item) {

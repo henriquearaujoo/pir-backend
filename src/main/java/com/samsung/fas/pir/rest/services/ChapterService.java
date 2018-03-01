@@ -2,7 +2,6 @@ package com.samsung.fas.pir.rest.services;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
-import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.models.entity.Chapter;
 import com.samsung.fas.pir.rest.dto.chapter.CRUChapterDTO;
@@ -11,6 +10,7 @@ import com.samsung.fas.pir.utils.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -52,7 +52,7 @@ public class ChapterService extends BService<Chapter, CRUChapterDTO, ChapterDAO,
 	}
 
 	@Override
-	public CRUChapterDTO save(CRUChapterDTO create, Account account) {
+	public CRUChapterDTO save(CRUChapterDTO create, UserDetails account) {
 		Chapter			model		= create.getModel();
 		List<Chapter>	versions	= new ArrayList<>(dao.findAllByChapter(create.getChapter()));
 
@@ -66,7 +66,7 @@ public class ChapterService extends BService<Chapter, CRUChapterDTO, ChapterDAO,
 	}
 
 	@Override
-	public CRUChapterDTO update(CRUChapterDTO update, Account account) {
+	public CRUChapterDTO update(CRUChapterDTO update, UserDetails account) {
 		Chapter			model		= update.getModel();
 		Chapter			chapter		= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("chapter.notfound"));
 

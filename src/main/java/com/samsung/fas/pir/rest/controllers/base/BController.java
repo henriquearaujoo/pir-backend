@@ -4,12 +4,12 @@ import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.base.IBaseDAO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.IDCoder;
-import org.jsondoc.core.annotation.ApiBodyObject;
-import org.jsondoc.core.annotation.ApiPathParam;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
@@ -22,31 +22,31 @@ public abstract class BController<TEntity, TDTO, TDAO extends IBaseDAO<TEntity, 
 
 	@RequestMapping(method= RequestMethod.GET, path = "/{id}")
 	@ResponseBody
-	public ResponseEntity<?> findOne(@ApiPathParam @PathVariable("id") String id) {
-		return ResponseEntity.ok(service.findOne(IDCoder.decode(id)));
+	public ResponseEntity<?> findOne(@PathVariable("id") String id, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(service.findOne(IDCoder.decode(id), details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<?> findAll() {
-		return ResponseEntity.ok(service.findAll());
+	public ResponseEntity<?> findAll(@ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(service.findAll(details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/page")
 	@ResponseBody
-	public ResponseEntity<?> findAll(Pageable pageable) {
-		return ResponseEntity.ok(service.findAll(pageable));
+	public ResponseEntity<?> findAll(Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(service.findAll(pageable, details));
 	}
 
 	@RequestMapping(method= RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> save(@ApiBodyObject @RequestBody @Valid TDTO dto, @AuthenticationPrincipal Account account) {
+	public ResponseEntity<?> save(@RequestBody @Valid TDTO dto, @ApiIgnore @AuthenticationPrincipal Account account) {
 		return ResponseEntity.ok(service.save(dto, account));
 	}
 
 	@RequestMapping(method= RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<?> update(@ApiBodyObject @RequestBody @Valid TDTO dto, @AuthenticationPrincipal Account account) {
+	public ResponseEntity<?> update(@RequestBody @Valid TDTO dto, @ApiIgnore @AuthenticationPrincipal Account account) {
 		return ResponseEntity.ok(service.update(dto, account));
 	}
 }

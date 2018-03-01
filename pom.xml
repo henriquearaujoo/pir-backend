@@ -5,7 +5,7 @@
 
 	<groupId>com.samsung.fas</groupId>
 	<artifactId>pir</artifactId>
-	<version>0.0.6</version>
+	<version>0.0.7</version>
 	<packaging>war</packaging>
 
 	<name>PIR</name>
@@ -64,19 +64,6 @@
 			<version>0.9.0</version>
 		</dependency>
 		<!-- Java Json Webtoken -->
-
-		<!-- Json Doc -->
-		<dependency>
-			<groupId>org.jsondoc</groupId>
-			<artifactId>jsondoc-ui-webjar</artifactId>
-			<version>1.2.17</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jsondoc</groupId>
-			<artifactId>spring-boot-starter-jsondoc</artifactId>
-			<version>1.2.17</version>
-		</dependency>
-		<!-- Json Doc -->
 
 		<!-- Swagger DOC -->
 		<dependency>

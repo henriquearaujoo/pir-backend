@@ -1,7 +1,6 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.exception.RESTRuntimeException;
-import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.dao.GreetingsDAO;
 import com.samsung.fas.pir.persistence.models.entity.Chapter;
@@ -10,6 +9,7 @@ import com.samsung.fas.pir.rest.dto.greetings.CRUGreetingsDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -26,7 +26,7 @@ public class GreetingsService extends BService<Greetings, CRUGreetingsDTO, Greet
 	}
 
 	@Override
-	public CRUGreetingsDTO save(CRUGreetingsDTO create, Account account) {
+	public CRUGreetingsDTO save(CRUGreetingsDTO create, UserDetails account) {
 		Greetings	model		= create.getModel();
 		UUID 		chapterID	= create.getChapterID() != null && !create.getChapterID().trim().isEmpty()? IDCoder.decode(create.getChapterID()) : null;
 		Chapter		chapter		= Optional.ofNullable(cdao.findOne(Optional.ofNullable(chapterID).orElseThrow(() -> new RESTRuntimeException("chapter.id.missing")))).orElseThrow(() -> new RESTRuntimeException("chapter.notfound"));
@@ -35,7 +35,7 @@ public class GreetingsService extends BService<Greetings, CRUGreetingsDTO, Greet
 	}
 
 	@Override
-	public CRUGreetingsDTO update(CRUGreetingsDTO update, Account account) {
+	public CRUGreetingsDTO update(CRUGreetingsDTO update, UserDetails account) {
 		Greetings	model		= update.getModel();
 		Greetings	greetings	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("greetings.notfound"));
 

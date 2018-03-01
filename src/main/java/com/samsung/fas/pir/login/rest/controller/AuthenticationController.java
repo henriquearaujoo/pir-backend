@@ -7,11 +7,8 @@ import com.samsung.fas.pir.login.providers.DeviceProvider;
 import com.samsung.fas.pir.login.rest.dto.AuthenticationDTO;
 import com.samsung.fas.pir.login.rest.dto.ResetPasswordDTO;
 import com.samsung.fas.pir.login.rest.service.AccountService;
+import io.swagger.annotations.Api;
 import org.hibernate.validator.constraints.Email;
-import org.jsondoc.core.annotation.Api;
-import org.jsondoc.core.annotation.ApiAuthNone;
-import org.jsondoc.core.pojo.ApiStage;
-import org.jsondoc.core.pojo.ApiVisibility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,19 +20,18 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@Api(name = "Authentication Services", description = "Methods for managing authentication", group = "Authentication", visibility = ApiVisibility.PUBLIC, stage = ApiStage.BETA)
-@ApiAuthNone
 @Controller
-@RequestMapping("/rest/authentication")
-@Produces(MediaType.APPLICATION_JSON)
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.POST }, exposedHeaders = HttpHeaders.AUTHORIZATION)
+@RequestMapping(value = "/rest/authentication", produces = MediaType.APPLICATION_JSON)
 @Validated
+@Api(value = "Authentication", description = "REST Controller for Authentication", tags = "AUTHENTICATION")
 public class AuthenticationController {
 	private	final	JWToken				token;
 	private	final	AuthManager 		manager;

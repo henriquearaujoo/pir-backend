@@ -12,7 +12,6 @@ import com.samsung.fas.pir.utils.annotations.Number;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
-import org.jsondoc.core.annotation.ApiObjectField;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -103,7 +102,6 @@ public class CRUChapterDTO {
 
 	@Getter
 	@Setter
-	@ApiObjectField(name="medias", order=11, required = true)
 	@JsonProperty("medias")
 	@Valid
 	private 	Set<FileDTO> 	medias;

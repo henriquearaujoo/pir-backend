@@ -1,7 +1,6 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.exception.RESTRuntimeException;
-import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.ChildDAO;
 import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
 import com.samsung.fas.pir.persistence.models.entity.Child;
@@ -11,6 +10,7 @@ import com.samsung.fas.pir.rest.dto.child.CRUChildDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -26,7 +26,7 @@ public class ChildService extends BService<Child, CRUChildDTO, ChildDAO, Long> {
 	}
 
 	@Override
-	public CRUChildDTO save(CRUChildDTO create, Account account) {
+	public CRUChildDTO save(CRUChildDTO create, UserDetails account) {
 		Child		model		= create.getModel();
 		Responsible	responsible	= Optional.ofNullable(rdao.findOne(IDCoder.decode(create.getResponsibleID()))).orElseThrow(() -> new RESTRuntimeException("responsible.notfound"));
 		Mother		mother		= model.getMother() != null? responsible.getMother() : create.getMotherID() != null && !create.getMotherID().trim().isEmpty()? Optional.ofNullable(rdao.findOne(IDCoder.decode(create.getMotherID())).getMother()).orElseThrow(() -> new RESTRuntimeException("mother.notfound")) : null;
@@ -38,7 +38,7 @@ public class ChildService extends BService<Child, CRUChildDTO, ChildDAO, Long> {
 	}
 
 	@Override
-	public CRUChildDTO update(CRUChildDTO update, Account account) {
+	public CRUChildDTO update(CRUChildDTO update, UserDetails account) {
 		Child		model		= update.getModel();
 		Child		child		= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("child.id.missing")))).orElseThrow(() -> new RESTRuntimeException("child.notfound"));
 		Responsible	responsible	= Optional.ofNullable(rdao.findOne(IDCoder.decode(update.getResponsibleID()))).orElseThrow(() -> new RESTRuntimeException("responsible.notfound"));

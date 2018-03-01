@@ -4,11 +4,9 @@ import com.fasterxml.jackson.annotation.*;
 import com.samsung.fas.pir.persistence.models.entity.MDataFile;
 import lombok.Getter;
 import lombok.Setter;
-import org.jsondoc.core.annotation.ApiObject;
 
 import java.util.Date;
 
-@ApiObject(name = "FileDTO", group = "Files", description = "Read a uploaded file metadata")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FileDTO {

@@ -1,27 +1,22 @@
 package com.samsung.fas.pir.rest.dto.address;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.entity.City;
 import lombok.Getter;
-import org.jsondoc.core.annotation.ApiObject;
-import org.jsondoc.core.annotation.ApiObjectField;
 
-/*
- * Class used to retrieve cities by state
- */
-@ApiObject
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CityDTO {
-	@ApiObjectField(name="id")
 	@Getter
 	@JsonProperty("id")
 	private		long			id;
-	
-	@ApiObjectField(name="name")
+
 	@Getter
 	@JsonProperty("name")
 	private		String			name;
-	
-	@ApiObjectField(name="state_id")
+
 	@Getter
 	@JsonProperty("state_id")
 	private		long			stateId;

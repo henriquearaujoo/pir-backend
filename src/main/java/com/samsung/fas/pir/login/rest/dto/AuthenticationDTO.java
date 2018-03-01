@@ -1,15 +1,15 @@
 package com.samsung.fas.pir.login.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.jsondoc.core.annotation.ApiObject;
 
 import javax.validation.constraints.Size;
 
-@ApiObject
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AuthenticationDTO {
 	@Getter
 	@Setter

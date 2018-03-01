@@ -1,7 +1,6 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.exception.RESTRuntimeException;
-import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.CityDAO;
 import com.samsung.fas.pir.persistence.dao.CommunityDAO;
 import com.samsung.fas.pir.persistence.models.entity.City;
@@ -9,6 +8,7 @@ import com.samsung.fas.pir.persistence.models.entity.Community;
 import com.samsung.fas.pir.rest.dto.community.CRUCommunityDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -24,7 +24,7 @@ public class CommunityService extends BService<Community, CRUCommunityDTO, Commu
 	}
 
 	@Override
-	public CRUCommunityDTO save(CRUCommunityDTO communityDTO, Account account) {
+	public CRUCommunityDTO save(CRUCommunityDTO communityDTO, UserDetails account) {
 		Community	model		= communityDTO.getModel();
 		City		city		= Optional.ofNullable(cdao.findOne(communityDTO.getCity())).orElseThrow(() -> new RESTRuntimeException("city.notfound"));
 		model.setCity(city);
@@ -32,7 +32,7 @@ public class CommunityService extends BService<Community, CRUCommunityDTO, Commu
 	}
 
 	@Override
-	public CRUCommunityDTO update(CRUCommunityDTO communityDTO, Account account) {
+	public CRUCommunityDTO update(CRUCommunityDTO communityDTO, UserDetails account) {
 		Community	model		= communityDTO.getModel();
 		Community	community	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("community.notfound"));
 		City		city		= Optional.ofNullable(cdao.findOne(communityDTO.getCity())).orElseThrow(() -> new RESTRuntimeException("city.notfound"));

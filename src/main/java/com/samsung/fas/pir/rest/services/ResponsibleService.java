@@ -1,7 +1,6 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.exception.RESTRuntimeException;
-import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.CommunityDAO;
 import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
 import com.samsung.fas.pir.persistence.models.entity.Community;
@@ -10,6 +9,7 @@ import com.samsung.fas.pir.rest.dto.responsible.CRUResponsibleDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,7 +25,7 @@ public class ResponsibleService extends BService<Responsible, CRUResponsibleDTO,
 	}
 
 	@Override
-	public CRUResponsibleDTO save(CRUResponsibleDTO create, Account account) {
+	public CRUResponsibleDTO save(CRUResponsibleDTO create, UserDetails account) {
 		Responsible		model		= create.getModel();
 
 		Community		community	= Optional.ofNullable(cdao.findOne(IDCoder.decode(create.getCommunityID()))).orElseThrow(() -> new RESTRuntimeException("community.notfound"));
@@ -34,7 +34,7 @@ public class ResponsibleService extends BService<Responsible, CRUResponsibleDTO,
 	}
 
 	@Override
-	public CRUResponsibleDTO update(CRUResponsibleDTO update, Account account) {
+	public CRUResponsibleDTO update(CRUResponsibleDTO update, UserDetails account) {
 		Responsible		model		= update.getModel();
 		Responsible		responsible	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("responsible.notfound"));
 		Community		community	= Optional.ofNullable(cdao.findOne(IDCoder.decode(update.getCommunityID()))).orElseThrow(() -> new RESTRuntimeException("community.notfound"));

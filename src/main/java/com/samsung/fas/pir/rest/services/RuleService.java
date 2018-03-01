@@ -11,6 +11,7 @@ import com.samsung.fas.pir.rest.dto.rule.CRURuleDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,12 +28,12 @@ public class RuleService extends BService<Rule, CRURuleDTO, RuleDAO, Long> {
 	}
 
 	@Override
-	public CRURuleDTO save(CRURuleDTO create, Account account) {
+	public CRURuleDTO save(CRURuleDTO create, UserDetails account) {
 		return null;
 	}
 
 	@Override
-	public CRURuleDTO update(CRURuleDTO update, Account account) {
+	public CRURuleDTO update(CRURuleDTO update, UserDetails account) {
 		Rule					model			= update.getModel();
 		UUID					ruleID			= Optional.ofNullable(update.getId() != null && !update.getId().trim().isEmpty()? IDCoder.decode(update.getId()) : null).orElseThrow(() -> new RESTRuntimeException("id.missing"));
 		Rule					rule			= Optional.ofNullable(dao.findOne(ruleID)).orElseThrow(() -> new RESTRuntimeException("rule.notfound"));
@@ -106,7 +107,7 @@ public class RuleService extends BService<Rule, CRURuleDTO, RuleDAO, Long> {
 		rule.canRead(model.canRead());
 		rule.canUpdate(model.canUpdate());
 		rule.canDelete(model.canDelete());
-		rule.getProfile().setWhoUpdated(account.getUser());
+		rule.getProfile().setWhoUpdated(((Account) account).getUser());
 
 		return new CRURuleDTO(dao.save(rule));
 	}

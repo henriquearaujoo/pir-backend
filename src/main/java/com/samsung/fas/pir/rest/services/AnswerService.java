@@ -1,7 +1,6 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.exception.RESTRuntimeException;
-import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.AnswerDAO;
 import com.samsung.fas.pir.persistence.dao.QuestionDAO;
 import com.samsung.fas.pir.persistence.models.entity.Answer;
@@ -9,6 +8,7 @@ import com.samsung.fas.pir.persistence.models.entity.Question;
 import com.samsung.fas.pir.rest.dto.answer.CRUAnswerDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -24,7 +24,7 @@ public class AnswerService extends BService<Answer,CRUAnswerDTO, AnswerDAO, Long
 	}
 
 	@Override
-	public CRUAnswerDTO save(CRUAnswerDTO create, Account account) {
+	public CRUAnswerDTO save(CRUAnswerDTO create, UserDetails account) {
 		Answer		model		= create.getModel();
 		Question	question	= Optional.ofNullable(qdao.findOne(model.getQuestion().getId())).orElseThrow(() -> new RESTRuntimeException("question.notfound"));
 
@@ -34,7 +34,7 @@ public class AnswerService extends BService<Answer,CRUAnswerDTO, AnswerDAO, Long
 	}
 
 	@Override
-	public CRUAnswerDTO update(CRUAnswerDTO update, Account account) {
+	public CRUAnswerDTO update(CRUAnswerDTO update, UserDetails account) {
 		Answer		model		= update.getModel();
 		Answer		answer		= Optional.ofNullable(dao.findOne(model.getId())).orElseThrow(() -> new RESTRuntimeException("answer.notfound"));
 

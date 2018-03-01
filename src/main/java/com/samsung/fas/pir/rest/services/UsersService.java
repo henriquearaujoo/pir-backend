@@ -14,6 +14,7 @@ import com.samsung.fas.pir.rest.dto.user.CRUUserDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class UsersService extends BService<User, CRUUserDTO, UserDAO, Long> {
 	}
 
 	@Override
-	public CRUUserDTO save(CRUUserDTO create, Account principal) {
+	public CRUUserDTO save(CRUUserDTO create, UserDetails principal) {
 		User		model		= create.getModel();
 		String		password	= create.getPassword();
 		Profile		profile		= Optional.ofNullable(pdao.findOne(IDCoder.decode(create.getProfileID()))).orElseThrow(() -> new RESTRuntimeException("profile.notfound"));
@@ -71,7 +72,7 @@ public class UsersService extends BService<User, CRUUserDTO, UserDAO, Long> {
 	}
 
 	@Override
-	public CRUUserDTO update(CRUUserDTO update, Account principal) {
+	public CRUUserDTO update(CRUUserDTO update, UserDetails principal) {
 		User		model		= update.getModel();
 		User		user		= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("user.notfound"));
 		Profile		profile		= Optional.ofNullable(pdao.findOne(IDCoder.decode(update.getProfileID()))).orElseThrow(() -> new RESTRuntimeException("profile.notfound"));

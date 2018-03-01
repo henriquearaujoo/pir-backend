@@ -10,12 +10,10 @@ import com.samsung.fas.pir.utils.serializers.LongJsonDeserializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
-import org.jsondoc.core.annotation.ApiObject;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@ApiObject
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddressDTO {
@@ -57,7 +55,7 @@ public class AddressDTO {
 	private		String			postalCode;
 	
 	public AddressDTO() {
-		// JSON
+		super();
 	}
 
 	public AddressDTO(Address embedded) {

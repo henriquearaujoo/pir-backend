@@ -1,13 +1,8 @@
 package com.samsung.fas.pir.login;
 
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.samsung.fas.pir.login.auth.AuthEntryPoint;
 import com.samsung.fas.pir.login.auth.JWToken;
 import com.samsung.fas.pir.login.auth.TokenAuthenticationFilter;
-import com.samsung.fas.pir.login.firebase.FirebaseAuthenticationFilter;
 import com.samsung.fas.pir.login.rest.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -27,9 +22,6 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 @Configuration
 @EnableWebSecurity
@@ -55,7 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers("/rest/**").fullyAuthenticated()
 		.and()
 		.addFilterBefore(new TokenAuthenticationFilter(token, service), BasicAuthenticationFilter.class)
-		.addFilterBefore(new FirebaseAuthenticationFilter(), BasicAuthenticationFilter.class)
+//		.addFilterBefore(new FirebaseAuthenticationFilter(), BasicAuthenticationFilter.class)
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
 		.exceptionHandling().authenticationEntryPoint(entry)
@@ -81,14 +73,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
-	@Bean
-	public FirebaseAuth firebaseAuth() throws IOException {
-		InputStream		input	= context.getResource("classpath:firebase-admin.json").getInputStream();
-		FirebaseOptions	options	= new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(input)).setDatabaseUrl("https://pir-development.firebaseio.com/").build();
-		FirebaseApp.initializeApp(options);
-		return FirebaseAuth.getInstance();
-	}
+//
+//	@Bean
+//	public FirebaseAuth firebaseAuth() throws IOException {
+//		InputStream		input	= context.getResource("classpath:firebase-admin.json").getInputStream();
+//		FirebaseOptions	options	= new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(input)).setDatabaseUrl("https://pir-development.firebaseio.com/").build();
+//		FirebaseApp.initializeApp(options);
+//		return FirebaseAuth.getInstance();
+//	}
 
 	@Bean
 	public CorsFilter corsFilter() {

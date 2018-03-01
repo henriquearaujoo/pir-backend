@@ -1,7 +1,6 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.exception.RESTRuntimeException;
-import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.dao.InterventionDAO;
 import com.samsung.fas.pir.persistence.models.entity.Chapter;
@@ -10,6 +9,7 @@ import com.samsung.fas.pir.rest.dto.intervention.CRUInterventionDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -26,7 +26,7 @@ public class InterventionService extends BService<Intervention, CRUInterventionD
 	}
 
 	@Override
-	public CRUInterventionDTO save(CRUInterventionDTO create, Account account) {
+	public CRUInterventionDTO save(CRUInterventionDTO create, UserDetails account) {
 		Intervention	model		= create.getModel();
 		UUID			chapterID	= create.getChapterdID() != null && !create.getChapterdID().trim().isEmpty()? IDCoder.decode(create.getChapterdID()) : null;
 		Chapter			chapter		= Optional.ofNullable(cdao.findOne(Optional.ofNullable(chapterID).orElseThrow(() -> new RESTRuntimeException("chapter.id.missing")))).orElseThrow(() -> new RESTRuntimeException("chapter.notfound"));
@@ -35,7 +35,7 @@ public class InterventionService extends BService<Intervention, CRUInterventionD
 	}
 
 	@Override
-	public CRUInterventionDTO update(CRUInterventionDTO update, Account account) {
+	public CRUInterventionDTO update(CRUInterventionDTO update, UserDetails account) {
 		Intervention	model			= update.getModel();
 		Intervention	intervention	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("intervention.notfound"));
 

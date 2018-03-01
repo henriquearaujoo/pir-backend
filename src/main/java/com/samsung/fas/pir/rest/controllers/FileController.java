@@ -3,6 +3,7 @@ package com.samsung.fas.pir.rest.controllers;
 import com.samsung.fas.pir.rest.dto.FileDTO;
 import com.samsung.fas.pir.rest.services.FileService;
 import com.samsung.fas.pir.utils.MultipartFileSender;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import java.util.HashSet;
 
 @Controller
 @RequestMapping("/rest/file")
+@Api(value = "FILES", description = "REST Controller for FILES", tags = "FILES")
 public class FileController {
 	private final FileService service;
 

@@ -1,10 +1,10 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.persistence.dao.PageDAO;
 import com.samsung.fas.pir.persistence.models.entity.Page;
 import com.samsung.fas.pir.rest.dto.page.CRUPageDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,12 +14,12 @@ public class PageService extends BService<Page, CRUPageDTO, PageDAO, Long> {
 	}
 
 	@Override
-	public CRUPageDTO save(CRUPageDTO create, Account account) {
+	public CRUPageDTO save(CRUPageDTO create, UserDetails account) {
 		return null;
 	}
 
 	@Override
-	public CRUPageDTO update(CRUPageDTO update, Account account) {
+	public CRUPageDTO update(CRUPageDTO update, UserDetails account) {
 		return null;
 	}
 }

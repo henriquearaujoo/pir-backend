@@ -6,22 +6,26 @@ import com.samsung.fas.pir.persistence.models.entity.Intervention;
 import com.samsung.fas.pir.rest.controllers.base.BController;
 import com.samsung.fas.pir.rest.dto.intervention.CRUInterventionDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
-import org.jsondoc.core.annotation.ApiPathParam;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
 @Controller
 @RequestMapping(value = "/rest/chapters/intervention", produces = MediaType.APPLICATION_JSON)
+@Api(value = "Chapter Intervention", description = "REST Controller for Chapter Intervention", tags = "CHAPTER INTERVENTION")
 public class InterventionController extends BController<Intervention, CRUInterventionDTO, InterventionDAO> {
 	@Autowired
 	public InterventionController(BService<Intervention, CRUInterventionDTO, InterventionDAO, Long> service) {
@@ -30,13 +34,13 @@ public class InterventionController extends BController<Intervention, CRUInterve
 
 	@RequestMapping(method = RequestMethod.GET, value = "/search")
 	@ResponseBody
-	public ResponseEntity<Collection<CRUInterventionDTO>> search(@QuerydslPredicate(root = Intervention.class) Predicate predicate) {
-		return ResponseEntity.ok(service.findAll(predicate));
+	public ResponseEntity<Collection<CRUInterventionDTO>> search(@QuerydslPredicate(root = Intervention.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(service.findAll(predicate, details));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/search/page")
 	@ResponseBody
-	public ResponseEntity<Page<CRUInterventionDTO>> search(@ApiPathParam @QuerydslPredicate(root = Intervention.class) Predicate predicate, @ApiPathParam Pageable pageable) {
-		return ResponseEntity.ok(service.findAll(predicate, pageable));
+	public ResponseEntity<Page<CRUInterventionDTO>> search(@QuerydslPredicate(root = Intervention.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(service.findAll(predicate, pageable, details));
 	}
 }
