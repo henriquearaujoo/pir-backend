@@ -1,5 +1,6 @@
 package com.samsung.fas.pir;
 
+import com.google.common.base.Predicates;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -47,7 +48,10 @@ public class PIRApplication extends SpringBootServletInitializer {
 					   .build()
 					   .pathMapping("/")
 					   .securitySchemes(Collections.singletonList(new ApiKey("APIKEY", HttpHeaders.AUTHORIZATION, "HEADER")))
-					   .securityContexts(Collections.singletonList(SecurityContext.builder().securityReferences(authorization()).forPaths(PathSelectors.ant("/rest/**")).build()))
+					   .securityContexts(Collections.singletonList(SecurityContext.builder()
+								   .securityReferences(authorization())
+								   .forPaths(PathSelectors.ant("/rest/**"))
+								   .forPaths(Predicates.not(PathSelectors.ant("/rest/authentication/**"))).build()))
 					   .apiInfo(new ApiInfo(
 							"PIR REST Documentation",
 							"Documentation for PIR REST Services",
