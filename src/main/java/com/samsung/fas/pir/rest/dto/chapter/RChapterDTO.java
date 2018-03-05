@@ -131,8 +131,8 @@ public class RChapterDTO {
 		setStatus(entity.isValid());
 		setResources(entity.getResources());
 		setUntilComplete(Tools.calculate(entity));
-		Optional.of(entity.getMedias()).ifPresent(item -> setMedias(item.stream().map(FileDTO::toDTO).collect(Collectors.toSet())));
-		Optional.of(entity.getThumbnails()).ifPresent(item -> setThumbnails(item.stream().map(FileDTO::toDTO).collect(Collectors.toSet())));
+		setMedias(entity.getMedias() != null? entity.getMedias().stream().map(FileDTO::toDTO).collect(Collectors.toSet()) : null);
+		setThumbnails(entity.getMedias() != null? entity.getThumbnails().stream().map(FileDTO::toDTO).collect(Collectors.toSet()) : null);
 	}
 
 	public static RChapterDTO toDTO(Chapter entity) {

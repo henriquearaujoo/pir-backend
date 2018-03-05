@@ -21,5 +21,7 @@ public interface IAnswerRepository extends JpaRepository<Answer, Long>, PagingAn
 	@Override
 	default void customize(QuerydslBindings bindings, QAnswer root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+		bindings.bind(root.uuid).as("id").withDefaultBinding();
+		bindings.bind(root.question.uuid).as("question").withDefaultBinding();
 	}
 }

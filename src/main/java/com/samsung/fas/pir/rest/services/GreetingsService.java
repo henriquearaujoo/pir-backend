@@ -51,7 +51,7 @@ public class GreetingsService {
 
 	public RGreetingsDTO save(CGreetingsDTO dto) {
 		Greetings	model		= dto.getModel();
-		Chapter		chapter		= cdao.findOne(model.getChapter().getId());
+		Chapter		chapter		= cdao.findOne(model.getChapter().getUuid());
 
 		// Verify if chapter exists
 		if (chapter == null)
@@ -67,8 +67,8 @@ public class GreetingsService {
 
 	public RGreetingsDTO update(UGreetingsDTO dto) {
 		Greetings	model		= dto.getModel();
-		Chapter		chapter		= cdao.findOne(model.getChapter().getId());
-		Greetings	greetings	= gdao.findOne(model.getId());
+		Chapter		chapter		= cdao.findOne(model.getChapter().getUuid());
+		Greetings	greetings	= gdao.findOne(model.getUuid());
 
 		// Verify if chapter exists
 		if (chapter == null)
@@ -83,7 +83,7 @@ public class GreetingsService {
 			throw new RESTRuntimeException("chapter.greetings.notfound");
 
 		// Verify if greetings chapter id is euqal to informed chapter id
-		if (greetings.getChapter().getId() != model.getChapter().getId())
+		if (greetings.getChapter().getUuid().compareTo(model.getChapter().getUuid()) != 0)
 			throw new RESTRuntimeException("chapter.greetings.id.differs");
 
 		// Set chapter for greetings

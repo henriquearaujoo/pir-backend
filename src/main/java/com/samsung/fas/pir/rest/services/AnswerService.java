@@ -68,7 +68,7 @@ public class AnswerService {
 
 	public RAnswerDTO save(CAnswerDTO dto) {
 		Answer		model		= dto.getModel();
-		Question	qentity		= qdao.findOne(model.getQuestion().getId());
+		Question	qentity		= qdao.findOne(model.getQuestion().getUuid());
 
 		// If no question with given id
 		if (qentity == null)
@@ -86,8 +86,8 @@ public class AnswerService {
 
 	public RAnswerDTO update(UAnswerDTO dto) {
 		Answer		model		= dto.getModel();
-		Answer		answer		= adao.findOne(model.getId());
-		Question	question	= qdao.findOne(model.getQuestion().getId());
+		Answer		answer		= adao.findOne(model.getUuid());
+		Question	question	= qdao.findOne(model.getQuestion().getUuid());
 
 		// If no entity with given id
 		if (answer == null)

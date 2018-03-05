@@ -67,7 +67,7 @@ public class QuestionService {
 
 	public RQuestionDTO save(CQuestionDTO dto) {
 		Question		model		= dto.getModel();
-		Conclusion		centity		= cdao.findOne(model.getConclusion().getId());
+		Conclusion		centity		= cdao.findOne(model.getConclusion().getUuid());
 
 		// If there's no conclusion with given id
 		if (centity == null)
@@ -84,8 +84,8 @@ public class QuestionService {
 
 	public RQuestionDTO update(UQuestionDTO dto) {
 		Question		model		= dto.getModel();
-		Question		question	= qdao.findOne(model.getId());
-		Conclusion		conclusion	= cdao.findOne(model.getConclusion().getId());
+		Question		question	= qdao.findOne(model.getUuid());
+		Conclusion		conclusion	= cdao.findOne(model.getConclusion().getUuid());
 
 		if (question == null)
 			throw new RESTRuntimeException("question.notfound");

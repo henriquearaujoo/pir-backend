@@ -58,7 +58,8 @@ public class AuthenticationController {
 
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			headers.add(HttpHeaders.AUTHORIZATION, token.generateToken((Account) authentication.getPrincipal(), device));
-
+			headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+			
 			return new ResponseEntity(headers, HttpStatus.OK);
 		} catch (NullPointerException e) {
 			e.printStackTrace();

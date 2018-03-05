@@ -23,11 +23,13 @@ public class ExceptionController {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<?> handleException(MethodArgumentNotValidException e) {
+		e.printStackTrace();
 		return ResponseEntity.badRequest().body(e.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage).collect(Collectors.toList()));
 	}
 
 	@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<?> handleException(ConstraintViolationException e) {
+		e.printStackTrace();
 		return ResponseEntity.badRequest().body(e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.toList()));
 	}
 
@@ -48,12 +50,14 @@ public class ExceptionController {
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	public ResponseEntity<?> handleException(HttpRequestMethodNotSupportedException e) {
 		Log.error(e.getMessage());
+		e.printStackTrace();
 		return ResponseEntity.badRequest().body("method." + e.getMethod().toLowerCase() + ".not.supported");
 	}
 
 	@ExceptionHandler(AuthenticationException.class)
 	public ResponseEntity<?> handleException(AuthenticationException e) {
 		Log.error(e.getMessage());
+		e.printStackTrace();
 		return ResponseEntity.badRequest().body(e.getMessage());
 	}
 

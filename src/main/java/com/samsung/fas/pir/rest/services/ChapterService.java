@@ -4,6 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.models.entity.Chapter;
+import com.samsung.fas.pir.persistence.models.entity.MDataFile;
 import com.samsung.fas.pir.rest.dto.chapter.CChapterDTO;
 import com.samsung.fas.pir.rest.dto.chapter.RChapterDTO;
 import com.samsung.fas.pir.rest.dto.chapter.UChapterDTO;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -128,8 +130,12 @@ public class ChapterService {
 		chapter.setEstimatedTime(model.getEstimatedTime());
 		chapter.setTimeUntilNext(model.getTimeUntilNext());
 		chapter.setValid(model.isValid());
-		chapter.setMedias(model.getMedias());
-		chapter.setThumbnails(model.getThumbnails());
-		return RChapterDTO.toDTO(cdao.save(model));
+		if (model.getMedias() != null) {
+			if (chapter.getMedias() == null)
+				chapter.setMedias(new ArrayList<>());
+			chapter.getMedias().clear();
+			chapter.getMedias().addAll(model.getMedias());
+		}
+		return RChapterDTO.toDTO(cdao.save(chapter));
 	}
 }

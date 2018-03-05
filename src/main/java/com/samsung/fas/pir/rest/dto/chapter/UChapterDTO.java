@@ -141,8 +141,8 @@ public class UChapterDTO {
 		e.setValid(isStatus());
 		e.setResources(getResources());
 		e.setSubtitle(getSubtitle());
-		Optional.of(getMedias()).ifPresent(item -> e.setMedias(item.stream().map(FileDTO::getModel).collect(Collectors.toSet())));
-		Optional.of(getThumbnails()).ifPresent(item -> e.setThumbnails(item.stream().map(FileDTO::getModel).collect(Collectors.toSet())));
+		e.setMedias(getMedias() != null? getMedias().stream().map(FileDTO::getModel).collect(Collectors.toSet()) : null);
+		e.setThumbnails(getThumbnails() != null? getThumbnails().stream().map(FileDTO::getModel).collect(Collectors.toSet()) : null);
 		return e;
 	}
 }
