@@ -21,6 +21,7 @@ public interface IBaseDAO<TEntity, TPK extends Serializable>{
 	TEntity save(TEntity model);
 	Set<TEntity> save(Iterable<TEntity> models);
 
+	TPK delete(UUID id);
 	void delete(TPK id);
 	void delete(TEntity entity);
 }

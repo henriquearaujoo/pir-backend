@@ -1,33 +1,48 @@
 /* Pages */
 INSERT INTO pirdb.public.pages (title_url, url_path)
-VALUES ('user-list', 'user-list'), ('profile-list', 'profile-list'), ('user', 'user'), ('user-edit', 'user-edit'),
-('user-details', 'user-details'), ('page-list', 'page-list'), ('template-chapter', 'template-chapter'),
-('chapter-dashboard',	'chapter-dashboard'), ('community-list', 'community-list'), ('community', 'community'),
-('mother', 'mother'), ('mother-list', 'mother-list'), ('child-list', 'child-list'),
-	('responsible-list', 'responsible-list'), ('responsible', 'responsible'), ('child', 'child')
+VALUES
+	('user-list', 'user-list'),
+	('profile-list', 'profile-list'),
+	('user', 'user'),
+	('user-edit', 'user-edit'),
+	('user-details', 'user-details'),
+	('page-list', 'page-list'),
+	('template-chapter', 'template-chapter'),
+	('chapter-dashboard',	'chapter-dashboard'),
+	('community-list', 'community-list'),
+	('community', 'community'),
+	('child-list', 'child-list'),
+	('responsible-list', 'responsible-list'),
+	('responsible', 'responsible'),
+	('child', 'child'),
+	('community-details',	'community-details'),
+	('responsible-details',	'responsible-details'),
+	('child-details',	'child-details'),
+	('pregnant', 'pregnant'),
+	('pregnant-list', 'pregnant-list'),
+	('child', 'child'),
+	('pregnant-details', 'pregnant-details')
 ON CONFLICT DO NOTHING;
 
 /* User */
-INSERT INTO "user" (email, full_name, dt_register, type)
-VALUES ('example@example.com', 'Administrator', current_date, 'PFIS')
+INSERT INTO "user" (email, name, register_date)
+VALUES ('example@example.com', 'Administrator', current_date)
 ON CONFLICT DO NOTHING;
 
 /* Profile */
-INSERT INTO pirdb.public.profile (status, created_at, description, title, updated_at, created_by, modified_by)
-VALUES (TRUE, current_date, 'Administrator ROLE', 'Administrator', current_date, (SELECT id FROM "user" WHERE full_name = 'Administrator'), (SELECT id FROM "user" WHERE full_name = 'Administrator'))
+INSERT INTO pirdb.public.profile (id, status, created_at, description, title, updated_at, created_by, modified_by)
+VALUES (1, TRUE, current_date, 'Administrator ROLE', 'Administrator', current_date, (SELECT id FROM "user" WHERE name = 'Administrator'), (SELECT id FROM "user" WHERE name = 'Administrator'))
 ON CONFLICT DO NOTHING;
 
 /* Page Profile Permissions */
-INSERT INTO profile_pages (can_create, can_delete, can_view, can_update, page_id, profile_id)
+INSERT INTO profile_pages (can_create, can_delete, can_read, can_update, page_id, profile_id)
 	(SELECT cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), pages.id, profile.id
 	 FROM pirdb.public.profile, public.pages)
 ON CONFLICT DO NOTHING;
 
 /* Account */
 INSERT INTO pirdb.public.account (id, credentials_expired, enabled, expired, locked, password, login, profile_id)
-VALUES((SELECT id FROM "user" WHERE full_name = 'Administrator'),
-FALSE, TRUE, FALSE, FALSE, '$2a$10$DHiwEO0otW0exjRhcsuhj.mJMUxZ2oAtQ/3SxVEXlETFd8WBn0Hqy', 'admin',
-(SELECT id FROM pirdb.public.profile WHERE title = 'Administrator'))
+VALUES((SELECT id FROM "user" WHERE name = 'Administrator'), FALSE, TRUE, FALSE, FALSE, '$2a$10$DHiwEO0otW0exjRhcsuhj.mJMUxZ2oAtQ/3SxVEXlETFd8WBn0Hqy', 'admin', (SELECT id FROM pirdb.public.profile WHERE title = 'Administrator'))
 ON CONFLICT DO NOTHING;
 
 INSERT INTO public.state (id, uf_abbr, name)

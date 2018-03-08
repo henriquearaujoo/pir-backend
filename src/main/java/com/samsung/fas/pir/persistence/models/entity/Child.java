@@ -116,7 +116,7 @@ public class Child {
 	@Setter
 	@ManyToOne
 	@JoinColumn
-	private 	Mother			mother;
+	private 	Responsible		mother;
 
 	@Getter
 	@Setter

@@ -31,7 +31,7 @@ public class CRUMotherDTO {
 		super();
 	}
 
-	public CRUMotherDTO(Mother mother) {
+	public CRUMotherDTO(Mother mother, boolean detailed) {
 		setChildrenCount(mother.getChildrenCount());
 		setCivilState(mother.getCivilState().toString());
 	}

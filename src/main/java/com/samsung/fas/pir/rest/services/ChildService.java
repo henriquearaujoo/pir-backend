@@ -4,7 +4,6 @@ import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.persistence.dao.ChildDAO;
 import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
 import com.samsung.fas.pir.persistence.models.entity.Child;
-import com.samsung.fas.pir.persistence.models.entity.Mother;
 import com.samsung.fas.pir.persistence.models.entity.Responsible;
 import com.samsung.fas.pir.rest.dto.child.CRUChildDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
@@ -29,12 +28,15 @@ public class ChildService extends BService<Child, CRUChildDTO, ChildDAO, Long> {
 	public CRUChildDTO save(CRUChildDTO create, UserDetails account) {
 		Child		model		= create.getModel();
 		Responsible	responsible	= Optional.ofNullable(rdao.findOne(IDCoder.decode(create.getResponsibleID()))).orElseThrow(() -> new RESTRuntimeException("responsible.notfound"));
-		Mother		mother		= model.getMother() != null? responsible.getMother() : create.getMotherID() != null && !create.getMotherID().trim().isEmpty()? Optional.ofNullable(rdao.findOne(IDCoder.decode(create.getMotherID())).getMother()).orElseThrow(() -> new RESTRuntimeException("mother.notfound")) : null;
+		Responsible	mother		= Optional.ofNullable(rdao.findOne(IDCoder.decode(create.getMotherID()))).orElseThrow(() -> new RESTRuntimeException("mother.notfound"));
+
+		if (mother.getMother() == null)
+			throw new RESTRuntimeException("responsible.not.mother");
 
 		model.setMother(mother);
 		model.setResponsible(responsible);
 
-		return new CRUChildDTO(dao.save(model));
+		return new CRUChildDTO(dao.save(model), true);
 	}
 
 	@Override
@@ -42,7 +44,10 @@ public class ChildService extends BService<Child, CRUChildDTO, ChildDAO, Long> {
 		Child		model		= update.getModel();
 		Child		child		= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("child.id.missing")))).orElseThrow(() -> new RESTRuntimeException("child.notfound"));
 		Responsible	responsible	= Optional.ofNullable(rdao.findOne(IDCoder.decode(update.getResponsibleID()))).orElseThrow(() -> new RESTRuntimeException("responsible.notfound"));
-		Mother		mother		= model.getMother() != null? responsible.getMother() : update.getMotherID() != null && !update.getMotherID().trim().isEmpty()? Optional.ofNullable(rdao.findOne(IDCoder.decode(update.getMotherID())).getMother()).orElseThrow(() -> new RESTRuntimeException("mother.notfound")) : null;
+		Responsible	mother		= Optional.ofNullable(rdao.findOne(IDCoder.decode(update.getMotherID()))).orElseThrow(() -> new RESTRuntimeException("responsible.notfound"));
+
+		if (mother.getMother() == null)
+			throw new RESTRuntimeException("responsible.not.mother");
 
 		child.setName(model.getName());
 		child.setFatherName(model.getFatherName());
@@ -62,6 +67,6 @@ public class ChildService extends BService<Child, CRUChildDTO, ChildDAO, Long> {
 		child.setResponsible(responsible);
 		child.setMother(mother);
 
-		return new CRUChildDTO(dao.save(child));
+		return new CRUChildDTO(dao.save(child), true);
 	}
 }

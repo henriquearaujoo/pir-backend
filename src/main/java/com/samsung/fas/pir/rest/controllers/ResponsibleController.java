@@ -5,6 +5,7 @@ import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
 import com.samsung.fas.pir.persistence.models.entity.Responsible;
 import com.samsung.fas.pir.rest.controllers.base.BController;
 import com.samsung.fas.pir.rest.dto.responsible.CRUResponsibleDTO;
+import com.samsung.fas.pir.rest.services.ResponsibleService;
 import com.samsung.fas.pir.rest.services.base.BService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,30 @@ public class ResponsibleController extends BController<Responsible, CRUResponsib
 	@Autowired
 	public ResponsibleController(BService<Responsible, CRUResponsibleDTO, ResponsibleDAO, Long> service) {
 		super(service);
+	}
+
+	@RequestMapping(method= RequestMethod.GET, path = "/no-mother")
+	@ResponseBody
+	public ResponseEntity<?> findAllResponsbiles() {
+		return ResponseEntity.ok(((ResponsibleService) service).findAllResponsible());
+	}
+
+	@RequestMapping(method= RequestMethod.GET, path = "/no-mother/page")
+	@ResponseBody
+	public ResponseEntity<?> findAllResponsbiles(Pageable pageable) {
+		return ResponseEntity.ok(((ResponsibleService) service).findAllResponsible(pageable));
+	}
+
+	@RequestMapping(method= RequestMethod.GET, path = "/no-mother/search")
+	@ResponseBody
+	public ResponseEntity<?> findAllResponsbiles(@QuerydslPredicate(root = Responsible.class) Predicate predicate) {
+		return ResponseEntity.ok(((ResponsibleService) service).findAllResponsible(predicate));
+	}
+
+	@RequestMapping(method= RequestMethod.GET, path = "/no-mother/search/page")
+	@ResponseBody
+	public ResponseEntity<?> findAllResponsbiles(@QuerydslPredicate(root = Responsible.class) Predicate predicate, Pageable pageable) {
+		return ResponseEntity.ok(((ResponsibleService) service).findAllResponsible(pageable, predicate));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/search")

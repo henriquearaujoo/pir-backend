@@ -54,6 +54,10 @@ public abstract class BaseDAO<TEntity, TPK extends Serializable, TQuery extends 
 		repository.delete(id);
 	}
 
+	public TPK delete(UUID id) {
+		return repository.deleteByUuid(id);
+	}
+
 	public void delete(TEntity entity) {
 		repository.delete(entity);
 	}

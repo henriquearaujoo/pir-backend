@@ -31,7 +31,7 @@ public class GreetingsService extends BService<Greetings, CRUGreetingsDTO, Greet
 		UUID 		chapterID	= create.getChapterID() != null && !create.getChapterID().trim().isEmpty()? IDCoder.decode(create.getChapterID()) : null;
 		Chapter		chapter		= Optional.ofNullable(cdao.findOne(Optional.ofNullable(chapterID).orElseThrow(() -> new RESTRuntimeException("chapter.id.missing")))).orElseThrow(() -> new RESTRuntimeException("chapter.notfound"));
 		model.setChapter(chapter);
-		return new CRUGreetingsDTO(dao.save(model));
+		return new CRUGreetingsDTO(dao.save(model), true);
 	}
 
 	@Override
@@ -45,6 +45,6 @@ public class GreetingsService extends BService<Greetings, CRUGreetingsDTO, Greet
 		greetings.setSit(model.isSit());
 		greetings.setGoback(model.isGoback());
 
-		return new CRUGreetingsDTO(dao.save(greetings));
+		return new CRUGreetingsDTO(dao.save(greetings), true);
 	}
 }

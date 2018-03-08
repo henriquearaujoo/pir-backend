@@ -8,7 +8,6 @@ import org.hibernate.annotations.*;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.Collection;
 import java.util.UUID;
 
 @Entity
@@ -23,9 +22,9 @@ public class Mother {
 
 	@Getter
 	@Setter
-	@OneToOne(optional = false)
 	@MapsId
-	@JoinColumn(name = "id", updatable = false)
+	@OneToOne(optional = false)
+	@JoinColumn(name = "id")
 	private 	Responsible			responsible;
 
 	@Getter
@@ -46,9 +45,4 @@ public class Mother {
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private 	ECivilState 		civilState;
-
-	@Getter
-	@Setter
-	@OneToMany(mappedBy = "mother")
-	private		Collection<Child>	children;
 }

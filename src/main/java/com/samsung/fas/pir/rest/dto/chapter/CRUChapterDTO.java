@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CRUChapterDTO {
-	@NotBlank(message = "id.missing")
 	@Getter
 	@Setter
 	private		String			id;
@@ -121,7 +120,7 @@ public class CRUChapterDTO {
 		super();
 	}
 
-	public CRUChapterDTO(Chapter chapter) {
+	public CRUChapterDTO(Chapter chapter, boolean detailed) {
 		setId(IDCoder.encode(chapter.getUuid()));
 		setChapter(chapter.getChapter());
 		setVersion(chapter.getVersion());
@@ -136,14 +135,14 @@ public class CRUChapterDTO {
 		setStatus(chapter.isValid());
 		setResources(chapter.getResources());
 		setUntilComplete(Tools.calculate(chapter));
-		Optional.of(chapter.getMedias()).ifPresent(item -> setMedias(item.stream().map(FileDTO::toDTO).collect(Collectors.toSet())));
-		Optional.of(chapter.getThumbnails()).ifPresent(item -> setThumbnails(item.stream().map(FileDTO::toDTO).collect(Collectors.toSet())));
+		Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMedias(item.stream().map(FileDTO::toDTO).collect(Collectors.toSet())));
+		Optional.ofNullable(chapter.getThumbnails()).ifPresent(item -> setThumbnails(item.stream().map(FileDTO::toDTO).collect(Collectors.toSet())));
 	}
 
 	@JsonIgnore
 	public Chapter getModel() {
 		Chapter e = new Chapter();
-		e.setUuid(IDCoder.decode(getId()));
+		e.setUuid(getId() != null && !getId().trim().isEmpty()? IDCoder.decode(getId()) : null);
 		e.setVersion(getVersion());
 		e.setChapter(getChapter());
 		e.setContent(getContent());
@@ -156,8 +155,8 @@ public class CRUChapterDTO {
 		e.setValid(isStatus());
 		e.setResources(getResources());
 		e.setSubtitle(getSubtitle());
+		e.setMedias(getMedias() != null? getMedias().stream().map(FileDTO::getModel).collect(Collectors.toSet()) : null);
 		e.setThumbnails(getThumbnails() != null? getThumbnails().stream().map(FileDTO::getModel).collect(Collectors.toSet()) : null);
-		e.setMedias(getMedias() != null? getThumbnails().stream().map(FileDTO::getModel).collect(Collectors.toSet()) : null);
 		return e;
 	}
 }

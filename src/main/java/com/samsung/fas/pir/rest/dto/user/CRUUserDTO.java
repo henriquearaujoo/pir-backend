@@ -88,17 +88,17 @@ public class CRUUserDTO {
 		super();
 	}
 
-	public CRUUserDTO(User user) {
+	public CRUUserDTO(User user, boolean detailed) {
 		setId(IDCoder.encode(user.getUuid()));
 		setName(user.getName());
 		setEmail(user.getEmail());
 		setLogin(user.getAccount().getUsername());
 		setPassword(null);
 		setActive(user.getAccount().isEnabled() && user.getAccount().isAccountNonExpired() && user.getAccount().isAccountNonLocked() && user.getAccount().isCredentialsNonExpired());
-		setPerson(user.getPerson() != null? new CRUPersonDTO(user.getPerson()) : null);
-		setEntity(user.getEntity() != null? new CRUEntityDTO(user.getEntity()) : null);
-		setAddress(new AddressDTO(user.getAddress()));
-		setProfile(new CRUProfileDTO(user.getAccount().getProfile()));
+		setPerson(user.getPerson() != null? new CRUPersonDTO(user.getPerson(), false) : null);
+		setEntity(user.getEntity() != null? new CRUEntityDTO(user.getEntity(), false) : null);
+		setAddress(user.getAddress() != null? new AddressDTO(user.getAddress(), false) : null);
+		setProfile(new CRUProfileDTO(user.getAccount().getProfile(), false));
 	}
 
 	@JsonIgnore
@@ -108,6 +108,7 @@ public class CRUUserDTO {
 		model.setName(getName());
 		model.setEmail(getEmail());
 		model.setAddress(getAddress().getModel());
+		model.getAddress().setUser(model);
 		model.setEntity(getEntity() != null? getEntity().getModel() : null);
 		model.setPerson(getPerson() != null? getPerson().getModel() : null);
 		return model;

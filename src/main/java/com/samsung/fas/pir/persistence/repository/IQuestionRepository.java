@@ -14,5 +14,7 @@ public interface IQuestionRepository extends BRepository<Question, Long, QQuesti
 	@Override
 	default void customize(QuerydslBindings bindings, QQuestion root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+		bindings.bind(root.uuid).as("id").withDefaultBinding();
+		bindings.bind(root.conclusion.uuid).as("conclusion").withDefaultBinding();
 	}
 }

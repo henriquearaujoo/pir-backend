@@ -40,7 +40,7 @@ public class CRUEntityDTO {
 		super();
 	}
 
-	public CRUEntityDTO(LegalEntity entity) {
+	public CRUEntityDTO(LegalEntity entity, boolean detailed) {
 		setCnpj(entity.getCnpj());
 		setIe(entity.getIe());
 		setSocial(entity.getSocialName());

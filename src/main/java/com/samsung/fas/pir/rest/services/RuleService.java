@@ -109,6 +109,6 @@ public class RuleService extends BService<Rule, CRURuleDTO, RuleDAO, Long> {
 		rule.canDelete(model.canDelete());
 		rule.getProfile().setWhoUpdated(((Account) account).getUser());
 
-		return new CRURuleDTO(dao.save(rule));
+		return new CRURuleDTO(dao.save(rule), true);
 	}
 }

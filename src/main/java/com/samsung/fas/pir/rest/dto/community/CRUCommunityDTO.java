@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.entity.Community;
 import com.samsung.fas.pir.persistence.models.enums.ECommunityZone;
+import com.samsung.fas.pir.rest.dto.address.CityDTO;
 import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
@@ -143,13 +144,18 @@ public class CRUCommunityDTO {
 	@Setter
 	@JsonProperty("city_id")
 	@NotNull(message = "city.id.missing")
-	private 	Long			city;
+	private 	String			cityId;
+
+	@Getter
+	@Setter
+	@JsonProperty
+	private 	CityDTO			city;
 
 	public CRUCommunityDTO() {
 		super();
 	}
 
-	public CRUCommunityDTO(Community community) {
+	public CRUCommunityDTO(Community community, boolean detailed) {
 		setId(IDCoder.encode(community.getUuid()));
 		setName(community.getName());
 		setWaterSupply(community.getWaterSupply());
@@ -168,7 +174,7 @@ public class CRUCommunityDTO {
 		hasPatron(community.hasPatron());
 		setCommunityZone(community.getCommunityZone().toString());
 		hasCommunityLeaders(community.hasCommunityLeaders());
-		setCity(community.getCity().getId());
+		setCity(new CityDTO(community.getCity(), false));
 		setCulturalProductions(community.getCulturalProductions());
 		setCommunityZone(community.getCommunityZone().toString());
 		setRegional(community.getRegional());

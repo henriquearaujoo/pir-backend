@@ -38,7 +38,7 @@ public class CRUPersonDTO {
 		super();
 	}
 
-	public CRUPersonDTO(Person person) {
+	public CRUPersonDTO(Person person, boolean detailed) {
 		setRg(person.getRg());
 		setEmitter(person.getEmitter());
 		setCpf(person.getCpf());

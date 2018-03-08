@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,6 +23,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.ws.rs.core.MediaType;
 import java.util.Collection;
+import java.util.UUID;
 
 @Controller
 @RequestMapping(value = "/rest/chapters/conclusion/questions", produces = MediaType.APPLICATION_JSON)
@@ -42,5 +44,12 @@ public class QuestionController extends BController<Question, CRUQuestionDTO, Qu
 	@ResponseBody
 	public ResponseEntity<Page<CRUQuestionDTO>> search(@QuerydslPredicate(root = Question.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable, details));
+	}
+
+	@RequestMapping(method=RequestMethod.DELETE, value="/{id}")
+	@ResponseBody
+	public ResponseEntity delete(@PathVariable("id") UUID codedid) {
+		service.delete(codedid);
+		return ResponseEntity.ok(null);
 	}
 }

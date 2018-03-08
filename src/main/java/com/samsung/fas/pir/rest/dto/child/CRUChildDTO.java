@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.entity.Child;
 import com.samsung.fas.pir.persistence.models.enums.EChildGender;
+import com.samsung.fas.pir.rest.dto.responsible.CRUResponsibleDTO;
 import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,12 +24,6 @@ public class CRUChildDTO {
 	@Setter
 	@JsonProperty("id")
 	private 	String 			id;
-
-	@Getter
-	@Setter
-	@JsonProperty("responsible_id")
-	@NotBlank(message = "responsible.id.missing")
-	private 	String			responsibleID;
 
 	@Getter
 	@Setter
@@ -125,16 +120,31 @@ public class CRUChildDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("responsible_id")
+	@NotBlank(message = "responsible.id.missing")
+	private 	String				responsibleID;
+
+	@Getter
+	@Setter
 	@JsonProperty("mother_id")
-	private 	String			motherID;
+	private 	String				motherID;
+
+	@Getter
+	@Setter
+	@JsonProperty("mother")
+	private 	CRUResponsibleDTO	mother;
+
+	@Getter
+	@Setter
+	@JsonProperty("responsible")
+	private 	CRUResponsibleDTO	responsible;
 
 	public CRUChildDTO() {
 		super();
 	}
 
-	public CRUChildDTO(Child child) {
+	public CRUChildDTO(Child child, boolean detailed) {
 		setId(IDCoder.encode(child.getUuid()));
-		setResponsibleID(IDCoder.encode(child.getResponsible().getUuid()));
 		setName(child.getName());
 		setBirth(new SimpleDateFormat("dd-MM-yyyy").format(child.getBirth()));
 		setFatherName(child.getFatherName());
@@ -151,7 +161,8 @@ public class CRUChildDTO {
 		isInSocialEducationalPrograms(child.isSocialEducationalPrograms());
 		vacinationUpToDate(child.isVacinationUpToDate());
 		hasRelationDifficulties(child.isRelationDifficulties());
-		setMotherID(IDCoder.encode(child.getMother().getResponsible().getUuid()));
+		setMother(child.getMother() != null? new CRUResponsibleDTO(child.getMother(), false) : null);
+		setResponsible(new CRUResponsibleDTO(child.getResponsible(), false));
 	}
 
 	@JsonIgnore

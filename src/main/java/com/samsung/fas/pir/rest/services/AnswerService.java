@@ -7,6 +7,7 @@ import com.samsung.fas.pir.persistence.models.entity.Answer;
 import com.samsung.fas.pir.persistence.models.entity.Question;
 import com.samsung.fas.pir.rest.dto.answer.CRUAnswerDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
+import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -26,19 +27,19 @@ public class AnswerService extends BService<Answer,CRUAnswerDTO, AnswerDAO, Long
 	@Override
 	public CRUAnswerDTO save(CRUAnswerDTO create, UserDetails account) {
 		Answer		model		= create.getModel();
-		Question	question	= Optional.ofNullable(qdao.findOne(model.getQuestion().getId())).orElseThrow(() -> new RESTRuntimeException("question.notfound"));
+		Question	question	= Optional.ofNullable(qdao.findOne(create.getQuestionID() != null && !create.getQuestionID().trim().isEmpty()? IDCoder.decode(create.getQuestionID()) : null)).orElseThrow(() -> new RESTRuntimeException("question.notfound"));
 
 		model.setQuestion(question);
 		question.getAnswers().add(model);
-		return new CRUAnswerDTO(dao.save(model));
+		return new CRUAnswerDTO(dao.save(model), true);
 	}
 
 	@Override
 	public CRUAnswerDTO update(CRUAnswerDTO update, UserDetails account) {
 		Answer		model		= update.getModel();
-		Answer		answer		= Optional.ofNullable(dao.findOne(model.getId())).orElseThrow(() -> new RESTRuntimeException("answer.notfound"));
+		Answer		answer		= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("answer.notfound"));
 
 		answer.setDescription(model.getDescription());
-		return new CRUAnswerDTO(dao.save(answer));
+		return new CRUAnswerDTO(dao.save(answer), true);
 	}
 }

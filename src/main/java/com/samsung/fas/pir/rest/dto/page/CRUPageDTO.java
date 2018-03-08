@@ -34,7 +34,11 @@ public class CRUPageDTO {
 	@JsonProperty("rules")
 	private 	Collection<CRURuleDTO>	rules;
 
-	public CRUPageDTO(Page entity) {
+	public CRUPageDTO() {
+		super();
+	}
+
+	public CRUPageDTO(Page entity, boolean detailed) {
 		setId(IDCoder.encode(entity.getUuid()));
 		setTitle(entity.getTitle());
 		setPath(entity.getUrl());

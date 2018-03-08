@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.entity.Rule;
+import com.samsung.fas.pir.rest.dto.page.CRUPageDTO;
+import com.samsung.fas.pir.rest.dto.profile.CRUProfileDTO;
 import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,16 +18,6 @@ public class CRURuleDTO {
 	@Setter
 	@JsonProperty("id")
 	private 	String 			id;
-
-	@Getter
-	@Setter
-	@JsonProperty("profile_id")
-	private		String			profileID;
-
-	@Getter
-	@Setter
-	@JsonProperty("page_id")
-	private		String			page;
 
 	@Getter
 	@Setter
@@ -47,18 +39,28 @@ public class CRURuleDTO {
 	@JsonProperty("delete")
 	private		boolean			delete;
 
+	@Getter
+	@Setter
+	@JsonProperty("profile")
+	private 	CRUProfileDTO 	profile;
+
+	@Getter
+	@Setter
+	@JsonProperty("page")
+	private 	CRUPageDTO 		page;
+
 	public CRURuleDTO() {
 		super();
 	}
 
-	public CRURuleDTO(Rule rule) {
+	public CRURuleDTO(Rule rule, boolean detailed) {
 		setId(IDCoder.encode(rule.getUuid()));
-		setProfileID(IDCoder.encode(rule.getProfile().getUuid()));
-		setPage(IDCoder.encode(rule.getPage().getUuid()));
 		setCreate(rule.canCreate());
 		setRead(rule.canRead());
 		setUpdate(rule.canUpdate());
 		setDelete(rule.canDelete());
+		setPage(new CRUPageDTO(rule.getPage(), false));
+		setProfile(new CRUProfileDTO(rule.getProfile(), false));
 	}
 
 	@JsonIgnore

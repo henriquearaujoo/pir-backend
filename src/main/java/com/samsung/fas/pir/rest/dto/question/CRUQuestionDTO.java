@@ -50,12 +50,12 @@ public class CRUQuestionDTO {
 		super();
 	}
 
-	public CRUQuestionDTO(Question question) {
+	public CRUQuestionDTO(Question question, boolean detailed) {
 		setId(IDCoder.encode(question.getUuid()));
 		setType(question.getType());
 		setDescription(question.getDescription());
 		setConclusionID(IDCoder.encode(question.getConclusion().getUuid()));
-		setAnswers(question.getAnswers() != null? question.getAnswers().stream().map(CRUAnswerDTO::new).collect(Collectors.toSet()) : null);
+		setAnswers(question.getAnswers() != null? question.getAnswers().stream().map(item -> new CRUAnswerDTO(item, false)).collect(Collectors.toSet()) : null);
 	}
 
 	@JsonIgnore

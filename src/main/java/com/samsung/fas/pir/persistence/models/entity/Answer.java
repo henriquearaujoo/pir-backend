@@ -35,7 +35,7 @@ public class Answer {
 
 	@Getter
 	@Setter
-	@ManyToOne
+	@ManyToOne(optional = false)
 	@JoinColumn
 	private 	Question		question;
 }

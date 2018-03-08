@@ -26,9 +26,9 @@ import java.util.Collection;
 @Controller
 @RequestMapping(value = "/rest/states", produces = MediaType.APPLICATION_JSON)
 @Api(value = "States", description = "REST Controller for States", tags = "STATES")
-public class StateCityController extends BController<State, CRUStateDTO, StateDAO> {
+public class StateController extends BController<State, CRUStateDTO, StateDAO> {
 	@Autowired
-	public StateCityController(BService<State, CRUStateDTO, StateDAO, Long> service) {
+	public StateController(BService<State, CRUStateDTO, StateDAO, Long> service) {
 		super(service);
 	}
 

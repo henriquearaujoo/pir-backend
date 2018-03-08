@@ -26,7 +26,7 @@ public class CRUGreetingsDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty("chapter")
+	@JsonProperty("chapter_id")
 	private 	String			chapterID;
 
 	@Getter
@@ -53,7 +53,7 @@ public class CRUGreetingsDTO {
 		super();
 	}
 
-	public CRUGreetingsDTO(Greetings greetings) {
+	public CRUGreetingsDTO(Greetings greetings, boolean detailed) {
 		setId(IDCoder.encode(greetings.getUuid()));
 		setChapterID(IDCoder.encode(greetings.getChapter().getUuid()));
 		setDescription(greetings.getDescription());
@@ -66,7 +66,7 @@ public class CRUGreetingsDTO {
 	@JsonIgnore
 	public Greetings getModel() {
 		Greetings e = new Greetings();
-		e.setUuid(IDCoder.decode(getId()));
+		e.setUuid(getId() != null && !getId().trim().isEmpty()? IDCoder.decode(getId()) : null);
 		e.setDescription(getDescription());
 		e.setGoback(isGoback());
 		e.setSit(isSit());

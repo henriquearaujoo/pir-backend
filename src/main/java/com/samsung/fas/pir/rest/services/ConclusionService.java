@@ -30,7 +30,7 @@ public class ConclusionService extends BService<Conclusion, CRUConclusionDTO, Co
 		Chapter 	chapter		= Optional.ofNullable(cdao.findOne(IDCoder.decode(Optional.ofNullable(create.getChapterID()).orElseThrow(() -> new RESTRuntimeException("chapter.id.missing"))))).orElseThrow(() -> new RESTRuntimeException("chapter.notfound"));
 		model.setChapter(chapter);
 		chapter.setConclusion(model);
-		return new CRUConclusionDTO(dao.save(model));
+		return new CRUConclusionDTO(dao.save(model), true);
 	}
 
 	@Override
@@ -38,6 +38,6 @@ public class ConclusionService extends BService<Conclusion, CRUConclusionDTO, Co
 		Conclusion	model		= update.getModel();
 		Conclusion	conclusion	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("conclusion.notfound"));
 		conclusion.setDescription(model.getDescription());
-		return new CRUConclusionDTO(dao.save(conclusion));
+		return new CRUConclusionDTO(dao.save(conclusion), true);
 	}
 }

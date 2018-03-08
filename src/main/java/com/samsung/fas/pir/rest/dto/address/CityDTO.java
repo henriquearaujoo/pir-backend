@@ -4,33 +4,36 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.entity.City;
+import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
+import lombok.Setter;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CityDTO {
+	@Setter
 	@Getter
 	@JsonProperty("id")
-	private		long			id;
+	private		String			id;
 
+	@Setter
 	@Getter
 	@JsonProperty("name")
 	private		String			name;
 
+	@Setter
 	@Getter
-	@JsonProperty("state_id")
-	private		long			stateId;
-	
-	private CityDTO(City embedded) {
-		id			= embedded.getId();
-		name		= embedded.getName();
-		stateId		= embedded.getState().getId();
+	@JsonProperty("state")
+	private		CRUStateDTO		state;
+
+	public CityDTO() {
+		super();
 	}
 	
-	public static CityDTO toDTO(City entity) {
-		if (entity != null) {
-			return new CityDTO(entity);
-		}
-		return null;
+	public CityDTO(City city, boolean detailed) {
+		setId(IDCoder.encode(city.getUuid()));
+		setName(city.getName());
+		setState(new CRUStateDTO(city.getState(), false));
+
 	}
 }

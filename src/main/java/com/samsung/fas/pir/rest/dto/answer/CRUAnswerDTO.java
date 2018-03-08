@@ -33,7 +33,7 @@ public class CRUAnswerDTO {
 		super();
 	}
 
-	public CRUAnswerDTO(Answer answer) {
+	public CRUAnswerDTO(Answer answer, boolean detailed) {
 		setId(IDCoder.encode(answer.getUuid()));
 		setAnswer(answer.getDescription());
 		setQuestionID(IDCoder.encode(answer.getQuestion().getUuid()));

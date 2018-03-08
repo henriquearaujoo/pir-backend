@@ -1,7 +1,6 @@
 package com.samsung.fas.pir.persistence.models.entity;
 
 import com.samsung.fas.pir.login.persistence.models.entity.Account;
-import com.samsung.fas.pir.persistence.models.enums.EUserType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -42,12 +41,6 @@ public class User implements Serializable {
 	@Setter
 	@Column(nullable=false)
 	private		String			email;
-
-	@Getter
-	@Setter
-	@Column(nullable=false)
-	@Enumerated(EnumType.STRING)
-	private 	EUserType 		type;
 
 	@Getter
 	@Setter

@@ -44,7 +44,7 @@ public class Question {
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-	@OnDelete(action = OnDeleteAction.CASCADE)
+//	@OnDelete(action = OnDeleteAction.CASCADE)
 	private 	Set<Answer>		answers;
 
 	@Getter

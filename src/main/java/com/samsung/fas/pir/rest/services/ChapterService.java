@@ -24,31 +24,31 @@ public class ChapterService extends BService<Chapter, CRUChapterDTO, ChapterDAO,
 	}
 
 	public Collection<CRUChapterDTO> findAllValid() {
-		return dao.findAllValid().stream().map(CRUChapterDTO::new).collect(Collectors.toSet());
+		return dao.findAllValid().stream().map(item -> new CRUChapterDTO(item ,false)).collect(Collectors.toSet());
 	}
 
 	public Collection<CRUChapterDTO> findAllValid(Predicate predicate) {
-		return dao.findAllValid(predicate).stream().map(CRUChapterDTO::new).collect(Collectors.toSet());
+		return dao.findAllValid(predicate).stream().map(item -> new CRUChapterDTO(item ,false)).collect(Collectors.toSet());
 	}
 
 	public Collection<CRUChapterDTO> findAllInvalid() {
-		return dao.findAllInvalid().stream().map(CRUChapterDTO::new).collect(Collectors.toSet());
+		return dao.findAllInvalid().stream().map(item -> new CRUChapterDTO(item ,false)).collect(Collectors.toSet());
 	}
 
 	public Page<CRUChapterDTO> findAllValid(Pageable pageable) {
-		return dao.findAllValid(pageable).map(CRUChapterDTO::new);
+		return dao.findAllValid(pageable).map(item -> new CRUChapterDTO(item ,false));
 	}
 
 	public Page<CRUChapterDTO> findAllValid(Pageable pageable, Predicate predicate) {
-		return dao.findAllValid(predicate, pageable).map(CRUChapterDTO::new);
+		return dao.findAllValid(predicate, pageable).map(item -> new CRUChapterDTO(item ,false));
 	}
 
 	public Page<CRUChapterDTO> findAllInvalid(Pageable pageable) {
-		return dao.findAllInvalid(pageable).map(CRUChapterDTO::new);
+		return dao.findAllInvalid(pageable).map(item -> new CRUChapterDTO(item ,false));
 	}
 
 	public Page<CRUChapterDTO> findAllInvalid(Pageable pageable, Predicate predicate) {
-		return dao.findAllInvalid(predicate, pageable).map(CRUChapterDTO::new);
+		return dao.findAllInvalid(predicate, pageable).map(item -> new CRUChapterDTO(item ,false));
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class ChapterService extends BService<Chapter, CRUChapterDTO, ChapterDAO,
 			model.setVersion(versions.get(0).getVersion() + 1);
 		}
 
-		return new CRUChapterDTO(dao.save(model));
+		return new CRUChapterDTO(dao.save(model), true);
 	}
 
 	@Override
@@ -94,9 +94,15 @@ public class ChapterService extends BService<Chapter, CRUChapterDTO, ChapterDAO,
 		chapter.setEstimatedTime(model.getEstimatedTime());
 		chapter.setTimeUntilNext(model.getTimeUntilNext());
 		chapter.setValid(model.isValid());
-		chapter.setMedias(model.getMedias());
-		chapter.setThumbnails(model.getThumbnails());
+		if (chapter.getMedias() == null)
+			chapter.setMedias(new ArrayList<>());
+		if (chapter.getThumbnails() == null)
+			chapter.setThumbnails(new ArrayList<>());
+		chapter.getMedias().clear();
+		chapter.getThumbnails().clear();
+		chapter.getMedias().addAll(model.getMedias() != null? model.getMedias() : new ArrayList<>());
+		chapter.getThumbnails().addAll(model.getThumbnails() != null? model.getThumbnails() : new ArrayList<>());
 
-		return new CRUChapterDTO(dao.save(model));
+		return new CRUChapterDTO(dao.save(model), true);
 	}
 }

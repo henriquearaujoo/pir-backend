@@ -31,7 +31,7 @@ public class Intervention {
 	@Getter
 	@Setter
 	@MapsId
-	@OneToOne(optional = false, fetch = FetchType.LAZY)
+	@OneToOne(optional = false)
 	@JoinColumn(name = "id")
 	private 	Chapter			chapter;
 

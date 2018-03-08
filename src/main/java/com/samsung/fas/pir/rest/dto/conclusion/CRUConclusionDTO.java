@@ -42,11 +42,11 @@ public class CRUConclusionDTO {
 		super();
 	}
 
-	public CRUConclusionDTO(Conclusion conclusion) {
+	public CRUConclusionDTO(Conclusion conclusion, boolean detailed) {
 		setId(IDCoder.encode(conclusion.getUuid()));
 		setDescription(conclusion.getDescription());
 		setChapterID(IDCoder.encode(conclusion.getChapter().getUuid()));
-		setQuestions(conclusion.getQuestions() != null? conclusion.getQuestions().stream().map(CRUQuestionDTO::new).collect(Collectors.toSet()) : null);
+		setQuestions(conclusion.getQuestions() != null? conclusion.getQuestions().stream().map(item -> new CRUQuestionDTO(item, false)).collect(Collectors.toSet()) : null);
 	}
 
 	@JsonIgnore

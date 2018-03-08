@@ -9,14 +9,8 @@ import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
-import java.util.UUID;
-
 @Repository
 public interface IRulesRepository extends BRepository<Rule, Long, QRule> {
-	@Transactional
-	void deleteByUuid(UUID id);
-
 	@Override
 	default void customize(QuerydslBindings bindings, QRule root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

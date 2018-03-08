@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.samsung.fas.pir.persistence.models.entity.Address;
-import com.samsung.fas.pir.utils.serializers.LongJsonDeserializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
@@ -42,10 +40,9 @@ public class AddressDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty("city")
-	@JsonDeserialize(using = LongJsonDeserializer.class)
+	@JsonProperty("city_id")
 	@NotNull(message="user.address.city.missing")
-	private		Long			cityId;
+	private		String			cityId;
 
 	@Getter
 	@Setter
@@ -53,18 +50,23 @@ public class AddressDTO {
 	@NotBlank(message="user.address.postalcode.missing")
 	@Size(min=4, message="user.address.postalcode.blank.short")
 	private		String			postalCode;
+
+	@Getter
+	@Setter
+	@JsonProperty("city")
+	private 	CityDTO			city;
 	
 	public AddressDTO() {
 		super();
 	}
 
-	public AddressDTO(Address embedded) {
-		setStreetNameAddress(embedded.getStreetAddress());
-		setComplementAddress(embedded.getComplementAdress());
-		setNumberAddress(embedded.getNumberAddress());
-		setPostalCode(embedded.getPostalCode());
-		setNeighborhoodAddress(embedded.getNeighborhoodAddress());
-		setCityId(embedded.getCity().getId());
+	public AddressDTO(Address address, boolean detailed) {
+		setStreetNameAddress(address.getStreetAddress());
+		setComplementAddress(address.getComplementAdress());
+		setNumberAddress(address.getNumberAddress());
+		setPostalCode(address.getPostalCode());
+		setNeighborhoodAddress(address.getNeighborhoodAddress());
+		setCity(new CityDTO(address.getCity(), false));
 	}
 	
 	@JsonIgnore

@@ -49,7 +49,7 @@ public class CRUProfileDTO {
 		super();
 	}
 
-	public CRUProfileDTO(Profile profile) {
+	public CRUProfileDTO(Profile profile, boolean detailed) {
 		setId(IDCoder.encode(profile.getUuid()));
 		setTitle(profile.getTitle());
 		setDescription(profile.getDescription());

@@ -39,7 +39,7 @@ public class CRUInterventionDTO {
 		super();
 	}
 
-	public CRUInterventionDTO(Intervention intervention) {
+	public CRUInterventionDTO(Intervention intervention, boolean detailed) {
 		setId(IDCoder.encode(intervention.getUuid()));
 		setDescription(intervention.getDescription());
 		setChapterdID(IDCoder.encode(intervention.getChapter().getUuid()));
@@ -51,7 +51,7 @@ public class CRUInterventionDTO {
 		Intervention model = new Intervention();
 		model.setDescription(getDescription());
 		model.setActivity(getActivity());
-		model.setUuid(IDCoder.decode(getId()));
+		model.setUuid(getId() != null && !getId().trim().isEmpty()? IDCoder.decode(getId()) : null);
 		return model;
 	}
 }

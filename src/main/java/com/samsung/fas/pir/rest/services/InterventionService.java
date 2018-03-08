@@ -31,7 +31,7 @@ public class InterventionService extends BService<Intervention, CRUInterventionD
 		UUID			chapterID	= create.getChapterdID() != null && !create.getChapterdID().trim().isEmpty()? IDCoder.decode(create.getChapterdID()) : null;
 		Chapter			chapter		= Optional.ofNullable(cdao.findOne(Optional.ofNullable(chapterID).orElseThrow(() -> new RESTRuntimeException("chapter.id.missing")))).orElseThrow(() -> new RESTRuntimeException("chapter.notfound"));
 		model.setChapter(chapter);
-		return new CRUInterventionDTO(dao.save(model));
+		return new CRUInterventionDTO(dao.save(model), true);
 	}
 
 	@Override
@@ -39,12 +39,8 @@ public class InterventionService extends BService<Intervention, CRUInterventionD
 		Intervention	model			= update.getModel();
 		Intervention	intervention	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("intervention.notfound"));
 
-		// Verify if intervention chapter id is euqal to informed chapter id
-		if (intervention.getChapter().getId() != model.getChapter().getId())
-			throw new RESTRuntimeException("chapter.intervention.id.differs");
-
 		intervention.setDescription(model.getDescription());
 		intervention.setActivity(model.getActivity());
-		return new CRUInterventionDTO(dao.save(intervention));
+		return new CRUInterventionDTO(dao.save(intervention), true);
 	}
 }

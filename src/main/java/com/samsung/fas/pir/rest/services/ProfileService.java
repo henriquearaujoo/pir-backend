@@ -50,7 +50,7 @@ public class ProfileService extends BService<Profile, CRUProfileDTO, ProfileDAO,
 		model.setWhoUpdated(((Account) account).getUser());
 		model.setRules(rules);
 
-		return new CRUProfileDTO(dao.save(model));
+		return new CRUProfileDTO(dao.save(model), true);
 	}
 
 	@Override
@@ -63,6 +63,6 @@ public class ProfileService extends BService<Profile, CRUProfileDTO, ProfileDAO,
 		profile.setTitle(model.getTitle());
 		profile.setWhoUpdated(((Account) account).getUser());
 
-		return new CRUProfileDTO(dao.save(profile));
+		return new CRUProfileDTO(dao.save(profile), true);
 	}
 }

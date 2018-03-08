@@ -26,39 +26,51 @@ public abstract class BService<TEntity, TDTO, TDAO extends IBaseDAO<TEntity, TPK
 	}
 
 	public TDTO findOne(TPK id, UserDetails details) {
-		return toDTO(Optional.ofNullable(dao.findOne(id)).orElseThrow(() -> new RESTRuntimeException("notfound")));
+		return toDTO(Optional.ofNullable(dao.findOne(id)).orElseThrow(() -> new RESTRuntimeException("notfound")), true);
 	}
 
 	public TDTO findOne(UUID uuid, UserDetails details) {
-		return toDTO(Optional.ofNullable(dao.findOne(uuid)).orElseThrow(() -> new RESTRuntimeException("notfound")));
+		return toDTO(Optional.ofNullable(dao.findOne(uuid)).orElseThrow(() -> new RESTRuntimeException("notfound")), true);
 	}
 
 	public Collection<TDTO> findAll(UserDetails details) {
-		return dao.findAll().stream().map(this::toDTO).collect(Collectors.toSet());
+		return dao.findAll().stream().map(item -> toDTO(item, false)).collect(Collectors.toSet());
 	}
 
 	public Collection<TDTO> findAll(Predicate predicate, UserDetails details) {
-		return dao.findAll(predicate).stream().map(this::toDTO).collect(Collectors.toSet());
+		return dao.findAll(predicate).stream().map(item -> toDTO(item, false)).collect(Collectors.toSet());
 	}
 
 	public Page<TDTO> findAll(Predicate predicate, Pageable pageable, UserDetails details) {
-		return dao.findAll(predicate, pageable).map(this::toDTO);
+		return dao.findAll(predicate, pageable).map(item -> toDTO(item, false));
 	}
 
 	public Page<TDTO> findAll(Pageable pageable, UserDetails details) {
-		return dao.findAll(pageable).map(this::toDTO);
+		return dao.findAll(pageable).map(item -> toDTO(item, false));
+	}
+
+	public TPK delete(UUID id) {
+		return dao.delete(id);
+	}
+
+	public void delete(TEntity entity) {
+		dao.delete(entity);
+	}
+
+	public void delete(TPK id) {
+		dao.delete(id);
 	}
 
 	public abstract TDTO save(TDTO create, UserDetails account);
 	public abstract TDTO update(TDTO update, UserDetails account);
 
 	//================================================================================================================//
-	private TDTO toDTO(TEntity item) {
+	private TDTO toDTO(TEntity item, boolean detailed) {
 		try {
-			return readClass.getConstructor(entityClass).newInstance(item);
+			return readClass.getConstructor(entityClass, boolean.class).newInstance(item, detailed);
 		} catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
 			e.printStackTrace();
-			throw new RuntimeException(readClass.getName() + ": No constructor matches (TEntity)");
+			throw new RuntimeException(readClass.getName() + ": No constructor matches (TEntity, Boolean)");
 		}
 	}
 }

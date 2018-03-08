@@ -34,7 +34,7 @@ public class QuestionService extends BService<Question, CRUQuestionDTO, Question
 		model.setConclusion(conclusion);
 		conclusion.getQuestions().add(model);
 
-		return new CRUQuestionDTO(dao.save(model));
+		return new CRUQuestionDTO(dao.save(model), true);
 	}
 
 	@Override
@@ -45,6 +45,6 @@ public class QuestionService extends BService<Question, CRUQuestionDTO, Question
 		question.setDescription(model.getDescription());
 		question.setType(model.getType());
 
-		return new CRUQuestionDTO(dao.save(question));
+		return new CRUQuestionDTO(dao.save(question), true);
 	}
 }

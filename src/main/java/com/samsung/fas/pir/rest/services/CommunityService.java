@@ -7,6 +7,7 @@ import com.samsung.fas.pir.persistence.models.entity.City;
 import com.samsung.fas.pir.persistence.models.entity.Community;
 import com.samsung.fas.pir.rest.dto.community.CRUCommunityDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
+import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -26,16 +27,16 @@ public class CommunityService extends BService<Community, CRUCommunityDTO, Commu
 	@Override
 	public CRUCommunityDTO save(CRUCommunityDTO communityDTO, UserDetails account) {
 		Community	model		= communityDTO.getModel();
-		City		city		= Optional.ofNullable(cdao.findOne(communityDTO.getCity())).orElseThrow(() -> new RESTRuntimeException("city.notfound"));
+		City		city		= Optional.ofNullable(cdao.findOne(IDCoder.decode(communityDTO.getCityId()))).orElseThrow(() -> new RESTRuntimeException("city.notfound"));
 		model.setCity(city);
-		return new CRUCommunityDTO(dao.save(model));
+		return new CRUCommunityDTO(dao.save(model), true);
 	}
 
 	@Override
 	public CRUCommunityDTO update(CRUCommunityDTO communityDTO, UserDetails account) {
 		Community	model		= communityDTO.getModel();
 		Community	community	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("community.notfound"));
-		City		city		= Optional.ofNullable(cdao.findOne(communityDTO.getCity())).orElseThrow(() -> new RESTRuntimeException("city.notfound"));
+		City		city		= Optional.ofNullable(cdao.findOne(IDCoder.decode(communityDTO.getCityId()))).orElseThrow(() -> new RESTRuntimeException("city.notfound"));
 
 		community.setName(model.getName());
 		community.setWaterSupply(model.getWaterSupply());
@@ -59,6 +60,6 @@ public class CommunityService extends BService<Community, CRUCommunityDTO, Commu
 		community.setUc(model.getUc());
 		community.setRegional(model.getRegional());
 
-		return new CRUCommunityDTO(dao.save(community));
+		return new CRUCommunityDTO(dao.save(community), true);
 	}
 }

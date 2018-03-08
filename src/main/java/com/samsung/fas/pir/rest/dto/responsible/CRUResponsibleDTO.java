@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.samsung.fas.pir.persistence.models.entity.Mother;
 import com.samsung.fas.pir.persistence.models.entity.Responsible;
 import com.samsung.fas.pir.persistence.models.enums.EHabitationType;
+import com.samsung.fas.pir.rest.dto.community.CRUCommunityDTO;
 import com.samsung.fas.pir.rest.dto.mother.CRUMotherDTO;
 import com.samsung.fas.pir.utils.IDCoder;
 import lombok.Getter;
@@ -124,19 +125,23 @@ public class CRUResponsibleDTO {
 	@Valid
 	private 	CRUMotherDTO	mother;
 
+	@Getter
+	@Setter
+	@JsonProperty("community")
+	private 	CRUCommunityDTO	community;
+
 	public CRUResponsibleDTO() {
 		super();
 	}
 
-	public CRUResponsibleDTO(Mother mother) {
-		this(mother.getResponsible());
-		setMother(new CRUMotherDTO(mother));
+	public CRUResponsibleDTO(Mother mother, boolean detailed) {
+		this(mother.getResponsible(), true);
+		setMother(new CRUMotherDTO(mother, false));
 	}
 
-	public CRUResponsibleDTO(Responsible responsible) {
+	public CRUResponsibleDTO(Responsible responsible, boolean detailed) {
 		setName(responsible.getName());
 		setId(IDCoder.encode(responsible.getUuid()));
-		setCommunityID(IDCoder.encode(responsible.getCommunity().getUuid()));
 		setBirth(new SimpleDateFormat("dd-MM-yyyy").format(responsible.getBirth()));
 		setInSocialProgram(responsible.isInSocialProgram());
 		setHabitationMembersCount(responsible.getHabitationMembersCount());
@@ -150,7 +155,8 @@ public class CRUResponsibleDTO {
 		hasWaterTreatment(responsible.isHasWaterTreatment());
 		setObservations(responsible.getObservations());
 		hasOtherChildren(responsible.isFamilyHasChildren());
-		setMother(responsible.getMother() != null? new CRUMotherDTO(responsible.getMother()) : null);
+		setCommunity(new CRUCommunityDTO(responsible.getCommunity(), false));
+		setMother(responsible.getMother() != null? new CRUMotherDTO(responsible.getMother(), false) : null);
 	}
 
 	@JsonIgnore

@@ -106,7 +106,7 @@ public class Responsible {
 
 	@Getter
 	@Setter
-	@OneToOne(mappedBy = "responsible", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	@OneToOne(mappedBy = "responsible", cascade = CascadeType.ALL, orphanRemoval = true)
 	private 	Mother				mother;
 
 	@Getter
