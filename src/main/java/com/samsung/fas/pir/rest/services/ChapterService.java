@@ -79,9 +79,7 @@ public class ChapterService extends BService<Chapter, CRUChapterDTO, ChapterDAO,
 			dao.invalidateAllChapters(model.getChapter());
 			chapter.setValid(model.isValid());
 		} else {
-			if (model.isValid()) {
-				chapter.setValid(false);
-			}
+			chapter.setValid(false);
 		}
 
 		chapter.setChapter(model.getChapter());

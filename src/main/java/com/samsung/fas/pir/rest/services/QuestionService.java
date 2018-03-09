@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.exception.RESTRuntimeException;
+import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.dao.ConclusionDAO;
 import com.samsung.fas.pir.persistence.dao.QuestionDAO;
 import com.samsung.fas.pir.persistence.models.entity.Conclusion;
@@ -18,11 +19,26 @@ import java.util.UUID;
 @Service
 public class QuestionService extends BService<Question, CRUQuestionDTO, QuestionDAO, Long> {
 	private ConclusionDAO	cdao;
+	private ChapterDAO		chdao;
 
 	@Autowired
-	public QuestionService(QuestionDAO dao, ConclusionDAO cdao) {
+	public QuestionService(QuestionDAO dao, ConclusionDAO cdao, ChapterDAO chdao) {
 		super(dao, Question.class, CRUQuestionDTO.class);
-		this.cdao = cdao;
+		this.cdao 	= cdao;
+		this.chdao	= chdao;
+	}
+
+	@Override
+	public Long delete(UUID id) {
+		Question	question	= Optional.ofNullable(dao.findOne(id)).orElseThrow(() -> new RESTRuntimeException("answer.notfound"));
+		Conclusion	conclusion	= question.getConclusion();
+		Object		deleted		= dao.delete(question.getUuid());
+
+		if (conclusion.getQuestions().size() == 0) {
+			chdao.invalidateOne(question.getConclusion().getChapter().getId());
+		}
+
+		return deleted != null? 0L : -1L;
 	}
 
 	@Override

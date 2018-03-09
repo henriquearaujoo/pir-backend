@@ -15,21 +15,21 @@ import java.util.Set;
 
 public class Tools {
 	public static float calculate(Chapter entity) {
-		Conclusion c			= entity.getConclusion();
+		Conclusion 	c			= entity.getConclusion();
 		float		complete 	= 25.0f;
+		int			qa			= 0;
 
 		if (c != null) {
 			Set<Question> qs = c.getQuestions();
 			complete += 12.5f;
 			if (qs != null) {
-				final int[] questionsWithAnswers = {0};
-				qs.forEach(item -> {
-					if (item.getAnswers() != null) {
-						questionsWithAnswers[0]++;
+				for (Question q : qs) {
+					if (q.getAnswers() != null && q.getAnswers().size() > 0) {
+						qa++;
 					}
-				});
+				}
 				if (qs.size() != 0)
-					complete += (12.5 * (questionsWithAnswers[0]/qs.size()) );
+					complete += (12.5 * (qa/qs.size()) );
 			}
 		}
 

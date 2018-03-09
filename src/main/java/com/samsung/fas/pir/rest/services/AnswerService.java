@@ -2,6 +2,7 @@ package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.persistence.dao.AnswerDAO;
+import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.dao.QuestionDAO;
 import com.samsung.fas.pir.persistence.models.entity.Answer;
 import com.samsung.fas.pir.persistence.models.entity.Question;
@@ -13,15 +14,31 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AnswerService extends BService<Answer,CRUAnswerDTO, AnswerDAO, Long> {
 	private	QuestionDAO	qdao;
+	private	ChapterDAO	cdao;
 
 	@Autowired
-	public AnswerService(AnswerDAO dao, QuestionDAO qdao) {
+	public AnswerService(AnswerDAO dao, QuestionDAO qdao, ChapterDAO cdao) {
 		super(dao, Answer.class, CRUAnswerDTO.class);
-		this.qdao = qdao;
+		this.qdao 	= qdao;
+		this.cdao	= cdao;
+	}
+
+	@Override
+	public Long delete(UUID id) {
+		Answer		answer		= Optional.ofNullable(dao.findOne(id)).orElseThrow(() -> new RESTRuntimeException("answer.notfound"));
+		Question	question	= answer.getQuestion();
+		Object		deleted		= dao.delete(answer.getUuid());
+
+		if (question.getAnswers().size() == 0) {
+			cdao.invalidateOne(question.getConclusion().getChapter().getId());
+		}
+
+		return deleted != null? 0L : -1L;
 	}
 
 	@Override
