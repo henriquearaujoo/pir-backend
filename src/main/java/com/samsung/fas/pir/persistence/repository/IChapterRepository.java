@@ -35,9 +35,9 @@ public interface IChapterRepository extends BRepository<Chapter, Long, QChapter>
 	@Query(nativeQuery = true, value = "SELECT * FROM chapter as t JOIN (SELECT *  FROM chapter WHERE chapter.in_use = true) as t1 ON t.number = t1.number ORDER BY ?#{#pageable}", countQuery = "SELECT count(*) FROM chapter as t JOIN (SELECT *  FROM chapter WHERE chapter.in_use = true) as t1 ON t.number = t1.number")
 	Page<Chapter> findAllByValid(Pageable pageable);
 
-	Collection<Chapter> findAllByChapterNotIn(Set<Integer> chapters);
+	Collection<Chapter> findAllByChapterNotIn(Collection<Integer> chapters);
 	Collection<Chapter> findAllByChapter(int chapter);
-	Page<Chapter> findAllByChapterNotIn(Set<Integer> chapters, Pageable pageable);
+	Page<Chapter> findAllByChapterNotIn(Collection<Integer> chapters, Pageable pageable);
 
 	@Override
 	default void customize(QuerydslBindings bindings, QChapter root) {

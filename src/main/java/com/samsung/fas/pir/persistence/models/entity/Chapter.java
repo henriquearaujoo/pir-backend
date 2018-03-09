@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @Entity
-@Table(name = "chapter", uniqueConstraints = @UniqueConstraint(columnNames= {"number", "version"}, name = "chapter"))
+@Table(name = "chapter", uniqueConstraints = @UniqueConstraint(columnNames= {"number", "version"}, name = "chapter_version"))
 @DynamicUpdate
 @DynamicInsert
 public class Chapter {
@@ -93,13 +93,13 @@ public class Chapter {
 	@Getter
 	@Setter
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "media", nullable = false)
+	@JoinColumn(name = "media")
 	private 	Collection<MDataFile>	medias;
 
 	@Getter
 	@Setter
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "thumbnail", nullable = false)
+	@JoinColumn(name = "thumbnail")
 	private 	Collection<MDataFile>	thumbnails;
 
 	@Getter

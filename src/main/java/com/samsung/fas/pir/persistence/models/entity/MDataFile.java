@@ -45,9 +45,4 @@ public class MDataFile {
 	@Column(name = "created_at", updatable = false, nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private		Date		createdAt;
-
-	@Getter
-	@Setter
-	@Column(name = "chapter")
-	private 	Long		chapter;
 }
