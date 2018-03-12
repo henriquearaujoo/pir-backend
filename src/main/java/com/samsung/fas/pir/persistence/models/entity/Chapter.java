@@ -93,12 +93,14 @@ public class Chapter {
 	@Getter
 	@Setter
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinColumn(name = "media")
 	private 	Collection<MDataFile>	medias;
 
 	@Getter
 	@Setter
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinColumn(name = "thumbnail")
 	private 	Collection<MDataFile>	thumbnails;
 
