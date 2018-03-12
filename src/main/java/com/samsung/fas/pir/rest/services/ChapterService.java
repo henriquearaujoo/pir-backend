@@ -96,11 +96,10 @@ public class ChapterService extends BService<Chapter, CRUChapterDTO, ChapterDAO,
 			chapter.setMedias(new ArrayList<>());
 		if (chapter.getThumbnails() == null)
 			chapter.setThumbnails(new ArrayList<>());
-//		chapter.getMedias().clear();
-//		chapter.getThumbnails().clear();
-		chapter.setMedias(model.getMedias() != null? model.getMedias() : new ArrayList<>());
-		chapter.setThumbnails(model.getThumbnails() != null? model.getThumbnails() : new ArrayList<>());
-
+		chapter.getMedias().clear();
+		chapter.getThumbnails().clear();
+		chapter.getMedias().addAll(model.getMedias() != null? model.getMedias() : new ArrayList<>());
+		chapter.getThumbnails().addAll(model.getThumbnails() != null? model.getThumbnails() : new ArrayList<>());
 		return new CRUChapterDTO(dao.save(chapter), true);
 	}
 }
