@@ -5,7 +5,7 @@ import com.samsung.fas.pir.persistence.dao.PageDAO;
 import com.samsung.fas.pir.persistence.models.entity.Page;
 import com.samsung.fas.pir.persistence.models.entity.Rule;
 import com.samsung.fas.pir.rest.controllers.base.BController;
-import com.samsung.fas.pir.rest.dto.page.CRUPageDTO;
+import com.samsung.fas.pir.rest.dto.PageDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +25,9 @@ import javax.ws.rs.core.MediaType;
 @Controller
 @RequestMapping(value = "/rest/pages", produces = MediaType.APPLICATION_JSON)
 @Api(value = "Pages", description = "REST Controller for Pages", tags = "PAGES")
-public class PageController extends BController<Page, CRUPageDTO, PageDAO> {
+public class PageController extends BController<Page, PageDTO, PageDAO> {
 	@Autowired
-	public PageController(BService<Page, CRUPageDTO, PageDAO, Long> service) {
+	public PageController(BService<Page, PageDTO, PageDAO, Long> service) {
 		super(service);
 	}
 

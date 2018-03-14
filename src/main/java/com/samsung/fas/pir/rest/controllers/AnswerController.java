@@ -4,7 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.persistence.dao.AnswerDAO;
 import com.samsung.fas.pir.persistence.models.entity.Answer;
 import com.samsung.fas.pir.rest.controllers.base.BController;
-import com.samsung.fas.pir.rest.dto.answer.CRUAnswerDTO;
+import com.samsung.fas.pir.rest.dto.AnswerDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,21 +28,21 @@ import java.util.UUID;
 @Controller
 @RequestMapping(value = "/rest/chapters/conclusion/question/answer", produces = MediaType.APPLICATION_JSON)
 @Api(value = "Chapter Conclusion Question Answers", description = "REST Controller for Chapter Conclusion Question Answers", tags = "CHAPTER CONCLUSION QUESTION ANSWERS")
-public class AnswerController extends BController<Answer, CRUAnswerDTO, AnswerDAO> {
+public class AnswerController extends BController<Answer, AnswerDTO, AnswerDAO> {
 	@Autowired
-	public AnswerController(BService<Answer, CRUAnswerDTO, AnswerDAO, Long> service) {
+	public AnswerController(BService<Answer, AnswerDTO, AnswerDAO, Long> service) {
 		super(service);
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/search")
 	@ResponseBody
-	public ResponseEntity<Collection<CRUAnswerDTO>> search(@QuerydslPredicate(root = Answer.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	public ResponseEntity<Collection<AnswerDTO>> search(@QuerydslPredicate(root = Answer.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, details));
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/search/page")
 	@ResponseBody
-	public ResponseEntity<Page<CRUAnswerDTO>> search(@QuerydslPredicate(root = Answer.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	public ResponseEntity<Page<AnswerDTO>> search(@QuerydslPredicate(root = Answer.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable, details));
 	}
 

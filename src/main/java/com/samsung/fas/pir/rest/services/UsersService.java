@@ -9,7 +9,7 @@ import com.samsung.fas.pir.persistence.dao.UserDAO;
 import com.samsung.fas.pir.persistence.models.entity.City;
 import com.samsung.fas.pir.persistence.models.entity.Profile;
 import com.samsung.fas.pir.persistence.models.entity.User;
-import com.samsung.fas.pir.rest.dto.user.CRUUserDTO;
+import com.samsung.fas.pir.rest.dto.UserDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,21 +21,21 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @Service
-public class UsersService extends BService<User, CRUUserDTO, UserDAO, Long> {
+public class UsersService extends BService<User, UserDTO, UserDAO, Long> {
 	private final	CityDAO 			cdao;
 	private final	ProfileDAO 			pdao;
 	private final	PasswordEncoder		encoder;
 
 	@Autowired
 	public UsersService(UserDAO dao, ProfileDAO pdao, CityDAO cdao, PasswordEncoder encoder) {
-		super(dao, User.class, CRUUserDTO.class);
+		super(dao, User.class, UserDTO.class);
 		this.pdao 		= pdao;
 		this.cdao		= cdao;
 		this.encoder	= encoder;
 	}
 
 	@Override
-	public CRUUserDTO save(CRUUserDTO create, UserDetails principal) {
+	public UserDTO save(UserDTO create, UserDetails principal) {
 		User		model		= create.getModel();
 		String		password	= create.getPassword();
 		Profile		profile		= Optional.ofNullable(pdao.findOne(IDCoder.decode(create.getProfileID()))).orElseThrow(() -> new RESTRuntimeException("profile.notfound"));
@@ -67,11 +67,11 @@ public class UsersService extends BService<User, CRUUserDTO, UserDAO, Long> {
 		else
 			model.getEntity().setUser(model);
 
-		return new CRUUserDTO(dao.save(model), true);
+		return new UserDTO(dao.save(model), true);
 	}
 
 	@Override
-	public CRUUserDTO update(CRUUserDTO update, UserDetails principal) {
+	public UserDTO update(UserDTO update, UserDetails principal) {
 		User		model		= update.getModel();
 		User		user		= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("user.notfound"));
 		Profile		profile		= Optional.ofNullable(pdao.findOne(IDCoder.decode(update.getProfileID()))).orElseThrow(() -> new RESTRuntimeException("profile.notfound"));
@@ -114,6 +114,6 @@ public class UsersService extends BService<User, CRUUserDTO, UserDAO, Long> {
 			user.setEntity(null);
 		}
 
-		return new CRUUserDTO(dao.save(user), true);
+		return new UserDTO(dao.save(user), true);
 	}
 }

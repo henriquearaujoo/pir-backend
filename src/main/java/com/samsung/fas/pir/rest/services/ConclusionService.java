@@ -5,7 +5,7 @@ import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.dao.ConclusionDAO;
 import com.samsung.fas.pir.persistence.models.entity.Chapter;
 import com.samsung.fas.pir.persistence.models.entity.Conclusion;
-import com.samsung.fas.pir.rest.dto.conclusion.CRUConclusionDTO;
+import com.samsung.fas.pir.rest.dto.ConclusionDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,29 +15,29 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class ConclusionService extends BService<Conclusion, CRUConclusionDTO, ConclusionDAO, Long> {
+public class ConclusionService extends BService<Conclusion, ConclusionDTO, ConclusionDAO, Long> {
 	private ChapterDAO cdao;
 
 	@Autowired
 	public ConclusionService(ConclusionDAO dao, ChapterDAO cdao) {
-		super(dao, Conclusion.class, CRUConclusionDTO.class);
+		super(dao, Conclusion.class, ConclusionDTO.class);
 		this.cdao = cdao;
 	}
 
 	@Override
-	public CRUConclusionDTO save(CRUConclusionDTO create, UserDetails account) {
+	public ConclusionDTO save(ConclusionDTO create, UserDetails account) {
 		Conclusion 	model		= create.getModel();
 		Chapter 	chapter		= Optional.ofNullable(cdao.findOne(IDCoder.decode(Optional.ofNullable(create.getChapterID()).orElseThrow(() -> new RESTRuntimeException("chapter.id.missing"))))).orElseThrow(() -> new RESTRuntimeException("chapter.notfound"));
 		model.setChapter(chapter);
 		chapter.setConclusion(model);
-		return new CRUConclusionDTO(dao.save(model), true);
+		return new ConclusionDTO(dao.save(model), true);
 	}
 
 	@Override
-	public CRUConclusionDTO update(CRUConclusionDTO update, UserDetails account) {
+	public ConclusionDTO update(ConclusionDTO update, UserDetails account) {
 		Conclusion	model		= update.getModel();
 		Conclusion	conclusion	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("conclusion.notfound"));
 		conclusion.setDescription(model.getDescription());
-		return new CRUConclusionDTO(dao.save(conclusion), true);
+		return new ConclusionDTO(dao.save(conclusion), true);
 	}
 }

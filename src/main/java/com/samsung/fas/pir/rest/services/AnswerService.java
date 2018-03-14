@@ -6,7 +6,7 @@ import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.dao.QuestionDAO;
 import com.samsung.fas.pir.persistence.models.entity.Answer;
 import com.samsung.fas.pir.persistence.models.entity.Question;
-import com.samsung.fas.pir.rest.dto.answer.CRUAnswerDTO;
+import com.samsung.fas.pir.rest.dto.AnswerDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +17,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class AnswerService extends BService<Answer,CRUAnswerDTO, AnswerDAO, Long> {
+public class AnswerService extends BService<Answer,AnswerDTO, AnswerDAO, Long> {
 	private	QuestionDAO	qdao;
 	private	ChapterDAO	cdao;
 
 	@Autowired
 	public AnswerService(AnswerDAO dao, QuestionDAO qdao, ChapterDAO cdao) {
-		super(dao, Answer.class, CRUAnswerDTO.class);
+		super(dao, Answer.class, AnswerDTO.class);
 		this.qdao 	= qdao;
 		this.cdao	= cdao;
 	}
@@ -42,21 +42,21 @@ public class AnswerService extends BService<Answer,CRUAnswerDTO, AnswerDAO, Long
 	}
 
 	@Override
-	public CRUAnswerDTO save(CRUAnswerDTO create, UserDetails account) {
+	public AnswerDTO save(AnswerDTO create, UserDetails account) {
 		Answer		model		= create.getModel();
 		Question	question	= Optional.ofNullable(qdao.findOne(create.getQuestionID() != null && !create.getQuestionID().trim().isEmpty()? IDCoder.decode(create.getQuestionID()) : null)).orElseThrow(() -> new RESTRuntimeException("question.notfound"));
 
 		model.setQuestion(question);
 		question.getAnswers().add(model);
-		return new CRUAnswerDTO(dao.save(model), true);
+		return new AnswerDTO(dao.save(model), true);
 	}
 
 	@Override
-	public CRUAnswerDTO update(CRUAnswerDTO update, UserDetails account) {
+	public AnswerDTO update(AnswerDTO update, UserDetails account) {
 		Answer		model		= update.getModel();
 		Answer		answer		= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("answer.notfound"));
 
 		answer.setDescription(model.getDescription());
-		return new CRUAnswerDTO(dao.save(answer), true);
+		return new AnswerDTO(dao.save(answer), true);
 	}
 }

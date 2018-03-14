@@ -4,7 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.persistence.dao.InterventionDAO;
 import com.samsung.fas.pir.persistence.models.entity.Intervention;
 import com.samsung.fas.pir.rest.controllers.base.BController;
-import com.samsung.fas.pir.rest.dto.intervention.CRUInterventionDTO;
+import com.samsung.fas.pir.rest.dto.InterventionDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +26,21 @@ import java.util.Collection;
 @Controller
 @RequestMapping(value = "/rest/chapters/intervention", produces = MediaType.APPLICATION_JSON)
 @Api(value = "Chapter Intervention", description = "REST Controller for Chapter Intervention", tags = "CHAPTER INTERVENTION")
-public class InterventionController extends BController<Intervention, CRUInterventionDTO, InterventionDAO> {
+public class InterventionController extends BController<Intervention, InterventionDTO, InterventionDAO> {
 	@Autowired
-	public InterventionController(BService<Intervention, CRUInterventionDTO, InterventionDAO, Long> service) {
+	public InterventionController(BService<Intervention, InterventionDTO, InterventionDAO, Long> service) {
 		super(service);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/search")
 	@ResponseBody
-	public ResponseEntity<Collection<CRUInterventionDTO>> search(@QuerydslPredicate(root = Intervention.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	public ResponseEntity<Collection<InterventionDTO>> search(@QuerydslPredicate(root = Intervention.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, details));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/search/page")
 	@ResponseBody
-	public ResponseEntity<Page<CRUInterventionDTO>> search(@QuerydslPredicate(root = Intervention.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	public ResponseEntity<Page<InterventionDTO>> search(@QuerydslPredicate(root = Intervention.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable, details));
 	}
 }

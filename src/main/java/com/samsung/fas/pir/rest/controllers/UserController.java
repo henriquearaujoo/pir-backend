@@ -4,7 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.persistence.dao.UserDAO;
 import com.samsung.fas.pir.persistence.models.entity.User;
 import com.samsung.fas.pir.rest.controllers.base.BController;
-import com.samsung.fas.pir.rest.dto.user.CRUUserDTO;
+import com.samsung.fas.pir.rest.dto.UserDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +26,21 @@ import java.util.Collection;
 @Controller
 @RequestMapping(value = "/rest/users", produces = MediaType.APPLICATION_JSON)
 @Api(value = "Users", description = "REST Controller for Users", tags = "USERS")
-public class UserController extends BController<User, CRUUserDTO, UserDAO> {
+public class UserController extends BController<User, UserDTO, UserDAO> {
 	@Autowired
-	public UserController(BService<User, CRUUserDTO, UserDAO, Long> service) {
+	public UserController(BService<User, UserDTO, UserDAO, Long> service) {
 		super(service);
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/search")
 	@ResponseBody
-	public ResponseEntity<Collection<CRUUserDTO>> search(@QuerydslPredicate(root = User.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	public ResponseEntity<Collection<UserDTO>> search(@QuerydslPredicate(root = User.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, details));
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/search/page")
 	@ResponseBody
-	public ResponseEntity<Page<CRUUserDTO>> search(@QuerydslPredicate(root = User.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	public ResponseEntity<Page<UserDTO>> search(@QuerydslPredicate(root = User.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable, details));
 	}
 }

@@ -4,7 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.persistence.dao.ChildDAO;
 import com.samsung.fas.pir.persistence.models.entity.Child;
 import com.samsung.fas.pir.rest.controllers.base.BController;
-import com.samsung.fas.pir.rest.dto.child.CRUChildDTO;
+import com.samsung.fas.pir.rest.dto.ChildDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +24,9 @@ import javax.ws.rs.core.MediaType;
 @Controller
 @RequestMapping(value = "/rest/children", produces = MediaType.APPLICATION_JSON)
 @Api(value = "Children", description = "REST Controller for Children", tags = "CHILDREN")
-public class ChildController extends BController<Child, CRUChildDTO, ChildDAO> {
+public class ChildController extends BController<Child, ChildDTO, ChildDAO> {
 	@Autowired
-	public ChildController(BService<Child, CRUChildDTO, ChildDAO, Long> service) {
+	public ChildController(BService<Child, ChildDTO, ChildDAO, Long> service) {
 		super(service);
 	}
 

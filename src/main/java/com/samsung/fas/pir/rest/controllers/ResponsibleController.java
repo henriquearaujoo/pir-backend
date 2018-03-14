@@ -4,7 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
 import com.samsung.fas.pir.persistence.models.entity.Responsible;
 import com.samsung.fas.pir.rest.controllers.base.BController;
-import com.samsung.fas.pir.rest.dto.responsible.CRUResponsibleDTO;
+import com.samsung.fas.pir.rest.dto.ResponsibleDTO;
 import com.samsung.fas.pir.rest.services.ResponsibleService;
 import com.samsung.fas.pir.rest.services.base.BService;
 import io.swagger.annotations.Api;
@@ -25,9 +25,9 @@ import javax.ws.rs.core.MediaType;
 @Controller
 @RequestMapping(value = "/rest/responsibles", produces = MediaType.APPLICATION_JSON)
 @Api(value = "Responsibles", description = "REST Controller for Responsibles", tags = "RESPONSIBLES")
-public class ResponsibleController extends BController<Responsible, CRUResponsibleDTO, ResponsibleDAO> {
+public class ResponsibleController extends BController<Responsible, ResponsibleDTO, ResponsibleDAO> {
 	@Autowired
-	public ResponsibleController(BService<Responsible, CRUResponsibleDTO, ResponsibleDAO, Long> service) {
+	public ResponsibleController(BService<Responsible, ResponsibleDTO, ResponsibleDAO, Long> service) {
 		super(service);
 	}
 

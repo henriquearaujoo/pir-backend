@@ -4,7 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.persistence.dao.CommunityDAO;
 import com.samsung.fas.pir.persistence.models.entity.Community;
 import com.samsung.fas.pir.rest.controllers.base.BController;
-import com.samsung.fas.pir.rest.dto.community.CRUCommunityDTO;
+import com.samsung.fas.pir.rest.dto.CommunityDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +24,9 @@ import javax.ws.rs.core.MediaType;
 @Controller
 @RequestMapping(value = "/rest/communities", produces = MediaType.APPLICATION_JSON)
 @Api(value = "Communities", description = "REST Controller for Communities", tags = "COMMUNITIES")
-public class CommunityController extends BController<Community, CRUCommunityDTO, CommunityDAO> {
+public class CommunityController extends BController<Community, CommunityDTO, CommunityDAO> {
 	@Autowired
-	public CommunityController(BService<Community, CRUCommunityDTO, CommunityDAO, Long> service) {
+	public CommunityController(BService<Community, CommunityDTO, CommunityDAO, Long> service) {
 		super(service);
 	}
 

@@ -4,7 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.persistence.dao.MotherDAO;
 import com.samsung.fas.pir.persistence.models.entity.Mother;
 import com.samsung.fas.pir.rest.controllers.base.BController;
-import com.samsung.fas.pir.rest.dto.responsible.CRUResponsibleDTO;
+import com.samsung.fas.pir.rest.dto.ResponsibleDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +24,9 @@ import javax.ws.rs.core.MediaType;
 @Controller
 @RequestMapping(value = "/rest/mothers", produces = MediaType.APPLICATION_JSON)
 @Api(value = "Mother", description = "REST Controller for Mothers", tags = "MOTHERS")
-public class MotherController extends BController<Mother, CRUResponsibleDTO, MotherDAO> {
+public class MotherController extends BController<Mother, ResponsibleDTO, MotherDAO> {
 	@Autowired
-	public MotherController(BService<Mother, CRUResponsibleDTO, MotherDAO, Long> service) {
+	public MotherController(BService<Mother, ResponsibleDTO, MotherDAO, Long> service) {
 		super(service);
 	}
 

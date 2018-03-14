@@ -4,7 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.persistence.dao.ProfileDAO;
 import com.samsung.fas.pir.persistence.models.entity.Profile;
 import com.samsung.fas.pir.rest.controllers.base.BController;
-import com.samsung.fas.pir.rest.dto.profile.CRUProfileDTO;
+import com.samsung.fas.pir.rest.dto.ProfileDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +26,21 @@ import java.util.Collection;
 @Controller
 @RequestMapping(value = "/rest/profiles", produces = MediaType.APPLICATION_JSON)
 @Api(value = "Profiles", description = "REST Controller for Profiles", tags = "PROFILES")
-public class ProfileController extends BController<Profile, CRUProfileDTO, ProfileDAO> {
+public class ProfileController extends BController<Profile, ProfileDTO, ProfileDAO> {
 	@Autowired
-	public ProfileController(BService<Profile, CRUProfileDTO, ProfileDAO, Long> service) {
+	public ProfileController(BService<Profile, ProfileDTO, ProfileDAO, Long> service) {
 		super(service);
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/search")
 	@ResponseBody
-	public ResponseEntity<Collection<CRUProfileDTO>> search(@QuerydslPredicate(root = Profile.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	public ResponseEntity<Collection<ProfileDTO>> search(@QuerydslPredicate(root = Profile.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, details));
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/search/page")
 	@ResponseBody
-	public ResponseEntity<Page<CRUProfileDTO>> search(@QuerydslPredicate(root = Profile.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	public ResponseEntity<Page<ProfileDTO>> search(@QuerydslPredicate(root = Profile.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable, details));
 	}
 }

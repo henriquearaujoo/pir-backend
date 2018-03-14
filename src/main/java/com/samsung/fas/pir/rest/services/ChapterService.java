@@ -4,7 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.models.entity.Chapter;
-import com.samsung.fas.pir.rest.dto.chapter.CRUChapterDTO;
+import com.samsung.fas.pir.rest.dto.ChapterDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,42 +17,42 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class ChapterService extends BService<Chapter, CRUChapterDTO, ChapterDAO, Long> {
+public class ChapterService extends BService<Chapter, ChapterDTO, ChapterDAO, Long> {
 	@Autowired
 	public ChapterService(ChapterDAO dao) {
-		super(dao, Chapter.class, CRUChapterDTO.class);
+		super(dao, Chapter.class, ChapterDTO.class);
 	}
 
-	public Collection<CRUChapterDTO> findAllValid() {
-		return dao.findAllValid().stream().map(item -> new CRUChapterDTO(item ,false)).collect(Collectors.toSet());
+	public Collection<ChapterDTO> findAllValid() {
+		return dao.findAllValid().stream().map(item -> new ChapterDTO(item ,false)).collect(Collectors.toSet());
 	}
 
-	public Collection<CRUChapterDTO> findAllValid(Predicate predicate) {
-		return dao.findAllValid(predicate).stream().map(item -> new CRUChapterDTO(item ,false)).collect(Collectors.toSet());
+	public Collection<ChapterDTO> findAllValid(Predicate predicate) {
+		return dao.findAllValid(predicate).stream().map(item -> new ChapterDTO(item ,false)).collect(Collectors.toSet());
 	}
 
-	public Collection<CRUChapterDTO> findAllInvalid() {
-		return dao.findAllInvalid().stream().map(item -> new CRUChapterDTO(item ,false)).collect(Collectors.toSet());
+	public Collection<ChapterDTO> findAllInvalid() {
+		return dao.findAllInvalid().stream().map(item -> new ChapterDTO(item ,false)).collect(Collectors.toSet());
 	}
 
-	public Page<CRUChapterDTO> findAllValid(Pageable pageable) {
-		return dao.findAllValid(pageable).map(item -> new CRUChapterDTO(item ,false));
+	public Page<ChapterDTO> findAllValid(Pageable pageable) {
+		return dao.findAllValid(pageable).map(item -> new ChapterDTO(item ,false));
 	}
 
-	public Page<CRUChapterDTO> findAllValid(Pageable pageable, Predicate predicate) {
-		return dao.findAllValid(predicate, pageable).map(item -> new CRUChapterDTO(item ,false));
+	public Page<ChapterDTO> findAllValid(Pageable pageable, Predicate predicate) {
+		return dao.findAllValid(predicate, pageable).map(item -> new ChapterDTO(item ,false));
 	}
 
-	public Page<CRUChapterDTO> findAllInvalid(Pageable pageable) {
-		return dao.findAllInvalid(pageable).map(item -> new CRUChapterDTO(item ,false));
+	public Page<ChapterDTO> findAllInvalid(Pageable pageable) {
+		return dao.findAllInvalid(pageable).map(item -> new ChapterDTO(item ,false));
 	}
 
-	public Page<CRUChapterDTO> findAllInvalid(Pageable pageable, Predicate predicate) {
-		return dao.findAllInvalid(predicate, pageable).map(item -> new CRUChapterDTO(item ,false));
+	public Page<ChapterDTO> findAllInvalid(Pageable pageable, Predicate predicate) {
+		return dao.findAllInvalid(predicate, pageable).map(item -> new ChapterDTO(item ,false));
 	}
 
 	@Override
-	public CRUChapterDTO save(CRUChapterDTO create, UserDetails account) {
+	public ChapterDTO save(ChapterDTO create, UserDetails account) {
 		Chapter			model		= create.getModel();
 		List<Chapter>	versions	= new ArrayList<>(dao.findAllByChapter(create.getChapter()));
 
@@ -62,11 +62,11 @@ public class ChapterService extends BService<Chapter, CRUChapterDTO, ChapterDAO,
 			model.setVersion(versions.get(0).getVersion() + 1);
 		}
 
-		return new CRUChapterDTO(dao.save(model), true);
+		return new ChapterDTO(dao.save(model), true);
 	}
 
 	@Override
-	public CRUChapterDTO update(CRUChapterDTO update, UserDetails account) {
+	public ChapterDTO update(ChapterDTO update, UserDetails account) {
 		Chapter			model		= update.getModel();
 		Chapter			chapter		= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("chapter.notfound"));
 
@@ -100,6 +100,6 @@ public class ChapterService extends BService<Chapter, CRUChapterDTO, ChapterDAO,
 		chapter.getThumbnails().clear();
 		chapter.getMedias().addAll(model.getMedias() != null? model.getMedias() : new ArrayList<>());
 		chapter.getThumbnails().addAll(model.getThumbnails() != null? model.getThumbnails() : new ArrayList<>());
-		return new CRUChapterDTO(dao.save(chapter), true);
+		return new ChapterDTO(dao.save(chapter), true);
 	}
 }

@@ -4,7 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.persistence.dao.RuleDAO;
 import com.samsung.fas.pir.persistence.models.entity.Rule;
 import com.samsung.fas.pir.rest.controllers.base.BController;
-import com.samsung.fas.pir.rest.dto.rule.CRURuleDTO;
+import com.samsung.fas.pir.rest.dto.RuleDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +26,21 @@ import java.util.Collection;
 @Controller
 @RequestMapping(value = "/rest/rules", produces = MediaType.APPLICATION_JSON)
 @Api(value = "Rules", description = "REST Controller for Rules", tags = "RULES")
-public class RulesController extends BController<Rule, CRURuleDTO, RuleDAO> {
+public class RulesController extends BController<Rule, RuleDTO, RuleDAO> {
 	@Autowired
-	public RulesController(BService<Rule, CRURuleDTO, RuleDAO, Long> service) {
+	public RulesController(BService<Rule, RuleDTO, RuleDAO, Long> service) {
 		super(service);
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/search")
 	@ResponseBody
-	public ResponseEntity<Collection<CRURuleDTO>> search(@QuerydslPredicate(root = Rule.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	public ResponseEntity<Collection<RuleDTO>> search(@QuerydslPredicate(root = Rule.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, details));
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/search/page")
 	@ResponseBody
-	public ResponseEntity<Page<CRURuleDTO>> search(@QuerydslPredicate(root = Rule.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	public ResponseEntity<Page<RuleDTO>> search(@QuerydslPredicate(root = Rule.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable, details));
 	}
 }

@@ -7,7 +7,7 @@ import com.samsung.fas.pir.persistence.dao.ProfileDAO;
 import com.samsung.fas.pir.persistence.models.entity.Page;
 import com.samsung.fas.pir.persistence.models.entity.Profile;
 import com.samsung.fas.pir.persistence.models.entity.Rule;
-import com.samsung.fas.pir.rest.dto.profile.CRUProfileDTO;
+import com.samsung.fas.pir.rest.dto.ProfileDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,17 +19,17 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class ProfileService extends BService<Profile, CRUProfileDTO, ProfileDAO, Long> {
+public class ProfileService extends BService<Profile, ProfileDTO, ProfileDAO, Long> {
 	private 	PageDAO 	pdao;
 
 	@Autowired
 	public ProfileService(ProfileDAO dao, PageDAO pdao) {
-		super(dao, Profile.class, CRUProfileDTO.class);
+		super(dao, Profile.class, ProfileDTO.class);
 		this.pdao 	= pdao;
 	}
 
 	@Override
-	public CRUProfileDTO save(CRUProfileDTO create, UserDetails account) {
+	public ProfileDTO save(ProfileDTO create, UserDetails account) {
 		Profile				model		= create.getModel();
 		Collection<Page>	pages		= pdao.findAll();
 		Collection<Rule>	rules		= new HashSet<>();
@@ -50,11 +50,11 @@ public class ProfileService extends BService<Profile, CRUProfileDTO, ProfileDAO,
 		model.setWhoUpdated(((Account) account).getUser());
 		model.setRules(rules);
 
-		return new CRUProfileDTO(dao.save(model), true);
+		return new ProfileDTO(dao.save(model), true);
 	}
 
 	@Override
-	public CRUProfileDTO update(CRUProfileDTO update, UserDetails account) {
+	public ProfileDTO update(ProfileDTO update, UserDetails account) {
 		Profile				model		= update.getModel();
 		Profile				profile		= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("profile.notfound"));
 
@@ -63,6 +63,6 @@ public class ProfileService extends BService<Profile, CRUProfileDTO, ProfileDAO,
 		profile.setTitle(model.getTitle());
 		profile.setWhoUpdated(((Account) account).getUser());
 
-		return new CRUProfileDTO(dao.save(profile), true);
+		return new ProfileDTO(dao.save(profile), true);
 	}
 }

@@ -7,7 +7,7 @@ import com.samsung.fas.pir.persistence.dao.RuleDAO;
 import com.samsung.fas.pir.persistence.models.entity.Page;
 import com.samsung.fas.pir.persistence.models.entity.Profile;
 import com.samsung.fas.pir.persistence.models.entity.Rule;
-import com.samsung.fas.pir.rest.dto.rule.CRURuleDTO;
+import com.samsung.fas.pir.rest.dto.RuleDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +20,20 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class RuleService extends BService<Rule, CRURuleDTO, RuleDAO, Long> {
+public class RuleService extends BService<Rule, RuleDTO, RuleDAO, Long> {
 
 	@Autowired
 	public RuleService(RuleDAO dao) {
-		super(dao, Rule.class, CRURuleDTO.class);
+		super(dao, Rule.class, RuleDTO.class);
 	}
 
 	@Override
-	public CRURuleDTO save(CRURuleDTO create, UserDetails account) {
+	public RuleDTO save(RuleDTO create, UserDetails account) {
 		return null;
 	}
 
 	@Override
-	public CRURuleDTO update(CRURuleDTO update, UserDetails account) {
+	public RuleDTO update(RuleDTO update, UserDetails account) {
 		Rule					model			= update.getModel();
 		UUID					ruleID			= Optional.ofNullable(update.getId() != null && !update.getId().trim().isEmpty()? IDCoder.decode(update.getId()) : null).orElseThrow(() -> new RESTRuntimeException("id.missing"));
 		Rule					rule			= Optional.ofNullable(dao.findOne(ruleID)).orElseThrow(() -> new RESTRuntimeException("rule.notfound"));
@@ -109,6 +109,6 @@ public class RuleService extends BService<Rule, CRURuleDTO, RuleDAO, Long> {
 		rule.canDelete(model.canDelete());
 		rule.getProfile().setWhoUpdated(((Account) account).getUser());
 
-		return new CRURuleDTO(dao.save(rule), true);
+		return new RuleDTO(dao.save(rule), true);
 	}
 }

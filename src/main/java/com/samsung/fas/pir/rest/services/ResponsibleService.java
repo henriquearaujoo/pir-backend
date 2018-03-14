@@ -6,7 +6,7 @@ import com.samsung.fas.pir.persistence.dao.CommunityDAO;
 import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
 import com.samsung.fas.pir.persistence.models.entity.Community;
 import com.samsung.fas.pir.persistence.models.entity.Responsible;
-import com.samsung.fas.pir.rest.dto.responsible.CRUResponsibleDTO;
+import com.samsung.fas.pir.rest.dto.ResponsibleDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,25 +20,25 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class ResponsibleService extends BService<Responsible, CRUResponsibleDTO, ResponsibleDAO, Long> {
+public class ResponsibleService extends BService<Responsible, ResponsibleDTO, ResponsibleDAO, Long> {
 	private		CommunityDAO		cdao;
 
 	@Autowired
 	public ResponsibleService(ResponsibleDAO dao, CommunityDAO cdao) {
-		super(dao, Responsible.class, CRUResponsibleDTO.class);
+		super(dao, Responsible.class, ResponsibleDTO.class);
 		this.cdao = cdao;
 	}
 
 	@Override
-	public CRUResponsibleDTO save(CRUResponsibleDTO create, UserDetails account) {
+	public ResponsibleDTO save(ResponsibleDTO create, UserDetails account) {
 		Responsible		model		= create.getModel();
 		Community		community	= Optional.ofNullable(cdao.findOne(IDCoder.decode(create.getCommunityID()))).orElseThrow(() -> new RESTRuntimeException("community.notfound"));
 		model.setCommunity(community);
-		return new CRUResponsibleDTO(dao.save(model), true);
+		return new ResponsibleDTO(dao.save(model), true);
 	}
 
 	@Override
-	public CRUResponsibleDTO update(CRUResponsibleDTO update, UserDetails account) {
+	public ResponsibleDTO update(ResponsibleDTO update, UserDetails account) {
 		Responsible		model		= update.getModel();
 		Responsible		responsible	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("responsible.notfound"));
 		Community		community	= Optional.ofNullable(cdao.findOne(IDCoder.decode(update.getCommunityID()))).orElseThrow(() -> new RESTRuntimeException("community.notfound"));
@@ -59,22 +59,22 @@ public class ResponsibleService extends BService<Responsible, CRUResponsibleDTO,
 		responsible.setHasWaterTreatment(model.isHasWaterTreatment());
 		responsible.setObservations(model.getObservations());
 
-		return new CRUResponsibleDTO(dao.save(responsible), true);
+		return new ResponsibleDTO(dao.save(responsible), true);
 	}
 
-	public Collection<CRUResponsibleDTO> findAllResponsible() {
-		return dao.findAllResponsible().stream().map(item -> new CRUResponsibleDTO(item, false)).collect(Collectors.toSet());
+	public Collection<ResponsibleDTO> findAllResponsible() {
+		return dao.findAllResponsible().stream().map(item -> new ResponsibleDTO(item, false)).collect(Collectors.toSet());
 	}
 
-	public Collection<CRUResponsibleDTO> findAllResponsible(Predicate predicate) {
-		return dao.findAllResponsible(predicate).stream().map(item -> new CRUResponsibleDTO(item, false)).collect(Collectors.toSet());
+	public Collection<ResponsibleDTO> findAllResponsible(Predicate predicate) {
+		return dao.findAllResponsible(predicate).stream().map(item -> new ResponsibleDTO(item, false)).collect(Collectors.toSet());
 	}
 
-	public Page<CRUResponsibleDTO> findAllResponsible(Pageable pageable) {
-		return dao.findAllResponsible(pageable).map(item -> new CRUResponsibleDTO(item, false));
+	public Page<ResponsibleDTO> findAllResponsible(Pageable pageable) {
+		return dao.findAllResponsible(pageable).map(item -> new ResponsibleDTO(item, false));
 	}
 
-	public Page<CRUResponsibleDTO> findAllResponsible(Pageable pageable, Predicate predicate) {
-		return dao.findAllResponsible(predicate, pageable).map(item -> new CRUResponsibleDTO(item, false));
+	public Page<ResponsibleDTO> findAllResponsible(Pageable pageable, Predicate predicate) {
+		return dao.findAllResponsible(predicate, pageable).map(item -> new ResponsibleDTO(item, false));
 	}
 }
