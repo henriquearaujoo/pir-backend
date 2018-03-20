@@ -5,6 +5,7 @@ import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.models.entity.Chapter;
 import com.samsung.fas.pir.rest.controllers.base.BController;
 import com.samsung.fas.pir.rest.dto.ChapterDTO;
+import com.samsung.fas.pir.rest.dto.ChapterDetailedDTO;
 import com.samsung.fas.pir.rest.services.ChapterService;
 import com.samsung.fas.pir.rest.services.base.BService;
 import io.swagger.annotations.Api;
@@ -37,6 +38,42 @@ public class ChapterController extends BController<Chapter, ChapterDTO, ChapterD
 	@ResponseBody
 	public ResponseEntity<Collection<ChapterDTO>> getAllValid() {
 		return ResponseEntity.ok(((ChapterService) service).findAllValid());
+	}
+
+	@RequestMapping(method=RequestMethod.GET, path="/active/detailed")
+	@ResponseBody
+	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllValidDetailed() {
+		return ResponseEntity.ok(((ChapterService) service).findAllValidDetailed());
+	}
+
+	@RequestMapping(method=RequestMethod.GET, path="/active/detailed/search")
+	@ResponseBody
+	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllValidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate) {
+		return ResponseEntity.ok(((ChapterService) service).findAllValidDetailed(predicate));
+	}
+
+	@RequestMapping(method=RequestMethod.GET, path="/active/detailed/search/page")
+	@ResponseBody
+	public ResponseEntity<Page<ChapterDetailedDTO>> getAllValidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable) {
+		return ResponseEntity.ok(((ChapterService) service).findAllValidDetailed(predicate, pageable));
+	}
+
+	@RequestMapping(method=RequestMethod.GET, path="/inactive/detailed")
+	@ResponseBody
+	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllInvalidDetailed() {
+		return ResponseEntity.ok(((ChapterService) service).findAllInvalidDetailed());
+	}
+
+	@RequestMapping(method=RequestMethod.GET, path="/inactive/detailed/search")
+	@ResponseBody
+	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllInvalidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate) {
+		return ResponseEntity.ok(((ChapterService) service).findAllInvalidDetailed(predicate));
+	}
+
+	@RequestMapping(method=RequestMethod.GET, path="/inactive/detailed/search/page")
+	@ResponseBody
+	public ResponseEntity<Page<ChapterDetailedDTO>> getAllInvalidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable) {
+		return ResponseEntity.ok(((ChapterService) service).findAllInvalidDetailed(predicate, pageable));
 	}
 
 	@RequestMapping(method=RequestMethod.GET, path="/active/search")
@@ -75,15 +112,33 @@ public class ChapterController extends BController<Chapter, ChapterDTO, ChapterD
 		return ResponseEntity.ok(((ChapterService) service).findAllValid(pageable));
 	}
 
+	@RequestMapping(method=RequestMethod.GET, path="/detailed/page")
+	@ResponseBody
+	public ResponseEntity<Page<ChapterDetailedDTO>> getAllDetailed(Pageable pageable) {
+		return ResponseEntity.ok(((ChapterService) service).findAllDetailed(pageable));
+	}
+
+	@RequestMapping(method=RequestMethod.GET, path="/detailed/search")
+	@ResponseBody
+	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate) {
+		return ResponseEntity.ok(((ChapterService) service).findAllDetailed(predicate));
+	}
+
+	@RequestMapping(method=RequestMethod.GET, path="/detailed/search/page")
+	@ResponseBody
+	public ResponseEntity<Page<ChapterDetailedDTO>> getAllDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable) {
+		return ResponseEntity.ok(((ChapterService) service).findAllDetailed(predicate, pageable));
+	}
+
 	@RequestMapping(method=RequestMethod.GET, value="/search")
 	@ResponseBody
-	public ResponseEntity<Collection<ChapterDTO>> search(@QuerydslPredicate(root = Chapter.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	public ResponseEntity<Collection<?>> search(@QuerydslPredicate(root = Chapter.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, details));
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/search/page")
 	@ResponseBody
-	public ResponseEntity<Page<ChapterDTO>> search(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	public ResponseEntity<Page<?>> search(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable, details));
 	}
 }

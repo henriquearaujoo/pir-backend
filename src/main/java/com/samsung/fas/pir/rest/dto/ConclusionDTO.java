@@ -35,7 +35,7 @@ public class ConclusionDTO {
 	@Getter
 	@Setter
 	@JsonProperty("questions")
-	private 	Collection<QuestionDTO>	questions;
+	private 	Collection<QuestionDTO>		questions;
 
 	public ConclusionDTO() {
 		super();

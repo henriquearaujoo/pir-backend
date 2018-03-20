@@ -1,28 +1,33 @@
 package com.samsung.fas.pir.persistence.models.enums;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Arrays;
+
 public enum ECommunityZone {
 	RURAL		("RURAL"),
 	URBAN		("URBAN"),
-	UNSPECIFIED	("UNSPECIFIED");
+	UNDEFINED	("UNDEFINED");
 
-	private final String val;
+	@Getter(value = AccessLevel.PRIVATE)
+	@Setter(value = AccessLevel.PRIVATE)
+	private		String	enumaration;
 
-	ECommunityZone(String s) {
-		val = s;
+	ECommunityZone(String value) {
+		setEnumaration(value);
 	}
 
-	public boolean equalsName(String otherName) {
-		return val.equalsIgnoreCase(otherName);
+	public boolean equals(String value) {
+		return getEnumaration().equalsIgnoreCase(value);
 	}
 
-	public String toString() {
-		return this.val;
+	public String getValue() {
+		return getEnumaration();
 	}
 
-	public static ECommunityZone parse(String s) {
-		for (ECommunityZone v : ECommunityZone.values())
-			if (v.val.equalsIgnoreCase(s))
-				return v;
-		return UNSPECIFIED;
+	public static ECommunityZone setValue(String s) {
+		return Arrays.stream(ECommunityZone.values()).filter(item -> item.getEnumaration().equalsIgnoreCase(s)).findAny().orElse(UNDEFINED);
 	}
 }

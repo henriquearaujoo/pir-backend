@@ -203,7 +203,7 @@ public class CommunityDTO {
 		model.hasCommunityLeaders(hasCommunityLeaders());
 		model.setRegional(getRegional());
 		model.setUc(getUc());
-		model.setCommunityZone(ECommunityZone.parse(getCommunityZone()));
+		model.setCommunityZone(ECommunityZone.setValue(getCommunityZone()));
 		return model;
 	}
 }

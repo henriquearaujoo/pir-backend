@@ -4,17 +4,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.persistence.models.entity.QuestionTB;
+import com.samsung.fas.pir.persistence.models.entity.FormQuestion;
+import com.samsung.fas.pir.persistence.models.enums.EFormQuestionType;
 import com.samsung.fas.pir.utils.IDCoder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FormQuestionTBDTO {
+public class FormQuestionDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
@@ -31,33 +33,41 @@ public class FormQuestionTBDTO {
 	@NotBlank(message = "description.missing")
 	private 		String					description;
 
-	@Accessors(fluent = true)
-	@Setter(value = AccessLevel.PRIVATE)
 	@Getter
-	@JsonProperty(value = "is_present", access = JsonProperty.Access.READ_ONLY)
-	private 		Boolean					isPresent;
+	@Setter
+	@JsonProperty("type")
+	@NotNull(message = "type.missing")
+	private 		String					type;
+
+	@Getter
+	@Setter
+	@JsonProperty("is_enabled")
+	private 		boolean					enabled;
 
 	@Setter(value = AccessLevel.PRIVATE)
 	@Getter
 	@JsonProperty(value = "form", access = JsonProperty.Access.READ_ONLY)
 	private 		FormDTO					form;
 
-	public FormQuestionTBDTO() {
+	public FormQuestionDTO() {
 		super();
 	}
 
-	public FormQuestionTBDTO(QuestionTB question, boolean detailed) {
+	public FormQuestionDTO(FormQuestion question, boolean detailed) {
 		setId(IDCoder.encode(question.getUuid()));
 		setDescription(question.getDescription());
-		isPresent(question.isPresent());
-		setForm(new FormDTO(question.getForm(), false));
+		setType(question.getType().getValue());
+		setEnabled(question.isEnabled());
+		setForm(detailed? new FormDTO(question.getForm(), false) : null);
 	}
 
 	@JsonIgnore
-	public QuestionTB getModel() {
-		QuestionTB model = new QuestionTB();
+	public FormQuestion getModel() {
+		FormQuestion model = new FormQuestion();
 		model.setUuid(getId() != null && !getId().trim().isEmpty()? IDCoder.decode(getId()) : null);
 		model.setDescription(getDescription());
+		model.setType(EFormQuestionType.setValue(getType()));
+		model.setEnabled(isEnabled());
 		return model;
 	}
 }

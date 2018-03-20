@@ -1,28 +1,33 @@
 package com.samsung.fas.pir.persistence.models.enums;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Arrays;
+
 public enum EFormType {
 	BTYPE			("BTYPE"),
 	ATYPE			("ATYPE"),
 	UNDEFINED		("UNDEFINED");
 
-	private final String val;
+	@Getter(value = AccessLevel.PRIVATE)
+	@Setter(value = AccessLevel.PRIVATE)
+	private		String	enumaration;
 
-	EFormType(String s) {
-		val = s;
+	EFormType(String value) {
+		setEnumaration(value);
 	}
 
-	public boolean equalsName(String otherName) {
-		return val.equalsIgnoreCase(otherName);
+	public boolean equals(String value) {
+		return getEnumaration().equalsIgnoreCase(value);
 	}
 
-	public String toString() {
-		return this.val;
+	public String getValue() {
+		return getEnumaration();
 	}
 
-	public static EFormType parse(String s) {
-		for (EFormType v : EFormType.values())
-			if (v.val.equalsIgnoreCase(s))
-				return v;
-		return null;
+	public static EFormType setValue(String s) {
+		return Arrays.stream(EFormType.values()).filter(item -> item.getEnumaration().equalsIgnoreCase(s)).findAny().orElse(UNDEFINED);
 	}
 }

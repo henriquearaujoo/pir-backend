@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,7 +41,7 @@ public class FormController extends BController<Form, FormDTO, FormDAO> {
 
 	@RequestMapping(method=RequestMethod.GET, value="/search/page")
 	@ResponseBody
-	public ResponseEntity<Page<FormDTO>> search(@QuerydslPredicate(root = Form.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	public ResponseEntity<Page<?>> search(@QuerydslPredicate(root = Form.class) Predicate predicate, @PageableDefault(sort = {"id"}) Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable, details));
 	}
 }

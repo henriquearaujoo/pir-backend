@@ -1,29 +1,34 @@
 package com.samsung.fas.pir.persistence.models.enums;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Arrays;
+
 public enum EHabitationType {
 	OWNED		("OWNED"),
 	LEASED		("LEASED"),
 	CEDED		("CEDED"),
-	UNSPECIFIED	("UNSPECIFIED");
+	UNDEFINED	("UNDEFINED");
 
-	private final String val;
+	@Getter(value = AccessLevel.PRIVATE)
+	@Setter(value = AccessLevel.PRIVATE)
+	private		String	enumaration;
 
-	EHabitationType(String s) {
-		val = s;
+	EHabitationType(String value) {
+		setEnumaration(value);
 	}
 
-	public boolean equalsName(String otherName) {
-		return val.equalsIgnoreCase(otherName);
+	public boolean equals(String value) {
+		return getEnumaration().equalsIgnoreCase(value);
 	}
 
-	public String toString() {
-		return this.val;
+	public String getValue() {
+		return getEnumaration();
 	}
 
-	public static EHabitationType parse(String s) {
-		for (EHabitationType v : EHabitationType.values())
-			if (v.val.equalsIgnoreCase(s))
-				return v;
-		return UNSPECIFIED;
+	public static EHabitationType setValue(String s) {
+		return Arrays.stream(EHabitationType.values()).filter(item -> item.getEnumaration().equalsIgnoreCase(s)).findAny().orElse(UNDEFINED);
 	}
 }

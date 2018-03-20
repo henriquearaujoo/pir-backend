@@ -6,17 +6,19 @@ import lombok.Setter;
 
 import java.util.Arrays;
 
-public enum  EQuestionType {
-	OBJECTIVE		("OBJECTIVE"),
-	SUBJECTIVE		("SUBJECTIVE"),
-	DISSERTATIVE	("DISSERTATIVE"),
+public enum EFormQuestionType {
+	AFFECTIVE		("SOCIO_AFFECTIVE"),
+	MOTOR			("MOTOR"),
+	LANGUAGE		("LANGUAGE"),
+	COGNITIVE		("COGNITIVE"),
+	NEURO			("NEURO"),
 	UNDEFINED		("UNDEFINED");
 
 	@Getter(value = AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE)
 	private		String	enumaration;
 
-	EQuestionType(String value) {
+	EFormQuestionType(String value) {
 		setEnumaration(value);
 	}
 
@@ -28,7 +30,7 @@ public enum  EQuestionType {
 		return getEnumaration();
 	}
 
-	public static EQuestionType setValue(String s) {
-		return Arrays.stream(EQuestionType.values()).filter(item -> item.getEnumaration().equalsIgnoreCase(s)).findAny().orElse(UNDEFINED);
+	public static EFormQuestionType setValue(String s) {
+		return Arrays.stream(EFormQuestionType.values()).filter(item -> item.getEnumaration().equalsIgnoreCase(s)).findAny().orElse(UNDEFINED);
 	}
 }

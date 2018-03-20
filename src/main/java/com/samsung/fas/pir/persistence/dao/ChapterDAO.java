@@ -19,7 +19,6 @@ import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +30,7 @@ public class ChapterDAO extends BaseDAO<Chapter, Long, QChapter> {
 		this.emanager	= emanager;
 	}
 
-	public Set<Chapter> findAllValid() {
+	public Collection<Chapter> findAllValid() {
 		return ((IChapterRepository) repository).findAllByValid();
 	}
 

@@ -1,28 +1,33 @@
 package com.samsung.fas.pir.persistence.models.enums;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Arrays;
+
 public enum EChildGender {
 	FEMALE		("FEMALE"),
 	MALE		("MALE"),
 	UNDEFINED	("UNDEFINED");
 
-	private final String val;
+	@Getter(value = AccessLevel.PRIVATE)
+	@Setter(value = AccessLevel.PRIVATE)
+	private		String	enumaration;
 
-	EChildGender(String s) {
-		val = s;
+	EChildGender(String value) {
+		setEnumaration(value);
 	}
 
-	public boolean equalsName(String otherName) {
-		return val.equalsIgnoreCase(otherName);
+	public boolean equals(String value) {
+		return getEnumaration().equalsIgnoreCase(value);
 	}
 
-	public String toString() {
-		return this.val;
+	public String getValue() {
+		return getEnumaration();
 	}
 
-	public static EChildGender parse(String s) {
-		for (EChildGender v : EChildGender.values())
-			if (v.val.equalsIgnoreCase(s))
-				return v;
-		return UNDEFINED;
+	public static EChildGender setValue(String s) {
+		return Arrays.stream(EChildGender.values()).filter(item -> item.getEnumaration().equalsIgnoreCase(s)).findAny().orElse(UNDEFINED);
 	}
 }

@@ -5,6 +5,7 @@ import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.models.entity.Chapter;
 import com.samsung.fas.pir.rest.dto.ChapterDTO;
+import com.samsung.fas.pir.rest.dto.ChapterDetailedDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import com.samsung.fas.pir.utils.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,30 @@ public class ChapterService extends BService<Chapter, ChapterDTO, ChapterDAO, Lo
 
 	public Collection<ChapterDTO> findAllValid() {
 		return dao.findAllValid().stream().map(item -> new ChapterDTO(item ,false)).collect(Collectors.toSet());
+	}
+
+	public Collection<ChapterDetailedDTO> findAllValidDetailed() {
+		return dao.findAllValid().stream().map(item -> new ChapterDetailedDTO(item ,false)).collect(Collectors.toSet());
+	}
+
+	public Collection<ChapterDetailedDTO> findAllInvalidDetailed() {
+		return dao.findAllInvalid().stream().map(item -> new ChapterDetailedDTO(item ,false)).collect(Collectors.toSet());
+	}
+
+	public Collection<ChapterDetailedDTO> findAllValidDetailed(Predicate predicate) {
+		return dao.findAllValid(predicate).stream().map(item -> new ChapterDetailedDTO(item ,false)).collect(Collectors.toSet());
+	}
+
+	public Collection<ChapterDetailedDTO> findAllInvalidDetailed(Predicate predicate) {
+		return dao.findAllInvalid(predicate).stream().map(item -> new ChapterDetailedDTO(item ,false)).collect(Collectors.toSet());
+	}
+
+	public Page<ChapterDetailedDTO> findAllValidDetailed(Predicate predicate, Pageable pageable) {
+		return dao.findAllValid(predicate, pageable).map(item -> new ChapterDetailedDTO(item ,false));
+	}
+
+	public Page<ChapterDetailedDTO> findAllInvalidDetailed(Predicate predicate, Pageable pageable) {
+		return dao.findAllInvalid(predicate, pageable).map(item -> new ChapterDetailedDTO(item ,false));
 	}
 
 	public Collection<ChapterDTO> findAllValid(Predicate predicate) {
@@ -49,6 +74,22 @@ public class ChapterService extends BService<Chapter, ChapterDTO, ChapterDAO, Lo
 
 	public Page<ChapterDTO> findAllInvalid(Pageable pageable, Predicate predicate) {
 		return dao.findAllInvalid(predicate, pageable).map(item -> new ChapterDTO(item ,false));
+	}
+
+	public Collection<ChapterDetailedDTO> findAllDetailed() {
+		return dao.findAll().stream().map(item -> new ChapterDetailedDTO(item, true)).collect(Collectors.toSet());
+	}
+
+	public Collection<ChapterDetailedDTO> findAllDetailed(Predicate predicate) {
+		return dao.findAll(predicate).stream().map(item -> new ChapterDetailedDTO(item, true)).collect(Collectors.toSet());
+	}
+
+	public Page<ChapterDetailedDTO> findAllDetailed(Pageable pageable) {
+		return dao.findAll(pageable).map(item -> new ChapterDetailedDTO(item, true));
+	}
+
+	public Page<ChapterDetailedDTO> findAllDetailed(Predicate predicate, Pageable pageable) {
+		return dao.findAll(predicate, pageable).map(item -> new ChapterDetailedDTO(item, true));
 	}
 
 	@Override

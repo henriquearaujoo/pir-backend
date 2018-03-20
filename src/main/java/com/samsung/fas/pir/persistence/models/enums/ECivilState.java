@@ -1,31 +1,36 @@
 package com.samsung.fas.pir.persistence.models.enums;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Arrays;
+
 public enum ECivilState {
 	MARRIED		("MARRIED"),
 	SINGLE		("SINGLE"),
 	DIVORCED	("DIVORCED"),
 	SEPARATED	("SEPARATED"),
 	WIDOWED		("WIDOWED"),
-	UNSPECIFIED	("UNSPECIFIED");
+	UNDEFINED	("UNDEFINED");
 
-	private final String val;
+	@Getter(value = AccessLevel.PRIVATE)
+	@Setter(value = AccessLevel.PRIVATE)
+	private		String	enumaration;
 
-	ECivilState(String s) {
-		val = s;
+	ECivilState(String value) {
+		setEnumaration(value);
 	}
 
-	public boolean equalsName(String otherName) {
-		return val.equalsIgnoreCase(otherName);
+	public boolean equals(String value) {
+		return getEnumaration().equalsIgnoreCase(value);
 	}
 
-	public String toString() {
-		return this.val;
+	public String getValue() {
+		return getEnumaration();
 	}
 
-	public static ECivilState parse(String s) {
-		for (ECivilState v : ECivilState.values())
-			if (v.val.equalsIgnoreCase(s))
-				return v;
-		return UNSPECIFIED;
+	public static ECivilState setValue(String s) {
+		return Arrays.stream(ECivilState.values()).filter(item -> item.getEnumaration().equalsIgnoreCase(s)).findAny().orElse(UNDEFINED);
 	}
 }
