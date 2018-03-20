@@ -29,7 +29,9 @@ public class Swagger {
 					   .securityContexts(Collections.singletonList(SecurityContext.builder()
 																		   .securityReferences(authorization())
 																		   .forPaths(PathSelectors.ant("/rest/**"))
-																		   .forPaths(Predicates.not(PathSelectors.ant("/rest/authentication/**"))).build()))
+																		   .forPaths(Predicates.not(PathSelectors.ant("/rest/authentication/**")))
+																		   .forPaths(Predicates.not(PathSelectors.ant("/rest/firebase/**")))
+																		   .build()))
 					   .apiInfo(new ApiInfo(
 							   "PIR REST Documentation",
 							   "Documentation for PIR REST Services",

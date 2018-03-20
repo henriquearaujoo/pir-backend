@@ -25,9 +25,10 @@ import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 import java.util.UUID;
 
+@Api(value = "Chapter Conclusion Questions", description = "REST Controller for Chapter Conclusion Questions", tags = "CHAPTER CONCLUSION QUESTIONS")
 @Controller
 @RequestMapping(value = "/rest/chapters/conclusion/questions", produces = MediaType.APPLICATION_JSON)
-@Api(value = "Chapter Conclusion Questions", description = "REST Controller for Chapter Conclusion Questions", tags = "CHAPTER CONCLUSION QUESTIONS")
+@ResponseBody
 public class QuestionController extends BController<Question, QuestionDTO, QuestionDAO> {
 	@Autowired
 	public QuestionController(BService<Question, QuestionDTO, QuestionDAO, Long> service) {
@@ -35,19 +36,16 @@ public class QuestionController extends BController<Question, QuestionDTO, Quest
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/search")
-	@ResponseBody
 	public ResponseEntity<Collection<QuestionDTO>> search(@QuerydslPredicate(root = Question.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, details));
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/search/page")
-	@ResponseBody
 	public ResponseEntity<Page<QuestionDTO>> search(@QuerydslPredicate(root = Question.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable, details));
 	}
 
 	@RequestMapping(method=RequestMethod.DELETE, value="/{id}")
-	@ResponseBody
 	public ResponseEntity delete(@PathVariable("id") UUID codedid) {
 		service.delete(codedid);
 		return ResponseEntity.ok(null);

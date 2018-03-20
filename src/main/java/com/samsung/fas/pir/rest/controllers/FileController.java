@@ -17,9 +17,10 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 
+@Api(value = "FILES", description = "REST Controller for FILES", tags = "FILES")
 @Controller
 @RequestMapping("/rest/file")
-@Api(value = "FILES", description = "REST Controller for FILES", tags = "FILES")
+@ResponseBody
 public class FileController {
 	private final FileService service;
 
@@ -29,7 +30,6 @@ public class FileController {
 	}
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	@ResponseBody
 	public ResponseEntity<?> upload(@RequestParam("file") MultipartFile[] files) throws IOException {
 		Collection<FileDTO> response = new HashSet<>();
 

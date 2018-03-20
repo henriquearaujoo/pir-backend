@@ -21,9 +21,10 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.ws.rs.core.MediaType;
 
+@Api(value = "Children", description = "REST Controller for Children", tags = "CHILDREN")
 @Controller
 @RequestMapping(value = "/rest/children", produces = MediaType.APPLICATION_JSON)
-@Api(value = "Children", description = "REST Controller for Children", tags = "CHILDREN")
+@ResponseBody
 public class ChildController extends BController<Child, ChildDTO, ChildDAO> {
 	@Autowired
 	public ChildController(BService<Child, ChildDTO, ChildDAO, Long> service) {
@@ -31,13 +32,11 @@ public class ChildController extends BController<Child, ChildDTO, ChildDAO> {
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/search")
-	@ResponseBody
 	public ResponseEntity<?> search(@QuerydslPredicate(root = Child.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/search/page")
-	@ResponseBody
 	public ResponseEntity<?> search(@QuerydslPredicate(root = Child.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable, details));
 	}

@@ -22,9 +22,10 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.ws.rs.core.MediaType;
 
+@Api(value = "Responsibles", description = "REST Controller for Responsibles", tags = "RESPONSIBLES")
 @Controller
 @RequestMapping(value = "/rest/responsibles", produces = MediaType.APPLICATION_JSON)
-@Api(value = "Responsibles", description = "REST Controller for Responsibles", tags = "RESPONSIBLES")
+@ResponseBody
 public class ResponsibleController extends BController<Responsible, ResponsibleDTO, ResponsibleDAO> {
 	@Autowired
 	public ResponsibleController(BService<Responsible, ResponsibleDTO, ResponsibleDAO, Long> service) {
@@ -32,37 +33,31 @@ public class ResponsibleController extends BController<Responsible, ResponsibleD
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/no-mother")
-	@ResponseBody
 	public ResponseEntity<?> findAllResponsbiles() {
 		return ResponseEntity.ok(((ResponsibleService) service).findAllResponsible());
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/no-mother/page")
-	@ResponseBody
 	public ResponseEntity<?> findAllResponsbiles(Pageable pageable) {
 		return ResponseEntity.ok(((ResponsibleService) service).findAllResponsible(pageable));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/no-mother/search")
-	@ResponseBody
 	public ResponseEntity<?> findAllResponsbiles(@QuerydslPredicate(root = Responsible.class) Predicate predicate) {
 		return ResponseEntity.ok(((ResponsibleService) service).findAllResponsible(predicate));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/no-mother/search/page")
-	@ResponseBody
 	public ResponseEntity<?> findAllResponsbiles(@QuerydslPredicate(root = Responsible.class) Predicate predicate, Pageable pageable) {
 		return ResponseEntity.ok(((ResponsibleService) service).findAllResponsible(pageable, predicate));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/search")
-	@ResponseBody
 	public ResponseEntity<?> search(@QuerydslPredicate(root = Responsible.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/search/page")
-	@ResponseBody
 	public ResponseEntity<?> search(@QuerydslPredicate(root = Responsible.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable, details));
 	}

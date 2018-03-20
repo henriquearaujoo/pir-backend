@@ -65,6 +65,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers(HttpMethod.POST, "/rest/firebase/authentication/**")
 		.antMatchers(HttpMethod.POST, "/rest/authentication/**")
 		.antMatchers(HttpMethod.GET, "/rest/file/**")
+		.antMatchers(HttpMethod.GET, "/rest/firebase/**")
 		.antMatchers("/assets/**", "/webjars/**", "/api-docs/**")
 		.antMatchers("/jsondoc/**", "/jsondoc-ui.html", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs");
 	}
@@ -73,10 +74,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-//
+
 //	@Bean
 //	public FirebaseAuth firebaseAuth() throws IOException {
-//		InputStream		input	= context.getResource("classpath:firebase-admin.json").getInputStream();
+//		InputStream 	input	= context.getResource("classpath:firebase-admin.json").getInputStream();
 //		FirebaseOptions	options	= new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(input)).setDatabaseUrl("https://pir-development.firebaseio.com/").build();
 //		FirebaseApp.initializeApp(options);
 //		return FirebaseAuth.getInstance();

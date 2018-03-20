@@ -21,9 +21,10 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.ws.rs.core.MediaType;
 
+@Api(value = "Communities", description = "REST Controller for Communities", tags = "COMMUNITIES")
 @Controller
 @RequestMapping(value = "/rest/communities", produces = MediaType.APPLICATION_JSON)
-@Api(value = "Communities", description = "REST Controller for Communities", tags = "COMMUNITIES")
+@ResponseBody
 public class CommunityController extends BController<Community, CommunityDTO, CommunityDAO> {
 	@Autowired
 	public CommunityController(BService<Community, CommunityDTO, CommunityDAO, Long> service) {
@@ -31,13 +32,11 @@ public class CommunityController extends BController<Community, CommunityDTO, Co
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/search")
-	@ResponseBody
 	public ResponseEntity<?> search(@QuerydslPredicate(root = Community.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/search/page")
-	@ResponseBody
 	public ResponseEntity<?> search(@QuerydslPredicate(root = Community.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable, details));
 	}

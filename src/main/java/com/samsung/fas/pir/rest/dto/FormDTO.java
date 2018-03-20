@@ -12,6 +12,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Min;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -74,7 +75,7 @@ public class FormDTO {
 		inYears(form.inYears());
 		setEnabled(form.isEnabled());
 		setVersion(form.getVersion());
-		setQuestions(form.getQuestions() != null? form.getQuestions().stream().map(item -> new FormQuestionDTO(item, false)).collect(Collectors.toList()) : null);
+		setQuestions(form.getQuestions() != null? form.getQuestions().stream().map(item -> new FormQuestionDTO(item, false)).collect(Collectors.toList()) : new ArrayList<>());
 	}
 
 	@JsonIgnore

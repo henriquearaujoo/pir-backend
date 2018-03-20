@@ -23,9 +23,10 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
+@Api(value = "States", description = "REST Controller for States", tags = "STATES")
 @Controller
 @RequestMapping(value = "/rest/states", produces = MediaType.APPLICATION_JSON)
-@Api(value = "States", description = "REST Controller for States", tags = "STATES")
+@ResponseBody
 public class StateController extends BController<State, StateDTO, StateDAO> {
 	@Autowired
 	public StateController(BService<State, StateDTO, StateDAO, Long> service) {
@@ -33,13 +34,11 @@ public class StateController extends BController<State, StateDTO, StateDAO> {
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/search")
-	@ResponseBody
 	public ResponseEntity<Collection<StateDTO>> search(@QuerydslPredicate(root = State.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, details));
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/search/page")
-	@ResponseBody
 	public ResponseEntity<Page<StateDTO>> search(@QuerydslPredicate(root = State.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable, details));
 	}

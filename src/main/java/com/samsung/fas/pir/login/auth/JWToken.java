@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.login.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.samsung.fas.pir.configuration.properties.JWTProperties;
 import com.samsung.fas.pir.login.persistence.models.entity.Account;
 import com.samsung.fas.pir.login.persistence.models.enums.EAudience;
 import com.samsung.fas.pir.utils.IDCoder;
@@ -8,7 +9,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -20,29 +24,20 @@ import java.util.Objects;
 
 @Component
 public class JWToken {
-	private 	static	String					STARTS			= "PIRFAS=";
-	private 			Date					date;
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
+	private 	Date			date;
 
-	@Value("${jwt.secret}")
-	private				String					secret;
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
+	private 	JWTProperties	properties;
 
-	@Value("${jwt.app.name}")
-	private				String					appName;
-
-	@Value("${jwt.expires_in}")
-	private				long					expires;
-
-	@Value("${jwt.mobile_expires_in}")
-	private				long					mobileExpires;
-
-	@Value("${jwt.header}")
-	private				String					header;
-
-	public JWToken() {
-		date	= new Date();
+	@Autowired
+	public JWToken(JWTProperties properties) {
+		setDate(new Date());
+		setProperties(properties);
 	}
 
-	// region Generate token
 	public String generateToken(Account account, Device device) {
 		JWTokenData		data		= new JWTokenData();
 		JwtBuilder 		builder 	= Jwts.builder();
@@ -57,26 +52,25 @@ public class JWToken {
 		// Token generation
 		builder.setClaims(new ObjectMapper().convertValue(data, Map.class));
 		builder.setAudience(generateAudience(device));
-		builder.setIssuer(appName);
+		builder.setIssuer(getProperties().getAppName());
 		builder.setSubject("TEST");//((GrantedAuthority) account.getAuthorities().toArray()[0]).getAuthority());
-		builder.setIssuedAt(date);
+		builder.setIssuedAt(getDate());
 		builder.setExpiration(generateExpirationDate(device));
-		builder.signWith(SignatureAlgorithm.HS512, secret);
+		builder.signWith(SignatureAlgorithm.HS512, getProperties().getSecret());
 		return builder.compact();
 	}
 
 	private Date generateExpirationDate(Device device) {
-		return new Date(date.getTime() + (device.isNormal() || device.isMobile() ? mobileExpires : expires) * 1000 * 3600 * 24);
+		return new Date(date.getTime() + (device.isNormal() || device.isMobile() ? getProperties().getMobileExpiresIn() : getProperties().getExpiresIn()) * 1000 * 3600 * 24);
 	}
 
 	private String generateAudience(Device device) {
 		return device.isNormal()? EAudience.WEB.toString() : device.isMobile()? EAudience.MOBILE.toString() : EAudience.UNKNOWN.toString();
 	}
-	// endregion
 
 	public String getToken(HttpServletRequest request) {
-		if (request.getHeader(header) != null && request.getHeader(header).startsWith(STARTS)) {
-			return request.getHeader(header).substring(STARTS.length());
+		if (request.getHeader(getProperties().getHeader()) != null && request.getHeader(getProperties().getHeader()).startsWith(getProperties().getHeaderPrefix())) {
+			return request.getHeader(getProperties().getHeader()).substring(getProperties().getHeaderPrefix().length());
 		}
 		return null;
 	}
@@ -91,7 +85,7 @@ public class JWToken {
 
 	private Claims getAllClaimsFromToken(String token) {
 		try {
-			return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+			return Jwts.parser().setSigningKey(getProperties().getSecret()).parseClaimsJws(token).getBody();
 		} catch (Exception e) {
 			return null;
 		}
@@ -117,12 +111,12 @@ public class JWToken {
 		Claims claims = this.getAllClaimsFromToken(token);
 		if (claims != null) {
 			claims.setIssuedAt(new Date());
-			return Jwts.builder().setClaims(claims).setExpiration(generateExpirationDate(device)).signWith(SignatureAlgorithm.HS512, secret).compact();
+			return Jwts.builder().setClaims(claims).setExpiration(generateExpirationDate(device)).signWith(SignatureAlgorithm.HS512, getProperties().getSecret()).compact();
 		}
 		return null;
 	}
 
 	public long getExpiredIn(Device device) {
-		return device.isMobile() || device.isTablet() ? mobileExpires * 3600 * 24: expires * 3600 * 24;
+		return device.isMobile() || device.isTablet() ? getProperties().getMobileExpiresIn() * 3600 * 24: getProperties().getExpiresIn() * 3600 * 24;
 	}
 }

@@ -23,9 +23,10 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
+@Api(value = "Chapter Conclusion", description = "REST Controller for Chapter Conclusion", tags = "CHAPTER CONCLUSION")
 @Controller
 @RequestMapping(value = "/rest/chapters/conclusion", produces = MediaType.APPLICATION_JSON)
-@Api(value = "Chapter Conclusion", description = "REST Controller for Chapter Conclusion", tags = "CHAPTER CONCLUSION")
+@ResponseBody
 public class ConclusionController extends BController<Conclusion, ConclusionDTO, ConclusionDAO> {
 	@Autowired
 	public ConclusionController(BService<Conclusion, ConclusionDTO, ConclusionDAO, Long> service) {
@@ -33,13 +34,11 @@ public class ConclusionController extends BController<Conclusion, ConclusionDTO,
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/search")
-	@ResponseBody
 	public ResponseEntity<Collection<ConclusionDTO>> search(@QuerydslPredicate(root = Conclusion.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, details));
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/search/page")
-	@ResponseBody
 	public ResponseEntity<Page<ConclusionDTO>> search(@QuerydslPredicate(root = Conclusion.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable, details));
 	}

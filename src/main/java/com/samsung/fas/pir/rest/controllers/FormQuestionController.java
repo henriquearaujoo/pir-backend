@@ -24,9 +24,10 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
+@Api(value = "Form Questions", description = "REST Controller for Form Questions", tags = "FORM QUESTIONS")
 @Controller
 @RequestMapping(value = "/rest/forms/questions", produces = MediaType.APPLICATION_JSON)
-@Api(value = "Form Questions", description = "REST Controller for Form Questions", tags = "FORM QUESTIONS")
+@ResponseBody
 public class FormQuestionController extends BController<FormQuestion, FormQuestionDTO, FormQuestionDAO> {
 	@Autowired
 	public FormQuestionController(BService<FormQuestion, FormQuestionDTO, FormQuestionDAO, Long> service) {
@@ -34,13 +35,11 @@ public class FormQuestionController extends BController<FormQuestion, FormQuesti
 	}
 
 	@RequestMapping(method= RequestMethod.GET, value="/search")
-	@ResponseBody
 	public ResponseEntity<Collection<FormQuestionDTO>> search(@QuerydslPredicate(root = FormQuestion.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, details));
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/search/page")
-	@ResponseBody
 	public ResponseEntity<Page<FormQuestionDTO>> search(@QuerydslPredicate(root = FormQuestion.class) Predicate predicate, @PageableDefault(sort = {"id"}) Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(service.findAll(predicate, pageable, details));
 	}
