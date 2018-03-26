@@ -117,6 +117,14 @@
 		</dependency>
 		<!-- Swagger DOC -->
 
+		<!-- JAXB DataSUS -->
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-core</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+		<!-- JAXB DataSUS -->
+
 		<!-- Random Strings -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
