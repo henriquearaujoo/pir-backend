@@ -3,7 +3,6 @@ package com.samsung.fas.pir.configuration.security.rest.controller;
 import com.samsung.fas.pir.configuration.security.auth.AuthManager;
 import com.samsung.fas.pir.configuration.security.auth.JWToken;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
-import com.samsung.fas.pir.configuration.security.providers.DeviceProvider;
 import com.samsung.fas.pir.configuration.security.rest.dto.AuthenticationDTO;
 import com.samsung.fas.pir.configuration.security.rest.dto.ResetPasswordDTO;
 import com.samsung.fas.pir.configuration.security.rest.service.AccountService;

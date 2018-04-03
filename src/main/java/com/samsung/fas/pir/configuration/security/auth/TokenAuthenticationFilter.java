@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.configuration.security.auth;
 
+import com.samsung.fas.pir.configuration.security.rest.dto.AccountDTO;
 import com.samsung.fas.pir.configuration.security.rest.service.AccountService;
 import com.samsung.fas.pir.exception.RESTException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,7 +17,7 @@ import java.io.IOException;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	private 	JWToken 		token;
-	private 	AccountService service;
+	private 	AccountService	service;
 
 	public TokenAuthenticationFilter(JWToken token, AccountService service) {
 		this.token 		= token;
@@ -26,20 +27,15 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	public void doFilterInternal(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull FilterChain chain) {
 		try {
-			String username;
-			String authToken = token.getToken(request);
+			String 		atoken 		= token.getToken(request);
+			AccountDTO	account		= atoken != null? token.getAccount(atoken) : null;
+			UserDetails	details		= account != null? service.loadUserByUsername(account.getUsername()) : null;
 
-			if (authToken != null) {
-				username = token.getUserLogin(authToken);
-				if (username != null) {
-					// TODO: Get UserDetails from token
-					UserDetails userDetails = service.loadUserByUsername(username);
-					if (token.validateToken(authToken, userDetails)) {
-						TokenAuthentication authentication = new TokenAuthentication(userDetails, authToken);
-						SecurityContextHolder.getContext().setAuthentication(authentication);
-					}
-				}
+			if (details != null && token.validateToken(atoken, details)) {
+				TokenAuthentication authentication = new TokenAuthentication(details, atoken);
+				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
+
 			chain.doFilter(request, response);
 		} catch (IOException | ServletException | BadCredentialsException e) {
 			throw new RESTException(e.getMessage());

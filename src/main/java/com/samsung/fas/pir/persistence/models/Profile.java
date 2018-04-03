@@ -81,8 +81,7 @@ public class Profile {
 
 	@Getter
 	@Setter
-	@ManyToMany(mappedBy = "profiles")
-	@Fetch(FetchMode.SUBSELECT)
+	@ManyToMany(mappedBy = "profiles", fetch = FetchType.EAGER)
 	private 	Collection<Authority>	authorities;
 
 	@Getter
