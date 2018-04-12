@@ -38,11 +38,6 @@ public class FormAnswerTB {
 	@Getter
 	@Setter
 	@ManyToOne(optional = false)
-	private 	Form					form;
-
-	@Getter
-	@Setter
-	@ManyToOne(optional = false)
 	@JoinColumn
 	private 	FormQuestion			question;
 

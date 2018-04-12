@@ -1,4 +1,6 @@
 /* Pages */
+
+
 INSERT INTO pages (title_url, url_path)
 VALUES
 	('user-list', 'user-list'),
@@ -21,7 +23,15 @@ VALUES
 	('pregnant', 'pregnant'),
 	('pregnant-list', 'pregnant-list'),
 	('child', 'child'),
-	('pregnant-details', 'pregnant-details')
+	('pregnant-details', 'pregnant-details'),
+	('agent-information', 'agent-information'),
+	('agent', 'agent'),
+	('agent-details', 'agent-details'),
+	('agent-location', 'agent-location'),
+	('agent-map', 'agent-map'),
+	('visit-historic', 'visit-historic'),
+	('family-list', 'family-list'),
+	('visit-historic-list', 'visit-historic-list')
 ON CONFLICT DO NOTHING;
 
 /* User */
