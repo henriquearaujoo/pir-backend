@@ -8,22 +8,10 @@ import java.util.Set;
 
 public class CTools {
 	public static float calculateChapterCompleteness(Chapter entity) {
-		Conclusion 	c			= entity.getConclusion();
-		float		complete 	= 25.0f;
-		int			qa			= 0;
+		float	complete	= 25.0f;
 
-		if (c != null) {
-			Set<Question> qs = c.getQuestions();
-			complete += 12.5f;
-			if (qs != null) {
-				for (Question q : qs) {
-					if (q.getAnswers() != null && q.getAnswers().size() > 0) {
-						qa++;
-					}
-				}
-				if (qs.size() != 0)
-					complete += (12.5 * (qa/qs.size()) );
-			}
+		if (entity.getConclusion() != null && entity.getConclusion().getQuestions() != null) {
+			complete 	+= 25.0f;
 		}
 
 		if (entity.getGreetings() != null) {
