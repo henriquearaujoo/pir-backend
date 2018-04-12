@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import java.util.Arrays;
 
-public enum  EQuestionType {
+public enum EAnswerType {
 	OBJECTIVE		("OBJECTIVE"),
 	SUBJECTIVE		("SUBJECTIVE"),
 	DISSERTATIVE	("DISSERTATIVE"),
@@ -16,7 +16,7 @@ public enum  EQuestionType {
 	@Setter(value = AccessLevel.PRIVATE)
 	private		String		enumaration;
 
-	EQuestionType(String value) {
+	EAnswerType(String value) {
 		setEnumaration(value);
 	}
 
@@ -28,7 +28,7 @@ public enum  EQuestionType {
 		return getEnumaration();
 	}
 
-	public static EQuestionType setValue(String s) {
-		return Arrays.stream(EQuestionType.values()).filter(item -> item.getEnumaration().equalsIgnoreCase(s)).findAny().orElse(UNDEFINED);
+	public static EAnswerType setValue(String s) {
+		return Arrays.stream(EAnswerType.values()).filter(item -> item.getEnumaration().equalsIgnoreCase(s)).findAny().orElse(UNDEFINED);
 	}
 }

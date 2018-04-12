@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.persistence.models;
 
+import com.samsung.fas.pir.persistence.enums.EAnswerType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -32,6 +33,11 @@ public class Answer {
 	@Setter
 	@Column(nullable = false, columnDefinition = "citext")
 	private 	String			description;
+
+	@Getter
+	@Setter
+	@Column(name = "type", nullable = false)
+	private 	EAnswerType 	type;
 
 	@Getter
 	@Setter

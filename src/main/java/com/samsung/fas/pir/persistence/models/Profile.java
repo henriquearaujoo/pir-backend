@@ -2,6 +2,7 @@ package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.configuration.security.persistence.models.Authority;
+import com.samsung.fas.pir.persistence.enums.EProfileType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -35,18 +36,24 @@ public class Profile {
 	
 	@Getter
 	@Setter
-	@Column(name="title", nullable=false)
+	@Column(columnDefinition = "CITEXT")
 	private		String					title;
 	
 	@Getter
 	@Setter
-	@Column(name="description")
+	@Column
 	private		String					description;
 	
 	@Getter
 	@Setter
 	@Column(name="status")
 	private		boolean					active;
+
+	@Getter
+	@Setter
+	@Column(/*nullable = false,*/ columnDefinition = "CITEXT")
+	@Enumerated(EnumType.STRING)
+	private 	EProfileType			type;
 	
 	@Getter
 	@Setter

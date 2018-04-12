@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -40,7 +41,10 @@ public class ProfileService extends BService<Profile, ProfileDTO, ProfileDAO, Lo
 			rule.canUpdate(false);
 			rule.canDelete(false);
 			rules.add(rule);
-			page.setRules(rules);
+			if (page.getRules() == null)
+				page.setRules(new ArrayList<>());
+			page.getRules().clear();
+			page.getRules().addAll(rules);
 		});
 
 		model.setWhoCreated(((Account) account).getUser());
@@ -58,6 +62,7 @@ public class ProfileService extends BService<Profile, ProfileDTO, ProfileDAO, Lo
 		profile.setActive(model.isActive());
 		profile.setDescription(model.getDescription());
 		profile.setTitle(model.getTitle());
+		profile.setType(model.getType());
 		profile.setWhoUpdated(((Account) account).getUser());
 
 		return new ProfileDTO(dao.save(profile), true);

@@ -37,7 +37,7 @@ public class Rule {
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false)
 	@JoinColumn
 	private		Page			page;
 

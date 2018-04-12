@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.rest.dto;
 
 import com.fasterxml.jackson.annotation.*;
+import com.samsung.fas.pir.persistence.enums.EProfileType;
 import com.samsung.fas.pir.persistence.models.Profile;
 import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
@@ -35,6 +36,11 @@ public class ProfileDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("type")
+	private 	EProfileType	type;
+
+	@Getter
+	@Setter
 	@JsonProperty("created_at")
 	@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss", shape = JsonFormat.Shape.STRING)
 	private 	Date 			createdAt;
@@ -55,6 +61,7 @@ public class ProfileDTO {
 		setDescription(profile.getDescription());
 		setActive(profile.isActive());
 		setCreatedAt(profile.getCreatedAt());
+		setType(profile.getType());
 	}
 
 	@JsonIgnore
@@ -64,6 +71,7 @@ public class ProfileDTO {
 		profile.setTitle(getTitle());
 		profile.setActive(isActive());
 		profile.setDescription(getDescription());
+		profile.setType(getType());
 		return profile;
 	}
 

@@ -18,15 +18,17 @@ public interface IUserRepository extends BRepository<User, Long, QUser> {
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QUser root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
 		bindings.bind(root.uuid).as("id").withDefaultBinding();
+		bindings.bind(root.account.profile.title).as("profile.name").withDefaultBinding();
+		bindings.bind(root.account.profile.type).as("profile.type").withDefaultBinding();
 		bindings.bind(root.account.enabled).as("status").withDefaultBinding();
 		bindings.bind(root.account.profile.uuid).as("profile").withDefaultBinding();
 		bindings.bind(root.address.city.name).as("city").withDefaultBinding();
 		bindings.bind(root.registerDate).as("date").all((path, values) -> Optional.ofNullable(path.between(values)));
-		bindings.excluding(
-				root.account.password,
-				root.account.profile.whoCreated,
-				root.account.profile.whoUpdated,
-				root.account.profile.rules
-		);
+//		bindings.excluding(
+//				root.account.password,
+//				root.account.profile.whoCreated,
+//				root.account.profile.whoUpdated,
+//				root.account.profile.rules
+//		);
 	}
 }

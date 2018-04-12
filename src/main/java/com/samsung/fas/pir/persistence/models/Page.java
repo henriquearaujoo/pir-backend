@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Collection;
@@ -41,7 +42,6 @@ public class Page {
 	
 	@Getter
 	@Setter
-	@OneToMany
-	@JoinColumn(name = "page_id")
+	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, mappedBy = "page")
 	private 	Collection<Rule>	rules;
 }

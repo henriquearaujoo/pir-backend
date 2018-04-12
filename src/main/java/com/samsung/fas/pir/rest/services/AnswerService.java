@@ -55,6 +55,8 @@ public class AnswerService extends BService<Answer, AnswerDTO, AnswerDAO, Long> 
 		Answer		answer		= dao.findOne(model.getUuid());
 
 		answer.setDescription(model.getDescription());
+		answer.setType(model.getType());
+
 		return new AnswerDTO(dao.save(answer), true);
 	}
 }

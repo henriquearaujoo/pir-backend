@@ -60,7 +60,11 @@ public class JWToken {
 	}
 
 	public AccountDTO getAccount(String token) {
-		return new Gson().fromJson(new Gson().toJson(Objects.requireNonNull(getClaims(token)).get("acc")), AccountDTO.class);
+		try {
+			return new Gson().fromJson(new Gson().toJson(Objects.requireNonNull(getClaims(token)).get("acc")), AccountDTO.class);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public Boolean validateToken(String token, UserDetails userDetails) {

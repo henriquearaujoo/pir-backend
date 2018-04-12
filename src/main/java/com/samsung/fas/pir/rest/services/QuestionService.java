@@ -56,7 +56,6 @@ public class QuestionService extends BService<Question, QuestionDTO, QuestionDAO
 		Question		question	= dao.findOne(model.getUuid());
 
 		question.setDescription(model.getDescription());
-		question.setType(model.getType());
 
 		return new QuestionDTO(dao.save(question), true);
 	}
