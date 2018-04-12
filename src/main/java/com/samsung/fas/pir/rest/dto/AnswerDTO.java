@@ -45,6 +45,7 @@ public class AnswerDTO {
 	public AnswerDTO(Answer answer, boolean detailed) {
 		setId(IDCoder.encode(answer.getUuid()));
 		setAnswer(answer.getDescription());
+		setType(answer.getType());
 		setQuestionID(IDCoder.encode(answer.getQuestion().getUuid()));
 	}
 
@@ -53,6 +54,7 @@ public class AnswerDTO {
 		Answer 		a	= new Answer();
 		a.setUuid(IDCoder.decode(getId()));
 		a.setDescription(getAnswer());
+		a.setType(getType());
 		return a;
 	}
 }
