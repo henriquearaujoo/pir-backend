@@ -43,7 +43,6 @@ ON CONFLICT DO NOTHING;
 INSERT INTO profile (id, status, created_at, description, title, type, updated_at, created_by, modified_by)
 VALUES (1, TRUE, current_date, 'Administrator ROLE', 'Administrator', 'ADMIN', current_date, (SELECT id FROM "user" WHERE name = 'Administrator'), (SELECT id FROM "user" WHERE name = 'Administrator'))
 ON CONFLICT DO NOTHING;
-
 /* Page Profile Permissions */
 INSERT INTO profile_pages (can_create, can_delete, can_read, can_update, page_id, profile_id)
 	(SELECT cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), pages.id, profile.id
