@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.persistence.models.entity.Greetings;
-import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.persistence.models.Greetings;
+import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotBlank;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -66,7 +67,7 @@ public class GreetingsDTO {
 	@JsonIgnore
 	public Greetings getModel() {
 		Greetings e = new Greetings();
-		e.setUuid(getId() != null && !getId().trim().isEmpty()? IDCoder.decode(getId()) : null);
+		e.setUuid(IDCoder.decode(getId()));
 		e.setDescription(getDescription());
 		e.setGoback(isGoback());
 		e.setSit(isSit());

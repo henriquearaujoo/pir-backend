@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.persistence.models.entity.FormQuestion;
-import com.samsung.fas.pir.persistence.models.enums.EFormQuestionType;
-import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.persistence.enums.EFormQuestionType;
+import com.samsung.fas.pir.persistence.models.FormQuestion;
+import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -64,7 +64,7 @@ public class FormQuestionDTO {
 	@JsonIgnore
 	public FormQuestion getModel() {
 		FormQuestion model = new FormQuestion();
-		model.setUuid(getId() != null && !getId().trim().isEmpty()? IDCoder.decode(getId()) : null);
+		model.setUuid(IDCoder.decode(getId()));
 		model.setDescription(getDescription());
 		model.setType(EFormQuestionType.setValue(getType()));
 		model.setEnabled(isEnabled());

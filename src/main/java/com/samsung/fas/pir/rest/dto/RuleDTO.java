@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.persistence.models.entity.Rule;
-import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.persistence.models.Rule;
+import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -64,7 +64,7 @@ public class RuleDTO {
 	@JsonIgnore
 	public Rule getModel() {
 		Rule rule = new Rule();
-		rule.setUuid(getId() != null && !getId().trim().isEmpty()? IDCoder.decode(getId()) : null);
+		rule.setUuid(IDCoder.decode(getId()));
 		rule.canCreate(isCreate());
 		rule.canRead(isRead());
 		rule.canUpdate(isUpdate());

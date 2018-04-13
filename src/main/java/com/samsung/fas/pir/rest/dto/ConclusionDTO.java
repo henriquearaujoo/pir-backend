@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.persistence.models.entity.Conclusion;
-import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.persistence.models.Conclusion;
+import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -51,7 +51,7 @@ public class ConclusionDTO {
 	@JsonIgnore
 	public Conclusion getModel() {
 		Conclusion model = new Conclusion();
-		model.setUuid(getId() != null && !getId().trim().isEmpty()? IDCoder.decode(getId()) : null);
+		model.setUuid(IDCoder.decode(getId()));
 		model.setDescription(getDescription());
 		return model;
 	}

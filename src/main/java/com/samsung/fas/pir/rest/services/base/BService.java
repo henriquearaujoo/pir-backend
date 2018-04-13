@@ -1,7 +1,6 @@
 package com.samsung.fas.pir.rest.services.base;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.persistence.dao.base.IBaseDAO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,14 +9,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public abstract class BService<TEntity, TDTO, TDAO extends IBaseDAO<TEntity, TPK>, TPK extends Serializable> {
-	protected  	TDAO			dao;
-	private 	Class<TDTO>		readClass;
-	private 	Class<TEntity>	entityClass;
+	protected	final	TDAO			dao;
+	private 	final 	Class<TDTO>		readClass;
+	private 	final 	Class<TEntity>	entityClass;
 
 	public BService(TDAO dao, Class<TEntity> entityClass, Class<TDTO> readClass) {
 		this.dao 			= dao;
@@ -26,11 +24,11 @@ public abstract class BService<TEntity, TDTO, TDAO extends IBaseDAO<TEntity, TPK
 	}
 
 	public TDTO findOne(TPK id, UserDetails details) {
-		return toDTO(Optional.ofNullable(dao.findOne(id)).orElseThrow(() -> new RESTRuntimeException("notfound")), true);
+		return toDTO(dao.findOne(id), true);
 	}
 
 	public TDTO findOne(UUID uuid, UserDetails details) {
-		return toDTO(Optional.ofNullable(dao.findOne(uuid)).orElseThrow(() -> new RESTRuntimeException("notfound")), true);
+		return toDTO(dao.findOne(uuid), true);
 	}
 
 	public Collection<TDTO> findAll(UserDetails details) {

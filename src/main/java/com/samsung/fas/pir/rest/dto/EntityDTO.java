@@ -2,12 +2,12 @@ package com.samsung.fas.pir.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.persistence.models.entity.LegalEntity;
+import com.samsung.fas.pir.persistence.models.LegalEntity;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CNPJ;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 public class EntityDTO {

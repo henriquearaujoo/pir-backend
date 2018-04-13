@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.*;
@@ -21,7 +22,7 @@ public class Swagger {
 	public Docket docket() {
 		return new Docket(DocumentationType.SWAGGER_2)
 					   .select()
-					   .apis(RequestHandlerSelectors.withClassAnnotation(Controller.class))
+					   .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
 					   .paths(PathSelectors.ant("/rest/**"))
 					   .build()
 					   .pathMapping("/")
@@ -35,7 +36,7 @@ public class Swagger {
 					   .apiInfo(new ApiInfo(
 							   "PIR REST Documentation",
 							   "Documentation for PIR REST Services",
-							   "0.0.7",
+							   "0.0.8",
 							   "Terms of Service: TODO",
 							   new Contact("Instituto ITN", "http://www.institutoitn.com.br", "contato@institutoitn.com.br"),
 							   "Apache License Version 2.0",

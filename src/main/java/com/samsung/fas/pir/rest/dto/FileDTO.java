@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.rest.dto;
 
 import com.fasterxml.jackson.annotation.*;
-import com.samsung.fas.pir.persistence.models.entity.MDataFile;
+import com.samsung.fas.pir.persistence.models.MDataFile;
 import lombok.Getter;
 import lombok.Setter;
 

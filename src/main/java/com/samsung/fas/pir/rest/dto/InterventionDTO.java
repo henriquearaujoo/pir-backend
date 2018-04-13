@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.persistence.models.entity.Intervention;
-import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.persistence.models.Intervention;
+import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotBlank;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -51,7 +52,7 @@ public class InterventionDTO {
 		Intervention model = new Intervention();
 		model.setDescription(getDescription());
 		model.setActivity(getActivity());
-		model.setUuid(getId() != null && !getId().trim().isEmpty()? IDCoder.decode(getId()) : null);
+		model.setUuid(IDCoder.decode(getId()));
 		return model;
 	}
 }

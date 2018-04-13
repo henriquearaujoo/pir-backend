@@ -1,8 +1,8 @@
 package com.samsung.fas.pir.rest.controllers;
 
+import com.samsung.fas.pir.rest.controllers.utils.MultipartFileSender;
 import com.samsung.fas.pir.rest.dto.FileDTO;
 import com.samsung.fas.pir.rest.services.FileService;
-import com.samsung.fas.pir.utils.MultipartFileSender;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +18,8 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Api(value = "FILES", description = "REST Controller for FILES", tags = "FILES")
-@Controller
 @RequestMapping("/rest/file")
-@ResponseBody
+@RestController
 public class FileController {
 	private final FileService service;
 
@@ -42,7 +41,7 @@ public class FileController {
 
 	@RequestMapping(value = "/download/{fileid}", method = RequestMethod.GET)
 	public void download(@PathVariable("fileid") long fileId, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		FileDTO					metadata		= service.findOne(fileId);
+		FileDTO metadata		= service.findOne(fileId);
 		File 					file			= service.getFile(metadata);
 
 		response.setContentType(metadata.getContent());

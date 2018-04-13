@@ -1,25 +1,22 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.persistence.dao.CityDAO;
 import com.samsung.fas.pir.persistence.dao.CommunityDAO;
-import com.samsung.fas.pir.persistence.models.entity.City;
-import com.samsung.fas.pir.persistence.models.entity.Community;
+import com.samsung.fas.pir.persistence.models.City;
+import com.samsung.fas.pir.persistence.models.Community;
 import com.samsung.fas.pir.rest.dto.CommunityDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
-import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.rest.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class CommunityService extends BService<Community, CommunityDTO, CommunityDAO, Long> {
-	private CityDAO cdao;
+	private	final CityDAO cdao;
 
 	@Autowired
-	public CommunityService(CommunityDAO dao, CityDAO cdao) {
+	public CommunityService(CommunityDAO dao, @Autowired CityDAO cdao) {
 		super(dao, Community.class, CommunityDTO.class);
 		this.cdao = cdao;
 	}
@@ -27,7 +24,7 @@ public class CommunityService extends BService<Community, CommunityDTO, Communit
 	@Override
 	public CommunityDTO save(CommunityDTO communityDTO, UserDetails account) {
 		Community	model		= communityDTO.getModel();
-		City		city		= Optional.ofNullable(cdao.findOne(IDCoder.decode(communityDTO.getCityId()))).orElseThrow(() -> new RESTRuntimeException("city.notfound"));
+		City 		city		= cdao.findOne(IDCoder.decode(communityDTO.getCityId()));
 		model.setCity(city);
 		return new CommunityDTO(dao.save(model), true);
 	}
@@ -35,8 +32,8 @@ public class CommunityService extends BService<Community, CommunityDTO, Communit
 	@Override
 	public CommunityDTO update(CommunityDTO communityDTO, UserDetails account) {
 		Community	model		= communityDTO.getModel();
-		Community	community	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("community.notfound"));
-		City		city		= Optional.ofNullable(cdao.findOne(IDCoder.decode(communityDTO.getCityId()))).orElseThrow(() -> new RESTRuntimeException("city.notfound"));
+		Community	community	= dao.findOne(model.getUuid());
+		City		city		= cdao.findOne(IDCoder.decode(communityDTO.getCityId()));
 
 		community.setName(model.getName());
 		community.setWaterSupply(model.getWaterSupply());

@@ -1,25 +1,23 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.persistence.dao.AnswerDAO;
 import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.dao.QuestionDAO;
-import com.samsung.fas.pir.persistence.models.entity.Answer;
-import com.samsung.fas.pir.persistence.models.entity.Question;
+import com.samsung.fas.pir.persistence.models.Answer;
+import com.samsung.fas.pir.persistence.models.Question;
 import com.samsung.fas.pir.rest.dto.AnswerDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
-import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.rest.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class AnswerService extends BService<Answer,AnswerDTO, AnswerDAO, Long> {
-	private	QuestionDAO	qdao;
-	private	ChapterDAO	cdao;
+public class AnswerService extends BService<Answer, AnswerDTO, AnswerDAO, Long> {
+	private	final	QuestionDAO	qdao;
+	private	final	ChapterDAO	cdao;
 
 	@Autowired
 	public AnswerService(AnswerDAO dao, QuestionDAO qdao, ChapterDAO cdao) {
@@ -30,8 +28,8 @@ public class AnswerService extends BService<Answer,AnswerDTO, AnswerDAO, Long> {
 
 	@Override
 	public Long delete(UUID id) {
-		Answer		answer		= Optional.ofNullable(dao.findOne(id)).orElseThrow(() -> new RESTRuntimeException("answer.notfound"));
-		Question	question	= answer.getQuestion();
+		Answer		answer		= dao.findOne(id);
+		Question 	question	= answer.getQuestion();
 		Object		deleted		= dao.delete(answer.getUuid());
 
 		if (question.getAnswers().size() == 0) {
@@ -44,7 +42,7 @@ public class AnswerService extends BService<Answer,AnswerDTO, AnswerDAO, Long> {
 	@Override
 	public AnswerDTO save(AnswerDTO create, UserDetails account) {
 		Answer		model		= create.getModel();
-		Question	question	= Optional.ofNullable(qdao.findOne(create.getQuestionID() != null && !create.getQuestionID().trim().isEmpty()? IDCoder.decode(create.getQuestionID()) : null)).orElseThrow(() -> new RESTRuntimeException("question.notfound"));
+		Question	question	= qdao.findOne(IDCoder.decode(create.getQuestionID()));
 
 		model.setQuestion(question);
 		question.getAnswers().add(model);
@@ -54,9 +52,11 @@ public class AnswerService extends BService<Answer,AnswerDTO, AnswerDAO, Long> {
 	@Override
 	public AnswerDTO update(AnswerDTO update, UserDetails account) {
 		Answer		model		= update.getModel();
-		Answer		answer		= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("answer.notfound"));
+		Answer		answer		= dao.findOne(model.getUuid());
 
 		answer.setDescription(model.getDescription());
+		answer.setType(model.getType());
+
 		return new AnswerDTO(dao.save(answer), true);
 	}
 }

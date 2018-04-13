@@ -4,16 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.persistence.models.entity.Chapter;
-import com.samsung.fas.pir.utils.IDCoder;
-import com.samsung.fas.pir.utils.Tools;
-import com.samsung.fas.pir.utils.annotations.Number;
+import com.samsung.fas.pir.persistence.models.Chapter;
+import com.samsung.fas.pir.rest.utils.CTools;
+import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,14 +27,12 @@ public class ChapterDTO {
 	@Getter
 	@Setter
 	@JsonProperty("number")
-	@Number(message = "chapter.number.invalid")
 	@Min(value = 1, message = "number.greater")
 	private		int				chapter;
 
 	@Getter
 	@Setter
 	@JsonProperty("version")
-	@Number(message = "chapter.version.invalid")
 	@Min(value = 0, message = "version.greater")
 	private 	int				version;
 
@@ -133,7 +130,7 @@ public class ChapterDTO {
 		setTimeUntilNext(chapter.getTimeUntilNext()/1000/3600/24);
 		setStatus(chapter.isValid());
 		setResources(chapter.getResources());
-		setUntilComplete(Tools.calculate(chapter));
+		setUntilComplete(CTools.calculateChapterCompleteness(chapter));
 		Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMedias(item.stream().map(FileDTO::toDTO).collect(Collectors.toSet())));
 		Optional.ofNullable(chapter.getThumbnails()).ifPresent(item -> setThumbnails(item.stream().map(FileDTO::toDTO).collect(Collectors.toSet())));
 	}
@@ -141,7 +138,7 @@ public class ChapterDTO {
 	@JsonIgnore
 	public Chapter getModel() {
 		Chapter e = new Chapter();
-		e.setUuid(getId() != null && !getId().trim().isEmpty()? IDCoder.decode(getId()) : null);
+		e.setUuid(IDCoder.decode(getId()));
 		e.setVersion(getVersion());
 		e.setChapter(getChapter());
 		e.setContent(getContent());

@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.persistence.models.entity.Community;
-import com.samsung.fas.pir.persistence.models.enums.ECommunityZone;
-import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.persistence.enums.ECommunityZone;
+import com.samsung.fas.pir.persistence.models.Community;
+import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -183,7 +183,7 @@ public class CommunityDTO {
 	@JsonIgnore
 	public Community getModel() {
 		Community model = new Community();
-		model.setUuid(getId() != null && !getId().trim().isEmpty()? IDCoder.decode(getId()) : null);
+		model.setUuid(IDCoder.decode(getId()));
 		model.setName(getName());
 		model.setWaterSupply(getWaterSupply());
 		model.setGarbageDestination(getGarbageDestination());

@@ -1,12 +1,13 @@
 package com.samsung.fas.pir.rest.dto;
 
 import com.fasterxml.jackson.annotation.*;
-import com.samsung.fas.pir.persistence.models.entity.Profile;
-import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.persistence.enums.EProfileType;
+import com.samsung.fas.pir.persistence.models.Profile;
+import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -35,6 +36,11 @@ public class ProfileDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("type")
+	private 	EProfileType	type;
+
+	@Getter
+	@Setter
 	@JsonProperty("created_at")
 	@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss", shape = JsonFormat.Shape.STRING)
 	private 	Date 			createdAt;
@@ -55,15 +61,17 @@ public class ProfileDTO {
 		setDescription(profile.getDescription());
 		setActive(profile.isActive());
 		setCreatedAt(profile.getCreatedAt());
+		setType(profile.getType());
 	}
 
 	@JsonIgnore
 	public Profile getModel() {
 		Profile profile = new Profile();
-		profile.setUuid(getId() != null && !getId().trim().isEmpty()? IDCoder.decode(getId()) : null);
+		profile.setUuid(IDCoder.decode(getId()));
 		profile.setTitle(getTitle());
 		profile.setActive(isActive());
 		profile.setDescription(getDescription());
+		profile.setType(getType());
 		return profile;
 	}
 

@@ -4,15 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.persistence.models.entity.Child;
-import com.samsung.fas.pir.persistence.models.enums.EChildGender;
-import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.persistence.enums.EChildGender;
+import com.samsung.fas.pir.persistence.models.Child;
+import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -168,7 +168,7 @@ public class ChildDTO {
 	public Child getModel() {
 		Child model = new Child();
 
-		model.setUuid(getId() != null && !getId().replaceAll("\\+", "").isEmpty()? IDCoder.decode(getId()) : null);
+		model.setUuid(IDCoder.decode(getId()));
 		model.setName(getName());
 		model.setFatherName(getFatherName());
 		model.setGender(EChildGender.valueOf(getGender()));

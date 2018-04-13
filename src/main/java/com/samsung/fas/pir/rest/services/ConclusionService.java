@@ -1,25 +1,22 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.samsung.fas.pir.exception.RESTRuntimeException;
 import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.dao.ConclusionDAO;
-import com.samsung.fas.pir.persistence.models.entity.Chapter;
-import com.samsung.fas.pir.persistence.models.entity.Conclusion;
+import com.samsung.fas.pir.persistence.models.Chapter;
+import com.samsung.fas.pir.persistence.models.Conclusion;
 import com.samsung.fas.pir.rest.dto.ConclusionDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
-import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.rest.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class ConclusionService extends BService<Conclusion, ConclusionDTO, ConclusionDAO, Long> {
-	private ChapterDAO cdao;
+	private	final ChapterDAO cdao;
 
 	@Autowired
-	public ConclusionService(ConclusionDAO dao, ChapterDAO cdao) {
+	public ConclusionService(ConclusionDAO dao, @Autowired ChapterDAO cdao) {
 		super(dao, Conclusion.class, ConclusionDTO.class);
 		this.cdao = cdao;
 	}
@@ -27,7 +24,7 @@ public class ConclusionService extends BService<Conclusion, ConclusionDTO, Concl
 	@Override
 	public ConclusionDTO save(ConclusionDTO create, UserDetails account) {
 		Conclusion 	model		= create.getModel();
-		Chapter 	chapter		= Optional.ofNullable(cdao.findOne(IDCoder.decode(Optional.ofNullable(create.getChapterID()).orElseThrow(() -> new RESTRuntimeException("chapter.id.missing"))))).orElseThrow(() -> new RESTRuntimeException("chapter.notfound"));
+		Chapter 	chapter		= cdao.findOne(IDCoder.decode(create.getChapterID()));
 		model.setChapter(chapter);
 		chapter.setConclusion(model);
 		return new ConclusionDTO(dao.save(model), true);
@@ -36,7 +33,7 @@ public class ConclusionService extends BService<Conclusion, ConclusionDTO, Concl
 	@Override
 	public ConclusionDTO update(ConclusionDTO update, UserDetails account) {
 		Conclusion	model		= update.getModel();
-		Conclusion	conclusion	= Optional.ofNullable(dao.findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTRuntimeException("id.missing")))).orElseThrow(() -> new RESTRuntimeException("conclusion.notfound"));
+		Conclusion	conclusion	= dao.findOne(model.getUuid());
 		conclusion.setDescription(model.getDescription());
 		return new ConclusionDTO(dao.save(conclusion), true);
 	}

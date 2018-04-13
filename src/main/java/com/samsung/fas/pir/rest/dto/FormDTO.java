@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.persistence.models.entity.Form;
-import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.persistence.models.Form;
+import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -81,7 +81,7 @@ public class FormDTO {
 	@JsonIgnore
 	public Form getModel() {
 		Form model = new Form();
-		model.setUuid(getId() != null && !getId().trim().isEmpty()? IDCoder.decode(getId()) : null);
+		model.setUuid(IDCoder.decode(getId()));
 		model.setToValue(inYears()? getTo() * 12 : getTo());
 		model.setFromValue(inYears()? getFrom() * 12 : getFrom());
 		model.setAgeZone(getAgeZone());

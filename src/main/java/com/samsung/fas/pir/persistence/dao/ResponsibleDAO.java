@@ -4,12 +4,9 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.samsung.fas.pir.persistence.dao.base.BaseDAO;
-import com.samsung.fas.pir.persistence.models.entity.Mother;
-import com.samsung.fas.pir.persistence.models.entity.QMother;
-import com.samsung.fas.pir.persistence.models.entity.QResponsible;
-import com.samsung.fas.pir.persistence.models.entity.Responsible;
-import com.samsung.fas.pir.persistence.repository.IResponsibleRepository;
-import com.samsung.fas.pir.utils.Tools;
+import com.samsung.fas.pir.persistence.dao.utils.SBPage;
+import com.samsung.fas.pir.persistence.models.*;
+import com.samsung.fas.pir.persistence.repositories.IResponsibleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,12 +19,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+// TODO: Change Queries
 @Service
 public class ResponsibleDAO extends BaseDAO<Responsible, Long, QResponsible> {
-	private EntityManager emanager;
+	private	final EntityManager emanager;
 
 	@Autowired
-	public ResponsibleDAO(EntityManager emanager) {
+	public ResponsibleDAO(IResponsibleRepository repository, EntityManager emanager) {
+		super(repository);
 		this.emanager = emanager;
 	}
 
@@ -36,38 +35,22 @@ public class ResponsibleDAO extends BaseDAO<Responsible, Long, QResponsible> {
 	}
 
 	public Collection<Responsible> findAllResponsible(Predicate predicate) {
-		JPAQuery<Responsible> 	responsibleQuery 	= new JPAQuery<>(emanager);
-		JPAQuery<Mother>		motherQuery			= new JPAQuery<>(emanager);
-		QResponsible 			responsible			= QResponsible.responsible;
-		QMother 				mother				= QMother.mother;
-		return responsibleQuery.from(responsible).where(responsible.id.notIn(motherQuery.from(mother).select(mother.id)).and(predicate)).fetch();
+		final 	JPAQuery<Responsible> 	query 				= new JPAQuery<>(emanager);
+		final	QResponsible 			responsible			= QResponsible.responsible;
+		final	QMother 				mother				= QMother.mother;
+		return query.select(responsible).from(responsible).leftJoin(mother).on(responsible.id.eq(mother.id)).where(mother.id.isNull().and(predicate)).fetch();
 	}
 
 	public Page<Responsible> findAllResponsible(Pageable pageable) {
 		return ((IResponsibleRepository) repository).findAllByMotherIsNull(pageable);
 	}
 
-	@SuppressWarnings("unchecked")
-	public Page<Responsible> findAllResponsible(Predicate predicate, Pageable pageable) {
-		JPAQuery<Responsible>		jpaquery	= new JPAQuery<>(emanager);
-		JPAQuery<Mother>			motherQuery	= new JPAQuery<>(emanager);
-		PathBuilder<Responsible> 	entityPath 	= new PathBuilder<>(Responsible.class, "responsible");
-		QResponsible				responsible	= QResponsible.responsible;
-		QMother						mother		= QMother.mother;
-		JPAQuery<Responsible>		result		= jpaquery.from(responsible).where(responsible.id.notIn(motherQuery.from(mother).select(mother.id)).and(predicate));
-		Query 						query		= Tools.setupPage(result, pageable, entityPath);
-		List<Responsible> 			list		= query.getResultList();
-
-		try {
-			if (pageable.getPageSize() > list.size())
-				return new PageImpl<>(list.subList(pageable.getOffset(), pageable.getOffset() + list.size()), pageable, list.size());
-			return new PageImpl<>(list.subList(pageable.getOffset(), pageable.getOffset() + pageable.getPageSize()), pageable, list.size());
-		} catch (Exception e) {
-			try {
-				return new PageImpl<>(list.subList(pageable.getOffset(), pageable.getOffset() + 1), pageable, list.size());
-			} catch (Exception e1) {
-				return new PageImpl<>(new ArrayList<>(), pageable, query.getResultList().size());
-			}
-		}
+	public Page<?> findAllResponsible(Predicate predicate, Pageable pageable) {
+		final 	JPAQuery<Responsible> 	query 		= new JPAQuery<>(emanager);
+		final	QResponsible 			responsible	= QResponsible.responsible;
+		final	QMother 				mother		= QMother.mother;
+		final	JPAQuery<Responsible>	result		= query.select(responsible).from(responsible).leftJoin(mother).on(responsible.id.eq(mother.id)).where(mother.id.isNull().and(predicate));
+		final	Query					page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Responsible.class, "responsible"));
+		return SBPage.getPageList(pageable, page);
 	}
 }

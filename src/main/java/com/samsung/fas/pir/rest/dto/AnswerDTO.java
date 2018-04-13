@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.persistence.models.entity.Answer;
-import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.persistence.enums.EAnswerType;
+import com.samsung.fas.pir.persistence.models.Answer;
+import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -25,6 +28,12 @@ public class AnswerDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("type")
+	@NotNull(message = "type.missing")
+	private 	EAnswerType 	type;
+
+	@Getter
+	@Setter
 	@JsonProperty("answer")
 	@NotBlank(message = "answer.missing")
 	private 	String			answer;
@@ -36,14 +45,16 @@ public class AnswerDTO {
 	public AnswerDTO(Answer answer, boolean detailed) {
 		setId(IDCoder.encode(answer.getUuid()));
 		setAnswer(answer.getDescription());
+		setType(answer.getType());
 		setQuestionID(IDCoder.encode(answer.getQuestion().getUuid()));
 	}
 
 	@JsonIgnore
 	public Answer getModel() {
 		Answer 		a	= new Answer();
-		a.setUuid(getId() != null && !getId().trim().isEmpty()? IDCoder.decode(getId()) : null);
+		a.setUuid(IDCoder.decode(getId()));
 		a.setDescription(getAnswer());
+		a.setType(getType());
 		return a;
 	}
 }

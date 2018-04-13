@@ -1,17 +1,17 @@
 package com.samsung.fas.pir.rest.dto;
 
 import com.fasterxml.jackson.annotation.*;
-import com.samsung.fas.pir.persistence.models.entity.Mother;
-import com.samsung.fas.pir.persistence.models.entity.Responsible;
-import com.samsung.fas.pir.persistence.models.enums.EHabitationType;
-import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.persistence.enums.EHabitationType;
+import com.samsung.fas.pir.persistence.models.Mother;
+import com.samsung.fas.pir.persistence.models.Responsible;
+import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -163,7 +163,7 @@ public class ResponsibleDTO {
 
 		model.setFamilyHasChildren(hasOtherChildren());
 		model.setName(getName());
-		model.setUuid(getId() != null? IDCoder.decode(getId()) : null);
+		model.setUuid(IDCoder.decode(getId()));
 		model.setInSocialProgram(isInSocialProgram());
 		model.setHabitationType(EHabitationType.valueOf(getHabitationType()));
 		model.setHabitationMembersCount(getHabitationMembersCount());

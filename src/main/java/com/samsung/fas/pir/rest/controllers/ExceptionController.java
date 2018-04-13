@@ -1,6 +1,6 @@
 package com.samsung.fas.pir.rest.controllers;
 
-import com.samsung.fas.pir.exception.RESTRuntimeException;
+import com.samsung.fas.pir.exception.RESTException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -33,8 +33,8 @@ public class ExceptionController {
 		return ResponseEntity.badRequest().body(e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.toList()));
 	}
 
-	@ExceptionHandler(RESTRuntimeException.class)
-	public ResponseEntity<?> handleException(RESTRuntimeException e) {
+	@ExceptionHandler(RESTException.class)
+	public ResponseEntity<?> handleException(RESTException e) {
 		Log.error(e.toString());
 		e.printStackTrace();
 		return ResponseEntity.badRequest().body(e.getMessage());
@@ -63,7 +63,7 @@ public class ExceptionController {
 	public ResponseEntity<?> handleException(HttpMessageNotReadableException e) {
 		Log.error(e.getRootCause().getMessage());
 		e.printStackTrace();
-		return ResponseEntity.badRequest().body(e.getRootCause() instanceof RESTRuntimeException? e.getRootCause().getMessage() : null);
+		return ResponseEntity.badRequest().body(e.getRootCause() instanceof RESTException? e.getRootCause().getMessage() : null);
 	}
 
 	@ExceptionHandler(RuntimeException.class)

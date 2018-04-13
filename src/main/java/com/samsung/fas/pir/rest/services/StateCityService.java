@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.persistence.dao.StateDAO;
-import com.samsung.fas.pir.persistence.models.entity.State;
+import com.samsung.fas.pir.persistence.models.State;
 import com.samsung.fas.pir.rest.dto.StateDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
 import org.springframework.beans.factory.annotation.Autowired;

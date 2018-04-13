@@ -1,27 +1,23 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.samsung.fas.pir.exception.RESTRuntimeException;
-import com.samsung.fas.pir.login.persistence.models.entity.Account;
-import com.samsung.fas.pir.login.persistence.models.entity.Authority;
 import com.samsung.fas.pir.persistence.dao.RuleDAO;
-import com.samsung.fas.pir.persistence.models.entity.Page;
-import com.samsung.fas.pir.persistence.models.entity.Profile;
-import com.samsung.fas.pir.persistence.models.entity.Rule;
+import com.samsung.fas.pir.persistence.models.Page;
+import com.samsung.fas.pir.persistence.models.Profile;
+import com.samsung.fas.pir.persistence.models.Rule;
+import com.samsung.fas.pir.configuration.security.persistence.models.Account;
+import com.samsung.fas.pir.configuration.security.persistence.models.Authority;
 import com.samsung.fas.pir.rest.dto.RuleDTO;
 import com.samsung.fas.pir.rest.services.base.BService;
-import com.samsung.fas.pir.utils.IDCoder;
+import com.samsung.fas.pir.rest.utils.IDCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class RuleService extends BService<Rule, RuleDTO, RuleDAO, Long> {
-
 	@Autowired
 	public RuleService(RuleDAO dao) {
 		super(dao, Rule.class, RuleDTO.class);
@@ -35,22 +31,22 @@ public class RuleService extends BService<Rule, RuleDTO, RuleDAO, Long> {
 	@Override
 	public RuleDTO update(RuleDTO update, UserDetails account) {
 		Rule					model			= update.getModel();
-		UUID					ruleID			= Optional.ofNullable(update.getId() != null && !update.getId().trim().isEmpty()? IDCoder.decode(update.getId()) : null).orElseThrow(() -> new RESTRuntimeException("id.missing"));
-		Rule					rule			= Optional.ofNullable(dao.findOne(ruleID)).orElseThrow(() -> new RESTRuntimeException("rule.notfound"));
-		Profile					profile			= Optional.ofNullable(rule.getProfile()).orElseThrow(() -> new RESTRuntimeException("profile.notfound"));
-		Page					page			= Optional.ofNullable(rule.getPage()).orElseThrow(() -> new RESTRuntimeException("rule.page.notfound"));
-		Collection<Authority>	authorities		= Optional.ofNullable(profile.getAuthorities()).orElse(new ArrayList<>());
+		Rule					rule			= dao.findOne(IDCoder.decode(update.getId()));
+		Profile 				profile			= rule.getProfile();
+		Page 					page			= rule.getPage();
+		Collection<Authority> 	authorities		= profile.getAuthorities();
 
 		if (model.canCreate()) {
 			Authority	authority	= authorities.stream().filter(item -> item.getAuthority().equalsIgnoreCase("CREATE::" + page.getTitle().toUpperCase())).findFirst().orElse(null);
 			if (authority != null) {
-				authority.addProfile(profile);
-				profile.addAuthority(authority);
+				authority.getProfiles().add(profile);
+				profile.getAuthorities().add(authority);
 			} else {
 				authority = new Authority();
+				authority.setProfiles(new ArrayList<>());
 				authority.setAuthority("CREATE::" + page.getTitle().toUpperCase());
-				authority.addProfile(profile);
-				profile.addAuthority(authority);
+				authority.getProfiles().add(profile);
+				profile.getAuthorities().add(authority);
 			}
 		} else {
 			profile.getAuthorities().removeIf(item -> item.getAuthority().equalsIgnoreCase("CREATE::" + page.getTitle().toUpperCase()));
@@ -59,13 +55,14 @@ public class RuleService extends BService<Rule, RuleDTO, RuleDAO, Long> {
 		if (model.canRead()) {
 			Authority	authority	= authorities.stream().filter(item -> item.getAuthority().equalsIgnoreCase("READ::" + page.getTitle().toUpperCase())).findFirst().orElse(null);
 			if (authority != null) {
-				authority.addProfile(profile);
-				profile.addAuthority(authority);
+				authority.getProfiles().add(profile);
+				profile.getAuthorities().add(authority);
 			} else {
 				authority = new Authority();
+				authority.setProfiles(new ArrayList<>());
 				authority.setAuthority("READ::" + page.getTitle().toUpperCase());
-				authority.addProfile(profile);
-				profile.addAuthority(authority);
+				authority.getProfiles().add(profile);
+				profile.getAuthorities().add(authority);
 			}
 		} else {
 			profile.getAuthorities().removeIf(item -> item.getAuthority().equalsIgnoreCase("READ::" + page.getTitle().toUpperCase()));
@@ -74,13 +71,14 @@ public class RuleService extends BService<Rule, RuleDTO, RuleDAO, Long> {
 		if (model.canUpdate()) {
 			Authority	authority	= authorities.stream().filter(item -> item.getAuthority().equalsIgnoreCase("UPDATE::" + page.getTitle().toUpperCase())).findFirst().orElse(null);
 			if (authority != null) {
-				authority.addProfile(profile);
-				profile.addAuthority(authority);
+				authority.getProfiles().add(profile);
+				profile.getAuthorities().add(authority);
 			} else {
 				authority = new Authority();
+				authority.setProfiles(new ArrayList<>());
 				authority.setAuthority("UPDATE::" +page.getTitle().toUpperCase());
-				authority.addProfile(profile);
-				profile.addAuthority(authority);
+				authority.getProfiles().add(profile);
+				profile.getAuthorities().add(authority);
 			}
 		} else {
 			profile.getAuthorities().removeIf(item -> item.getAuthority().equalsIgnoreCase("UPDATE::" + page.getTitle().toUpperCase()));
@@ -89,13 +87,14 @@ public class RuleService extends BService<Rule, RuleDTO, RuleDAO, Long> {
 		if (model.canDelete()) {
 			Authority	authority	= authorities.stream().filter(item -> item.getAuthority().equalsIgnoreCase("DELETE::" + page.getTitle().toUpperCase())).findFirst().orElse(null);
 			if (authority != null) {
-				authority.addProfile(profile);
-				profile.addAuthority(authority);
+				authority.getProfiles().add(profile);
+				profile.getAuthorities().add(authority);
 			} else {
 				authority = new Authority();
+				authority.setProfiles(new ArrayList<>());
 				authority.setAuthority("DELETE::" + page.getTitle().toUpperCase());
-				authority.addProfile(profile);
-				profile.addAuthority(authority);
+				authority.getProfiles().add(profile);
+				profile.getAuthorities().add(authority);
 			}
 		} else {
 			profile.getAuthorities().removeIf(item -> item.getAuthority().equalsIgnoreCase("DELETE::" + page.getTitle().toUpperCase()));

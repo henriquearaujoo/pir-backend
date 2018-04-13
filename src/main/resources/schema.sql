@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS profile (
 	created_at  TIMESTAMP                       NOT NULL,
 	description VARCHAR(255),
 	title       VARCHAR(255)                    NOT NULL,
+	type        CITEXT													NOT NULL,
 	updated_at  TIMESTAMP                       NOT NULL,
 	uuid        UUID DEFAULT uuid_generate_v4() NOT NULL,
 	created_by  BIGINT                          NOT NULL	CONSTRAINT fk_user_created	REFERENCES "user",
@@ -54,14 +55,14 @@ CREATE TABLE IF NOT EXISTS profile_pages(
 	CONSTRAINT rule	UNIQUE (profile_id, page_id)
 );
 
-CREATE TABLE IF NOT EXISTS state (
+CREATE TABLE IF NOT EXISTS states (
 	id      BIGINT       NOT NULL CONSTRAINT state_pkey	PRIMARY KEY,
 	uf_abbr VARCHAR(255) NOT NULL CONSTRAINT uk_uf_abbr	UNIQUE,
 	name    VARCHAR(255) NOT NULL CONSTRAINT uk_name		UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS city (
+CREATE TABLE IF NOT EXISTS cities (
 	id          BIGINT       NOT NULL CONSTRAINT city_pkey	PRIMARY KEY,
 	name        VARCHAR(255) NOT NULL,
-	state_id_fk BIGINT       NOT NULL CONSTRAINT fk_state		REFERENCES state
+	state_id_fk BIGINT       NOT NULL CONSTRAINT fk_state		REFERENCES states
 );

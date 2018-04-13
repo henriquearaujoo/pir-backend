@@ -1,8 +1,8 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.samsung.fas.pir.exception.RESTRuntimeException;
-import com.samsung.fas.pir.persistence.models.entity.MDataFile;
-import com.samsung.fas.pir.persistence.repository.IFileRepository;
+import com.samsung.fas.pir.exception.RESTException;
+import com.samsung.fas.pir.persistence.models.MDataFile;
+import com.samsung.fas.pir.persistence.repositories.IFileRepository;
 import com.samsung.fas.pir.rest.dto.FileDTO;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.Date;
 @Service
 public class FileService {
 	private	final	HttpServletRequest	request;
-	private	final	IFileRepository 	repository;
+	private	final	IFileRepository		repository;
 
 	@Autowired
 	public FileService(HttpServletRequest request, IFileRepository repository) {
@@ -53,7 +53,7 @@ public class FileService {
 		File	file	= new File(dir, name);
 
 		if (!dir.mkdirs() && !file.createNewFile())
-			throw new RESTRuntimeException("file.internal.error");
+			throw new RESTException("file.internal.error");
 
 		return file;
 	}
@@ -63,18 +63,18 @@ public class FileService {
 
 		if(!new File(uploadPath).exists())
 			if (!new File(uploadPath).mkdirs())
-				throw new RESTRuntimeException("file.internal.error");
+				throw new RESTException("file.internal.error");
 
 		return uploadPath;
 	}
 
 	public boolean delete(long fileid) {
 		try {
-			MDataFile	metadata	= repository.findOne(fileid);
+			MDataFile	metadata	= repository.findById(fileid).orElseThrow(() -> new RESTException("not.found"));
 			boolean 	deleted 	= new File(getUploadDir(), metadata.getPath()).delete();
 
 			if (deleted)
-				repository.delete(metadata.getId());
+				repository.deleteById(metadata.getId());
 
 			return deleted;
 		} catch (Exception e) {
@@ -83,7 +83,7 @@ public class FileService {
 	}
 
 	public FileDTO findOne(long fileid) {
-		return FileDTO.toDTO(repository.findOne(fileid));
+		return FileDTO.toDTO(repository.findById(fileid).orElseThrow(() -> new RESTException("not.found")));
 	}
 
 	public File getFile(FileDTO file) {
