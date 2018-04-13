@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS profile (
 	created_at  TIMESTAMP                       NOT NULL,
 	description VARCHAR(255),
 	title       VARCHAR(255)                    NOT NULL,
+	type        CITEXT													NOT NULL,
 	updated_at  TIMESTAMP                       NOT NULL,
 	uuid        UUID DEFAULT uuid_generate_v4() NOT NULL,
 	created_by  BIGINT                          NOT NULL	CONSTRAINT fk_user_created	REFERENCES "user",
