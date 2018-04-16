@@ -31,7 +31,10 @@ VALUES
 	('agent-map', 'agent-map'),
 	('visit-historic', 'visit-historic'),
 	('family-list', 'family-list'),
-	('visit-historic-list', 'visit-historic-list')
+	('visit-historic-list', 'visit-historic-list'),
+	('form-template','form-template'),
+	('form-template-list','form-template-list'),
+	('form-template-detailed','form-template-detailed')
 ON CONFLICT DO NOTHING;
 
 /* User */
