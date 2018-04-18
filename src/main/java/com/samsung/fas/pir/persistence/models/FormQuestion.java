@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.persistence.enums.EFormQuestionType;
+import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -15,21 +16,7 @@ import java.util.UUID;
 @Table(name = "form_questions", uniqueConstraints = @UniqueConstraint(name = "question", columnNames = {"description", "form_id"}))
 @DynamicUpdate
 @DynamicInsert
-public class FormQuestion {
-	@Getter
-	@Setter
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
-	private		long						id;
-
-	@Getter
-	@Setter
-	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
-	@Type(type = "org.hibernate.type.PostgresUUIDType")
-	@Generated(GenerationTime.INSERT)
-	private 	UUID 						uuid;
-
+public class FormQuestion extends BaseID {
 	@Getter
 	@Setter
 	@Column(nullable = false, columnDefinition = "citext")

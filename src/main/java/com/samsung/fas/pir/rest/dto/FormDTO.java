@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.Form;
-import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +13,7 @@ import lombok.experimental.Accessors;
 import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -22,53 +22,53 @@ public class FormDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private 		String						id;
+	private 		UUID		uuid;
 
 	@Getter
 	@Setter
 	@JsonProperty("from")
 	@Min(value = 0, message = "invalid.from")
-	private 		int							from;
+	private 		int			from;
 
 	@Getter
 	@Setter
 	@JsonProperty("to")
 	@Min(value = 0, message = "invalid.to")
-	private 		int							to;
+	private 		int			to;
 
 	@Getter
 	@Setter
 	@JsonProperty("age_zone")
 	@Min(value = 0, message = "invalid.age.zone")
-	private 		int							ageZone;
+	private 		int			ageZone;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("in_years")
-	private 		boolean						inYears;
+	private 		boolean		inYears;
 
 	@Getter
 	@Setter
 	@JsonProperty("is_enabled")
-	private 		boolean						enabled;
+	private 		boolean		enabled;
 
 	@Getter
 	@Setter
 	@JsonProperty("version")
-	private 		int							version;
+	private 		int			version;
 
 	@Getter
 	@Setter(value = AccessLevel.PRIVATE)
 	@JsonProperty(value = "questions", access = JsonProperty.Access.READ_ONLY)
-	private 		Collection<FormQuestionDTO>	questions;
+	private 		Collection<FormQuestionDTO>		questions;
 
 	public FormDTO() {
 		super();
 	}
 
 	public FormDTO(Form form, boolean detailed) {
-		setId(IDCoder.encode(form.getUuid()));
+		setUuid(form.getUuid());
 		setFrom(form.inYears()? form.getFromValue()/12 : form.getFromValue());
 		setTo(form.inYears()? form.getToValue()/12 : form.getToValue());
 		setAgeZone(form.getAgeZone());
@@ -81,7 +81,7 @@ public class FormDTO {
 	@JsonIgnore
 	public Form getModel() {
 		Form model = new Form();
-		model.setUuid(IDCoder.decode(getId()));
+		model.setUuid(getUuid());
 		model.setToValue(inYears()? getTo() * 12 : getTo());
 		model.setFromValue(inYears()? getFrom() * 12 : getFrom());
 		model.setAgeZone(getAgeZone());

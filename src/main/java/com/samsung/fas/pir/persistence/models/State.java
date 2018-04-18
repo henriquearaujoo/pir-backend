@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.persistence.models;
 
+import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Generated;
@@ -12,20 +13,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "states")
-public class State {
-	@Getter
-	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE)
-	@Column(name="id", updatable=false)
-	private		long		id;
-
-	@Getter
-	@Setter
-	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
-	@Type(type = "org.hibernate.type.PostgresUUIDType")
-	@Generated(GenerationTime.INSERT)
-	private 	UUID 		uuid;
-	
+public class State extends BaseID {
 	@Getter
 	@Setter
 	@Column(name="name", nullable=false, unique=true)

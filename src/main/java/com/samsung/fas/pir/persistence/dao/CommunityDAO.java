@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CommunityDAO extends BaseDAO<Community, Long, QCommunity> {
+public class CommunityDAO extends BaseDAO<Community, Long, ICommunityRepository,  QCommunity> {
 	@Autowired
 	public CommunityDAO(ICommunityRepository repository) {
 		super(repository);
 	}
 
 	public Community findOne(String name, long id) {
-		return ((ICommunityRepository) repository).findOneByNameIgnoreCaseAndCityId(name, id);
+		return getRepository().findOneByNameIgnoreCaseAndCityId(name, id);
 	}
 }

@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.enums.ECommunityZone;
 import com.samsung.fas.pir.persistence.models.Community;
-import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -20,7 +20,7 @@ public class CommunityDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private 	String			id;
+	private 	UUID 			uuid;
 
 	@Getter
 	@Setter
@@ -143,7 +143,7 @@ public class CommunityDTO {
 	@Setter
 	@JsonProperty("city_id")
 	@NotNull(message = "city.id.missing")
-	private 	String			cityId;
+	private 	UUID			cityUUID;
 
 	@Getter
 	@Setter
@@ -155,7 +155,7 @@ public class CommunityDTO {
 	}
 
 	public CommunityDTO(Community community, boolean detailed) {
-		setId(IDCoder.encode(community.getUuid()));
+		setUuid(community.getUuid());
 		setName(community.getName());
 		setWaterSupply(community.getWaterSupply());
 		setGarbageDestination(community.getGarbageDestination());
@@ -183,7 +183,7 @@ public class CommunityDTO {
 	@JsonIgnore
 	public Community getModel() {
 		Community model = new Community();
-		model.setUuid(IDCoder.decode(getId()));
+		model.setUuid(getUuid());
 		model.setName(getName());
 		model.setWaterSupply(getWaterSupply());
 		model.setGarbageDestination(getGarbageDestination());

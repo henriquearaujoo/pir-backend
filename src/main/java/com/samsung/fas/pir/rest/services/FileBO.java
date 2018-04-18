@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.exception.RESTException;
-import com.samsung.fas.pir.persistence.models.MDataFile;
+import com.samsung.fas.pir.persistence.models.FileData;
 import com.samsung.fas.pir.persistence.repositories.IFileRepository;
 import com.samsung.fas.pir.rest.dto.FileDTO;
 import org.apache.commons.io.FilenameUtils;
@@ -16,13 +16,12 @@ import java.nio.file.Paths;
 import java.util.Date;
 
 @Service
-public class FileService {
-	private	final	HttpServletRequest	request;
-	private	final	IFileRepository		repository;
+public class FileBO {
+	private			final 	IFileRepository 	repository;
+	private static	final 	String				path			= System.getProperty("user.home") + "/RDService/Data";
 
 	@Autowired
-	public FileService(HttpServletRequest request, IFileRepository repository) {
-		this.request 	= request;
+	public FileBO(IFileRepository repository) {
 		this.repository	= repository;
 	}
 
@@ -31,16 +30,16 @@ public class FileService {
 			String				extension		= FilenameUtils.getExtension(name);
 			File 				fileLocation	= getNewFile(extension);
 			FileOutputStream 	fos				= new FileOutputStream(fileLocation);
-			MDataFile 			metadata		= new MDataFile();
+			FileData 			fileData		= new FileData();
 
 			fos.write(data);
 			fos.close();
-			metadata.setPath(Paths.get("", fileLocation.getName()).toString());
-			metadata.setExtension(extension);
-			metadata.setName(name);
-			metadata.setContent(contentType);
-			metadata.setCreatedAt(new Date());
-			return FileDTO.toDTO(repository.save(metadata));
+			fileData.setPath(Paths.get("", fileLocation.getName()).toString());
+			fileData.setExtension(extension);
+			fileData.setName(name);
+			fileData.setContent(contentType);
+			fileData.setCreatedAt(new Date());
+			return new FileDTO(repository.save(fileData));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -59,18 +58,15 @@ public class FileService {
 	}
 
 	private String getUploadDir() {
-		String	uploadPath	=  request.getServletContext().getRealPath("data/files");
-
-		if(!new File(uploadPath).exists())
-			if (!new File(uploadPath).mkdirs())
+		if(!new File(path).exists())
+			if (!new File(path).mkdirs())
 				throw new RESTException("file.internal.error");
-
-		return uploadPath;
+		return path;
 	}
 
 	public boolean delete(long fileid) {
 		try {
-			MDataFile	metadata	= repository.findById(fileid).orElseThrow(() -> new RESTException("not.found"));
+			FileData	metadata	= repository.findById(fileid).orElseThrow(() -> new RESTException("not.found"));
 			boolean 	deleted 	= new File(getUploadDir(), metadata.getPath()).delete();
 
 			if (deleted)
@@ -83,7 +79,7 @@ public class FileService {
 	}
 
 	public FileDTO findOne(long fileid) {
-		return FileDTO.toDTO(repository.findById(fileid).orElseThrow(() -> new RESTException("not.found")));
+		return new FileDTO(repository.findById(fileid).orElseThrow(() -> new RESTException("not.found")));
 	}
 
 	public File getFile(FileDTO file) {

@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.Greetings;
-import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,46 +17,46 @@ public class GreetingsDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private		String			id;
+	private		UUID 		uuid;
+
+	@Getter
+	@Setter
+	@JsonProperty("chapter_id")
+	private 	UUID		chapterUUID;
 
 	@Getter
 	@Setter
 	@JsonProperty("description")
 	@NotBlank(message = "description.missing")
-	private 	String			description;
-
-	@Getter
-	@Setter
-	@JsonProperty("chapter_id")
-	private 	String			chapterID;
+	private 	String		description;
 
 	@Getter
 	@Setter
 	@JsonProperty("turnoff_eletronics")
-	private 	boolean			eletronics;
+	private 	boolean		eletronics;
 
 	@Getter
 	@Setter
 	@JsonProperty("turnoff_stove")
-	private 	boolean			stove;
+	private 	boolean		stove;
 
 	@Getter
 	@Setter
 	@JsonProperty("sit_down")
-	private 	boolean			sit;
+	private 	boolean		sit;
 
 	@Getter
 	@Setter
 	@JsonProperty("goback_lastvisit")
-	private 	boolean			goback;
+	private 	boolean		goback;
 
 	public GreetingsDTO() {
 		super();
 	}
 
 	public GreetingsDTO(Greetings greetings, boolean detailed) {
-		setId(IDCoder.encode(greetings.getUuid()));
-		setChapterID(IDCoder.encode(greetings.getChapter().getUuid()));
+		setUuid(greetings.getUuid());
+		setChapterUUID(greetings.getChapter().getUuid());
 		setDescription(greetings.getDescription());
 		setEletronics(greetings.isEletronics());
 		setSit(greetings.isSit());
@@ -67,7 +67,7 @@ public class GreetingsDTO {
 	@JsonIgnore
 	public Greetings getModel() {
 		Greetings e = new Greetings();
-		e.setUuid(IDCoder.decode(getId()));
+		e.setUuid(getUuid());
 		e.setDescription(getDescription());
 		e.setGoback(isGoback());
 		e.setSit(isSit());

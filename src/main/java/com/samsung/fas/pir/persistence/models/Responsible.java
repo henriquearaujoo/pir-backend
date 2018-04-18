@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.persistence.enums.EHabitationType;
+import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -17,21 +18,7 @@ import java.util.UUID;
 @Table(name = "responsible")
 @DynamicUpdate
 @DynamicInsert
-public class Responsible {
-	@Getter
-	@Setter
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
-	private		long				id;
-
-	@Getter
-	@Setter
-	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
-	@Type(type = "org.hibernate.type.PostgresUUIDType")
-	@Generated(GenerationTime.INSERT)
-	private 	UUID 				uuid;
-
+public class Responsible extends BaseID {
 	@Getter
 	@Setter
 	@Column(nullable = false)
@@ -119,4 +106,9 @@ public class Responsible {
 	@ManyToOne(optional = false)
 	@JoinColumn
 	private 	Community			community;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "responsible")
+	private 	Collection<Answer>	answers;
 }

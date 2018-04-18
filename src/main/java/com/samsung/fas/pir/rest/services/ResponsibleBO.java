@@ -7,8 +7,7 @@ import com.samsung.fas.pir.persistence.models.Community;
 import com.samsung.fas.pir.persistence.models.Mother;
 import com.samsung.fas.pir.persistence.models.Responsible;
 import com.samsung.fas.pir.rest.dto.ResponsibleDTO;
-import com.samsung.fas.pir.rest.services.base.BService;
-import com.samsung.fas.pir.rest.utils.IDCoder;
+import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,44 +18,44 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
-public class ResponsibleService extends BService<Responsible, ResponsibleDTO, ResponsibleDAO, Long> {
+public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, ResponsibleDTO, Long> {
 	private	final CommunityDAO cdao;
 
 	@Autowired
-	public ResponsibleService(ResponsibleDAO dao, CommunityDAO cdao) {
-		super(dao, Responsible.class, ResponsibleDTO.class);
+	public ResponsibleBO(ResponsibleDAO dao, CommunityDAO cdao) {
+		super(dao);
 		this.cdao = cdao;
 	}
 
 	public Collection<ResponsibleDTO> findAllResponsible() {
-		return dao.findAllResponsible().stream().map(item -> new ResponsibleDTO(item, false)).collect(Collectors.toSet());
+		return getDao().findAllResponsible().stream().map(item -> new ResponsibleDTO(item, false)).collect(Collectors.toSet());
 	}
 
 	public Collection<ResponsibleDTO> findAllResponsible(Predicate predicate) {
-		return dao.findAllResponsible(predicate).stream().map(item -> new ResponsibleDTO(item, false)).collect(Collectors.toSet());
+		return getDao().findAllResponsible(predicate).stream().map(item -> new ResponsibleDTO(item, false)).collect(Collectors.toSet());
 	}
 
 	public Page<ResponsibleDTO> findAllResponsible(Pageable pageable) {
-		return dao.findAllResponsible(pageable).map(item -> new ResponsibleDTO(item, false));
+		return getDao().findAllResponsible(pageable).map(item -> new ResponsibleDTO(item, false));
 	}
 
 	public Page<ResponsibleDTO> findAllResponsible(Pageable pageable, Predicate predicate) {
-		return dao.findAllResponsible(predicate, pageable).map(item -> new ResponsibleDTO((Mother) item, false));
+		return getDao().findAllResponsible(predicate, pageable).map(item -> new ResponsibleDTO((Mother) item, false));
 	}
 
 	@Override
 	public ResponsibleDTO save(ResponsibleDTO create, UserDetails account) {
 		Responsible		model		= create.getModel();
-		Community 		community	= cdao.findOne(IDCoder.decode(create.getCommunityID()));
+		Community 		community	= cdao.findOne(create.getCommunityUUID());
 		model.setCommunity(community);
-		return new ResponsibleDTO(dao.save(model), true);
+		return new ResponsibleDTO(getDao().save(model), true);
 	}
 
 	@Override
 	public ResponsibleDTO update(ResponsibleDTO update, UserDetails account) {
 		Responsible		model		= update.getModel();
-		Responsible		responsible	= dao.findOne(model.getUuid());
-		Community		community	= cdao.findOne(IDCoder.decode(update.getCommunityID()));
+		Responsible		responsible	= getDao().findOne(model.getUuid());
+		Community		community	= cdao.findOne(update.getCommunityUUID());
 
 		responsible.setFamilyHasChildren(model.isFamilyHasChildren());
 		responsible.setName(model.getName());
@@ -74,6 +73,6 @@ public class ResponsibleService extends BService<Responsible, ResponsibleDTO, Re
 		responsible.setHasWaterTreatment(model.isHasWaterTreatment());
 		responsible.setObservations(model.getObservations());
 
-		return new ResponsibleDTO(dao.save(responsible), true);
+		return new ResponsibleDTO(getDao().save(responsible), true);
 	}
 }

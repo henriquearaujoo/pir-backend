@@ -4,7 +4,7 @@ import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
 import com.samsung.fas.pir.persistence.models.City;
 import com.samsung.fas.pir.persistence.models.QCity;
-import com.samsung.fas.pir.persistence.repositories.base.BRepository;
+import com.samsung.fas.pir.persistence.repositories.base.IBaseRepository;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.stereotype.Repository;
@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 @Repository
-public interface ICityRepository extends BRepository<City, Long, QCity> {
+public interface ICityRepository extends IBaseRepository<City, Long, QCity> {
 	List<City> findByStateId(long id);
 
 	@Override

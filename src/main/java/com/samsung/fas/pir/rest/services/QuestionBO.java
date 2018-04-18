@@ -6,8 +6,7 @@ import com.samsung.fas.pir.persistence.dao.QuestionDAO;
 import com.samsung.fas.pir.persistence.models.Conclusion;
 import com.samsung.fas.pir.persistence.models.Question;
 import com.samsung.fas.pir.rest.dto.QuestionDTO;
-import com.samsung.fas.pir.rest.services.base.BService;
-import com.samsung.fas.pir.rest.utils.IDCoder;
+import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -15,22 +14,22 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class QuestionService extends BService<Question, QuestionDTO, QuestionDAO, Long> {
+public class QuestionBO extends BaseBO<Question, QuestionDAO, QuestionDTO, Long> {
 	private	final	ConclusionDAO	cdao;
 	private	final	ChapterDAO		chdao;
 
 	@Autowired
-	public QuestionService(QuestionDAO dao, ConclusionDAO cdao, ChapterDAO chdao) {
-		super(dao, Question.class, QuestionDTO.class);
+	public QuestionBO(QuestionDAO dao, ConclusionDAO cdao, ChapterDAO chdao) {
+		super(dao);
 		this.cdao 	= cdao;
 		this.chdao	= chdao;
 	}
 
 	@Override
 	public Long delete(UUID id) {
-		Question	question	= dao.findOne(id);
+		Question	question	= getDao().findOne(id);
 		Conclusion 	conclusion	= question.getConclusion();
-		Object		deleted		= dao.delete(question.getUuid());
+		Object		deleted		= getDao().delete(question.getUuid());
 
 		if (conclusion.getQuestions().size() == 0) {
 			chdao.invalidateOne(question.getConclusion().getChapter().getId());
@@ -42,21 +41,21 @@ public class QuestionService extends BService<Question, QuestionDTO, QuestionDAO
 	@Override
 	public QuestionDTO save(QuestionDTO create, UserDetails account) {
 		Question		model			= create.getModel();
-		Conclusion		conclusion		= cdao.findOne(IDCoder.decode(create.getConclusionID()));
+		Conclusion		conclusion		= cdao.findOne(create.getConclusionUUID());
 
 		model.setConclusion(conclusion);
 		conclusion.getQuestions().add(model);
 
-		return new QuestionDTO(dao.save(model), true);
+		return new QuestionDTO(getDao().save(model), true);
 	}
 
 	@Override
 	public QuestionDTO update(QuestionDTO update, UserDetails account) {
 		Question		model		= update.getModel();
-		Question		question	= dao.findOne(model.getUuid());
+		Question		question	= getDao().findOne(model.getUuid());
 
 		question.setDescription(model.getDescription());
 
-		return new QuestionDTO(dao.save(question), true);
+		return new QuestionDTO(getDao().save(question), true);
 	}
 }

@@ -7,8 +7,7 @@ import com.samsung.fas.pir.persistence.models.Rule;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.configuration.security.persistence.models.Authority;
 import com.samsung.fas.pir.rest.dto.RuleDTO;
-import com.samsung.fas.pir.rest.services.base.BService;
-import com.samsung.fas.pir.rest.utils.IDCoder;
+import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -17,10 +16,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
-public class RuleService extends BService<Rule, RuleDTO, RuleDAO, Long> {
+public class RuleBO extends BaseBO<Rule, RuleDAO, RuleDTO, Long> {
 	@Autowired
-	public RuleService(RuleDAO dao) {
-		super(dao, Rule.class, RuleDTO.class);
+	public RuleBO(RuleDAO dao) {
+		super(dao);
 	}
 
 	@Override
@@ -31,7 +30,7 @@ public class RuleService extends BService<Rule, RuleDTO, RuleDAO, Long> {
 	@Override
 	public RuleDTO update(RuleDTO update, UserDetails account) {
 		Rule					model			= update.getModel();
-		Rule					rule			= dao.findOne(IDCoder.decode(update.getId()));
+		Rule					rule			= getDao().findOne(update.getUuid());
 		Profile 				profile			= rule.getProfile();
 		Page 					page			= rule.getPage();
 		Collection<Authority> 	authorities		= profile.getAuthorities();
@@ -108,6 +107,6 @@ public class RuleService extends BService<Rule, RuleDTO, RuleDAO, Long> {
 		rule.canDelete(model.canDelete());
 		rule.getProfile().setWhoUpdated(((Account) account).getUser());
 
-		return new RuleDTO(dao.save(rule), true);
+		return new RuleDTO(getDao().save(rule), true);
 	}
 }

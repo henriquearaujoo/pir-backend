@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserDAO extends BaseDAO<User, Long, QUser> {
+public class UserDAO extends BaseDAO<User, Long, IUserRepository, QUser> {
 	@Autowired
 	public UserDAO(IUserRepository repository) {
 		super(repository);

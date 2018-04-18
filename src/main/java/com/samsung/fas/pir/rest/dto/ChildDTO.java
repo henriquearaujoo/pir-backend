@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.enums.EChildGender;
 import com.samsung.fas.pir.persistence.models.Child;
-import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -15,6 +14,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -22,7 +22,7 @@ public class ChildDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private 	String 			id;
+	private 	UUID 			uuid;
 
 	@Getter
 	@Setter
@@ -121,12 +121,12 @@ public class ChildDTO {
 	@Setter
 	@JsonProperty("responsible_id")
 	@NotBlank(message = "responsible.id.missing")
-	private 	String				responsibleID;
+	private 	UUID			responsibleUUID;
 
 	@Getter
 	@Setter
 	@JsonProperty("mother_id")
-	private 	String				motherID;
+	private 	UUID			motherUUID;
 
 	@Getter
 	@Setter
@@ -143,7 +143,7 @@ public class ChildDTO {
 	}
 
 	public ChildDTO(Child child, boolean detailed) {
-		setId(IDCoder.encode(child.getUuid()));
+		setUuid(child.getUuid());
 		setName(child.getName());
 		setBirth(new SimpleDateFormat("dd-MM-yyyy").format(child.getBirth()));
 		setFatherName(child.getFatherName());
@@ -168,7 +168,7 @@ public class ChildDTO {
 	public Child getModel() {
 		Child model = new Child();
 
-		model.setUuid(IDCoder.decode(getId()));
+		model.setUuid(getUuid());
 		model.setName(getName());
 		model.setFatherName(getFatherName());
 		model.setGender(EChildGender.valueOf(getGender()));

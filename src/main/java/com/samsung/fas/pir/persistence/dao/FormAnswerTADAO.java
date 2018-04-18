@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FormAnswerTADAO extends BaseDAO<FormAnswerTA, Long, QFormAnswerTA> {
+public class FormAnswerTADAO extends BaseDAO<FormAnswerTA, Long, IFormAnswerTARepository, QFormAnswerTA> {
 	@Autowired
 	public FormAnswerTADAO(IFormAnswerTARepository repository) {
 		super(repository);

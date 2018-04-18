@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.persistence.models;
 
+import com.samsung.fas.pir.persistence.models.base.BaseNID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Table(name = "conslusions")
 @DynamicUpdate
 @DynamicInsert
-public class Conclusion {
+public class Conclusion extends BaseNID {
 	@Getter
 	@Setter
 	@Id

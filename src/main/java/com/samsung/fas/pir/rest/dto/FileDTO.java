@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.rest.dto;
 
 import com.fasterxml.jackson.annotation.*;
-import com.samsung.fas.pir.persistence.models.MDataFile;
+import com.samsung.fas.pir.persistence.models.FileData;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -55,7 +55,7 @@ public class FileDTO {
 		super();
 	}
 
-	private FileDTO(MDataFile entity) {
+	public FileDTO(FileData entity) {
 		id			= entity.getId();
 		path		= entity.getPath();
 		name		= entity.getName();
@@ -65,8 +65,8 @@ public class FileDTO {
 	}
 
 	@JsonIgnore
-	public MDataFile getModel() {
-		MDataFile model = new MDataFile();
+	public FileData getModel() {
+		FileData model = new FileData();
 		model.setId(id);
 		model.setName(name);
 		model.setExtension(extension);
@@ -74,11 +74,5 @@ public class FileDTO {
 		model.setCreatedAt(creation);
 		model.setContent(content);
 		return model;
-	}
-
-	public static FileDTO toDTO(MDataFile entity) {
-		if (entity != null)
-			return new FileDTO(entity);
-		return null;
 	}
 }

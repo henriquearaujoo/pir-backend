@@ -10,8 +10,7 @@ import com.samsung.fas.pir.persistence.models.Profile;
 import com.samsung.fas.pir.persistence.models.User;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.rest.dto.UserDTO;
-import com.samsung.fas.pir.rest.services.base.BService;
-import com.samsung.fas.pir.rest.utils.IDCoder;
+import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,14 +19,14 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 
 @Service
-public class UsersService extends BService<User, UserDTO, UserDAO, Long> {
+public class UsersBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 	private final CityDAO cdao;
 	private final ProfileDAO pdao;
 	private final PasswordEncoder encoder;
 
 	@Autowired
-	public UsersService(UserDAO dao, ProfileDAO pdao, CityDAO cdao, PasswordEncoder encoder) {
-		super(dao, User.class, UserDTO.class);
+	public UsersBO(UserDAO dao, ProfileDAO pdao, CityDAO cdao, PasswordEncoder encoder) {
+		super(dao);
 		this.pdao 		= pdao;
 		this.cdao		= cdao;
 		this.encoder	= encoder;
@@ -37,8 +36,8 @@ public class UsersService extends BService<User, UserDTO, UserDAO, Long> {
 	public UserDTO save(UserDTO create, UserDetails principal) {
 		User		model		= create.getModel();
 		String		password	= create.getPassword();
-		Profile	 	profile		= pdao.findOne(IDCoder.decode(create.getProfileID()));
-		City 		city		= cdao.findOne(IDCoder.decode(create.getAddress().getCityId()));
+		Profile	 	profile		= pdao.findOne(create.getProfileUUID());
+		City 		city		= cdao.findOne(create.getAddress().getCityUUID());
 		Account 	account		= new Account();
 
 		if (model.getEntity() != null && model.getPerson() != null)
@@ -66,15 +65,15 @@ public class UsersService extends BService<User, UserDTO, UserDAO, Long> {
 		else
 			model.getEntity().setUser(model);
 
-		return new UserDTO(dao.save(model), true);
+		return new UserDTO(getDao().save(model), true);
 	}
 
 	@Override
 	public UserDTO update(UserDTO update, UserDetails principal) {
 		User		model		= update.getModel();
-		User		user		= dao.findOne(model.getUuid());
-		Profile		profile		= pdao.findOne(IDCoder.decode(update.getProfileID()));
-		City		city		= cdao.findOne(IDCoder.decode(update.getAddress().getCityId()));
+		User		user		= getDao().findOne(model.getUuid());
+		Profile		profile		= pdao.findOne(update.getProfileUUID());
+		City		city		= cdao.findOne(update.getAddress().getCityUUID());
 
 		if (model.getEntity() != null && model.getPerson() != null)
 			throw new RESTException("user.cannotbe.both");
@@ -113,6 +112,6 @@ public class UsersService extends BService<User, UserDTO, UserDAO, Long> {
 			user.setEntity(null);
 		}
 
-		return new UserDTO(dao.save(user), true);
+		return new UserDTO(getDao().save(user), true);
 	}
 }

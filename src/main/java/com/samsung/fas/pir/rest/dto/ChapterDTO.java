@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.Chapter;
 import com.samsung.fas.pir.rest.utils.CTools;
-import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +14,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -22,7 +22,8 @@ import java.util.stream.Collectors;
 public class ChapterDTO {
 	@Getter
 	@Setter
-	private		String			id;
+	@JsonProperty("id")
+	private 	UUID			uuid;
 
 	@Getter
 	@Setter
@@ -117,7 +118,7 @@ public class ChapterDTO {
 	}
 
 	public ChapterDTO(Chapter chapter, boolean detailed) {
-		setId(IDCoder.encode(chapter.getUuid()));
+		setUuid(chapter.getUuid());
 		setChapter(chapter.getChapter());
 		setVersion(chapter.getVersion());
 		setTitle(chapter.getTitle());
@@ -131,14 +132,14 @@ public class ChapterDTO {
 		setStatus(chapter.isValid());
 		setResources(chapter.getResources());
 		setUntilComplete(CTools.calculateChapterCompleteness(chapter));
-		Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMedias(item.stream().map(FileDTO::toDTO).collect(Collectors.toSet())));
-		Optional.ofNullable(chapter.getThumbnails()).ifPresent(item -> setThumbnails(item.stream().map(FileDTO::toDTO).collect(Collectors.toSet())));
+		Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMedias(item.stream().map(FileDTO::new).collect(Collectors.toSet())));
+		Optional.ofNullable(chapter.getThumbnails()).ifPresent(item -> setThumbnails(item.stream().map(FileDTO::new).collect(Collectors.toSet())));
 	}
 
 	@JsonIgnore
 	public Chapter getModel() {
 		Chapter e = new Chapter();
-		e.setUuid(IDCoder.decode(getId()));
+		e.setUuid(getUuid());
 		e.setVersion(getVersion());
 		e.setChapter(getChapter());
 		e.setContent(getContent());

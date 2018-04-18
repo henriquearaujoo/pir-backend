@@ -5,35 +5,34 @@ import com.samsung.fas.pir.persistence.dao.CommunityDAO;
 import com.samsung.fas.pir.persistence.models.City;
 import com.samsung.fas.pir.persistence.models.Community;
 import com.samsung.fas.pir.rest.dto.CommunityDTO;
-import com.samsung.fas.pir.rest.services.base.BService;
-import com.samsung.fas.pir.rest.utils.IDCoder;
+import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CommunityService extends BService<Community, CommunityDTO, CommunityDAO, Long> {
+public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, Long> {
 	private	final CityDAO cdao;
 
 	@Autowired
-	public CommunityService(CommunityDAO dao, @Autowired CityDAO cdao) {
-		super(dao, Community.class, CommunityDTO.class);
+	public CommunityBO(CommunityDAO dao, @Autowired CityDAO cdao) {
+		super(dao);
 		this.cdao = cdao;
 	}
 
 	@Override
-	public CommunityDTO save(CommunityDTO communityDTO, UserDetails account) {
-		Community	model		= communityDTO.getModel();
-		City 		city		= cdao.findOne(IDCoder.decode(communityDTO.getCityId()));
+	public CommunityDTO save(CommunityDTO create, UserDetails account) {
+		Community	model		= create.getModel();
+		City 		city		= cdao.findOne(create.getCityUUID());
 		model.setCity(city);
-		return new CommunityDTO(dao.save(model), true);
+		return new CommunityDTO(getDao().save(model), true);
 	}
 
 	@Override
-	public CommunityDTO update(CommunityDTO communityDTO, UserDetails account) {
-		Community	model		= communityDTO.getModel();
-		Community	community	= dao.findOne(model.getUuid());
-		City		city		= cdao.findOne(IDCoder.decode(communityDTO.getCityId()));
+	public CommunityDTO update(CommunityDTO update, UserDetails account) {
+		Community	model		= update.getModel();
+		Community	community	= getDao().findOne(model.getUuid());
+		City		city		= cdao.findOne(update.getCityUUID());
 
 		community.setName(model.getName());
 		community.setWaterSupply(model.getWaterSupply());
@@ -57,6 +56,6 @@ public class CommunityService extends BService<Community, CommunityDTO, Communit
 		community.setUc(model.getUc());
 		community.setRegional(model.getRegional());
 
-		return new CommunityDTO(dao.save(community), true);
+		return new CommunityDTO(getDao().save(community), true);
 	}
 }

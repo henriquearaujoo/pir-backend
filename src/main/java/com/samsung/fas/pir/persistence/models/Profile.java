@@ -3,6 +3,7 @@ package com.samsung.fas.pir.persistence.models;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.configuration.security.persistence.models.Authority;
 import com.samsung.fas.pir.persistence.enums.EProfileType;
+import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -19,21 +20,7 @@ import java.util.UUID;
 @Table(name = "profile", uniqueConstraints = @UniqueConstraint(columnNames = "title", name = "title"))
 @DynamicUpdate
 @DynamicInsert
-public class Profile {
-	@Getter
-	@Setter
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
-	private		long					id;
-
-	@Getter
-	@Setter
-	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
-	@Type(type = "org.hibernate.type.PostgresUUIDType")
-	@Generated(GenerationTime.INSERT)
-	private 	UUID 					uuid;
-	
+public class Profile extends BaseID {
 	@Getter
 	@Setter
 	@Column(columnDefinition = "CITEXT")

@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.persistence.enums.EChildGender;
+import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.*;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
 
@@ -15,21 +17,7 @@ import java.util.UUID;
 @Table(name = "child")
 @DynamicUpdate
 @DynamicInsert
-public class Child {
-	@Getter
-	@Setter
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
-	private		long			id;
-
-	@Getter
-	@Setter
-	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
-	@Type(type = "org.hibernate.type.PostgresUUIDType")
-	@Generated(GenerationTime.INSERT)
-	private 	UUID 			uuid;
-
+public class Child extends BaseID {
 	@Getter
 	@Setter
 	@Column(nullable = false)
@@ -123,4 +111,9 @@ public class Child {
 	@ManyToOne(optional = false)
 	@JoinColumn
 	private 	Responsible		responsible;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "child")
+	private 	Collection<Answer>	answers;
 }

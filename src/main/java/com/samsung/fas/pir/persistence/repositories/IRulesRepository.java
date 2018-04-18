@@ -4,7 +4,7 @@ import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
 import com.samsung.fas.pir.persistence.models.QRule;
 import com.samsung.fas.pir.persistence.models.Rule;
-import com.samsung.fas.pir.persistence.repositories.base.BRepository;
+import com.samsung.fas.pir.persistence.repositories.base.IBaseRepository;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.stereotype.Repository;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Nonnull;
 
 @Repository
-public interface IRulesRepository extends BRepository<Rule, Long, QRule> {
+public interface IRulesRepository extends IBaseRepository<Rule, Long, QRule> {
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QRule root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

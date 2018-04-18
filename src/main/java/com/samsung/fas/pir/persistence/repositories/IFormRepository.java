@@ -4,7 +4,7 @@ import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
 import com.samsung.fas.pir.persistence.models.Form;
 import com.samsung.fas.pir.persistence.models.QForm;
-import com.samsung.fas.pir.persistence.repositories.base.BRepository;
+import com.samsung.fas.pir.persistence.repositories.base.IBaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
@@ -16,7 +16,7 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 
 @Repository
-public interface IFormRepository extends BRepository<Form, Long, QForm> {
+public interface IFormRepository extends IBaseRepository<Form, Long, QForm> {
 	Collection<Form> findAllByAgeZone(int zone);
 
 	@Transactional

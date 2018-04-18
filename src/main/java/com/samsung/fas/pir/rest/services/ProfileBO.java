@@ -7,7 +7,7 @@ import com.samsung.fas.pir.persistence.models.Profile;
 import com.samsung.fas.pir.persistence.models.Rule;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.rest.dto.ProfileDTO;
-import com.samsung.fas.pir.rest.services.base.BService;
+import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -17,12 +17,12 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Service
-public class ProfileService extends BService<Profile, ProfileDTO, ProfileDAO, Long> {
+public class ProfileBO extends BaseBO<Profile, ProfileDAO, ProfileDTO, Long> {
 	private	final PageDAO pdao;
 
 	@Autowired
-	public ProfileService(ProfileDAO dao, @Autowired PageDAO pdao) {
-		super(dao, Profile.class, ProfileDTO.class);
+	public ProfileBO(ProfileDAO dao, @Autowired PageDAO pdao) {
+		super(dao);
 		this.pdao 	= pdao;
 	}
 
@@ -51,13 +51,13 @@ public class ProfileService extends BService<Profile, ProfileDTO, ProfileDAO, Lo
 		model.setWhoUpdated(((Account) account).getUser());
 		model.setRules(rules);
 
-		return new ProfileDTO(dao.save(model), true);
+		return new ProfileDTO(getDao().save(model), true);
 	}
 
 	@Override
 	public ProfileDTO update(ProfileDTO update, UserDetails account) {
 		Profile				model		= update.getModel();
-		Profile				profile		= dao.findOne(model.getUuid());
+		Profile				profile		= getDao().findOne(model.getUuid());
 
 		profile.setActive(model.isActive());
 		profile.setDescription(model.getDescription());
@@ -65,6 +65,6 @@ public class ProfileService extends BService<Profile, ProfileDTO, ProfileDAO, Lo
 		profile.setType(model.getType());
 		profile.setWhoUpdated(((Account) account).getUser());
 
-		return new ProfileDTO(dao.save(profile), true);
+		return new ProfileDTO(getDao().save(profile), true);
 	}
 }

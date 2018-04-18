@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.persistence.models;
 
+import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -15,21 +16,7 @@ import java.util.UUID;
 @Table(name = "chapter", uniqueConstraints = @UniqueConstraint(columnNames= {"number", "version"}, name = "chapter_version"))
 @DynamicUpdate
 @DynamicInsert
-public class Chapter {
-	@Getter
-	@Setter
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
-	private		long			id;
-
-	@Getter
-	@Setter
-	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
-	@Type(type = "org.hibernate.type.PostgresUUIDType")
-	@Generated(GenerationTime.INSERT)
-	private 	UUID 			uuid;
-
+public class Chapter extends BaseID {
 	@Getter
 	@Setter
 	@Column(name = "number", nullable = false)
@@ -95,14 +82,14 @@ public class Chapter {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinColumn(name = "media")
-	private 	Collection<MDataFile>	medias;
+	private 	Collection<FileData>	medias;
 
 	@Getter
 	@Setter
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinColumn(name = "thumbnail")
-	private 	Collection<MDataFile>	thumbnails;
+	private 	Collection<FileData>	thumbnails;
 
 	@Getter
 	@Setter

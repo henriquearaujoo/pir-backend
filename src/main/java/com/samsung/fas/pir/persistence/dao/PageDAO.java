@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PageDAO extends BaseDAO<Page, Long, QPage> {
+public class PageDAO extends BaseDAO<Page, Long, IPageRepository, QPage> {
 	@Autowired
 	public PageDAO(IPageRepository repository) {
 		super(repository);

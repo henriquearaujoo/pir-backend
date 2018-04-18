@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.persistence.enums.ECivilState;
+import com.samsung.fas.pir.persistence.models.base.BaseNID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -14,25 +15,13 @@ import java.util.UUID;
 @Table(name = "mother")
 @DynamicUpdate
 @DynamicInsert
-public class Mother {
-	@Getter
-	@Setter
-	@Id
-	private 	long				id;
-
+public class Mother extends BaseNID {
 	@Getter
 	@Setter
 	@MapsId
 	@OneToOne(optional = false)
 	@JoinColumn(name = "id")
 	private 	Responsible			responsible;
-
-	@Getter
-	@Setter
-	@Column(insertable = false, updatable = false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
-	@Type(type = "org.hibernate.type.PostgresUUIDType")
-	@Generated(GenerationTime.INSERT)
-	private 	UUID				uuid;
 
 	// May mother have other children that are not registered
 	@Getter

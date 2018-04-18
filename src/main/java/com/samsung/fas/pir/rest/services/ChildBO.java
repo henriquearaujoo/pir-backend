@@ -6,27 +6,26 @@ import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
 import com.samsung.fas.pir.persistence.models.Child;
 import com.samsung.fas.pir.persistence.models.Responsible;
 import com.samsung.fas.pir.rest.dto.ChildDTO;
-import com.samsung.fas.pir.rest.services.base.BService;
-import com.samsung.fas.pir.rest.utils.IDCoder;
+import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ChildService extends BService<Child, ChildDTO, ChildDAO, Long> {
+public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	private	final ResponsibleDAO rdao;
 
 	@Autowired
-	public ChildService(ChildDAO dao, ResponsibleDAO rdao) {
-		super(dao, Child.class, ChildDTO.class);
+	public ChildBO(ChildDAO dao, ResponsibleDAO rdao) {
+		super(dao);
 		this.rdao	= rdao;
 	}
 
 	@Override
 	public ChildDTO save(ChildDTO create, UserDetails account) {
 		Child		model		= create.getModel();
-		Responsible responsible	= rdao.findOne(IDCoder.decode(create.getResponsibleID()));
-		Responsible	mother		= rdao.findOne(IDCoder.decode(create.getMotherID()));
+		Responsible responsible	= rdao.findOne(create.getResponsibleUUID());
+		Responsible	mother		= rdao.findOne(create.getMotherUUID());
 
 		if (mother.getMother() == null)
 			throw new RESTException("not.mother");
@@ -34,15 +33,15 @@ public class ChildService extends BService<Child, ChildDTO, ChildDAO, Long> {
 		model.setMother(mother);
 		model.setResponsible(responsible);
 
-		return new ChildDTO(dao.save(model), true);
+		return new ChildDTO(getDao().save(model), true);
 	}
 
 	@Override
 	public ChildDTO update(ChildDTO update, UserDetails account) {
 		Child		model		= update.getModel();
-		Child		child		= dao.findOne(model.getUuid());
-		Responsible	responsible	= rdao.findOne(IDCoder.decode(update.getResponsibleID()));
-		Responsible	mother		= rdao.findOne(IDCoder.decode(update.getMotherID()));
+		Child		child		= getDao().findOne(model.getUuid());
+		Responsible	responsible	= rdao.findOne(update.getResponsibleUUID());
+		Responsible	mother		= rdao.findOne(update.getMotherUUID());
 
 		if (mother.getMother() == null)
 			throw new RESTException("not.mother");
@@ -65,6 +64,6 @@ public class ChildService extends BService<Child, ChildDTO, ChildDAO, Long> {
 		child.setResponsible(responsible);
 		child.setMother(mother);
 
-		return new ChildDTO(dao.save(child), true);
+		return new ChildDTO(getDao().save(child), true);
 	}
 }

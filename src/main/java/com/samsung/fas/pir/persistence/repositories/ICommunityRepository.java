@@ -4,7 +4,7 @@ import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
 import com.samsung.fas.pir.persistence.models.Community;
 import com.samsung.fas.pir.persistence.models.QCommunity;
-import com.samsung.fas.pir.persistence.repositories.base.BRepository;
+import com.samsung.fas.pir.persistence.repositories.base.IBaseRepository;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.stereotype.Repository;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Nonnull;
 
 @Repository
-public interface ICommunityRepository extends BRepository<Community, Long, QCommunity> {
+public interface ICommunityRepository extends IBaseRepository<Community, Long, QCommunity> {
 	Community findOneByNameIgnoreCaseAndCityId(String name, long id);
 
 	@Override

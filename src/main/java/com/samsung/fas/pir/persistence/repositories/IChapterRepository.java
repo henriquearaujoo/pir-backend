@@ -4,9 +4,7 @@ import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
 import com.samsung.fas.pir.persistence.models.Chapter;
 import com.samsung.fas.pir.persistence.models.QChapter;
-import com.samsung.fas.pir.persistence.repositories.base.BRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.samsung.fas.pir.persistence.repositories.base.IBaseRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
@@ -16,10 +14,9 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Nonnull;
 import javax.transaction.Transactional;
 import java.util.Collection;
-import java.util.Set;
 
 @Repository
-public interface IChapterRepository extends BRepository<Chapter, Long, QChapter> {
+public interface IChapterRepository extends IBaseRepository<Chapter, Long, QChapter> {
 	@Transactional
 	@Modifying(clearAutomatically = true)
 	@Query(value = "update chapter set in_use = false where pirdb.public.chapter.number = ?1", nativeQuery = true)

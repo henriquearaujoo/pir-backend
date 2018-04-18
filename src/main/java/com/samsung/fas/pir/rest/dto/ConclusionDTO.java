@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.Conclusion;
-import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -19,18 +19,18 @@ public class ConclusionDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private		String						id;
+	private		UUID		uuid;
 
 	@Getter
 	@Setter
 	@JsonProperty("chapter_id")
-	private 	String						chapterID;
+	private 	UUID 		chapterUUID;
 
 	@Getter
 	@Setter
 	@JsonProperty("description")
 	@NotBlank(message = "chapter.greetings.description.missing")
-	private 	String						description;
+	private 	String		description;
 
 	@Getter
 	@Setter
@@ -42,16 +42,16 @@ public class ConclusionDTO {
 	}
 
 	public ConclusionDTO(Conclusion conclusion, boolean detailed) {
-		setId(IDCoder.encode(conclusion.getUuid()));
+		setUuid(conclusion.getUuid());
 		setDescription(conclusion.getDescription());
-		setChapterID(IDCoder.encode(conclusion.getChapter().getUuid()));
+		setChapterUUID(conclusion.getChapter().getUuid());
 		setQuestions(conclusion.getQuestions() != null? conclusion.getQuestions().stream().map(item -> new QuestionDTO(item, false)).collect(Collectors.toSet()) : null);
 	}
 
 	@JsonIgnore
 	public Conclusion getModel() {
 		Conclusion model = new Conclusion();
-		model.setUuid(IDCoder.decode(getId()));
+		model.setUuid(getUuid());
 		model.setDescription(getDescription());
 		return model;
 	}

@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
+import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -17,21 +18,7 @@ import java.util.UUID;
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email", name = "email"))
 @DynamicUpdate
 @DynamicInsert
-public class User implements Serializable {
-	@Getter
-	@Setter
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
-	private		long			id;
-
-	@Setter
-	@Getter
-	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
-	@Type(type = "org.hibernate.type.PostgresUUIDType")
-	@Generated(GenerationTime.INSERT)
-	private 	UUID			uuid;
-
+public class User extends BaseID implements Serializable {
 	@Getter
 	@Setter
 	@Column(nullable=false)

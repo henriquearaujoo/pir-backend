@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.Intervention;
-import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,33 +17,33 @@ public class InterventionDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private		String			id;
+	private		UUID		uuid;
 
 	@Getter
 	@Setter
 	@JsonProperty("chapter_id")
-	private		String			chapterdID;
+	private		UUID		chapterdUUID;
 
 	@Getter
 	@Setter
 	@JsonProperty("description")
 	@NotBlank(message = "description.missing")
-	private 	String			description;
+	private 	String		description;
 
 	@Getter
 	@Setter
 	@JsonProperty("activity")
 	@NotBlank(message = "activity.missing")
-	private 	String			activity;
+	private 	String		activity;
 
 	public InterventionDTO() {
 		super();
 	}
 
 	public InterventionDTO(Intervention intervention, boolean detailed) {
-		setId(IDCoder.encode(intervention.getUuid()));
+		setUuid(intervention.getUuid());
 		setDescription(intervention.getDescription());
-		setChapterdID(IDCoder.encode(intervention.getChapter().getUuid()));
+		setChapterdUUID(intervention.getChapter().getUuid());
 		setActivity(intervention.getActivity());
 	}
 
@@ -52,7 +52,7 @@ public class InterventionDTO {
 		Intervention model = new Intervention();
 		model.setDescription(getDescription());
 		model.setActivity(getActivity());
-		model.setUuid(IDCoder.decode(getId()));
+		model.setUuid(getUuid());
 		return model;
 	}
 }

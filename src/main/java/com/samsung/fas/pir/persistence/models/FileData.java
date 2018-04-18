@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.persistence.models;
 
+import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -12,14 +13,7 @@ import java.util.Date;
 @Table(name = "files")
 @DynamicInsert
 @DynamicUpdate
-public class MDataFile {
-	@Getter
-	@Setter
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-	private		long		id;
-
+public class FileData extends BaseID {
 	@Getter
 	@Setter
 	@Column(name = "path", updatable = false)

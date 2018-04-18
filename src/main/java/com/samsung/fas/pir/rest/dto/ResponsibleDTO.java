@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.*;
 import com.samsung.fas.pir.persistence.enums.EHabitationType;
 import com.samsung.fas.pir.persistence.models.Mother;
 import com.samsung.fas.pir.persistence.models.Responsible;
-import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -15,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -22,111 +22,111 @@ public class ResponsibleDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private 	String 			id;
+	private		UUID		uuid;
 
 	@Getter
 	@Setter
 	@JsonProperty("agent_id")
-	private 	String 			agentID;
+	private 	UUID 		agentUUID;
 
 	@Getter
 	@Setter
 	@JsonProperty("community_id")
 	@NotBlank(message = "community.id.missing")
-	private 	String			communityID;
+	private 	UUID		communityUUID;
 
 	@Getter
 	@Setter
 	@JsonProperty("name")
 	@NotBlank(message = "name.missing")
-	private 	String			name;
+	private 	String		name;
 
 	@Getter
 	@Setter
 	@JsonProperty("birth")
 	@NotNull(message = "date.missing")
 	@JsonFormat(pattern = "dd-MM-yyyy", shape = JsonFormat.Shape.STRING)
-	private 	String 			birth;
+	private 	String 		birth;
 
 	@Getter
 	@Setter
 	@JsonProperty("in_social_program")
-	private 	boolean			inSocialProgram;
+	private 	boolean		inSocialProgram;
 
 	@Getter
 	@Setter
 	@JsonProperty("habitation_type")
 	@NotBlank(message = "habitation.type.missing")
-	private 	String			habitationType;
+	private 	String		habitationType;
 
 	@Getter
 	@Setter
 	@JsonProperty("habitation_members_count")
 	@Min(value = 1, message = "invalid.counter")
-	private 	int				habitationMembersCount;
+	private 	int			habitationMembersCount;
 
 	@Getter
 	@Setter
 	@JsonProperty("live_with")
 	@NotBlank(message = "live.with.missing")
-	private 	String			liveWith;
+	private 	String		liveWith;
 
 	@Getter
 	@Setter
 	@JsonProperty("family_income")
 	@NotBlank(message = "family.income.missing")
-	private 	String			familyIncome;
+	private 	String		familyIncome;
 
 	@Getter
 	@Setter
 	@JsonProperty("income_participation")
 	@NotBlank(message = "income.participation.missing")
-	private 	String			incomeParticipation;
+	private 	String		incomeParticipation;
 
 	@Getter
 	@Setter
 	@JsonProperty("drinking_water_treatment")
 	@NotBlank(message = "drinking.water.missing")
-	private 	String			drinkingWaterTreatment;
+	private 	String		drinkingWaterTreatment;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("has_hospital_nearby")
-	private 	boolean			hasHospital;
+	private 	boolean		hasHospital;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("has_sanitation")
-	private 	boolean			hasSanitation;
+	private 	boolean		hasSanitation;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("has_water_treatment")
-	private 	boolean			hasWaterTreatment;
+	private 	boolean		hasWaterTreatment;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("has_other_children")
-	private 	boolean			hasOtherChildren;
+	private 	boolean		hasOtherChildren;
 
 	@Getter
 	@Setter
 	@JsonProperty("observations")
-	private 	String			observations;
+	private 	String		observations;
 
 	@Getter
 	@Setter
 	@Valid
-	private MotherDTO mother;
+	private 	MotherDTO		mother;
 
 	@Getter
 	@Setter
 	@JsonProperty("community")
-	private CommunityDTO community;
+	private 	CommunityDTO	community;
 
 	public ResponsibleDTO() {
 		super();
@@ -139,7 +139,7 @@ public class ResponsibleDTO {
 
 	public ResponsibleDTO(Responsible responsible, boolean detailed) {
 		setName(responsible.getName());
-		setId(IDCoder.encode(responsible.getUuid()));
+		setUuid(responsible.getUuid());
 		setBirth(new SimpleDateFormat("dd-MM-yyyy").format(responsible.getBirth()));
 		setInSocialProgram(responsible.isInSocialProgram());
 		setHabitationMembersCount(responsible.getHabitationMembersCount());
@@ -163,7 +163,7 @@ public class ResponsibleDTO {
 
 		model.setFamilyHasChildren(hasOtherChildren());
 		model.setName(getName());
-		model.setUuid(IDCoder.decode(getId()));
+		model.setUuid(getUuid());
 		model.setInSocialProgram(isInSocialProgram());
 		model.setHabitationType(EHabitationType.valueOf(getHabitationType()));
 		model.setHabitationMembersCount(getHabitationMembersCount());

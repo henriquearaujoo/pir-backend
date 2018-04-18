@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AddressDAO extends BaseDAO<Address, Long, QAddress> {
+public class AddressDAO extends BaseDAO<Address, Long, IAddressRepository, QAddress> {
 	@Autowired
 	public AddressDAO(IAddressRepository repository) {
 		super(repository);

@@ -5,26 +5,26 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.enums.EAnswerType;
-import com.samsung.fas.pir.persistence.models.Answer;
-import com.samsung.fas.pir.rest.utils.IDCoder;
+import com.samsung.fas.pir.persistence.models.Alternative;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AnswerDTO {
+public class AlternativeDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private		String			id;
+	private 	UUID 			uuid;
 
 	@Getter
 	@Setter
 	@JsonProperty("question_id")
-	private 	String			questionID;
+	private 	UUID			questionUUID;
 
 	@Getter
 	@Setter
@@ -38,21 +38,21 @@ public class AnswerDTO {
 	@NotBlank(message = "answer.missing")
 	private 	String			answer;
 
-	public AnswerDTO() {
+	public AlternativeDTO() {
 		super();
 	}
 
-	public AnswerDTO(Answer answer, boolean detailed) {
-		setId(IDCoder.encode(answer.getUuid()));
-		setAnswer(answer.getDescription());
-		setType(answer.getType());
-		setQuestionID(IDCoder.encode(answer.getQuestion().getUuid()));
+	public AlternativeDTO(Alternative alternative, boolean detailed) {
+		setUuid(alternative.getUuid());
+		setAnswer(alternative.getDescription());
+		setType(alternative.getType());
+		setQuestionUUID(alternative.getQuestion().getUuid());
 	}
 
 	@JsonIgnore
-	public Answer getModel() {
-		Answer 		a	= new Answer();
-		a.setUuid(IDCoder.decode(getId()));
+	public Alternative getModel() {
+		Alternative a	= new Alternative();
+		a.setUuid(getUuid());
 		a.setDescription(getAnswer());
 		a.setType(getType());
 		return a;

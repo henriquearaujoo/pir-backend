@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.User;
-import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +13,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -21,73 +21,73 @@ public class UserDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private		String			id;
+	private		UUID		uuid;
 
 	@Setter
 	@Getter
 	@JsonProperty(value="name")
 	@NotBlank(message="user.name.missing")
-	private		String			name;
+	private		String		name;
 
 	@Setter
 	@Getter
 	@JsonProperty("email")
 	@Email(message = "user.email.invalid")
-	private		String			email;
+	private		String		email;
 
 	@Setter
 	@Getter
 	@JsonProperty("login")
 	@NotBlank(message="user.login.missing")
-	private		String			login;
+	private		String		login;
 
 	@Setter
 	@Getter
 	@JsonProperty("password")
 	@Size(min=8, message="user.password.short")
-	private		String			password;
+	private		String		password;
 
 	@Setter
 	@Getter
 	@JsonProperty("status")
-	private		boolean			active;
+	private		boolean		active;
 
 	@Setter
 	@Getter
 	@JsonProperty("profile_id")
 	@NotBlank(message="profile.id.missing")
-	private		String			profileID;
+	private		UUID		profileUUID;
 
 	@Setter
 	@Getter
 	@JsonProperty("profile")
-	private ProfileDTO profile;
+	private		ProfileDTO	profile;
 
 	@Setter
 	@Getter
 	@JsonProperty("address")
 	@NotNull(message="user.address.missing")
 	@Valid
-	private 	AddressDTO 		address;
+	private 	AddressDTO 	address;
 
 	@Getter
 	@Setter
 	@JsonProperty("person")
 	@Valid
-	private 	PersonDTO 		person;
+	private 	PersonDTO 	person;
 
 	@Getter
 	@Setter
 	@JsonProperty("entity")
 	@Valid
-	private 	EntityDTO 		entity;
+	private 	EntityDTO 	entity;
 
 	public UserDTO() {
 		super();
 	}
 
 	public UserDTO(User user, boolean detailed) {
-		setId(IDCoder.encode(user.getUuid()));
+		setUuid(user.getUuid());
 		setName(user.getName());
 		setEmail(user.getEmail());
 		setLogin(user.getAccount().getUsername());
@@ -102,7 +102,7 @@ public class UserDTO {
 	@JsonIgnore
 	public User getModel() {
 		User model = new User();
-		model.setUuid(IDCoder.decode(getId()));
+		model.setUuid(getUuid());
 		model.setName(getName());
 		model.setEmail(getEmail());
 		model.setAddress(getAddress().getModel());

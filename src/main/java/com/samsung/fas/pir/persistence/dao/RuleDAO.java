@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RuleDAO extends BaseDAO<Rule, Long, QRule> {
+public class RuleDAO extends BaseDAO<Rule, Long, IRulesRepository, QRule> {
 	@Autowired
 	public RuleDAO(IRulesRepository repository) {
 		super(repository);

@@ -4,7 +4,7 @@ import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
 import com.samsung.fas.pir.persistence.models.Profile;
 import com.samsung.fas.pir.persistence.models.QProfile;
-import com.samsung.fas.pir.persistence.repositories.base.BRepository;
+import com.samsung.fas.pir.persistence.repositories.base.IBaseRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.querydsl.binding.SingleValueBinding;
@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 @Repository
-public interface IProfileRepository extends BRepository<Profile, Long, QProfile> {
+public interface IProfileRepository extends IBaseRepository<Profile, Long, QProfile> {
 	@Query(value = "select * from profile order by lower(title)", nativeQuery = true)
 	List<Profile> findAll();
 

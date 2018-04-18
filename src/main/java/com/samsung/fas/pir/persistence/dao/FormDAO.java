@@ -10,17 +10,17 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 
 @Service
-public class FormDAO extends BaseDAO<Form, Long, QForm> {
+public class FormDAO extends BaseDAO<Form, Long, IFormRepository, QForm> {
 	@Autowired
 	public FormDAO(IFormRepository repository) {
 		super(repository);
 	}
 
 	public Collection<Form> findAll(int zone) {
-		return ((IFormRepository) repository).findAllByAgeZone(zone);
+		return getRepository().findAllByAgeZone(zone);
 	}
 
 	public void invalidate(int zone) {
-		((IFormRepository) repository).invalidateAll(zone);
+		getRepository().invalidateAll(zone);
 	}
 }

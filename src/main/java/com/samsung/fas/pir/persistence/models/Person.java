@@ -1,5 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
+import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.BaseNID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -13,19 +15,7 @@ import java.util.UUID;
 @Table(name = "person", uniqueConstraints = @UniqueConstraint(columnNames = "cpf", name = "cpf"))
 @DynamicUpdate
 @DynamicInsert
-public class Person {
-	@Getter
-	@Setter
-	@Id
-	private 	long 			id;
-
-	@Getter
-	@Setter
-	@Column(insertable = false, updatable=false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
-	@Type(type = "org.hibernate.type.PostgresUUIDType")
-	@Generated(GenerationTime.INSERT)
-	private 	UUID 			uuid;
-
+public class Person extends BaseNID {
 	@Getter
 	@Setter
 	@MapsId
