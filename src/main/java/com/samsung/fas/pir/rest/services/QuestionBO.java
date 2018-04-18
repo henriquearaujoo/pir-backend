@@ -55,6 +55,7 @@ public class QuestionBO extends BaseBO<Question, QuestionDAO, QuestionDTO, Long>
 		Question		question	= getDao().findOne(model.getUuid());
 
 		question.setDescription(model.getDescription());
+		question.setType(model.getType());
 
 		return new QuestionDTO(getDao().save(question), true);
 	}

@@ -3,14 +3,14 @@ package com.samsung.fas.pir.persistence.dao;
 import com.samsung.fas.pir.persistence.dao.base.BaseDAO;
 import com.samsung.fas.pir.persistence.models.Page;
 import com.samsung.fas.pir.persistence.models.QPage;
-import com.samsung.fas.pir.persistence.repositories.IPageRepository;
+import com.samsung.fas.pir.persistence.repositories.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PageDAO extends BaseDAO<Page, Long, IPageRepository, QPage> {
+public class PageDAO extends BaseDAO<Page, Long, IPage, QPage> {
 	@Autowired
-	public PageDAO(IPageRepository repository) {
+	public PageDAO(IPage repository) {
 		super(repository);
 	}
 }

@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
 
@@ -55,4 +56,13 @@ public class User extends BaseID implements Serializable {
 	@Setter
 	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "user", orphanRemoval = true)
 	private 	Account 		account;
+
+	// region Agent
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "agent")
+	private 	Collection<Visit>	visits;
+
+	// endregion
 }

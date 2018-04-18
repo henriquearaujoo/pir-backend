@@ -106,9 +106,4 @@ public class Responsible extends BaseID {
 	@ManyToOne(optional = false)
 	@JoinColumn
 	private 	Community			community;
-
-	@Getter
-	@Setter
-	@OneToMany(mappedBy = "responsible")
-	private 	Collection<Answer>	answers;
 }

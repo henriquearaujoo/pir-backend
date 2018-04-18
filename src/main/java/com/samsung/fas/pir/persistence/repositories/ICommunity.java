@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Nonnull;
 
 @Repository
-public interface ICommunityRepository extends IBaseRepository<Community, Long, QCommunity> {
+public interface ICommunity extends IBaseRepository<Community, Long, QCommunity> {
 	Community findOneByNameIgnoreCaseAndCityId(String name, long id);
 
 	@Override

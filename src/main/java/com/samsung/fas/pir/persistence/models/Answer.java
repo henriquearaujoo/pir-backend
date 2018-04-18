@@ -9,7 +9,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "answers", uniqueConstraints = @UniqueConstraint(columnNames = {"child_id", "alternative_id", "responsible_id"}, name = "answer"))
+@Table(name = "answers", uniqueConstraints = @UniqueConstraint(columnNames = {"child_id", "alternative_id", "mother_id", "question_id"}, name = "answer"))
 @DynamicUpdate
 @DynamicInsert
 public class Answer extends BaseID {
@@ -28,11 +28,17 @@ public class Answer extends BaseID {
 	@Setter
 	@ManyToOne
 	@JoinColumn
-	private		Responsible		responsible;
+	private		Mother			mother;
 
 	@Getter
 	@Setter
 	@ManyToOne
 	@JoinColumn
 	private 	Alternative		alternative;
+
+	@Getter
+	@Setter
+	@ManyToOne(optional = false)
+	@JoinColumn
+	private 	Question		question;
 }

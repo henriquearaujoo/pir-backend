@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @Repository
-public interface IUserRepository extends IBaseRepository<User, Long, QUser> {
+public interface IUser extends IBaseRepository<User, Long, QUser> {
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QUser root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

@@ -5,6 +5,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IFileRepository extends PagingAndSortingRepository<FileData, Long> {
+public interface IFile extends PagingAndSortingRepository<FileData, Long> {
 	//
 }

@@ -79,15 +79,20 @@ public class Chapter extends BaseID {
 
 	@Getter
 	@Setter
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@LazyCollection(LazyCollectionOption.FALSE)
+	@Column(nullable = false)
+	private 	int				period;
+
+	@Getter
+	@Setter
+	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
+//	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinColumn(name = "media")
 	private 	Collection<FileData>	medias;
 
 	@Getter
 	@Setter
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
+//	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinColumn(name = "thumbnail")
 	private 	Collection<FileData>	thumbnails;
 
@@ -105,4 +110,9 @@ public class Chapter extends BaseID {
 	@Setter
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "chapter")
 	private 	Conclusion		conclusion;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "chapter", cascade = CascadeType.MERGE, orphanRemoval = true)
+	private 	Collection<Visit>	visits;
 }

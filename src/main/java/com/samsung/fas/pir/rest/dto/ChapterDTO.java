@@ -98,6 +98,12 @@ public class ChapterDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("period")
+	@Min(value = 0, message = "invalid.period")
+	private 	int				period;
+
+	@Getter
+	@Setter
 	@JsonProperty("medias")
 	@Valid
 	private 	Set<FileDTO> 	medias;
@@ -120,6 +126,7 @@ public class ChapterDTO {
 	public ChapterDTO(Chapter chapter, boolean detailed) {
 		setUuid(chapter.getUuid());
 		setChapter(chapter.getChapter());
+		setPeriod(chapter.getPeriod());
 		setVersion(chapter.getVersion());
 		setTitle(chapter.getTitle());
 		setSubtitle(chapter.getSubtitle());
@@ -141,6 +148,7 @@ public class ChapterDTO {
 		Chapter e = new Chapter();
 		e.setUuid(getUuid());
 		e.setVersion(getVersion());
+		e.setPeriod(getPeriod());
 		e.setChapter(getChapter());
 		e.setContent(getContent());
 		e.setDescription(getDescription());

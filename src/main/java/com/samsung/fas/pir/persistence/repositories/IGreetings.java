@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Nonnull;
 
 @Repository
-public interface IGreetingsRepository extends IBaseRepository<Greetings, Long, QGreetings> {
+public interface IGreetings extends IBaseRepository<Greetings, Long, QGreetings> {
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QGreetings root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

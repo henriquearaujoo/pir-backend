@@ -9,6 +9,7 @@ import org.hibernate.annotations.*;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.Collection;
 import java.util.UUID;
 
 @Entity
@@ -23,7 +24,6 @@ public class Mother extends BaseNID {
 	@JoinColumn(name = "id")
 	private 	Responsible			responsible;
 
-	// May mother have other children that are not registered
 	@Getter
 	@Setter
 	@Column(nullable = false)
@@ -34,4 +34,14 @@ public class Mother extends BaseNID {
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private 	ECivilState 		civilState;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "mother")
+	private 	Collection<Answer>	answers;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "mother")
+	private 	Collection<Visit>	visits;
 }

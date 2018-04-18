@@ -6,26 +6,23 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.samsung.fas.pir.persistence.dao.base.BaseDAO;
 import com.samsung.fas.pir.persistence.dao.utils.SBPage;
 import com.samsung.fas.pir.persistence.models.*;
-import com.samsung.fas.pir.persistence.repositories.IResponsibleRepository;
+import com.samsung.fas.pir.persistence.repositories.IResponsible;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 // TODO: Change Queries
 @Service
-public class ResponsibleDAO extends BaseDAO<Responsible, Long, IResponsibleRepository, QResponsible> {
+public class ResponsibleDAO extends BaseDAO<Responsible, Long, IResponsible, QResponsible> {
 	private	final EntityManager emanager;
 
 	@Autowired
-	public ResponsibleDAO(IResponsibleRepository repository, EntityManager emanager) {
+	public ResponsibleDAO(IResponsible repository, EntityManager emanager) {
 		super(repository);
 		this.emanager = emanager;
 	}

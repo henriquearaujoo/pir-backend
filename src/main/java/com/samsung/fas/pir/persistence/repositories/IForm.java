@@ -16,7 +16,7 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 
 @Repository
-public interface IFormRepository extends IBaseRepository<Form, Long, QForm> {
+public interface IForm extends IBaseRepository<Form, Long, QForm> {
 	Collection<Form> findAllByAgeZone(int zone);
 
 	@Transactional

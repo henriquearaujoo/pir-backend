@@ -2,9 +2,11 @@ package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.persistence.models.Alternative;
+import com.samsung.fas.pir.persistence.models.Answer;
 import com.samsung.fas.pir.rest.controllers.base.BController;
 import com.samsung.fas.pir.rest.dto.AlternativeDTO;
-import com.samsung.fas.pir.rest.services.AlternativeBO;
+import com.samsung.fas.pir.rest.dto.AnswerDTO;
+import com.samsung.fas.pir.rest.services.AnswerBO;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,33 +16,29 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Collection;
-import java.util.UUID;
 
-@Api(value = "Chapter Conclusion Question Alternatives", description = "REST Controller for Chapter Conclusion Question Alternatives", tags = "CHAPTER CONCLUSION QUESTION ALTERNATIVES")
-@RequestMapping(value = "/rest/chapters/conclusion/question/alternative", produces = MediaType.APPLICATION_JSON_VALUE)
+@Api(value = "Chapter Conclusion Question Answers", description = "REST Controller for Chapter Conclusion Question Answers", tags = "CHAPTER CONCLUSION QUESTION ANSWER")
+@RequestMapping(value = "/rest/chapters/conclusion/question/answer", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
-public class AlternativeController extends BController<AlternativeBO, AlternativeDTO> {
+public class AnswerController extends BController<AnswerBO, AnswerDTO> {
 	@Autowired
-	public AlternativeController(AlternativeBO service) {
+	public AnswerController(AnswerBO service) {
 		super(service);
 	}
 
 	@RequestMapping(method= RequestMethod.GET, value="/search")
-	public ResponseEntity<Collection<AlternativeDTO>> search(@QuerydslPredicate(root = Alternative.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	public ResponseEntity<Collection<AnswerDTO>> search(@QuerydslPredicate(root = Answer.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(getService().findAll(predicate, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, value="/search/page")
-	public ResponseEntity<Page<AlternativeDTO>> search(@QuerydslPredicate(root = Alternative.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	public ResponseEntity<Page<AnswerDTO>> search(@QuerydslPredicate(root = Answer.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(getService().findAll(predicate, pageable, details));
-	}
-
-	@RequestMapping(method= RequestMethod.DELETE, value="/{id}")
-	public ResponseEntity delete(@PathVariable("id") UUID codedid) {
-		return ResponseEntity.ok(getService().delete(codedid));
 	}
 }

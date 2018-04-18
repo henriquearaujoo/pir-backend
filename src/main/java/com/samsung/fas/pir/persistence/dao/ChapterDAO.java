@@ -7,7 +7,7 @@ import com.samsung.fas.pir.persistence.dao.base.BaseDAO;
 import com.samsung.fas.pir.persistence.dao.utils.SBPage;
 import com.samsung.fas.pir.persistence.models.Chapter;
 import com.samsung.fas.pir.persistence.models.QChapter;
-import com.samsung.fas.pir.persistence.repositories.IChapterRepository;
+import com.samsung.fas.pir.persistence.repositories.IChapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,11 +19,11 @@ import java.util.Collection;
 import java.util.List;
 
 @Service
-public class ChapterDAO extends BaseDAO<Chapter, Long, IChapterRepository, QChapter> {
+public class ChapterDAO extends BaseDAO<Chapter, Long, IChapter, QChapter> {
 	private	final EntityManager emanager;
 
 	@Autowired
-	public ChapterDAO(IChapterRepository repository, EntityManager emanager) {
+	public ChapterDAO(IChapter repository, EntityManager emanager) {
 		super(repository);
 		this.emanager = emanager;
 	}

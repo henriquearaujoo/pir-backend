@@ -16,7 +16,7 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 
 @Repository
-public interface IChapterRepository extends IBaseRepository<Chapter, Long, QChapter> {
+public interface IChapter extends IBaseRepository<Chapter, Long, QChapter> {
 	@Transactional
 	@Modifying(clearAutomatically = true)
 	@Query(value = "update chapter set in_use = false where pirdb.public.chapter.number = ?1", nativeQuery = true)

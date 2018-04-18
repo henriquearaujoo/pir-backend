@@ -2,13 +2,12 @@ package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.exception.RESTException;
 import com.samsung.fas.pir.persistence.models.FileData;
-import com.samsung.fas.pir.persistence.repositories.IFileRepository;
+import com.samsung.fas.pir.persistence.repositories.IFile;
 import com.samsung.fas.pir.rest.dto.FileDTO;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,11 +16,11 @@ import java.util.Date;
 
 @Service
 public class FileBO {
-	private			final 	IFileRepository 	repository;
+	private			final IFile repository;
 	private static	final 	String				path			= System.getProperty("user.home") + "/RDService/Data";
 
 	@Autowired
-	public FileBO(IFileRepository repository) {
+	public FileBO(IFile repository) {
 		this.repository	= repository;
 	}
 

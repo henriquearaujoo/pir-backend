@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Nonnull;
 
 @Repository
-public interface IPageRepository extends IBaseRepository<Page, Long, QPage> {
+public interface IPage extends IBaseRepository<Page, Long, QPage> {
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QPage root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

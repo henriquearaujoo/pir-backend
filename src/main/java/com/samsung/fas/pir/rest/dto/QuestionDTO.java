@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.samsung.fas.pir.persistence.enums.EAnswerType;
 import com.samsung.fas.pir.persistence.models.Question;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,18 +20,23 @@ public class QuestionDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private		UUID		uuid;
+	private		UUID			uuid;
 
 	@Getter
 	@Setter
 	@JsonProperty("conclusion_id")
-	private 	UUID		conclusionUUID;
+	private 	UUID			conclusionUUID;
 
 	@Getter
 	@Setter
 	@JsonProperty("description")
 	@NotBlank(message = "description.missing")
-	private 	String		description;
+	private 	String			description;
+
+	@Getter
+	@Setter
+	@JsonProperty("type")
+	private		EAnswerType		type;
 
 	@JsonProperty("alternatives")
 	@Setter
@@ -44,6 +50,7 @@ public class QuestionDTO {
 	public QuestionDTO(Question question, boolean detailed) {
 		setUuid(question.getUuid());
 		setDescription(question.getDescription());
+		setType(question.getType());
 		setConclusionUUID(question.getConclusion().getUuid());
 		setAnswers(question.getAlternatives() != null? question.getAlternatives().stream().map(item -> new AlternativeDTO(item, false)).collect(Collectors.toSet()) : null);
 	}
@@ -53,6 +60,7 @@ public class QuestionDTO {
 		Question model = new Question();
 		model.setUuid(getUuid());
 		model.setDescription(getDescription());
+		model.setType(getType());
 		return model;
 	}
 }

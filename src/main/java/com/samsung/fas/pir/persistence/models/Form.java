@@ -52,4 +52,9 @@ public class Form extends BaseID {
 	@Setter
 	@OneToMany(orphanRemoval = true, mappedBy = "form")
 	private 	Collection<FormQuestion>	questions;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "form")
+	private 	Collection<Visit>			visits;
 }

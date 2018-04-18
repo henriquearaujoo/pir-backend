@@ -116,4 +116,9 @@ public class Child extends BaseID {
 	@Setter
 	@OneToMany(mappedBy = "child")
 	private 	Collection<Answer>	answers;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "child")
+	private 	Collection<Visit>	visits;
 }
