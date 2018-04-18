@@ -9,7 +9,7 @@ import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotBlank;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
