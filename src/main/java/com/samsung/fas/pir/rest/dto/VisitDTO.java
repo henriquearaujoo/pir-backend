@@ -4,13 +4,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.samsung.fas.pir.persistence.models.Answer;
 import com.samsung.fas.pir.persistence.models.Visit;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -58,16 +62,6 @@ public class VisitDTO {
 
 	@Getter(onMethod = @__(@JsonIgnore))
 	@Setter
-	@JsonProperty(value = "mother_id", access = JsonProperty.Access.WRITE_ONLY)
-	private 		UUID		motherUUID;
-
-	@Getter(onMethod = @__(@JsonIgnore))
-	@Setter
-	@JsonProperty(value = "child_id", access = JsonProperty.Access.WRITE_ONLY)
-	private 		UUID		childUUID;
-
-	@Getter(onMethod = @__(@JsonIgnore))
-	@Setter
 	@JsonProperty(value = "chapter_id", access = JsonProperty.Access.WRITE_ONLY)
 	private 		UUID		chapterUUID;
 
@@ -81,23 +75,31 @@ public class VisitDTO {
 
 
 
+	@Getter
+	@Setter
+	@JsonProperty(value = "mother")
+	private 		ResponsibleDTO				mother;
+
+	@Getter
+	@Setter
+	@JsonProperty(value = "child")
+	private 		ChildDTO					child;
+
+	@Getter
+	@Setter
+	@JsonProperty(value = "answers")
+	private 		Collection<AnswerDTO>		answers;
+
+
+
+
+
+
 	@ApiModelProperty(readOnly = true, hidden = true)
 	@Getter
 	@Setter(onMethod = @__(@JsonIgnore))
 	@JsonProperty(value = "agent")
 	private 		UserDTO		agent;
-
-	@ApiModelProperty(readOnly = true, hidden = true)
-	@Getter
-	@Setter(onMethod = @__(@JsonIgnore))
-	@JsonProperty(value = "mother")
-	private 		MotherDTO	mother;
-
-	@ApiModelProperty(readOnly = true, hidden = true)
-	@Getter
-	@Setter(onMethod = @__(@JsonIgnore))
-	@JsonProperty(value = "child")
-	private 		ChildDTO	child;
 
 	@ApiModelProperty(readOnly = true, hidden = true)
 	@Getter
@@ -132,7 +134,7 @@ public class VisitDTO {
 		setChapter(new ChapterDTO(visit.getChapter(), false));
 		setForm(new FormDTO(visit.getForm(), false));
 		setChild(visit.getChild() != null? new ChildDTO(visit.getChild(), false) : null);
-		setMother(visit.getMother() != null? new MotherDTO(visit.getMother(), false) : null);
+		setMother(visit.getMother() != null? new ResponsibleDTO(visit.getMother(), false) : null);
 	}
 
 	@JsonIgnore
@@ -145,6 +147,9 @@ public class VisitDTO {
 		model.setAgentRating(getAgentRating());
 		model.setDoneAt(getDoneAt());
 		model.setDuration(getDuration());
+		model.setMother(getMother() != null? getMother().getModel() : null);
+		model.setChild(getChild() != null? getChild().getModel() : null);
+		model.setAnswers(getAnswers() != null? getAnswers().stream().map(AnswerDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 
 		return model;
 	}

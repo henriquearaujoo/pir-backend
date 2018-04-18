@@ -12,27 +12,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@JsonIgnore}))
-	private		UserDAO		agentDAO;
+	private		UserDAO			agentDAO;
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@JsonIgnore}))
-	private 	MotherDAO	motherDAO;
+	private 	ResponsibleDAO	responsibleDAO;
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@JsonIgnore}))
-	private	 	ChildDAO	childDAO;
+	private	 	ChildDAO		childDAO;
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@JsonIgnore}))
-	private 	ChapterDAO	chapterDAO;
+	private 	ChapterDAO		chapterDAO;
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@JsonIgnore}))
-	private 	FormDAO		formDAO;
+	private 	FormDAO			formDAO;
 
 	@Autowired
 	protected VisitBO(VisitDAO dao) {
@@ -45,11 +47,23 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 		User		agent		= getAgentDAO().findOne(create.getAgentUUID());
 		Chapter		chapter		= getChapterDAO().findOne(create.getChapterUUID());
 		Form		form		= getFormDAO().findOne(create.getFormUUID());
-		Mother		mother		= create.getMotherUUID() != null? getMotherDAO().findOne(create.getMotherUUID()) : null;
-		Child		child		= create.getChildUUID() != null? getChildDAO().findOne(create.getChildUUID()) : null;
+		Child		child		= model.getChild() != null && model.getChild().getUuid() != null? getChildDAO().findOne(model.getChild().getUuid()) : model.getChild();
+		Responsible	mother		= model.getMother() != null && model.getMother().getUuid() != null? getResponsibleDAO().findOne(model.getMother().getUuid()) : model.getMother();
 
+		if (child != null && child.getVisits() == null) {
+			child.setVisits(new ArrayList<>());
+		}
+
+		if (child != null) {
+			child.getVisits().add(model);
+		}
+
+//		if (mother != null && mother.getChildren() == null) {
+//			mother
+//		}
+
+		model.setChild(child);
 		model.setForm(form);
-		model.setMother(mother);
 		model.setChild(child);
 		model.setChapter(chapter);
 		model.setAgent(agent);

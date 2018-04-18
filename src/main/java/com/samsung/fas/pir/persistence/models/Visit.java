@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -49,13 +50,13 @@ public class Visit extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn
-	private 	Mother			mother;
+	private 	Responsible		mother;
 
 	@Getter
 	@Setter
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn
 	private 	Child			child;
 
@@ -70,4 +71,9 @@ public class Visit extends BaseID {
 	@ManyToOne(optional = false)
 	@JoinColumn
 	private 	Form			form;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "visit", cascade = CascadeType.ALL)
+	private 	Collection<Answer>		answers;
 }

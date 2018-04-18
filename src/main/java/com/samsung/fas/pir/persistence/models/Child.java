@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Collection;
@@ -119,6 +120,6 @@ public class Child extends BaseID {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "child")
+	@OneToMany(mappedBy = "child", cascade = CascadeType.MERGE)
 	private 	Collection<Visit>	visits;
 }

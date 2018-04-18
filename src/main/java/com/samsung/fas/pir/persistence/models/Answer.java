@@ -41,4 +41,10 @@ public class Answer extends BaseID {
 	@ManyToOne(optional = false)
 	@JoinColumn
 	private 	Question		question;
+
+	@Getter
+	@Setter
+	@ManyToOne(optional = false)
+	@JoinColumn
+	private 	Visit			visit;
 }
