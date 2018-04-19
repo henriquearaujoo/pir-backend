@@ -68,7 +68,7 @@ public class Visit extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false)
+	@ManyToOne
 	@JoinColumn
 	private 	Form			form;
 
