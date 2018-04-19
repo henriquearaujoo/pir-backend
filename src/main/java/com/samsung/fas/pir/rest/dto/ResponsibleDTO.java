@@ -31,12 +31,6 @@ public class ResponsibleDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty("community_id")
-	@NotBlank(message = "community.id.missing")
-	private 	UUID		communityUUID;
-
-	@Getter
-	@Setter
 	@JsonProperty("name")
 	@NotBlank(message = "name.missing")
 	private 	String		name;
@@ -126,6 +120,7 @@ public class ResponsibleDTO {
 	@Getter
 	@Setter
 	@JsonProperty("community")
+	@Valid
 	private 	CommunityDTO	community;
 
 	public ResponsibleDTO() {
@@ -176,6 +171,7 @@ public class ResponsibleDTO {
 		model.setHasWaterTreatment(hasWaterTreatment());
 		model.setObservations(getObservations());
 		model.setMother(getMother() != null? getMother().getModel() : null);
+		model.setCommunity(getCommunity().getModel());
 
 		if (model.getMother() != null) {
 			model.getMother().setResponsible(model);

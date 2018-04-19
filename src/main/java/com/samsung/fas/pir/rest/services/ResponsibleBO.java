@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.querydsl.core.types.Predicate;
+import com.samsung.fas.pir.exception.RESTException;
 import com.samsung.fas.pir.persistence.dao.CommunityDAO;
 import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
 import com.samsung.fas.pir.persistence.models.Community;
@@ -52,7 +53,7 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 	public ResponsibleDTO update(ResponsibleDTO update, UserDetails account) {
 		Responsible		model		= update.getModel();
 		Responsible		responsible	= getDao().findOne(model.getUuid());
-		Community		community	= cdao.findOne(update.getCommunityUUID());
+		Community		community	= model.getCommunity() != null? model.getCommunity().getUuid() != null? cdao.findOne(update.getCommunity().getCityUUID()) : update.getCommunity().getModel() : responsible.getCommunity();
 
 		responsible.setFamilyHasChildren(model.isFamilyHasChildren());
 		responsible.setName(model.getName());
@@ -75,7 +76,11 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 
 	protected Responsible persist(ResponsibleDTO create, UserDetails details) {
 		Responsible		model		= create.getModel();
-		Community 		community	= cdao.findOne(create.getCommunityUUID());
+		Community 		community	= model.getCommunity() != null? model.getCommunity().getUuid() != null? cdao.findOne(create.getCommunity().getCityUUID()) : create.getCommunity().getModel() : null;
+
+		if (community == null)
+			throw new RESTException("community.missing");
+
 		model.setCommunity(community);
 		return getDao().save(model);
 	}
