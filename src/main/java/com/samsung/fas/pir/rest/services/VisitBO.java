@@ -1,8 +1,11 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.samsung.fas.pir.exception.RESTException;
 import com.samsung.fas.pir.persistence.dao.*;
 import com.samsung.fas.pir.persistence.models.*;
+import com.samsung.fas.pir.rest.dto.ChildDTO;
+import com.samsung.fas.pir.rest.dto.ResponsibleDTO;
 import com.samsung.fas.pir.rest.dto.VisitDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import lombok.AccessLevel;
@@ -22,6 +25,14 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@JsonIgnore}))
+	private 	ChapterDAO		chapterDAO;
+
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@JsonIgnore}))
+	private 	FormDAO			formDAO;
+
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@JsonIgnore}))
 	private 	ResponsibleDAO	responsibleDAO;
 
 	@Getter(AccessLevel.PRIVATE)
@@ -30,11 +41,15 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@JsonIgnore}))
-	private 	ChapterDAO		chapterDAO;
+	private 	CommunityDAO	communityDAO;
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@JsonIgnore}))
-	private 	FormDAO			formDAO;
+	private 	ResponsibleBO	responsibleBO;
+
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@JsonIgnore}))
+	private 	ChildBO			childBO;
 
 	@Autowired
 	protected VisitBO(VisitDAO dao) {
@@ -47,24 +62,12 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 		User		agent		= getAgentDAO().findOne(create.getAgentUUID());
 		Chapter		chapter		= getChapterDAO().findOne(create.getChapterUUID());
 		Form		form		= getFormDAO().findOne(create.getFormUUID());
-		Child		child		= model.getChild() != null && model.getChild().getUuid() != null? getChildDAO().findOne(model.getChild().getUuid()) : model.getChild();
-		Responsible	mother		= model.getMother() != null && model.getMother().getUuid() != null? getResponsibleDAO().findOne(model.getMother().getUuid()) : model.getMother();
-
-		if (child != null && child.getVisits() == null) {
-			child.setVisits(new ArrayList<>());
-		}
-
-		if (child != null) {
-			child.getVisits().add(model);
-		}
-
-//		if (mother != null && mother.getChildren() == null) {
-//			mother
-//		}
+		Child		child		= setup(create.getChild(), account);
+		Responsible	responsible	= setup(create.getResponsible(), account);
 
 		model.setChild(child);
+		model.setResponsible(responsible);
 		model.setForm(form);
-		model.setChild(child);
 		model.setChapter(chapter);
 		model.setAgent(agent);
 
@@ -83,5 +86,25 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 		visit.setDuration(model.getDuration());
 
 		return new VisitDTO(getDao().save(visit), true);
+	}
+
+	private Responsible setup(ResponsibleDTO create, UserDetails details) {
+		if (create != null) {
+			if (create.getUuid() == null) {
+				return getResponsibleBO().persist(create, details);
+			}
+			return getResponsibleDAO().findOne(create.getUuid());
+		}
+		return null;
+	}
+
+	private Child setup(ChildDTO create, UserDetails details) {
+		if (create != null) {
+			if (create.getUuid() == null) {
+				return getChildBO().persist(create, details);
+			}
+			return getChildDAO().findOne(create.getUuid());
+		}
+		return null;
 	}
 }

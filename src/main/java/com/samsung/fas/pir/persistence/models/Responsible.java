@@ -103,7 +103,12 @@ public class Responsible extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, cascade = CascadeType.PERSIST)
 	@JoinColumn
 	private 	Community			community;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "responsible")
+	private 	Collection<Visit>	visits;
 }

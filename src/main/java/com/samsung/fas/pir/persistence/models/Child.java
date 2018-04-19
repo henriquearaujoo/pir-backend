@@ -103,13 +103,13 @@ public class Child extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn
 	private 	Responsible		mother;
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, cascade = CascadeType.PERSIST)
 	@JoinColumn
 	private 	Responsible		responsible;
 

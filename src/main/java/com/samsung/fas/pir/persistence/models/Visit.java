@@ -50,13 +50,13 @@ public class Visit extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn
-	private 	Responsible		mother;
+	private 	Responsible		responsible;
 
 	@Getter
 	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn
 	private 	Child			child;
 

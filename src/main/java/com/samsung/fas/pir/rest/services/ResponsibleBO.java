@@ -45,10 +45,7 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 
 	@Override
 	public ResponsibleDTO save(ResponsibleDTO create, UserDetails account) {
-		Responsible		model		= create.getModel();
-		Community 		community	= cdao.findOne(create.getCommunityUUID());
-		model.setCommunity(community);
-		return new ResponsibleDTO(getDao().save(model), true);
+		return new ResponsibleDTO(persist(create, account), true);
 	}
 
 	@Override
@@ -74,5 +71,12 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		responsible.setObservations(model.getObservations());
 
 		return new ResponsibleDTO(getDao().save(responsible), true);
+	}
+
+	protected Responsible persist(ResponsibleDTO create, UserDetails details) {
+		Responsible		model		= create.getModel();
+		Community 		community	= cdao.findOne(create.getCommunityUUID());
+		model.setCommunity(community);
+		return getDao().save(model);
 	}
 }

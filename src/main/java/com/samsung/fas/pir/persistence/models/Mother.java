@@ -39,9 +39,4 @@ public class Mother extends BaseNID {
 	@Setter
 	@OneToMany(mappedBy = "mother")
 	private 	Collection<Answer>	answers;
-
-	@Getter
-	@Setter
-	@OneToMany(mappedBy = "mother")
-	private 	Collection<Visit>	visits;
 }

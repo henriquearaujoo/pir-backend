@@ -23,17 +23,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 
 	@Override
 	public ChildDTO save(ChildDTO create, UserDetails account) {
-		Child		model		= create.getModel();
-		Responsible responsible	= rdao.findOne(create.getResponsibleUUID());
-		Responsible	mother		= rdao.findOne(create.getMotherUUID());
-
-		if (mother.getMother() == null)
-			throw new RESTException("not.mother");
-
-		model.setMother(mother);
-		model.setResponsible(responsible);
-
-		return new ChildDTO(getDao().save(model), true);
+		return new ChildDTO(getDao().save(persist(create, account)), true);
 	}
 
 	@Override
@@ -65,5 +55,19 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		child.setMother(mother);
 
 		return new ChildDTO(getDao().save(child), true);
+	}
+
+	protected Child persist(ChildDTO create, UserDetails details) {
+		Child		model		= create.getModel();
+		Responsible responsible	= rdao.findOne(create.getResponsibleUUID());
+		Responsible	mother		= create.getMotherUUID() != null? rdao.findOne(create.getMotherUUID()) : null;
+
+		if (mother != null && mother.getMother() == null)
+			throw new RESTException("not.mother");
+
+		model.setMother(mother);
+		model.setResponsible(responsible);
+
+		return getDao().save(model);
 	}
 }
