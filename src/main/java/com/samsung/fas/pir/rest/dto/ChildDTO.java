@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.text.ParseException;
@@ -119,24 +120,15 @@ public class ChildDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty("responsible_id")
-	@NotBlank(message = "responsible.id.missing")
-	private 	UUID			responsibleUUID;
-
-	@Getter
-	@Setter
-	@JsonProperty("mother_id")
-	private 	UUID			motherUUID;
-
-	@Getter
-	@Setter
 	@JsonProperty("mother")
-	private ResponsibleDTO mother;
+	@Valid
+	private		ResponsibleDTO 	mother;
 
 	@Getter
 	@Setter
 	@JsonProperty("responsible")
-	private ResponsibleDTO responsible;
+	@Valid
+	private		ResponsibleDTO 	responsible;
 
 	public ChildDTO() {
 		super();

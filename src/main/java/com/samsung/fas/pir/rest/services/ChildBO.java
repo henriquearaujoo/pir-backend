@@ -30,8 +30,8 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	public ChildDTO update(ChildDTO update, UserDetails account) {
 		Child		model		= update.getModel();
 		Child		child		= getDao().findOne(model.getUuid());
-		Responsible	responsible	= rdao.findOne(update.getResponsibleUUID());
-		Responsible	mother		= rdao.findOne(update.getMotherUUID());
+		Responsible responsible	= update.getResponsible() != null? update.getResponsible().getUuid() != null? rdao.findOne(update.getResponsible().getUuid()) : update.getResponsible().getModel() : child.getResponsible();
+		Responsible	mother		= update.getMother() != null? update.getMother().getUuid() != null? rdao.findOne(update.getMother().getUuid()) : update.getMother().getModel() : child.getMother();
 
 		if (mother.getMother() == null)
 			throw new RESTException("not.mother");
@@ -59,8 +59,8 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 
 	protected Child persist(ChildDTO create, UserDetails details) {
 		Child		model		= create.getModel();
-		Responsible responsible	= rdao.findOne(create.getResponsibleUUID());
-		Responsible	mother		= create.getMotherUUID() != null? rdao.findOne(create.getMotherUUID()) : null;
+		Responsible responsible	= create.getResponsible() != null? create.getResponsible().getUuid() != null? rdao.findOne(create.getResponsible().getUuid()) : create.getResponsible().getModel() : null;
+		Responsible	mother		= create.getMother() != null? create.getMother().getUuid() != null? rdao.findOne(create.getMother().getUuid()) : create.getMother().getModel() : null;
 
 		if (mother != null && mother.getMother() == null)
 			throw new RESTException("not.mother");
