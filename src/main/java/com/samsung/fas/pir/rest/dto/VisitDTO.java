@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -79,16 +80,19 @@ public class VisitDTO {
 	@Getter
 	@Setter
 	@JsonProperty(value = "responsible")
+	@Valid
 	private 		ResponsibleDTO				responsible;
 
 	@Getter
 	@Setter
 	@JsonProperty(value = "child")
+	@Valid
 	private 		ChildDTO					child;
 
 	@Getter
 	@Setter
 	@JsonProperty(value = "answers")
+	@Valid
 	private 		Collection<AnswerDTO>		answers;
 
 

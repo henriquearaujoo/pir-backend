@@ -114,6 +114,7 @@ public class ResponsibleDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("mother")
 	@Valid
 	private 	MotherDTO		mother;
 
