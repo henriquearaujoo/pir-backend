@@ -33,15 +33,13 @@ public class Test {
 			node.setProperties(clazz != null? Arrays.stream(ArrayUtils.addAll(setupFields(clazz))).collect(Collectors.groupingBy(this::getTypeName, Collectors.mapping(Field::getName, Collectors.toSet()))) : new HashMap<>());
 			node.setNodes(graph.stream().filter(item -> node.getProperties().get(node.getProperties().entrySet().stream().filter(entry -> entry.getKey().toLowerCase().contains(item.getEntity().toLowerCase())).map(Map.Entry::getKey).findAny().orElse("")) != null).collect(Collectors.toList()));
 		});
-
+		System.out.println(new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create().toJson(graph));
 		return graph;
 	}
 
+	// Recursion
 	private Field[] setupFields(Class<?> clazz) {
-		if (clazz.isInstance(Object.class)) {
-			return null;
-		}
-		return ArrayUtils.addAll(clazz.getDeclaredFields(), setupFields(clazz.getSuperclass()));
+		return ArrayUtils.addAll(clazz.getDeclaredFields(), clazz.isInstance(Object.class)? null : setupFields(clazz.getSuperclass()));
 	}
 
 	private String getTypeName(Field field) {
@@ -55,6 +53,7 @@ public class Test {
 		}
 	}
 
+	// Recursion
 	private String getCompleteTypeName(String name, ParameterizedType parameterizedType) {
 		try {
 			Type[]		types		= parameterizedType != null? parameterizedType.getActualTypeArguments() : null;
