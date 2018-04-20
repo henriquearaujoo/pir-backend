@@ -11,9 +11,7 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email", name = "email"))
@@ -29,6 +27,11 @@ public class User extends BaseID implements Serializable {
 	@Setter
 	@Column(nullable=false)
 	private		String			email;
+
+	@Getter
+	@Setter
+	@Transient
+	private Map<String, List<String>> mapingTest;
 
 	@Getter
 	@Setter

@@ -85,15 +85,15 @@ public class Chapter extends BaseID {
 	@Getter
 	@Setter
 	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
-//	@LazyCollection(LazyCollectionOption.FALSE)
-	@JoinColumn(name = "media")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@JoinColumn(name = "media_chapter_id", referencedColumnName = "id")
 	private 	Collection<FileData>	medias;
 
 	@Getter
 	@Setter
 	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
-//	@LazyCollection(LazyCollectionOption.FALSE)
-	@JoinColumn(name = "thumbnail")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@JoinColumn(name = "thumbnail_chapter_id", referencedColumnName = "id")
 	private 	Collection<FileData>	thumbnails;
 
 	@Getter
