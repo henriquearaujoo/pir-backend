@@ -6,27 +6,28 @@ import lombok.Setter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class EntityNode {
 	@Getter
 	@Setter
-	private				String					table;
+	private				String						table;
 
 	@Getter
 	@Setter
-	private				String					entity;
+	private				String						entity;
 
 	@Getter
 	@Setter
-	private 			Map<String, String> 	properties;
+	private 			Map<String, Set<String>>	properties;
 
 	@Getter
 	@Setter
-	private 			List<EntityNode> 		nodes;
+	private	transient	List<EntityNode>			nodes;
 
 	@Getter
 	@Setter
-	private	transient	boolean					visited;
+	private	transient	boolean						visited;
 
 	public EntityNode(String table, String entity) {
 		setTable(table);
