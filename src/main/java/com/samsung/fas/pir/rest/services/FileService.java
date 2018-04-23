@@ -17,8 +17,9 @@ import java.util.Date;
 
 @Service
 public class FileService {
-	private	final	HttpServletRequest	request;
-	private	final	IFileRepository		repository;
+	private	final			HttpServletRequest	request;
+	private	final			IFileRepository		repository;
+	private	static	final 	String				path			= System.getProperty("user.home") + "/RDService/Data";
 
 	@Autowired
 	public FileService(HttpServletRequest request, IFileRepository repository) {
@@ -59,13 +60,10 @@ public class FileService {
 	}
 
 	private String getUploadDir() {
-		String	uploadPath	=  request.getServletContext().getRealPath("data/files");
-
-		if(!new File(uploadPath).exists())
-			if (!new File(uploadPath).mkdirs())
+		if(!new File(path).exists())
+			if (!new File(path).mkdirs())
 				throw new RESTException("file.internal.error");
-
-		return uploadPath;
+		return path;
 	}
 
 	public boolean delete(long fileid) {
