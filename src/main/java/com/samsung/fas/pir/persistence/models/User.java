@@ -60,4 +60,21 @@ public class User extends BaseID implements Serializable {
 	@Setter
 	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "user", orphanRemoval = true)
 	private 	Account 		account;
+
+	// region Agent
+	@Getter
+	@Setter
+	@Column
+	private 	Double			latitude;
+
+	@Getter
+	@Setter
+	@Column
+	private 	Double			longitude;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "agent")
+	private		Collection<Visit>	visits;
+	// endregion
 }

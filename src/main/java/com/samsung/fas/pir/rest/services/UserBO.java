@@ -2,12 +2,9 @@ package com.samsung.fas.pir.rest.services;
 
 import com.google.common.hash.Hashing;
 import com.samsung.fas.pir.exception.RESTException;
-import com.samsung.fas.pir.persistence.dao.AgentDAO;
 import com.samsung.fas.pir.persistence.dao.CityDAO;
 import com.samsung.fas.pir.persistence.dao.ProfileDAO;
 import com.samsung.fas.pir.persistence.dao.UserDAO;
-import com.samsung.fas.pir.persistence.enums.EProfileType;
-import com.samsung.fas.pir.persistence.models.Agent;
 import com.samsung.fas.pir.persistence.models.City;
 import com.samsung.fas.pir.persistence.models.Profile;
 import com.samsung.fas.pir.persistence.models.User;
@@ -36,7 +33,7 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
-	private 	AgentDAO		agentDAO;
+	private 	UserDAO			userDAO;
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
@@ -80,9 +77,6 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 		else
 			model.getEntity().setUser(model);
 
-		if (model.getAccount().getProfile().getType().equals(EProfileType.AGENT))
-			return new UserDTO(getAgentDAO().save((Agent) model), true);
-
 		return new UserDTO(getDao().save(model), true);
 	}
 
@@ -104,6 +98,8 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 
 		user.setName(model.getName());
 		user.setEmail(model.getEmail());
+		user.setLatitude(model.getLatitude());
+		user.setLongitude(model.getLongitude());
 		user.getAddress().setComplementAdress(model.getAddress().getComplementAdress());
 		user.getAddress().setNeighborhoodAddress(model.getAddress().getNeighborhoodAddress());
 		user.getAddress().setNumberAddress(model.getAddress().getNumberAddress());

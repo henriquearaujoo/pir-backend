@@ -55,6 +55,8 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 		community.setCity(city);
 		community.setUc(model.getUc());
 		community.setRegional(model.getRegional());
+		community.setLatitude(model.getLatitude());
+		community.setLongitude(model.getLongitude());
 
 		return new CommunityDTO(getDao().save(community), true);
 	}

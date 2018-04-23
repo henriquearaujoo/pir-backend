@@ -42,6 +42,6 @@ public class StateDTO {
 		setUuid(state.getUuid());
 		setName(state.getName());
 		setUf(state.getAbbreviation());
-		setCities(state.getCities() != null && state.getCities().size() > 0 && detailed? state.getCities().stream().map(item -> new CityDTO(item, false)).collect(Collectors.toSet()) : null);
+		setCities(detailed && state.getCities() != null? state.getCities().stream().map(item -> new CityDTO(item, false)).collect(Collectors.toSet()) : null);
 	}
 }

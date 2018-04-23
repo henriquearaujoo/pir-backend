@@ -18,7 +18,7 @@ import java.util.UUID;
 public class Rule extends BaseID {
 	@Getter
 	@Setter
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false)
 	@JoinColumn
 	private		Profile			profile;
 

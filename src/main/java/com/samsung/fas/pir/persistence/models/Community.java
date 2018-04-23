@@ -131,6 +131,16 @@ public class Community extends BaseID {
 
 	@Getter
 	@Setter
+	@Column
+	private 	Double			latitude;
+
+	@Getter
+	@Setter
+	@Column
+	private 	Double			longitude;
+
+	@Getter
+	@Setter
 	@OneToMany(mappedBy = "community")
 	private 	Collection<Responsible>	responsibles;
 

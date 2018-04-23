@@ -141,6 +141,16 @@ public class CommunityDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("latitude")
+	private 	Double			latitude;
+
+	@Getter
+	@Setter
+	@JsonProperty("longitude")
+	private 	Double			longitude;
+
+	@Getter
+	@Setter
 	@JsonProperty("city_id")
 	@NotNull(message = "city.id.missing")
 	private 	UUID			cityUUID;
@@ -178,6 +188,8 @@ public class CommunityDTO {
 		setCommunityZone(community.getCommunityZone().toString());
 		setRegional(community.getRegional());
 		setUc(community.getUc());
+		setLatitude(community.getLatitude());
+		setLongitude(community.getLongitude());
 	}
 
 	@JsonIgnore
@@ -204,6 +216,8 @@ public class CommunityDTO {
 		model.setRegional(getRegional());
 		model.setUc(getUc());
 		model.setCommunityZone(ECommunityZone.setValue(getCommunityZone()));
+		model.setLatitude(getLatitude());
+		model.setLongitude(getLongitude());
 		return model;
 	}
 }
