@@ -21,6 +21,6 @@ public class IDCoder {
 //		String		todecode	= Optional.ofNullable(base != null && !base.trim().isEmpty()? base : null).orElse(null);
 //		ByteBuffer 	buffer 		= todecode != null? ByteBuffer.wrap(Base64.decodeBase64(todecode)) : null;
 //		return buffer != null? new UUID(buffer.getLong(), buffer.getLong()) : null;
-		return UUID.fromString(base);
+		return base != null? UUID.fromString(base) : null;
 	}
 }
