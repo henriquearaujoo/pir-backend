@@ -46,7 +46,7 @@ public class Visit extends BaseID {
 	@Setter
 	@ManyToOne(optional = false)
 	@JoinColumn
-	private 	User			agent;
+	private 	Agent			agent;
 
 	@Getter
 	@Setter

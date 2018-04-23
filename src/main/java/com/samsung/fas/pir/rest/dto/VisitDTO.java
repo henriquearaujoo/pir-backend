@@ -135,7 +135,7 @@ public class VisitDTO {
 		setDoneAt(visit.getDoneAt());
 		setDuration(visit.getDuration());
 
-		setAgent(new UserDTO(visit.getAgent(), false));
+//		setAgent(new UserDTO(visit.getAgent(), false));
 		setChapter(new ChapterDTO(visit.getChapter(), false));
 		setForm(new FormDTO(visit.getForm(), false));
 		setChild(visit.getChild() != null? new ChildDTO(visit.getChild(), false) : null);

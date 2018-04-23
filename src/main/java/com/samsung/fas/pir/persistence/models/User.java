@@ -15,6 +15,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email", name = "email"))
+@Inheritance(strategy = InheritanceType.JOINED)
 @DynamicUpdate
 @DynamicInsert
 public class User extends BaseID implements Serializable {
@@ -59,13 +60,4 @@ public class User extends BaseID implements Serializable {
 	@Setter
 	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "user", orphanRemoval = true)
 	private 	Account 		account;
-
-	// region Agent
-
-	@Getter
-	@Setter
-	@OneToMany(mappedBy = "agent")
-	private 	Collection<Visit>	visits;
-
-	// endregion
 }

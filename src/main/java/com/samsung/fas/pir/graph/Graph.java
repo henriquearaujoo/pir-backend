@@ -71,6 +71,7 @@ public class Graph {
 					}
 				}
 			}
+
 			return name.concat(">");
 		} catch (Exception e) {
 			return name;

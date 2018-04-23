@@ -1,11 +1,10 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.persistence.dao.UserDAO;
 import com.samsung.fas.pir.persistence.models.User;
 import com.samsung.fas.pir.rest.controllers.base.BController;
 import com.samsung.fas.pir.rest.dto.UserDTO;
-import com.samsung.fas.pir.rest.services.UsersBO;
+import com.samsung.fas.pir.rest.services.UserBO;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,9 +24,9 @@ import java.util.Collection;
 @Api(value = "Users", description = "REST Controller for Users", tags = "USERS")
 @RequestMapping(value = "/rest/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
-public class UserController extends BController<UsersBO, UserDTO> {
+public class UserController extends BController<UserBO, UserDTO> {
 	@Autowired
-	public UserController(UsersBO service) {
+	public UserController(UserBO service) {
 		super(service);
 	}
 

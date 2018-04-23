@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@JsonIgnore}))
-	private		UserDAO			agentDAO;
+	private		AgentDAO		agentDAO;
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@JsonIgnore}))
@@ -59,7 +59,7 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 	@Override
 	public VisitDTO save(VisitDTO create, UserDetails account) {
 		Visit		model		= create.getModel();
-		User		agent		= getAgentDAO().findOne(create.getAgentUUID());
+		Agent		agent		= getAgentDAO().findOne(create.getAgentUUID());
 		Chapter		chapter		= getChapterDAO().findOne(create.getChapterUUID());
 		Form		form		= getFormDAO().findOne(create.getFormUUID());
 		Child		child		= setup(create.getChild(), account);
