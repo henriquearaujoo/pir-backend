@@ -42,39 +42,39 @@ public class Query {
 	public Query(EntityManager manager) {
 		setManager(manager);
 
-		Path chapter = new Path();
-		chapter.setEntity("Chapter");
-
-		Path child = new Path();
-		child.setEntity("Child");
-
-		Path mother = new Path();
-		mother.setEntity("Mother");
-		mother.setJoins(new ArrayList<>());
-
-		Path responsible = new Path();
-		responsible.setEntity("Responsible");
-		responsible.setJoins(new ArrayList<>());
-		responsible.getJoins().add(mother);
-		responsible.getJoins().add(child);
-
-		Path agent = new Path();
-		agent.setEntity("User");
-
-		Path visit = new Path();
-		visit.setEntity("Visit");
-		visit.setJoins(new ArrayList<>());
-		visit.getJoins().add(agent);
-		visit.getJoins().add(chapter);
-		visit.getJoins().add(responsible);
-
-		Class<?> clazz = findClass("com.samsung.fas.pir", "Mother", Table.class);
-		Class<?> clazz2 = findClass("com.samsung.fas.pir", "Child", Table.class);
-
-		System.out.println(getPropertyName(clazz, clazz2.getDeclaredFields()));
-
-
-		System.out.println(query(visit, null, null, null).toString());
+//		Path chapter = new Path();
+//		chapter.setEntity("Chapter");
+//
+//		Path child = new Path();
+//		child.setEntity("Child");
+//
+//		Path mother = new Path();
+//		mother.setEntity("Mother");
+//		mother.setJoins(new ArrayList<>());
+//
+//		Path responsible = new Path();
+//		responsible.setEntity("Responsible");
+//		responsible.setJoins(new ArrayList<>());
+//		responsible.getJoins().add(mother);
+//		responsible.getJoins().add(child);
+//
+//		Path agent = new Path();
+//		agent.setEntity("User");
+//
+//		Path visit = new Path();
+//		visit.setEntity("Visit");
+//		visit.setJoins(new ArrayList<>());
+//		visit.getJoins().add(agent);
+//		visit.getJoins().add(chapter);
+//		visit.getJoins().add(responsible);
+//
+//		Class<?> clazz = findClass("com.samsung.fas.pir", "Mother", Table.class);
+//		Class<?> clazz2 = findClass("com.samsung.fas.pir", "Child", Table.class);
+//
+//		System.out.println(getPropertyName(clazz, clazz2.getDeclaredFields()));
+//
+//
+//		System.out.println(query(visit, null, null, null).toString());
 	}
 
 	public JPAQuery<?> query(Path root, JPAQuery<?> query, EntityPathBase<?> rootPath, List<EntityPathBase<?>> paths) {
