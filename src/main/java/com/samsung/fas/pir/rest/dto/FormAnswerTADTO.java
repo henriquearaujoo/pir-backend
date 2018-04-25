@@ -7,11 +7,10 @@ import com.samsung.fas.pir.persistence.models.FormAnswerTA;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
-//@ApiModel
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FormAnswerTADTO {

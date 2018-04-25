@@ -5,8 +5,8 @@ import com.samsung.fas.pir.persistence.enums.EProfileType;
 import com.samsung.fas.pir.persistence.models.Profile;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.UUID;
 

@@ -44,7 +44,7 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 		community.hasElementarySchool(model.hasElementarySchool());
 		community.hasHighSchool(model.hasHighSchool());
 		community.hasCollege(model.hasCollege());
-		community.hasEletricity(model.hasEletricity());
+		community.hasElectricity(model.hasElectricity());
 		community.hasCommunityCenter(model.hasCommunityCenter());
 		community.hasReligiousPlace(model.hasReligiousPlace());
 		community.hasCulturalEvents(model.hasCulturalEvents());

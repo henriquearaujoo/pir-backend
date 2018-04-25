@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.graph;
 
 import com.google.gson.GsonBuilder;
+import com.samsung.fas.pir.persistence.utils.Alias;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,7 +33,7 @@ public class Graph {
 
 		graph.forEach(node -> {
 			Class<?>	clazz	= classes.stream().filter(item -> item.getSimpleName().equalsIgnoreCase(node.getEntity())).findAny().orElse(null);
-			node.setProperties(clazz != null? Arrays.stream(ArrayUtils.addAll(setupFields(clazz))).map(item -> new Property(item.getName(), getTypeName(item))).collect(Collectors.toList()) : new ArrayList<>());
+			node.setProperties(clazz != null? Arrays.stream(ArrayUtils.addAll(setupFields(clazz))).map(item -> new Property(item.getName(), getTypeName(item), item.getAnnotation(Alias.class) != null? item.getAnnotation(Alias.class).value() : null)).collect(Collectors.toList()) : new ArrayList<>());
 			node.setNodes(graph.stream().filter(item ->  node.getProperties().stream().filter(n -> n.getType().toLowerCase().contains(item.getEntity().toLowerCase())).findAny().orElse(null) != null).collect(Collectors.toList()));
 		});
 

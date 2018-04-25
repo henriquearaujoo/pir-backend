@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 public class GreetingsBO extends BaseBO<Greetings, GreetingsDAO, GreetingsDTO, Long> {
 	private	final ChapterDAO cdao;
@@ -36,7 +34,7 @@ public class GreetingsBO extends BaseBO<Greetings, GreetingsDAO, GreetingsDTO, L
 		Greetings	greetings	= getDao().findOne(model.getUuid());
 
 		greetings.setDescription(model.getDescription());
-		greetings.setEletronics(model.isEletronics());
+		greetings.setElectronics(model.isElectronics());
 		greetings.setStove(model.isStove());
 		greetings.setSit(model.isSit());
 		greetings.setGoback(model.isGoback());

@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.Greetings;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -58,7 +58,7 @@ public class GreetingsDTO {
 		setUuid(greetings.getUuid());
 		setChapterUUID(greetings.getChapter().getUuid());
 		setDescription(greetings.getDescription());
-		setEletronics(greetings.isEletronics());
+		setEletronics(greetings.isElectronics());
 		setSit(greetings.isSit());
 		setGoback(greetings.isGoback());
 		setStove(greetings.isStove());
@@ -71,7 +71,7 @@ public class GreetingsDTO {
 		e.setDescription(getDescription());
 		e.setGoback(isGoback());
 		e.setSit(isSit());
-		e.setEletronics(isEletronics());
+		e.setElectronics(isEletronics());
 		e.setStove(isStove());
 		return e;
 	}

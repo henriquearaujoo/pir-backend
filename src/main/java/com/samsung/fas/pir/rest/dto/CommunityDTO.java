@@ -9,8 +9,8 @@ import com.samsung.fas.pir.persistence.models.Community;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
@@ -176,7 +176,7 @@ public class CommunityDTO {
 		hasElementarySchool(community.hasElementarySchool());
 		hasHighSchool(community.hasHighSchool());
 		hasCollege(community.hasCollege());
-		hasEletricity(community.hasEletricity());
+		hasEletricity(community.hasElectricity());
 		hasCommunityCenter(community.hasCommunityCenter());
 		hasReligiousPlace(community.hasReligiousPlace());
 		hasCulturalEvents(community.hasCulturalEvents());
@@ -206,7 +206,7 @@ public class CommunityDTO {
 		model.hasElementarySchool(hasElementarySchool());
 		model.hasHighSchool(hasHighSchool());
 		model.hasCollege(hasCollege());
-		model.hasEletricity(hasEletricity());
+		model.hasElectricity(hasEletricity());
 		model.hasCommunityCenter(hasCommunityCenter());
 		model.hasReligiousPlace(hasReligiousPlace());
 		model.hasCulturalEvents(hasCulturalEvents());

@@ -15,8 +15,14 @@ public class Property {
 	@JsonProperty("type")
 	private		String		type;
 
-	public Property(String property, String type) {
+	@Getter
+	@Setter
+	@JsonProperty("alias")
+	private 	String		alias;
+
+	public Property(String property, String type, String alias) {
 		setProperty(property);
 		setType(type);
+		setAlias(alias);
 	}
 }

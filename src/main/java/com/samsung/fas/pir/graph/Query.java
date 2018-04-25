@@ -1,17 +1,17 @@
 package com.samsung.fas.pir.graph;
 
+import com.google.gson.GsonBuilder;
 import com.querydsl.core.JoinType;
 import com.querydsl.core.QueryFactory;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.samsung.fas.pir.persistence.models.Chapter;
-import com.samsung.fas.pir.persistence.models.QVisit;
-import com.samsung.fas.pir.persistence.models.Visit;
+import com.samsung.fas.pir.persistence.models.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +27,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,22 +41,76 @@ public class Query {
 	@Autowired
 	public Query(EntityManager manager) {
 		setManager(manager);
-		List<?> list = doQuery(new ArrayList<>(Arrays.asList("Visit", "Child", "Mother"))).fetch();
-		System.out.println(doQuery(new ArrayList<>(Arrays.asList("Visit", "Child", "Mother"))).fetchAll());
+
+		Path chapter = new Path();
+		chapter.setEntity("Chapter");
+
+		Path child = new Path();
+		child.setEntity("Child");
+
+		Path mother = new Path();
+		mother.setEntity("Mother");
+		mother.setJoins(new ArrayList<>());
+
+		Path responsible = new Path();
+		responsible.setEntity("Responsible");
+		responsible.setJoins(new ArrayList<>());
+		responsible.getJoins().add(mother);
+		responsible.getJoins().add(child);
+
+		Path agent = new Path();
+		agent.setEntity("User");
+
+		Path visit = new Path();
+		visit.setEntity("Visit");
+		visit.setJoins(new ArrayList<>());
+		visit.getJoins().add(agent);
+		visit.getJoins().add(chapter);
+		visit.getJoins().add(responsible);
+
+		Class<?> clazz = findClass("com.samsung.fas.pir", "Mother", Table.class);
+		Class<?> clazz2 = findClass("com.samsung.fas.pir", "Child", Table.class);
+
+		System.out.println(getPropertyName(clazz, clazz2.getDeclaredFields()));
+
+
+		System.out.println(query(visit, null, null, null).toString());
 	}
 
-	public JPAQuery<?> doQuery(ArrayList<String> classes) {
-		JPAQuery<?> 				query	= new JPAQuery<>(manager);
-		EntityPathBase<?>[]			paths	= classes.stream().map(className -> path(findClass("com.samsung.fas.pir", className, Table.class))).toArray(EntityPathBase<?>[]::new);
-		query 								= query.select(paths).from(path(findClass("com.samsung.fas.pir", classes.get(0), Table.class)));
+	public JPAQuery<?> query(Path root, JPAQuery<?> query, EntityPathBase<?> rootPath, List<EntityPathBase<?>> paths) {
+		Class<?>					clazz	= findClass("com.samsung.fas.pir", root.getEntity(), Table.class);
+		EntityPathBase<?>			path	= path(clazz);
 
-		for (int i = 1; i < paths.length; i++) {
-			// TODO: Change id for FK_ID
-			query.getMetadata().addJoin(JoinType.FULLJOIN, paths[i]);
-			query.getMetadata().addJoinCondition(Expressions.stringPath(paths[i - 1], "id").eq(Expressions.stringPath(paths[i], "id")));
+		if (paths != null) {
+			paths.add(path);
+		} else {
+			paths = new ArrayList<>();
+			paths.add(path);
 		}
 
-		return query;
+		if (query != null && path != null) {
+			query.getMetadata().addJoin(JoinType.FULLJOIN, path);
+			query.getMetadata().addJoinCondition(Expressions.stringPath(rootPath, getPropertyName(path.getType(), rootPath.getType().getDeclaredFields()).concat("id")).eq(Expressions.stringPath(path, getPropertyName(rootPath.getType(), path.getType().getDeclaredFields()).concat("id"))));
+		} else {
+			query = new JPAQuery<>(manager).select(paths.toArray(new EntityPathBase<?>[0])).from(path);
+		}
+
+		if (root.getJoins() != null) {
+			for (Path node : root.getJoins()) {
+				query(node, query, path, paths);
+			}
+		}
+
+		return query.select(paths.toArray(new EntityPathBase<?>[0]));
+	}
+
+	private String getPropertyName(Class<?> type, Field[] fields) {
+		for (Field field : fields) {
+			if (field.getType() == type) {
+				return field.getName().toLowerCase().concat(".");
+			}
+		}
+		return "";
 	}
 
 	@SuppressWarnings("SameParameterValue")
