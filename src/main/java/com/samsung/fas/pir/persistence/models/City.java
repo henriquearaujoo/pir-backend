@@ -1,16 +1,12 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.persistence.models.base.BaseID;
-import com.samsung.fas.pir.persistence.utils.Alias;
+import com.samsung.fas.pir.persistence.annotations.Alias;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "cities")

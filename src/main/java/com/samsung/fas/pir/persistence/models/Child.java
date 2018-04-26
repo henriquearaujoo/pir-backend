@@ -2,7 +2,7 @@ package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.persistence.enums.EChildGender;
 import com.samsung.fas.pir.persistence.models.base.BaseID;
-import com.samsung.fas.pir.persistence.utils.Alias;
+import com.samsung.fas.pir.persistence.annotations.Alias;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -13,7 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Collection;
 import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Table(name = "child")

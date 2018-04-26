@@ -2,7 +2,7 @@ package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.persistence.enums.EAnswerType;
 import com.samsung.fas.pir.persistence.models.base.BaseID;
-import com.samsung.fas.pir.persistence.utils.Alias;
+import com.samsung.fas.pir.persistence.annotations.Alias;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -11,7 +11,6 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Collection;
-import java.util.UUID;
 
 @Entity
 @Table(name = "alternatives", uniqueConstraints = @UniqueConstraint(columnNames = {"description", "question_id"}, name = "answer"))

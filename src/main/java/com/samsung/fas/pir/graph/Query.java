@@ -1,36 +1,23 @@
 package com.samsung.fas.pir.graph;
 
-import com.google.gson.GsonBuilder;
 import com.querydsl.core.JoinType;
-import com.querydsl.core.QueryFactory;
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.PathBuilder;
-import com.querydsl.core.types.dsl.StringPath;
-import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.samsung.fas.pir.persistence.models.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.Criteria;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Generated;
 import javax.persistence.EntityManager;
 import javax.persistence.Table;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class Query {
@@ -41,40 +28,6 @@ public class Query {
 	@Autowired
 	public Query(EntityManager manager) {
 		setManager(manager);
-
-//		Path chapter = new Path();
-//		chapter.setEntity("Chapter");
-//
-//		Path child = new Path();
-//		child.setEntity("Child");
-//
-//		Path mother = new Path();
-//		mother.setEntity("Mother");
-//		mother.setJoins(new ArrayList<>());
-//
-//		Path responsible = new Path();
-//		responsible.setEntity("Responsible");
-//		responsible.setJoins(new ArrayList<>());
-//		responsible.getJoins().add(mother);
-//		responsible.getJoins().add(child);
-//
-//		Path agent = new Path();
-//		agent.setEntity("User");
-//
-//		Path visit = new Path();
-//		visit.setEntity("Visit");
-//		visit.setJoins(new ArrayList<>());
-//		visit.getJoins().add(agent);
-//		visit.getJoins().add(chapter);
-//		visit.getJoins().add(responsible);
-//
-//		Class<?> clazz = findClass("com.samsung.fas.pir", "Mother", Table.class);
-//		Class<?> clazz2 = findClass("com.samsung.fas.pir", "Child", Table.class);
-//
-//		System.out.println(getPropertyName(clazz, clazz2.getDeclaredFields()));
-//
-//
-//		System.out.println(query(visit, null, null, null).toString());
 	}
 
 	public JPAQuery<?> query(Path root, JPAQuery<?> query, EntityPathBase<?> rootPath, List<EntityPathBase<?>> paths) {
