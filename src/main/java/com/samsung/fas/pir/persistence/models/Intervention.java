@@ -14,6 +14,7 @@ import javax.persistence.Table;
 @Table(name = "intervention")
 @DynamicUpdate
 @DynamicInsert
+@Alias("Intervenção")
 public class Intervention extends BaseNID {
 	@Getter
 	@Setter

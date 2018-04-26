@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Table(name = "answers", uniqueConstraints = @UniqueConstraint(columnNames = {"child_id", "alternative_id", "mother_id", "question_id"}, name = "answer"))
 @DynamicUpdate
 @DynamicInsert
+@Alias("Resposta")
 public class Answer extends BaseID {
 	@Getter
 	@Setter

@@ -10,11 +10,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "cities")
+@Alias("Município")
 public class City extends BaseID {
 	@Getter
 	@Setter
 	@Column(name="name", nullable=false)
-	@Alias("Nome")
+	@Alias("Município")
 	private		String		name;
 	
 	@Getter

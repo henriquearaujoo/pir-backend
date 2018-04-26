@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.persistence.models;
 
+import com.samsung.fas.pir.persistence.annotations.Alias;
 import com.samsung.fas.pir.persistence.models.base.BaseNID;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,35 +17,25 @@ import java.util.UUID;
 @Table(name = "conslusions")
 @DynamicUpdate
 @DynamicInsert
+@Alias("Conclusão")
 public class Conclusion extends BaseNID {
-	@Getter
-	@Setter
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
-	private		long			id;
-
-	@Getter
-	@Setter
-	@Column(insertable = false, updatable = false, nullable = false, unique = true, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
-	@Type(type = "org.hibernate.type.PostgresUUIDType")
-	@Generated(GenerationTime.INSERT)
-	private 	UUID 			uuid;
-
 	@Getter
 	@Setter
 	@MapsId
 	@OneToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id")
+	@Alias("Capítulo")
 	private 	Chapter			chapter;
 
 	@Getter
 	@Setter
 	@Column(nullable = false, columnDefinition = "TEXT")
+	@Alias("Descrição")
 	private 	String			description;
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "conclusion", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Alias("Questões")
 	private 	Set<Question>	questions;
 }

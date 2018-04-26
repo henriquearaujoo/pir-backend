@@ -10,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "states")
+@Alias("Estado")
 public class State extends BaseID {
 	@Getter
 	@Setter

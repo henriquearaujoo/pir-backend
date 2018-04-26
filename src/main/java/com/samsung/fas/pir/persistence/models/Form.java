@@ -16,6 +16,7 @@ import java.util.Collection;
 @Table(name = "forms", uniqueConstraints = {@UniqueConstraint(name = "zone", columnNames = {"version", "age_zone"})})
 @DynamicUpdate
 @DynamicInsert
+@Alias("Formulário")
 public class Form extends BaseID {
 	@Getter
 	@Setter

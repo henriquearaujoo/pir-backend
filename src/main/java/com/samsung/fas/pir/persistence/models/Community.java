@@ -17,6 +17,7 @@ import java.util.Collection;
 @Table(name = "community", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "city_id"}, name = "community"))
 @DynamicUpdate
 @DynamicInsert
+@Alias("Comunidade")
 public class Community extends BaseID {
 	@Getter
 	@Setter

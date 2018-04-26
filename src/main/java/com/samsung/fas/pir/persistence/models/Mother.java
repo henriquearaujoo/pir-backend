@@ -16,6 +16,7 @@ import java.util.Collection;
 @Table(name = "mother")
 @DynamicUpdate
 @DynamicInsert
+@Alias("Mãe")
 public class Mother extends BaseNID {
 	@Getter
 	@Setter

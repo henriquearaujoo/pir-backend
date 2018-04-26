@@ -18,6 +18,7 @@ import java.util.Date;
 @Table(name = "responsible")
 @DynamicUpdate
 @DynamicInsert
+@Alias("Responsável")
 public class Responsible extends BaseID {
 	@Getter
 	@Setter

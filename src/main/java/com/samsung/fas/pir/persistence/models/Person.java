@@ -14,6 +14,7 @@ import javax.persistence.Table;
 @Table(name = "person", uniqueConstraints = @UniqueConstraint(columnNames = "cpf", name = "cpf"))
 @DynamicUpdate
 @DynamicInsert
+@Alias("Pessoa Física")
 public class Person extends BaseNID {
 	@Getter
 	@Setter

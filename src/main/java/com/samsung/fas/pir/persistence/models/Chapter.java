@@ -16,6 +16,7 @@ import java.util.Collection;
 @Table(name = "chapter", uniqueConstraints = @UniqueConstraint(columnNames= {"number", "version"}, name = "chapter_version"))
 @DynamicUpdate
 @DynamicInsert
+@Alias("Capítulo")
 public class Chapter extends BaseID {
 	@Getter
 	@Setter

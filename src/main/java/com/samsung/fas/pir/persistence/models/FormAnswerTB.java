@@ -15,6 +15,7 @@ import javax.persistence.Table;
 @Table(name = "answer_type_b", uniqueConstraints = @UniqueConstraint(name = "question", columnNames = {"child_id", "question_id"}))
 @DynamicUpdate
 @DynamicInsert
+@Alias("Resposta Formulário B")
 public class FormAnswerTB extends BaseID {
 	@Accessors(fluent = true)
 	@Getter

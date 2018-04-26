@@ -14,6 +14,7 @@ import javax.persistence.Table;
 @Table(name = "entity", uniqueConstraints = @UniqueConstraint(columnNames = "cnpj", name = "cnpj"))
 @DynamicUpdate
 @DynamicInsert
+@Alias("Pessoa Jurídica")
 public class LegalEntity extends BaseNID {
 	@Getter
 	@Setter

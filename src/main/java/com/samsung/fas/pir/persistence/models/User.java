@@ -19,6 +19,7 @@ import java.util.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DynamicUpdate
 @DynamicInsert
+@Alias("Usuário")
 public class User extends BaseID implements Serializable {
 	@Getter
 	@Setter

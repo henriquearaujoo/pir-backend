@@ -15,6 +15,7 @@ import java.util.Date;
 @Table(name = "visits")
 @DynamicUpdate
 @DynamicInsert
+@Alias("Visita")
 public class Visit extends BaseID {
 	@Getter
 	@Setter

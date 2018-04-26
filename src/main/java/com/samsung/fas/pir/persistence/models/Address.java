@@ -15,6 +15,7 @@ import java.io.Serializable;
 @Table(name = "address")
 @DynamicUpdate
 @DynamicInsert
+@Alias("Endereço")
 public class Address extends BaseNID implements Serializable {
 	@Getter
 	@Setter

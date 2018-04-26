@@ -16,6 +16,7 @@ import java.util.Collection;
 @Table(name = "alternatives", uniqueConstraints = @UniqueConstraint(columnNames = {"description", "question_id"}, name = "answer"))
 @DynamicUpdate
 @DynamicInsert
+@Alias("Alternativa")
 public class Alternative extends BaseID {
 	@Getter
 	@Setter
