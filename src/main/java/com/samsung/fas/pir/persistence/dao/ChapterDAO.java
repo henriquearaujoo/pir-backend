@@ -34,21 +34,21 @@ public class ChapterDAO extends BaseDAO<Chapter, Long, IChapter, QChapter> {
 
 	public Collection<Chapter> findAllValid() {
 		JPAQuery<Chapter>	query 		= new JPAQuery<>(emanager);
-		QChapter 			chapter		= new QChapter("chapters");
+		QChapter 			chapter		= QChapter.chapter1;
 		QChapter 			achapter	= new QChapter("active_chapters");
 		return query.select(chapter).from(chapter).innerJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).orderBy(chapter.chapter.asc()).orderBy(chapter.version.asc()).fetch();
 	}
 
 	public List<Chapter> findAllValid(Predicate predicate) {
 		JPAQuery<Chapter>	query 		= new JPAQuery<>(emanager);
-		QChapter 			chapter		= new QChapter("chapters");
+		QChapter 			chapter		= QChapter.chapter1;
 		QChapter 			achapter	= new QChapter("active_chapters");
 		return query.select(chapter).from(chapter).innerJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue()).and(predicate)).fetch();
 	}
 
 	public Page<?> findAllValid(Pageable pageable) {
 		JPAQuery<Chapter>	query 		= new JPAQuery<>(emanager);
-		QChapter 			chapter		= new QChapter("chapters");
+		QChapter 			chapter		= QChapter.chapter1;
 		QChapter 			achapter	= new QChapter("active_chapters");
 		JPAQuery<Chapter>	result		= query.select(chapter).from(chapter).innerJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue()));
 		Query				page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, "chapters"));
@@ -57,7 +57,7 @@ public class ChapterDAO extends BaseDAO<Chapter, Long, IChapter, QChapter> {
 
 	public Page<?> findAllValid(Predicate predicate, Pageable pageable) {
 		JPAQuery<Chapter>	query 		= new JPAQuery<>(emanager);
-		QChapter 			chapter		= new QChapter("chapters");
+		QChapter 			chapter		= QChapter.chapter1;
 		QChapter 			achapter	= new QChapter("active_chapters");
 		JPAQuery<Chapter>	result		= query.select(chapter).from(chapter).innerJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue()).and(predicate));
 		Query				page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, "chapters"));
@@ -66,21 +66,21 @@ public class ChapterDAO extends BaseDAO<Chapter, Long, IChapter, QChapter> {
 
 	public Collection<Chapter> findAllInvalid() {
 		JPAQuery<Chapter>	query 		= new JPAQuery<>(emanager);
-		QChapter 			chapter		= new QChapter("chapters");
+		QChapter 			chapter		= QChapter.chapter1;
 		QChapter 			achapter	= new QChapter("active_chapters");
 		return query.select(chapter).from(chapter).leftJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).where(chapter.id.isNull()).fetch();
 	}
 
 	public List<Chapter> findAllInvalid(Predicate predicate) {
 		JPAQuery<Chapter>	query 		= new JPAQuery<>(emanager);
-		QChapter 			chapter		= new QChapter("chapters");
+		QChapter 			chapter		= QChapter.chapter1;
 		QChapter 			achapter	= new QChapter("active_chapters");
 		return query.select(chapter).from(chapter).leftJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).where(chapter.id.isNull().and(predicate)).fetch();
 	}
 
 	public Page<?> findAllInvalid(Pageable pageable) {
 		JPAQuery<Chapter>	query 		= new JPAQuery<>(emanager);
-		QChapter 			chapter		= new QChapter("chapters");
+		QChapter 			chapter		= QChapter.chapter1;
 		QChapter 			achapter	= new QChapter("active_chapters");
 		JPAQuery<Chapter>	result		= query.select(chapter).from(chapter).leftJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).where(chapter.id.isNull());
 		Query				page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, "chapters"));
@@ -89,7 +89,7 @@ public class ChapterDAO extends BaseDAO<Chapter, Long, IChapter, QChapter> {
 
 	public Page<?> findAllInvalid(Predicate predicate, Pageable pageable) {
 		JPAQuery<Chapter>	query 		= new JPAQuery<>(emanager);
-		QChapter 			chapter		= new QChapter("chapters");
+		QChapter 			chapter		= QChapter.chapter1;
 		QChapter 			achapter	= new QChapter("active_chapters");
 		JPAQuery<Chapter>	result		= query.select(chapter).from(chapter).leftJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).where(chapter.id.isNull().and(predicate));
 		Query				page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, "chapters"));
