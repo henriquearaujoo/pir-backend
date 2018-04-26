@@ -4,6 +4,7 @@ import com.querydsl.core.JoinType;
 import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
+import com.samsung.fas.pir.persistence.annotations.Alias;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +35,7 @@ public class Query {
 		Class<?>					clazz	= findClass("com.samsung.fas.pir", root.getEntity(), Table.class);
 		EntityPathBase<?>			path	= path(clazz);
 
+
 		if (paths != null) {
 			paths.add(path);
 		} else {
@@ -42,6 +44,7 @@ public class Query {
 		}
 
 		if (query != null && path != null) {
+			path.as(clazz.getAnnotation(Alias.class) != null? clazz.getAnnotation(Alias.class).value() : path.getMetadata().getName());
 			query.getMetadata().addJoin(JoinType.FULLJOIN, path);
 			query.getMetadata().addJoinCondition(Expressions.stringPath(rootPath, getPropertyName(path.getType(), rootPath.getType().getDeclaredFields()).concat("id")).eq(Expressions.stringPath(path, getPropertyName(rootPath.getType(), path.getType().getDeclaredFields()).concat("id"))));
 		} else {
