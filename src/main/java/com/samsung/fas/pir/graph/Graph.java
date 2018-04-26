@@ -31,7 +31,7 @@ public class Graph {
 	@SuppressWarnings("SameParameterValue")
 	private List<Node> setup(String prefix) {
 		Set<Class<?>> 	classes	= new Reflections(prefix).getTypesAnnotatedWith(Table.class);
-		List<Node>		graph	= classes.stream().map(item -> new Node(item.getAnnotation(Table.class).name(), item.getSimpleName())).collect(Collectors.toList());
+		List<Node>		graph	= classes.stream().map(item -> new Node(item.getAnnotation(Table.class).name(), item.getSimpleName(), item.getAnnotation(Alias.class) != null? item.getAnnotation(Alias.class).value() : null)).collect(Collectors.toList());
 
 		graph.forEach(node -> {
 			Class<?>	clazz	= classes.stream().filter(item -> item.getSimpleName().equalsIgnoreCase(node.getEntity())).findAny().orElse(null);

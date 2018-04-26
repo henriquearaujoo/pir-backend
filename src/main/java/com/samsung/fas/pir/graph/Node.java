@@ -24,6 +24,11 @@ public class Node {
 
 	@Getter
 	@Setter
+	@JsonProperty(value = "alias", access = JsonProperty.Access.READ_ONLY)
+	private				String				alias;
+
+	@Getter
+	@Setter
 	@JsonProperty(value = "properties", access = JsonProperty.Access.READ_ONLY)
 	private				List<Property>		properties;
 
@@ -32,19 +37,14 @@ public class Node {
 	@JsonProperty("nodes")
 	private	transient	List<Node>			nodes;
 
-	@Getter
-	@Setter
-	@JsonProperty("visited")
-	private	transient	boolean				visited;
-
 	public Node() {
 		super();
 	}
 
-	public Node(String table, String entity) {
+	public Node(String table, String entity, String alias) {
 		setTable(table);
 		setEntity(entity);
-		setVisited(false);
+		setAlias(alias);
 	}
 
 	public int getSize() {
