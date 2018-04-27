@@ -18,33 +18,31 @@ import java.util.Date;
 
 @Service
 public class FileBO {
-	private	final 	String 				UPLOAD_DIR		= "/uploads/";
 	private			IFile				repository;
-	private			HttpServletRequest	request;
 
 	@Autowired
-	public FileBO(IFile repository, HttpServletRequest request) {
+	public FileBO(IFile repository) {
 		this.repository		= repository;
-		this.request		= request;
 	}
 
 	public FileDTO save(String name, String contentType, byte[] data) {
 		try {
 			String				extension		= FilenameUtils.getExtension(name);
-			File				fileLocation	= getNewFile(extension);
-			FileOutputStream	fos				= new FileOutputStream(fileLocation);
-			FileData			metadata		= new FileData();
+			File 				fileLocation	= getNewFile(extension);
+			FileOutputStream 	fos				= new FileOutputStream(fileLocation);
+			FileData 			fileData		= new FileData();
 
 //			validateFile(name, type);
+
 			fos.write(data);
 			fos.close();
-			metadata.setPath(Paths.get(fileLocation.getName()).toString());
-			metadata.setExtension(extension);
-			metadata.setName(name);
-			metadata.setContent(contentType);
-//			metadata.setType(type);
-			metadata.setCreatedAt(new Date());
-			return new FileDTO(metadata);
+
+			fileData.setPath(Paths.get("", fileLocation.getName()).toString());
+			fileData.setExtension(extension);
+			fileData.setName(name);
+			fileData.setContent(contentType);
+			fileData.setCreatedAt(new Date());
+			return new FileDTO(repository.save(fileData));
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RESTException("file.error");
@@ -88,7 +86,7 @@ public class FileBO {
 
 	private String getUploadDir() {
 //		String uploadPath = new File("/opt/pir/", UPLOAD_DIR).getAbsolutePath();
-		String uploadPath = new File(System.getProperty("user.home") + "/RDService/Data", UPLOAD_DIR).getAbsolutePath();
+		String uploadPath = new File(System.getProperty("user.home") + "/PIRService", "/Data").getAbsolutePath();
 
 		if(!new File(uploadPath).exists())
 			if (!new File(uploadPath).mkdir())
