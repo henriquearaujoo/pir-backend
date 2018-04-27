@@ -19,12 +19,12 @@ import java.util.Collection;
 public interface IChapter extends IBaseRepository<Chapter, Long, QChapter> {
 	@Transactional
 	@Modifying(clearAutomatically = true)
-	@Query(value = "update chapter set in_use = false where pirdb.public.chapter.number = ?1", nativeQuery = true)
+	@Query(value = "update chapter set in_use = false where chapter.number = ?1", nativeQuery = true)
 	void invalidateAll(long number);
 
 	@Transactional
 	@Modifying(clearAutomatically = true)
-	@Query(value = "update chapter set in_use = false where pirdb.public.chapter.id = ?1", nativeQuery = true)
+	@Query(value = "update chapter set in_use = false where chapter.id = ?1", nativeQuery = true)
 	void invalidateOne(long id);
 
 	Collection<Chapter> findAllByChapter(int chapter);

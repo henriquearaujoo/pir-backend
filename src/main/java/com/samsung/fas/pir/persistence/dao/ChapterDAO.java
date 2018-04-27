@@ -51,7 +51,7 @@ public class ChapterDAO extends BaseDAO<Chapter, Long, IChapter, QChapter> {
 		QChapter 			chapter		= QChapter.chapter1;
 		QChapter 			achapter	= new QChapter("active_chapters");
 		JPAQuery<Chapter>	result		= query.select(chapter).from(chapter).innerJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue()));
-		Query				page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, "chapters"));
+		Query				page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, chapter.getMetadata().getName()));
 		return SBPage.getPageList(pageable, page);
 	}
 
@@ -60,30 +60,30 @@ public class ChapterDAO extends BaseDAO<Chapter, Long, IChapter, QChapter> {
 		QChapter 			chapter		= QChapter.chapter1;
 		QChapter 			achapter	= new QChapter("active_chapters");
 		JPAQuery<Chapter>	result		= query.select(chapter).from(chapter).innerJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue()).and(predicate));
-		Query				page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, "chapters"));
+		Query				page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, chapter.getMetadata().getName()));
 		return SBPage.getPageList(pageable, page);
 	}
 
 	public Collection<Chapter> findAllInvalid() {
 		JPAQuery<Chapter>	query 		= new JPAQuery<>(emanager);
-		QChapter 			chapter		= QChapter.chapter1;
-		QChapter 			achapter	= new QChapter("active_chapters");
-		return query.select(chapter).from(chapter).leftJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).where(chapter.id.isNull()).fetch();
+		QChapter 			chapters	= new QChapter("chapters");
+		QChapter 			actives		= new QChapter("active_chapters");
+		return query.select(chapters).from(chapters).leftJoin(actives).on(actives.chapter.eq(chapters.chapter).and(actives.valid.isTrue())).where(actives.id.isNull()).fetch();
 	}
 
 	public List<Chapter> findAllInvalid(Predicate predicate) {
 		JPAQuery<Chapter>	query 		= new JPAQuery<>(emanager);
 		QChapter 			chapter		= QChapter.chapter1;
 		QChapter 			achapter	= new QChapter("active_chapters");
-		return query.select(chapter).from(chapter).leftJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).where(chapter.id.isNull().and(predicate)).fetch();
+		return query.select(chapter).from(chapter).leftJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).where(achapter.id.isNull().and(predicate)).fetch();
 	}
 
 	public Page<?> findAllInvalid(Pageable pageable) {
 		JPAQuery<Chapter>	query 		= new JPAQuery<>(emanager);
 		QChapter 			chapter		= QChapter.chapter1;
 		QChapter 			achapter	= new QChapter("active_chapters");
-		JPAQuery<Chapter>	result		= query.select(chapter).from(chapter).leftJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).where(chapter.id.isNull());
-		Query				page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, "chapters"));
+		JPAQuery<Chapter>	result		= query.select(chapter).from(chapter).leftJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).where(achapter.id.isNull());
+		Query				page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, chapter.getMetadata().getName()));
 		return SBPage.getPageList(pageable, page);
 	}
 
@@ -91,8 +91,8 @@ public class ChapterDAO extends BaseDAO<Chapter, Long, IChapter, QChapter> {
 		JPAQuery<Chapter>	query 		= new JPAQuery<>(emanager);
 		QChapter 			chapter		= QChapter.chapter1;
 		QChapter 			achapter	= new QChapter("active_chapters");
-		JPAQuery<Chapter>	result		= query.select(chapter).from(chapter).leftJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).where(chapter.id.isNull().and(predicate));
-		Query				page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, "chapters"));
+		JPAQuery<Chapter>	result		= query.select(chapter).from(chapter).leftJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).where(achapter.id.isNull().and(predicate));
+		Query				page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, chapter.getMetadata().getName()));
 		return SBPage.getPageList(pageable, page);
 	}
 
