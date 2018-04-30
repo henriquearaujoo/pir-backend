@@ -66,7 +66,7 @@ public class AccountService implements UserDetailsService {
 		precover.setUntil(Date.from(new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plusDays(1).atZone(ZoneId.systemDefault()).toInstant()));
 
 		content.put("name", account.getUser().getName());
-		content.put("link", "http://localhost:4200/#/reset-password?reset=" + token);
+		content.put("link", "http://localhost:4200/#/login/reset-password?reset=" + token);
 		content.put("signature", "Fundação Amazônia Sustentável");
 		content.put("location", "Amazonas, Brazil");
 

@@ -30,8 +30,8 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	public ChildDTO update(ChildDTO update, UserDetails account) {
 		Child		model		= update.getModel();
 		Child		child		= getDao().findOne(model.getUuid());
-		Responsible responsible	= update.getResponsible() != null? update.getResponsible().getUuid() != null? rdao.findOne(update.getResponsible().getUuid()) : update.getResponsible().getModel() : child.getResponsible();
-		Responsible	mother		= update.getMother() != null? update.getMother().getUuid() != null? rdao.findOne(update.getMother().getUuid()) : update.getMother().getModel() : child.getMother();
+		Responsible responsible	= update.getResponsible() != null? update.getResponsible().getUuid() != null? rdao.findOne(update.getResponsible().getUuid()) : update.getResponsible().getModel() : child.getResponsible() != null? child.getResponsible() : rdao.findOne(update.getResponsibleUUID());
+		Responsible	mother		= update.getMother() != null? update.getMother().getUuid() != null? rdao.findOne(update.getMother().getUuid()) : update.getMother().getModel() : child.getMother() != null? child.getMother() : rdao.findOne(update.getMotherUUID());
 
 		if (mother.getMother() == null)
 			throw new RESTException("not.mother");
@@ -59,8 +59,8 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 
 	protected Child persist(ChildDTO create, UserDetails details) {
 		Child		model		= create.getModel();
-		Responsible responsible	= create.getResponsible() != null? create.getResponsible().getUuid() != null? rdao.findOne(create.getResponsible().getUuid()) : create.getResponsible().getModel() : null;
-		Responsible	mother		= create.getMother() != null? create.getMother().getUuid() != null? rdao.findOne(create.getMother().getUuid()) : create.getMother().getModel() : null;
+		Responsible responsible	= create.getResponsible() != null? create.getResponsible().getUuid() != null? rdao.findOne(create.getResponsible().getUuid()) : create.getResponsible().getModel() : rdao.findOne(create.getResponsibleUUID());
+		Responsible	mother		= create.getMother() != null? create.getMother().getUuid() != null? rdao.findOne(create.getMother().getUuid()) : create.getMother().getModel() : rdao.findOne(create.getMotherUUID());
 
 		if (mother != null && mother.getMother() == null)
 			throw new RESTException("not.mother");

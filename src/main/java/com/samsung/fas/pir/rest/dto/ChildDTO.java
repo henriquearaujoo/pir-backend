@@ -27,6 +27,16 @@ public class ChildDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("mother_id")
+	private		UUID 			motherUUID;
+
+	@Getter
+	@Setter
+	@JsonProperty("responsible_id")
+	private		UUID 			responsibleUUID;
+
+	@Getter
+	@Setter
 	@JsonProperty("name")
 	@NotBlank(message = "name.missing")
 	private 	String			name;

@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,7 +42,7 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 	}
 
 	public Page<ResponsibleDTO> findAllResponsible(Pageable pageable, Predicate predicate) {
-		return getDao().findAllResponsible(predicate, pageable).map(item -> new ResponsibleDTO((Mother) item, false));
+		return getDao().findAllResponsible(predicate, pageable).map(item -> new ResponsibleDTO((Responsible) item, false));
 	}
 
 	@Override
@@ -53,7 +54,7 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 	public ResponsibleDTO update(ResponsibleDTO update, UserDetails account) {
 		Responsible		model		= update.getModel();
 		Responsible		responsible	= getDao().findOne(model.getUuid());
-		Community		community	= model.getCommunity() != null? model.getCommunity().getUuid() != null? cdao.findOne(update.getCommunity().getCityUUID()) : update.getCommunity().getModel() : responsible.getCommunity();
+		Community		community	= model.getCommunity() != null? model.getCommunity().getUuid() != null? cdao.findOne(update.getCommunity().getCityUUID()) : update.getCommunity().getModel() : update.getCommunityUUID() != null? cdao.findOne(update.getCommunityUUID()) : responsible.getCommunity();
 
 		responsible.setFamilyHasChildren(model.isFamilyHasChildren());
 		responsible.setName(model.getName());
@@ -76,7 +77,7 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 
 	protected Responsible persist(ResponsibleDTO create, UserDetails details) {
 		Responsible		model		= create.getModel();
-		Community 		community	= model.getCommunity() != null? model.getCommunity().getUuid() != null? cdao.findOne(create.getCommunity().getCityUUID()) : create.getCommunity().getModel() : null;
+		Community 		community	= model.getCommunity() != null? model.getCommunity().getUuid() != null? cdao.findOne(create.getCommunity().getCityUUID()) : create.getCommunity().getModel() : cdao.findOne(Optional.ofNullable(create.getCommunityUUID()).orElseThrow(() -> new RESTException("id.missing")));
 
 		if (community == null)
 			throw new RESTException("community.missing");

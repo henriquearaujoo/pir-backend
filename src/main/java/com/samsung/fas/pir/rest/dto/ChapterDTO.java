@@ -52,7 +52,6 @@ public class ChapterDTO {
 	@Getter
 	@Setter
 	@JsonProperty("resources")
-	@NotBlank(message = "resources.missing")
 	private 	String			resources;
 
 	@Getter

@@ -44,7 +44,7 @@ public class Chapter extends BaseID {
 
 	@Getter
 	@Setter
-	@Column(name = "resources", nullable = false, columnDefinition = "TEXT")
+	@Column(name = "resources", columnDefinition = "TEXT")
 	@Alias("Recursos")
 	private 	String			resources;
 
