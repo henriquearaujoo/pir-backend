@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 public class GreetingsBO extends BaseBO<Greetings, GreetingsDAO, GreetingsDTO, Long> {
 	private	final ChapterDAO cdao;
@@ -40,5 +42,15 @@ public class GreetingsBO extends BaseBO<Greetings, GreetingsDAO, GreetingsDTO, L
 		greetings.setGoback(model.isGoback());
 
 		return new GreetingsDTO(getDao().save(greetings), true);
+	}
+
+	@Override
+	public Collection<GreetingsDTO> save(Collection<GreetingsDTO> create, UserDetails details) {
+		return null;
+	}
+
+	@Override
+	public Collection<GreetingsDTO> update(Collection<GreetingsDTO> update, UserDetails details) {
+		return null;
 	}
 }

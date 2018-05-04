@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 public class AnswerBO extends BaseBO<Answer, AnswerDAO, AnswerDTO, Long> {
 	@Getter(AccessLevel.PRIVATE)
@@ -62,5 +64,15 @@ public class AnswerBO extends BaseBO<Answer, AnswerDAO, AnswerDTO, Long> {
 		answer.setDescription(model.getDescription());
 
 		return new AnswerDTO(getDao().save(answer), true);
+	}
+
+	@Override
+	public Collection<AnswerDTO> save(Collection<AnswerDTO> create, UserDetails details) {
+		return null;
+	}
+
+	@Override
+	public Collection<AnswerDTO> update(Collection<AnswerDTO> update, UserDetails details) {
+		return null;
 	}
 }

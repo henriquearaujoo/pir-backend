@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.UUID;
 
 public abstract class BController<BO extends IBaseBO<?, DTO, Long>, DTO> {
@@ -44,6 +45,16 @@ public abstract class BController<BO extends IBaseBO<?, DTO, Long>, DTO> {
 	@RequestMapping(method= RequestMethod.PUT)
 	public ResponseEntity<DTO> update(@RequestBody @Valid DTO dto, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
 		return ResponseEntity.ok(service.update(dto, account));
+	}
+
+	@RequestMapping(method= RequestMethod.POST, path = "/collection")
+	public ResponseEntity<Collection<DTO>> save(@RequestBody @Valid Collection<DTO> collection, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
+		return ResponseEntity.ok(service.save(collection, account));
+	}
+
+	@RequestMapping(method= RequestMethod.PUT, path = "/collection")
+	public ResponseEntity<Collection<DTO>> update(@RequestBody @Valid Collection<DTO> collection, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
+		return ResponseEntity.ok(service.update(collection, account));
 	}
 }
 

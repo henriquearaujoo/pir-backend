@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 public class PageBO extends BaseBO<Page, PageDAO, PageDTO, Long> {
 	@Autowired
@@ -22,6 +24,16 @@ public class PageBO extends BaseBO<Page, PageDAO, PageDTO, Long> {
 
 	@Override
 	public PageDTO update(PageDTO update, UserDetails account) {
+		return null;
+	}
+
+	@Override
+	public Collection<PageDTO> save(Collection<PageDTO> create, UserDetails details) {
+		return null;
+	}
+
+	@Override
+	public Collection<PageDTO> update(Collection<PageDTO> update, UserDetails details) {
 		return null;
 	}
 }

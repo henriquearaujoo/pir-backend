@@ -149,4 +149,14 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 		chapter.getThumbnails().addAll(model.getThumbnails() != null? model.getThumbnails() : new ArrayList<>());
 		return new ChapterDTO(getDao().save(chapter), true);
 	}
+
+	@Override
+	public Collection<ChapterDTO> save(Collection<ChapterDTO> create, UserDetails details) {
+		return null;
+	}
+
+	@Override
+	public Collection<ChapterDTO> update(Collection<ChapterDTO> update, UserDetails details) {
+		return null;
+	}
 }

@@ -10,11 +10,13 @@ import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface ICity extends IBaseRepository<City, Long, QCity> {
-	List<City> findByStateId(long id);
+	Collection<City> findAllByUuidIn(Collection<UUID> collection);
 
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QCity root) {

@@ -15,12 +15,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 @Api(value = "States", description = "REST Controller for States", tags = "STATES")
 @RequestMapping(value = "/rest/states", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -29,6 +32,11 @@ public class StateController extends BController<StateCityBO, StateDTO> {
 	@Autowired
 	public StateController(StateCityBO service) {
 		super(service);
+	}
+
+	@RequestMapping(method= RequestMethod.GET, value="/find-uf/{uf}")
+	public ResponseEntity<Collection<StateDTO>> findUF(@PathVariable("uf") String uf, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(Collections.singletonList(getService().findByUF(uf.toUpperCase())));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, value="/search")

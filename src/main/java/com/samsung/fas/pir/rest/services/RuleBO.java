@@ -109,4 +109,14 @@ public class RuleBO extends BaseBO<Rule, RuleDAO, RuleDTO, Long> {
 
 		return new RuleDTO(getDao().save(rule), true);
 	}
+
+	@Override
+	public Collection<RuleDTO> save(Collection<RuleDTO> create, UserDetails details) {
+		return null;
+	}
+
+	@Override
+	public Collection<RuleDTO> update(Collection<RuleDTO> update, UserDetails details) {
+		return null;
+	}
 }

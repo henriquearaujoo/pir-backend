@@ -10,9 +10,13 @@ import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Optional;
 
 @Repository
 public interface IState extends IBaseRepository<State, Long, QState> {
+	Optional<State> findByAbbreviation(String abbr);
+
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QState root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

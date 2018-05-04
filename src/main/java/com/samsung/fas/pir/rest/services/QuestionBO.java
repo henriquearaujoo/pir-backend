@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @Service
@@ -58,5 +59,15 @@ public class QuestionBO extends BaseBO<Question, QuestionDAO, QuestionDTO, Long>
 		question.setType(model.getType());
 
 		return new QuestionDTO(getDao().save(question), true);
+	}
+
+	@Override
+	public Collection<QuestionDTO> save(Collection<QuestionDTO> create, UserDetails details) {
+		return null;
+	}
+
+	@Override
+	public Collection<QuestionDTO> update(Collection<QuestionDTO> update, UserDetails details) {
+		return null;
 	}
 }

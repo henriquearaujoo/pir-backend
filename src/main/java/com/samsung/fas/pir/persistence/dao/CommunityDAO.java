@@ -7,6 +7,9 @@ import com.samsung.fas.pir.persistence.repositories.ICommunity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.UUID;
+
 @Service
 public class CommunityDAO extends BaseDAO<Community, Long, ICommunity,  QCommunity> {
 	@Autowired
@@ -16,5 +19,9 @@ public class CommunityDAO extends BaseDAO<Community, Long, ICommunity,  QCommuni
 
 	public Community findOne(String name, long id) {
 		return getRepository().findOneByNameIgnoreCaseAndCityId(name, id);
+	}
+
+	public Collection<Community> findAllIn(Collection<UUID> collection) {
+		return getRepository().findAllByUuidIn(collection);
 	}
 }

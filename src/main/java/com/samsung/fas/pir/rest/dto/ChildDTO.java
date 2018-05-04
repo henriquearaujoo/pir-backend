@@ -15,7 +15,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -24,16 +27,6 @@ public class ChildDTO {
 	@Setter
 	@JsonProperty("id")
 	private 	UUID 			uuid;
-
-	@Getter
-	@Setter
-	@JsonProperty("mother_id")
-	private		UUID 			motherUUID;
-
-	@Getter
-	@Setter
-	@JsonProperty("responsible_id")
-	private		UUID 			responsibleUUID;
 
 	@Getter
 	@Setter
@@ -138,7 +131,7 @@ public class ChildDTO {
 	@Setter
 	@JsonProperty("responsible")
 	@Valid
-	private		ResponsibleDTO 	responsible;
+	private		Collection<ResponsibleDTO>	responsibles;
 
 	public ChildDTO() {
 		super();
@@ -163,7 +156,8 @@ public class ChildDTO {
 		vacinationUpToDate(child.isVacinationUpToDate());
 		hasRelationDifficulties(child.isRelationDifficulties());
 		setMother(child.getMother() != null? new ResponsibleDTO(child.getMother(), false) : null);
-		setResponsible(new ResponsibleDTO(child.getResponsible(), false));
+		setResponsibles(child.getResponsibles() != null? child.getResponsibles().stream().map(responsible -> new ResponsibleDTO(responsible, false)).collect(Collectors.toList()) : null);
+
 	}
 
 	@JsonIgnore
@@ -186,6 +180,7 @@ public class ChildDTO {
 		model.setSocialEducationalPrograms(isInSocialEducationalPrograms());
 		model.setVacinationUpToDate(vacinationUpToDate());
 		model.setRelationDifficulties(hasRelationDifficulties());
+		model.setResponsibles(getResponsibles() != null? getResponsibles().stream().map(ResponsibleDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 
 		try {
 			model.setBirth(new SimpleDateFormat("dd-MM-yyyy").parse(getBirth()));

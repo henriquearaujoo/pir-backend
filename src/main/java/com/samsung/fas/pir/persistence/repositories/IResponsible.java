@@ -13,9 +13,11 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.UUID;
 
 @Repository
 public interface IResponsible extends IBaseRepository<Responsible, Long, QResponsible> {
+	Collection<Responsible> findAllByUuidIn(Collection<UUID> collection);
 	Collection<Responsible> findAllByMotherIsNull();
 	Page<Responsible> findAllByMotherIsNull(Pageable pageable);
 

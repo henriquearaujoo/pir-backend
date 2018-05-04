@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 public class InterventionBO extends BaseBO<Intervention, InterventionDAO, InterventionDTO, Long> {
 	private	final ChapterDAO cdao;
@@ -36,5 +38,15 @@ public class InterventionBO extends BaseBO<Intervention, InterventionDAO, Interv
 		intervention.setDescription(model.getDescription());
 		intervention.setActivity(model.getActivity());
 		return new InterventionDTO(getDao().save(intervention), true);
+	}
+
+	@Override
+	public Collection<InterventionDTO> save(Collection<InterventionDTO> create, UserDetails details) {
+		return null;
+	}
+
+	@Override
+	public Collection<InterventionDTO> update(Collection<InterventionDTO> update, UserDetails details) {
+		return null;
 	}
 }

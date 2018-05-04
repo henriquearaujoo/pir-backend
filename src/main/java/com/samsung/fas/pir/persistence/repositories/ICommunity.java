@@ -10,10 +10,13 @@ import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.UUID;
 
 @Repository
 public interface ICommunity extends IBaseRepository<Community, Long, QCommunity> {
 	Community findOneByNameIgnoreCaseAndCityId(String name, long id);
+	Collection<Community> findAllByUuidIn(Collection<UUID> collection);
 
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QCommunity root) {

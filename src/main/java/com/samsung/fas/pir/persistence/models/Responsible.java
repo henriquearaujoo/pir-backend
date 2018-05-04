@@ -114,13 +114,13 @@ public class Responsible extends BaseID {
 
 	@Getter
 	@Setter
-	@OneToMany
+	@ManyToMany
 	@Alias("Crianças")
 	private 	Collection<Child>	children;
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+	@ManyToOne(optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn
 	@Alias("Comunidade")
 	private 	Community			community;

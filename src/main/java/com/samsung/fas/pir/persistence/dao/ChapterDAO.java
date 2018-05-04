@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
 @Service
 public class ChapterDAO extends BaseDAO<Chapter, Long, IChapter, QChapter> {
@@ -47,12 +48,13 @@ public class ChapterDAO extends BaseDAO<Chapter, Long, IChapter, QChapter> {
 	}
 
 	public Page<?> findAllValid(Pageable pageable) {
-		JPAQuery<Chapter>	query 		= new JPAQuery<>(emanager);
-		QChapter 			chapter		= QChapter.chapter1;
-		QChapter 			achapter	= new QChapter("active_chapters");
-		JPAQuery<Chapter>	result		= query.select(chapter).from(chapter).innerJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue()));
-		Query				page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, chapter.getMetadata().getName()));
-		return SBPage.getPageList(pageable, page);
+		JPAQuery<Chapter>			query 		= new JPAQuery<>(emanager);
+		QChapter 					chapter		= QChapter.chapter1;
+		QChapter 					achapter	= new QChapter("active_chapters");
+		JPAQuery<Chapter>			result		= query.select(chapter).from(chapter).innerJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue()));
+		Query						page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, chapter.getMetadata().getName()));
+		Function<Chapter, Integer> 	getChapter	= Chapter::getChapter;
+		return SBPage.getPageList(pageable, page, getChapter);
 	}
 
 	public Page<?> findAllValid(Predicate predicate, Pageable pageable) {
@@ -61,7 +63,8 @@ public class ChapterDAO extends BaseDAO<Chapter, Long, IChapter, QChapter> {
 		QChapter 			achapter	= new QChapter("active_chapters");
 		JPAQuery<Chapter>	result		= query.select(chapter).from(chapter).innerJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue()).and(predicate));
 		Query				page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, chapter.getMetadata().getName()));
-		return SBPage.getPageList(pageable, page);
+		Function<Chapter, Integer> 	getChapter	= Chapter::getChapter;
+		return SBPage.getPageList(pageable, page, getChapter);
 	}
 
 	public Collection<Chapter> findAllInvalid() {
@@ -84,7 +87,8 @@ public class ChapterDAO extends BaseDAO<Chapter, Long, IChapter, QChapter> {
 		QChapter 			achapter	= new QChapter("active_chapters");
 		JPAQuery<Chapter>	result		= query.select(chapter).from(chapter).leftJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).where(achapter.id.isNull());
 		Query				page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, chapter.getMetadata().getName()));
-		return SBPage.getPageList(pageable, page);
+		Function<Chapter, Integer> 	getChapter	= Chapter::getChapter;
+		return SBPage.getPageList(pageable, page, getChapter);
 	}
 
 	public Page<?> findAllInvalid(Predicate predicate, Pageable pageable) {
@@ -93,7 +97,8 @@ public class ChapterDAO extends BaseDAO<Chapter, Long, IChapter, QChapter> {
 		QChapter 			achapter	= new QChapter("active_chapters");
 		JPAQuery<Chapter>	result		= query.select(chapter).from(chapter).leftJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).where(achapter.id.isNull().and(predicate));
 		Query				page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Chapter.class, chapter.getMetadata().getName()));
-		return SBPage.getPageList(pageable, page);
+		Function<Chapter, Integer> 	getChapter	= Chapter::getChapter;
+		return SBPage.getPageList(pageable, page, getChapter);
 	}
 
 	public void invalidateAllChapters(long chapter) {

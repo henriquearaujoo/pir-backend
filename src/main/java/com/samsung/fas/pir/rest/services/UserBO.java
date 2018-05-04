@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 
 @Service
 public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
@@ -127,5 +128,15 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 		}
 
 		return new UserDTO(getDao().save(user), true);
+	}
+
+	@Override
+	public Collection<UserDTO> save(Collection<UserDTO> create, UserDetails details) {
+		return null;
+	}
+
+	@Override
+	public Collection<UserDTO> update(Collection<UserDTO> update, UserDetails details) {
+		return null;
 	}
 }

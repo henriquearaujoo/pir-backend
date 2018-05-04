@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @Service
@@ -57,5 +58,15 @@ public class AlternativeBO extends BaseBO<Alternative, AlternativeDAO, Alternati
 		alternative.setType(model.getType());
 
 		return new AlternativeDTO(getDao().save(alternative), true);
+	}
+
+	@Override
+	public Collection<AlternativeDTO> save(Collection<AlternativeDTO> create, UserDetails details) {
+		return null;
+	}
+
+	@Override
+	public Collection<AlternativeDTO> update(Collection<AlternativeDTO> update, UserDetails details) {
+		return null;
 	}
 }

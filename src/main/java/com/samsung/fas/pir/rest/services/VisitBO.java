@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 @Service
 public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
@@ -86,6 +87,16 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 		visit.setDuration(model.getDuration());
 
 		return new VisitDTO(getDao().save(visit), true);
+	}
+
+	@Override
+	public Collection<VisitDTO> save(Collection<VisitDTO> create, UserDetails details) {
+		return null;
+	}
+
+	@Override
+	public Collection<VisitDTO> update(Collection<VisitDTO> update, UserDetails details) {
+		return null;
 	}
 
 	private Responsible setup(ResponsibleDTO create, UserDetails details) {

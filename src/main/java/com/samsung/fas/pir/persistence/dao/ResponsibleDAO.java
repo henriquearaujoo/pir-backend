@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.Collection;
+import java.util.UUID;
 
 // TODO: Change Queries
 @Service
@@ -25,6 +26,10 @@ public class ResponsibleDAO extends BaseDAO<Responsible, Long, IResponsible, QRe
 	public ResponsibleDAO(IResponsible repository, EntityManager emanager) {
 		super(repository);
 		this.emanager = emanager;
+	}
+
+	public Collection<Responsible> findAllIn(Collection<UUID> collection) {
+		return getRepository().findAllByUuidIn(collection);
 	}
 
 	public Collection<Responsible> findAllResponsible() {
@@ -48,6 +53,6 @@ public class ResponsibleDAO extends BaseDAO<Responsible, Long, IResponsible, QRe
 		QMother 				mother		= QMother.mother;
 		JPAQuery<Responsible>	result		= query.select(responsible).from(responsible).leftJoin(mother).on(responsible.id.eq(mother.id)).where(mother.id.isNull().and(predicate));
 		Query					page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Responsible.class, "responsible"));
-		return SBPage.getPageList(pageable, page);
+		return SBPage.getPageList(pageable, page, null);
 	}
 }

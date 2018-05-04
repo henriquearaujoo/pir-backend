@@ -67,4 +67,14 @@ public class ProfileBO extends BaseBO<Profile, ProfileDAO, ProfileDTO, Long> {
 
 		return new ProfileDTO(getDao().save(profile), true);
 	}
+
+	@Override
+	public Collection<ProfileDTO> save(Collection<ProfileDTO> create, UserDetails details) {
+		return null;
+	}
+
+	@Override
+	public Collection<ProfileDTO> update(Collection<ProfileDTO> update, UserDetails details) {
+		return null;
+	}
 }

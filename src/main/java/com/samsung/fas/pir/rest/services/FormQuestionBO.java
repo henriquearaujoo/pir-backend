@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Service
@@ -39,5 +40,15 @@ public class FormQuestionBO extends BaseBO<FormQuestion, FormQuestionDAO, FormQu
 		question.setDescription(model.getDescription());
 		question.setEnabled(model.isEnabled());
 		return new FormQuestionDTO(getDao().save(question), true);
+	}
+
+	@Override
+	public Collection<FormQuestionDTO> save(Collection<FormQuestionDTO> create, UserDetails details) {
+		return null;
+	}
+
+	@Override
+	public Collection<FormQuestionDTO> update(Collection<FormQuestionDTO> update, UserDetails details) {
+		return null;
 	}
 }

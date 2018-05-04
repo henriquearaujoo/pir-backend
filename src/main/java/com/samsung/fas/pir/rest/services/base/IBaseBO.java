@@ -23,6 +23,9 @@ public interface IBaseBO<T, DTO, ID extends Serializable> {
 	void delete(T entity);
 	void delete(ID id);
 
-	DTO save(DTO create, UserDetails account);
-	DTO update(DTO update, UserDetails account);
+	DTO save(DTO create, UserDetails details);
+	DTO update(DTO update, UserDetails details);
+
+	Collection<DTO> save(Collection<DTO> create, UserDetails details);
+	Collection<DTO> update(Collection<DTO> update, UserDetails details);
 }

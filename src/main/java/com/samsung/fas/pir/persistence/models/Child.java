@@ -127,13 +127,6 @@ public class Child extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false, cascade = CascadeType.PERSIST)
-	@JoinColumn
-	@Alias("Responsável")
-	private 	Responsible		responsible;
-
-	@Getter
-	@Setter
 	@OneToMany(mappedBy = "child")
 	@Alias("Respostas")
 	private 	Collection<Answer>	answers;
@@ -143,4 +136,12 @@ public class Child extends BaseID {
 	@OneToMany(mappedBy = "child", cascade = CascadeType.MERGE)
 	@Alias("Visitas")
 	private 	Collection<Visit>	visits;
+
+	@Getter
+	@Setter
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	@JoinTable(name = "child_responsible", joinColumns = @JoinColumn(name = "child_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "responsible_id", referencedColumnName = "id"))
+	@Alias("Responsável")
+	private 	Collection<Responsible>		responsibles;
 }

@@ -20,7 +20,7 @@ public class State extends BaseID {
 	
 	@Getter
 	@Setter
-	@Column(name="uf_abbr", nullable=false, unique=true)
+	@Column(name="uf_abbr", columnDefinition = "CITEXT", nullable=false, unique=true)
 	@Alias("Abreviação")
 	private		String		abbreviation;
 	

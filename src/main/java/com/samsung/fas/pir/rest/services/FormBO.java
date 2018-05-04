@@ -56,4 +56,14 @@ public class FormBO extends BaseBO<Form, FormDAO, FormDTO, Long> {
 
 		return new FormDTO(getDao().save(form), true);
 	}
+
+	@Override
+	public Collection<FormDTO> save(Collection<FormDTO> create, UserDetails details) {
+		return null;
+	}
+
+	@Override
+	public Collection<FormDTO> update(Collection<FormDTO> update, UserDetails details) {
+		return null;
+	}
 }

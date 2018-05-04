@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import java.util.Collection;
 
 @Entity
-@Table(name = "community", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "city_id"}, name = "community"))
+@Table(name = "community", uniqueConstraints = @UniqueConstraint(name = "community_name", columnNames = {"name", "city_id"}))
 @DynamicUpdate
 @DynamicInsert
 @Alias("Comunidade")
@@ -33,7 +33,7 @@ public class Community extends BaseID {
 
 	@Getter
 	@Setter
-	@Column(nullable = false, columnDefinition = "citext")
+	@Column(nullable = false, columnDefinition = "CITEXT")
 	@Alias("Nome")
 	private 	String			name;
 
@@ -170,7 +170,7 @@ public class Community extends BaseID {
 
 	@Getter
 	@Setter
-	@OneToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn
 	@Alias("Município")
 	private 	City			city;
