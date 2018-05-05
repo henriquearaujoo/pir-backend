@@ -21,10 +21,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	private		ResponsibleBO		responsibleBO;
+
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
 	private		ResponsibleDAO		responsibleDAO;
@@ -54,17 +60,25 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 
 	@Override
 	public Collection<ChildDTO> save(Collection<ChildDTO> collection, UserDetails details) {
-		ArrayList<Child>		models		= new ArrayList<>();
+		ArrayList<Child>		response		= new ArrayList<>();
 
 		for (ChildDTO item : collection) {
 			if (item.getUuid() == null) {
-				models.add(persist(item, details));
+				try {
+					response.add(getDao().save(persist(item, details)));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			} else {
-				models.add(patch(item, details));
+				try {
+					response.add(getDao().save(persist(item, details)));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
-		return getDao().save(models).stream().map(child -> new ChildDTO(child, false)).collect(Collectors.toList());
+		return response.stream().map(child -> new ChildDTO(child, true)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -75,9 +89,6 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	protected Child persist(ChildDTO create, UserDetails details) {
 		Child					model			= create.getModel();
 		Responsible				mother			= create.getMother() != null? create.getMother().getUuid() != null? getResponsibleDAO().findOne(create.getMother().getUuid()) : create.getMother().getModel() : null;
-		Collection<Responsible>	responsibles	= getResponsibleDAO().findAllIn(create.getResponsibles().stream().map(ResponsibleDTO::getUuid).collect(Collectors.toList()));
-		Collection<Community>	communities		= getCommunityDAO().findAllIn(create.getResponsibles().stream().map(responsibleDTO -> responsibleDTO.getCommunity().getUuid()).collect(Collectors.toList()));
-		Collection<City>		cities			= getCityDAO().findAllIn(create.getResponsibles().stream().map(responsibleDTO -> responsibleDTO.getCommunity().getCityUUID()).collect(Collectors.toList()));
 
 		if (mother != null && mother.getMother() == null)
 			throw new RESTException("not.mother");
@@ -85,10 +96,11 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		if (mother != null && mother.getId() != 0)
 			model.getMother().setId(mother.getId());
 
-		model.getResponsibles().forEach(responsibleModel -> {
-			responsibleModel.setId(responsibles.stream().filter(community -> community.getUuid().compareTo(responsibleModel.getUuid()) == 0).findAny().orElse(responsibleModel).getId());
-			responsibleModel.getCommunity().setId(communities.stream().filter(community -> community.getUuid().compareTo(responsibleModel.getCommunity().getUuid()) == 0).findAny().orElse(responsibleModel.getCommunity()).getId());
-			responsibleModel.getCommunity().setCity(cities.stream().filter(city -> city.getUuid().compareTo(create.getResponsibles().stream().filter(responsibleDTO -> responsibleDTO.getCommunity().getCityUUID().compareTo(city.getUuid()) == 0).findAny().orElseThrow(() -> new RESTException("notfound")).getUuid()) == 0).findAny().orElseThrow(() -> new RESTException("notfound")));
+		model.setResponsibles(getResponsibleBO().internalSaving(create.getResponsibles(), details));
+		model.getResponsibles().forEach(responsible -> {
+			if (responsible.getChildren() == null)
+				responsible.setChildren(new ArrayList<>());
+			responsible.getChildren().add(model);
 		});
 
 		return model;
@@ -111,6 +123,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 			responsibleModel.getCommunity().setCity(cities.stream().filter(city -> city.getUuid().compareTo(update.getResponsibles().stream().filter(responsibleDTO -> responsibleDTO.getCommunity().getCityUUID().compareTo(city.getUuid()) == 0).findAny().orElseThrow(() -> new RESTException("notfound")).getUuid()) == 0).findAny().orElseThrow(() -> new RESTException("notfound")));
 		});
 
+		child.setTempID(model.getTempID());
 		child.setName(model.getName());
 		child.setFatherName(model.getFatherName());
 		child.setGender(model.getGender());

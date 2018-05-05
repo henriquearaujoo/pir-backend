@@ -19,6 +19,11 @@ import java.util.Collection;
 @DynamicInsert
 @Alias("Comunidade")
 public class Community extends BaseID {
+	@Transient
+	@Getter
+	@Setter
+	private		long				tempID;
+
 	@Getter
 	@Setter
 	@Column

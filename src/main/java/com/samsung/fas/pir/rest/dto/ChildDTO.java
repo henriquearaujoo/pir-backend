@@ -25,6 +25,11 @@ import java.util.stream.Collectors;
 public class ChildDTO {
 	@Getter
 	@Setter
+	@JsonProperty("external_id")
+	private		long			tempID;
+
+	@Getter
+	@Setter
 	@JsonProperty("id")
 	private 	UUID 			uuid;
 
@@ -49,9 +54,8 @@ public class ChildDTO {
 	@Setter
 	@JsonProperty("gender")
 	@NotBlank(message = "gender.missing")
-	private 	String 			gender;
+	private 	EChildGender 	gender;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("has_civil_registration")
@@ -62,7 +66,6 @@ public class ChildDTO {
 	@JsonProperty("civil_reg_justificative")
 	private 	String			civilRegistrationJustificative;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("has_education_diff")
@@ -73,7 +76,6 @@ public class ChildDTO {
 	@JsonProperty("education_diff_specification")
 	private 	String			educationDifficultySpecification;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("is_premature_born")
@@ -97,25 +99,21 @@ public class ChildDTO {
 	@NotBlank(message = "playswithwho.missing")
 	private 	String			playsWithWho;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("is_mensaly_weighted")
 	private 	boolean			mensalWeight;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("is_in_social_program")
-	private 	boolean			isInSocialEducationalPrograms;
+	private 	boolean			inSocialEducationalPrograms;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("is_vacination_uptodate")
 	private 	boolean			vacinationUpToDate;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("has_relation_diff")
@@ -138,23 +136,24 @@ public class ChildDTO {
 	}
 
 	public ChildDTO(Child child, boolean detailed) {
+		setTempID(child.getTempID());
 		setUuid(child.getUuid());
 		setName(child.getName());
 		setBirth(new SimpleDateFormat("dd-MM-yyyy").format(child.getBirth()));
 		setFatherName(child.getFatherName());
-		setGender(child.getGender().toString());
-		hasCivilRegistration(child.isHasCivilRegistration());
+		setGender(child.getGender());
+		setHasCivilRegistration(child.isHasCivilRegistration());
 		setCivilRegistrationJustificative(child.getCivilRegistrationJustificative());
-		hasEducationDifficulty(child.isHasEducationDifficulty());
+		setHasEducationDifficulty(child.isHasEducationDifficulty());
 		setEducationDifficultySpecification(child.getEducationDifficultySpecification());
-		isPrematureBorn(child.isPrematureBorn());
+		setPrematureBorn(child.isPrematureBorn());
 		setBornWeek(child.getBornWeek());
 		setWhoTakeCare(child.getWhoTakeCare());
 		setPlaysWithWho(child.getPlaysWithWho());
-		mensalWeight(child.isMensalWeight());
-		isInSocialEducationalPrograms(child.isSocialEducationalPrograms());
-		vacinationUpToDate(child.isVacinationUpToDate());
-		hasRelationDifficulties(child.isRelationDifficulties());
+		setMensalWeight(child.isMensalWeight());
+		setInSocialEducationalPrograms(child.isSocialEducationalPrograms());
+		setVacinationUpToDate(child.isVacinationUpToDate());
+		setHasRelationDifficulties(child.isRelationDifficulties());
 		setMother(child.getMother() != null? new ResponsibleDTO(child.getMother(), false) : null);
 		setResponsibles(child.getResponsibles() != null? child.getResponsibles().stream().map(responsible -> new ResponsibleDTO(responsible, false)).collect(Collectors.toList()) : null);
 
@@ -164,22 +163,23 @@ public class ChildDTO {
 	public Child getModel() {
 		Child model = new Child();
 
+		model.setTempID(getTempID());
 		model.setUuid(getUuid());
 		model.setName(getName());
 		model.setFatherName(getFatherName());
-		model.setGender(EChildGender.valueOf(getGender()));
-		model.setHasCivilRegistration(hasCivilRegistration());
+		model.setGender(getGender());
+		model.setHasCivilRegistration(isHasCivilRegistration());
 		model.setCivilRegistrationJustificative(getCivilRegistrationJustificative());
-		model.setHasEducationDifficulty(hasEducationDifficulty());
+		model.setHasEducationDifficulty(isHasEducationDifficulty());
 		model.setEducationDifficultySpecification(getEducationDifficultySpecification());
 		model.setPrematureBorn(isPrematureBorn());
 		model.setBornWeek(getBornWeek());
 		model.setWhoTakeCare(getWhoTakeCare());
 		model.setPlaysWithWho(getPlaysWithWho());
-		model.setMensalWeight(mensalWeight());
+		model.setMensalWeight(isMensalWeight());
 		model.setSocialEducationalPrograms(isInSocialEducationalPrograms());
-		model.setVacinationUpToDate(vacinationUpToDate());
-		model.setRelationDifficulties(hasRelationDifficulties());
+		model.setVacinationUpToDate(isVacinationUpToDate());
+		model.setRelationDifficulties(isHasRelationDifficulties());
 		model.setResponsibles(getResponsibles() != null? getResponsibles().stream().map(ResponsibleDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 
 		try {

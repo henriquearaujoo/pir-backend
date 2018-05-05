@@ -47,7 +47,7 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 
 	@Override
 	public Collection<CommunityDTO> save(Collection<CommunityDTO> collection, UserDetails account) {
-		ArrayList<Community>	models		= new ArrayList<>();
+		ArrayList<Community>	response	= new ArrayList<>();
 		ArrayList<City>			cities		= (ArrayList<City>) getCityDAO().findAllIn(collection.stream().map(CommunityDTO::getCityUUID).collect(Collectors.toList()));
 
 		for (CommunityDTO item : collection) {
@@ -56,14 +56,23 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 
 			if (model.getUuid() == null) {
 				model.setCity(city);
-				models.add(model);
 			} else {
-				models.add(setupCommunity(getDao().findOne(model.getUuid()), model, city));
+				model = setupCommunity(getDao().findOne(model.getUuid()), model, city);
 			}
 
+			try {
+				Community 	community	= getDao().findOne(model.getName(), city.getId());
+				if (community != null) {
+					response.add(getDao().save(setupCommunity(community, model, city)));
+				} else {
+					response.add(getDao().save(model));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
-		return getDao().save(models).stream().map(community -> new CommunityDTO(community, true)).collect(Collectors.toList());
+		return response.stream().map(item -> new CommunityDTO(item, true)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -72,6 +81,7 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 	}
 
 	protected static Community setupCommunity(Community community, Community model, City city) {
+		community.setTempID(model.getTempID());
 		community.setName(model.getName());
 		community.setWaterSupply(model.getWaterSupply());
 		community.setGarbageDestination(model.getGarbageDestination());

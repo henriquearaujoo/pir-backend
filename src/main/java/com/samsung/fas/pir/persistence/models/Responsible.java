@@ -20,6 +20,11 @@ import java.util.Date;
 @DynamicInsert
 @Alias("Responsável")
 public class Responsible extends BaseID {
+	@Transient
+	@Getter
+	@Setter
+	private		long				tempID;
+
 	@Getter
 	@Setter
 	@Column(nullable = false)
@@ -114,7 +119,7 @@ public class Responsible extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToMany
+	@ManyToMany(mappedBy = "responsibles")
 	@Alias("Crianças")
 	private 	Collection<Child>	children;
 

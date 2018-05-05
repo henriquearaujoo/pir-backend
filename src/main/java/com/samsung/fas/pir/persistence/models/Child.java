@@ -20,6 +20,11 @@ import java.util.Date;
 @DynamicInsert
 @Alias("Criança")
 public class Child extends BaseID {
+	@Transient
+	@Getter
+	@Setter
+	private		long			tempID;
+
 	@Getter
 	@Setter
 	@Column(nullable = false)
@@ -139,9 +144,7 @@ public class Child extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToMany(cascade = CascadeType.PERSIST)
-	@JoinTable(name = "child_responsible", joinColumns = @JoinColumn(name = "child_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "responsible_id", referencedColumnName = "id"))
+	@ManyToMany(cascade = CascadeType.ALL)
 	@Alias("Responsável")
 	private 	Collection<Responsible>		responsibles;
 }

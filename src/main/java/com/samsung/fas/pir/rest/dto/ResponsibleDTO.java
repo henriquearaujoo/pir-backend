@@ -21,6 +21,11 @@ import java.util.UUID;
 public class ResponsibleDTO {
 	@Getter
 	@Setter
+	@JsonProperty("external_id")
+	private		long		tempID;
+
+	@Getter
+	@Setter
 	@JsonProperty("id")
 	private		UUID		uuid;
 
@@ -135,6 +140,7 @@ public class ResponsibleDTO {
 	}
 
 	public ResponsibleDTO(Responsible responsible, boolean detailed) {
+		setTempID(responsible.getTempID());
 		setName(responsible.getName());
 		setUuid(responsible.getUuid());
 		setBirth(new SimpleDateFormat("dd-MM-yyyy").format(responsible.getBirth()));
@@ -157,7 +163,7 @@ public class ResponsibleDTO {
 	@JsonIgnore
 	public Responsible getModel() {
 		Responsible model = new Responsible();
-
+		model.setTempID(getTempID());
 		model.setFamilyHasChildren(hasOtherChildren());
 		model.setName(getName());
 		model.setUuid(getUuid());

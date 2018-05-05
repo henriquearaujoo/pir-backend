@@ -67,17 +67,28 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 
 	@Override
 	public Collection<ResponsibleDTO> save(Collection<ResponsibleDTO> collection, UserDetails details) {
-		ArrayList<Responsible>		models		= new ArrayList<>();
+		return internalSaving(collection, details).stream().map(responsible -> new ResponsibleDTO(responsible, true)).collect(Collectors.toList());
+	}
+
+	protected Collection<Responsible> internalSaving(Collection<ResponsibleDTO> collection, UserDetails details) {
+		ArrayList<Responsible>		response		= new ArrayList<>();
 
 		for (ResponsibleDTO item : collection) {
 			if (item.getUuid() == null) {
-				models.add(persist(item, details));
+				try {
+					response.add(getDao().save(persist(item, details)));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			} else {
-				models.add(patch(item, details));
+				try {
+					response.add(getDao().save(patch(item, details)));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
-
-		return getDao().save(models).stream().map(responsible -> new ResponsibleDTO(responsible, true)).collect(Collectors.toList());
+		return response;
 	}
 
 	@Override
@@ -87,12 +98,17 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 
 	protected Responsible persist(ResponsibleDTO create, UserDetails details) {
 		Responsible		model		= create.getModel();
+		Community		community	= getCommunityDAO().findOne(model.getCommunity().getName(), getCityDAO().findOne(create.getCommunity().getCityUUID()).getId());
 
 		if (model.getCommunity() != null) {
 			if (model.getCommunity().getUuid() != null) {
-				model.setCommunity(CommunityBO.setupCommunity(getCommunityDAO().findOne(model.getCommunity().getUuid()), model.getCommunity(), getCityDAO().findOne(create.getCommunity().getCityUUID())));
+				model.setCommunity(CommunityBO.setupCommunity(community, model.getCommunity(), getCityDAO().findOne(create.getCommunity().getCityUUID())));
 			} else {
-				model.getCommunity().setCity(getCityDAO().findOne(create.getCommunity().getCityUUID()));
+				if (community != null) {
+					model.setCommunity(CommunityBO.setupCommunity(community, model.getCommunity(), getCityDAO().findOne(create.getCommunity().getCityUUID())));
+				} else {
+					model.getCommunity().setCity(getCityDAO().findOne(create.getCommunity().getCityUUID()));
+				}
 			}
 		}
 		return model;
@@ -103,9 +119,23 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		Responsible		responsible	= getDao().findOne(model.getUuid());
 		Community 		community	= update.getCommunity().getModel();
 
-		community.setId(community.getUuid() != null? getCommunityDAO().findOne(community.getUuid()).getId() : 0L);
-		community.setCity(getCityDAO().findOne(update.getCommunity().getCityUUID()));
+		if (model.getCommunity().getUuid() != null) {
+			community.setId(community.getUuid() != null ? getCommunityDAO().findOne(community.getUuid()).getId() : 0L);
+			community.setCity(getCityDAO().findOne(update.getCommunity().getCityUUID()));
+		} else {
+			Community c = getCommunityDAO().findOne(model.getCommunity().getName(), getCityDAO().findOne(update.getCommunity().getCityUUID()).getId());
+			if (c != null) {
+				community.setId(c.getId());
+				community.setCity(getCityDAO().findOne(update.getCommunity().getCityUUID()));
+			} else {
+				community.setCity(getCityDAO().findOne(update.getCommunity().getCityUUID()));
+			}
+		}
 
+		return setupResponsible(responsible, model, community);
+	}
+
+	protected static Responsible setupResponsible(Responsible responsible, Responsible model, Community community) {
 		responsible.setFamilyHasChildren(model.isFamilyHasChildren());
 		responsible.setName(model.getName());
 		responsible.setCommunity(community);

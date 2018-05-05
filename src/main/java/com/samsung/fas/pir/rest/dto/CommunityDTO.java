@@ -20,6 +20,11 @@ import java.util.UUID;
 public class CommunityDTO {
 	@Getter
 	@Setter
+	@JsonProperty("external_id")
+	private		long		tempID;
+
+	@Getter
+	@Setter
 	@JsonProperty("id")
 	private 	UUID 			uuid;
 
@@ -167,6 +172,7 @@ public class CommunityDTO {
 	}
 
 	public CommunityDTO(Community community, boolean detailed) {
+		setTempID(community.getTempID());
 		setUuid(community.getUuid());
 		setName(community.getName());
 		setWaterSupply(community.getWaterSupply());
@@ -183,7 +189,7 @@ public class CommunityDTO {
 		hasReligiousPlace(community.hasReligiousPlace());
 		hasCulturalEvents(community.hasCulturalEvents());
 		hasPatron(community.hasPatron());
-		setCommunityZone(community.getCommunityZone().toString());
+		setCommunityZone(community.getCommunityZone().getValue());
 		hasCommunityLeaders(community.hasCommunityLeaders());
 		setCity(new CityDTO(community.getCity(), false));
 		setCulturalProductions(community.getCulturalProductions());
@@ -197,6 +203,7 @@ public class CommunityDTO {
 	@JsonIgnore
 	public Community getModel() {
 		Community model = new Community();
+		model.setTempID(getTempID());
 		model.setUuid(getUuid());
 		model.setName(getName());
 		model.setWaterSupply(getWaterSupply());
