@@ -17,14 +17,6 @@ import java.util.Collection;
 public class AnswerBO extends BaseBO<Answer, AnswerDAO, AnswerDTO, Long> {
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE, onMethod = @__(@Autowired))
-	private		ChildDAO		childDAO;
-
-	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__(@Autowired))
-	private 	MotherDAO		motherDAO;
-
-	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__(@Autowired))
 	private		AlternativeDAO	alternativeDAO;
 
 	@Getter(AccessLevel.PRIVATE)
@@ -39,15 +31,11 @@ public class AnswerBO extends BaseBO<Answer, AnswerDAO, AnswerDTO, Long> {
 	@Override
 	public AnswerDTO save(AnswerDTO create, UserDetails account) {
 		Answer		model		= create.getModel();
-		Mother		mother		= create.getMotherUUID() != null? getMotherDAO().findOne(create.getMotherUUID()) : null;
-		Child 		child		= create.getChildUUID() != null? getChildDAO().findOne(create.getChildUUID()) : null;
 		Question 	question	= create.getQuestionUUID() != null? getQuestionDAO().findOne(create.getQuestionUUID()) : null;
 		Alternative alternative	= create.getAlternativeUUID() != null? getAlternativeDAO().findOne(create.getAlternativeUUID()) : null;
 
 		model.setAlternative(alternative);
-		model.setChild(child);
 		model.setQuestion(question);
-		model.setMother(mother);
 
 		return new AnswerDTO(getDao().save(model), true);
 	}

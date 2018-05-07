@@ -120,7 +120,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		model.getResponsibles().forEach(responsibleModel -> {
 			responsibleModel.setId(responsibles.stream().filter(community -> community.getUuid().compareTo(responsibleModel.getUuid()) == 0).findAny().orElse(responsibleModel).getId());
 			responsibleModel.getCommunity().setId(communities.stream().filter(community -> community.getUuid().compareTo(responsibleModel.getCommunity().getUuid()) == 0).findAny().orElse(responsibleModel.getCommunity()).getId());
-			responsibleModel.getCommunity().setCity(cities.stream().filter(city -> city.getUuid().compareTo(update.getResponsibles().stream().filter(responsibleDTO -> responsibleDTO.getCommunity().getCityUUID().compareTo(city.getUuid()) == 0).findAny().orElseThrow(() -> new RESTException("notfound")).getUuid()) == 0).findAny().orElseThrow(() -> new RESTException("notfound")));
+			responsibleModel.getCommunity().setCity(cities.stream().filter(city -> city.getUuid().compareTo(update.getResponsibles().stream().filter(dto -> dto.getCommunity().getCityUUID().compareTo(city.getUuid()) == 0).findAny().orElseThrow(() -> new RESTException("not.found")).getCommunity().getCityUUID()) == 0).findAny().orElseThrow(() -> new RESTException("not.found")));
 		});
 
 		child.setTempID(model.getTempID());

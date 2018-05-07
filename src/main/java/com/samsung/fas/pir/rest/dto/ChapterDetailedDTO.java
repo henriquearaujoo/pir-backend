@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.Chapter;
+import com.samsung.fas.pir.rest.utils.CTools;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -98,7 +99,7 @@ public class ChapterDetailedDTO {
 	@Getter
 	@Setter
 	@JsonProperty("percentage")
-	private 	float 					untilComplete		= 25.0f;
+	private 	float 					untilComplete;
 
 	@Getter
 	@Setter
@@ -129,6 +130,7 @@ public class ChapterDetailedDTO {
 		setTimeUntilNext(chapter.getTimeUntilNext()/1000/3600/24);
 		setStatus(chapter.isValid());
 		setResources(chapter.getResources());
+		setUntilComplete(CTools.calculateChapterCompleteness(chapter));
 		setGreetings(chapter.getGreetings() != null? new GreetingsDTO(chapter.getGreetings(), true) : null);
 		setIntervention(chapter.getIntervention() != null? new InterventionDTO(chapter.getIntervention(), true) : null);
 		setConclusion(chapter.getConclusion() != null? new ConclusionDTO(chapter.getConclusion(), true) : null);

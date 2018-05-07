@@ -13,6 +13,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class ChildDTO {
 	@Getter
 	@Setter
 	@JsonProperty("gender")
-	@NotBlank(message = "gender.missing")
+	@NotNull(message = "gender.missing")
 	private 	EChildGender 	gender;
 
 	@Getter

@@ -19,6 +19,11 @@ import java.util.Date;
 public class Visit extends BaseID {
 	@Getter
 	@Setter
+	@Transient
+	private 	long			tempID;
+
+	@Getter
+	@Setter
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false, nullable = false)
 	@Alias("Realizada Em")
@@ -57,14 +62,14 @@ public class Visit extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn
 	@Alias("Responsável")
 	private 	Responsible		responsible;
 
 	@Getter
 	@Setter
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn
 	@Alias("Criança")
 	private 	Child			child;
@@ -85,7 +90,7 @@ public class Visit extends BaseID {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "visit", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "visit", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Alias("Respostas")
 	private 	Collection<Answer>		answers;
 }

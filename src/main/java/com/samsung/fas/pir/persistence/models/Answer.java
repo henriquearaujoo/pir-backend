@@ -10,30 +10,21 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "answers", uniqueConstraints = @UniqueConstraint(columnNames = {"child_id", "alternative_id", "mother_id", "question_id"}, name = "answer"))
+@Table(name = "answers", uniqueConstraints = @UniqueConstraint(columnNames = {"alternative_id", "question_id", "visit_id"}, name = "answer"))
 @DynamicUpdate
 @DynamicInsert
 @Alias("Resposta")
 public class Answer extends BaseID {
 	@Getter
 	@Setter
+	@Transient
+	private 	long			tempID;
+
+	@Getter
+	@Setter
 	@Column
 	@Alias("Descrição")
 	private 	String			description;
-
-	@Getter
-	@Setter
-	@ManyToOne
-	@JoinColumn
-	@Alias("Criança")
-	private		Child			child;
-
-	@Getter
-	@Setter
-	@ManyToOne
-	@JoinColumn
-	@Alias("Mãe")
-	private		Mother			mother;
 
 	@Getter
 	@Setter

@@ -5,12 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.Visit;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
@@ -18,7 +16,7 @@ import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class VisitDTO {
+public class VisitFrontDTO {
 	@Getter
 	@Setter
 	@JsonProperty("external_id")
@@ -56,13 +54,13 @@ public class VisitDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty(value = "agent_id")
-	private 		UUID		agentUUID;
+	@JsonProperty(value = "agent")
+	private 		UserDTO		agent;
 
 	@Getter
 	@Setter
-	@JsonProperty(value = "chapter_id")
-	private 		UUID		chapterUUID;
+	@JsonProperty(value = "chapter")
+	private 		ChapterDTO	chapter;
 
 	@Getter
 	@Setter
@@ -71,15 +69,15 @@ public class VisitDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty(value = "responsible")
+	@JsonProperty(value = "child")
 	@Valid
-	private 		ResponsibleDTO				responsible;
+	private 		ChildDTO	child;
 
 	@Getter
 	@Setter
-	@JsonProperty(value = "child")
+	@JsonProperty(value = "responsible")
 	@Valid
-	private 		ChildDTO					child;
+	private 		ResponsibleDTO		responsible;
 
 	@Getter
 	@Setter
@@ -87,11 +85,11 @@ public class VisitDTO {
 	@Valid
 	private 		Collection<AnswerDTO>		answers;
 
-	public VisitDTO() {
+	public VisitFrontDTO() {
 		super();
 	}
 
-	public VisitDTO(Visit visit, boolean detailed) {
+	public VisitFrontDTO(Visit visit, boolean detailed) {
 		setUuid(visit.getUuid());
 		setNumber(visit.getNumber());
 		setFamilyRating(visit.getFamilyRating());
@@ -101,8 +99,8 @@ public class VisitDTO {
 		setTempID(visit.getTempID());
 
 		setAnswers(visit.getAnswers() != null? visit.getAnswers().stream().map(answer -> new AnswerDTO(answer, true)).collect(Collectors.toList()) : null);
-		setAgentUUID(visit.getAgent().getUuid());
-		setChapterUUID(visit.getChapter().getUuid());
+		setAgent(new UserDTO(visit.getAgent(), false));
+		setChapter(new ChapterDTO(visit.getChapter(), false));
 		setFormUUID(visit.getForm() != null? visit.getForm().getUuid() : null);
 		setChild(visit.getChild() != null? new ChildDTO(visit.getChild(), false) : null);
 		setResponsible(visit.getResponsible() != null? new ResponsibleDTO(visit.getResponsible(), false) : null);

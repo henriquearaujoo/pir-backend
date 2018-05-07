@@ -35,8 +35,8 @@ public class ChapterDAO extends BaseDAO<Chapter, Long, IChapter, QChapter> {
 
 	public Collection<Chapter> findAllValid() {
 		JPAQuery<Chapter>	query 		= new JPAQuery<>(emanager);
-		QChapter 			chapter		= QChapter.chapter1;
-		QChapter 			achapter	= new QChapter("active_chapters");
+		QChapter 			chapter		= new QChapter("chapters");
+		QChapter 			achapter	= new QChapter("active");
 		return query.select(chapter).from(chapter).innerJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).orderBy(chapter.chapter.asc()).orderBy(chapter.version.asc()).fetch();
 	}
 

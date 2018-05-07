@@ -38,10 +38,4 @@ public class Mother extends BaseNID {
 	@Enumerated(EnumType.STRING)
 	@Alias("Estado Civil")
 	private 	ECivilState 		civilState;
-
-	@Getter
-	@Setter
-	@OneToMany(mappedBy = "mother")
-	@Alias("Respostas")
-	private 	Collection<Answer>	answers;
 }

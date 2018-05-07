@@ -55,7 +55,7 @@ public class ResponsibleDTO {
 	@Getter
 	@Setter
 	@JsonProperty("habitation_type")
-	@NotBlank(message = "habitation.type.missing")
+	@NotNull(message = "habitation.type.missing")
 	private 	EHabitationType	habitationType;
 
 	@Getter

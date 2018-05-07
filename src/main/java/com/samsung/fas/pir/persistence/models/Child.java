@@ -27,7 +27,7 @@ public class Child extends BaseID {
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "VARCHAR(100)")
 	@Alias("Nome")
 	private 	String			name;
 
@@ -40,7 +40,7 @@ public class Child extends BaseID {
 
 	@Getter
 	@Setter
-	@Column
+	@Column(columnDefinition = "VARCHAR(100)")
 	@Alias("Nome do Pai")
 	private 	String			fatherName;
 
@@ -129,12 +129,6 @@ public class Child extends BaseID {
 	@JoinColumn
 	@Alias("Mãe")
 	private 	Responsible		mother;
-
-	@Getter
-	@Setter
-	@OneToMany(mappedBy = "child")
-	@Alias("Respostas")
-	private 	Collection<Answer>	answers;
 
 	@Getter
 	@Setter

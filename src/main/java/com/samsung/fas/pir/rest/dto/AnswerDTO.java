@@ -16,6 +16,11 @@ import java.util.UUID;
 public class AnswerDTO {
 	@Getter
 	@Setter
+	@JsonProperty("external_id")
+	private		long		tempID;
+
+	@Getter
+	@Setter
 	@JsonProperty("id")
 	private		UUID		uuid;
 
@@ -23,16 +28,6 @@ public class AnswerDTO {
 	@Setter
 	@JsonProperty("answer")
 	private 	String		answer;
-
-	@Getter(onMethod = @__({@JsonIgnore}))
-	@Setter
-	@JsonProperty(value = "child_id", access = JsonProperty.Access.WRITE_ONLY)
-	private 	UUID		childUUID;
-
-	@Getter(onMethod = @__({@JsonIgnore}))
-	@Setter
-	@JsonProperty(value = "mother_id", access = JsonProperty.Access.WRITE_ONLY)
-	private 	UUID		motherUUID;
 
 	@Getter(onMethod = @__({@JsonIgnore}))
 	@Setter
@@ -56,27 +51,14 @@ public class AnswerDTO {
 	@JsonProperty(value = "question")
 	private 	QuestionDTO			question;
 
-	@ApiModelProperty(readOnly = true, hidden = true)
-	@Getter
-	@Setter(onMethod = @__({@JsonIgnore}))
-	@JsonProperty(value = "child")
-	private 	ChildDTO			child;
-
-	@ApiModelProperty(readOnly = true, hidden = true)
-	@Getter
-	@Setter(onMethod = @__({@JsonIgnore}))
-	@JsonProperty(value = "mother")
-	private 	MotherDTO			mother;
-
 	public AnswerDTO() {
 		super();
 	}
 
 	public AnswerDTO(Answer answer, boolean detailed) {
+		setTempID(answer.getTempID());
 		setUuid(answer.getUuid());
 		setAnswer(answer.getDescription());
-		setChild(answer.getChild() != null? new ChildDTO(answer.getChild(), false) : null);
-		setMother(answer.getMother() != null? new MotherDTO(answer.getMother(), false) : null);
 		setQuestion(answer.getQuestion() != null? new QuestionDTO(answer.getQuestion(), false) : null);
 		setAlternative(answer.getAlternative() != null? new AlternativeDTO(answer.getAlternative(), false) : null);
 	}
@@ -86,6 +68,7 @@ public class AnswerDTO {
 		Answer answer = new Answer();
 		answer.setDescription(getAnswer());
 		answer.setUuid(getUuid());
+		answer.setTempID(getTempID());
 		return answer;
 	}
 
