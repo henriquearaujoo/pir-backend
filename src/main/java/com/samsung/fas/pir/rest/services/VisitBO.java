@@ -132,35 +132,52 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 			User			agent		= getUserDAO().findOne(create.getAgentUUID());
 			Chapter			chapter		= getChapterDAO().findOne(create.getChapterUUID());
 			Form			form		= create.getFormUUID() != null? getFormDAO().findOne(create.getFormUUID()) : null;
+			//
+			Responsible		responsible	= model.getResponsible() != null? getResponsibleDAO().findOneByMobileId(model.getResponsible().getMobileId()) : null;
+			Child			child		= model.getChild() != null? getChildDAO().findOneByMobileId(model.getChild().getMobileId()) : null;
 
 			model.setAgent(agent);
 			model.setChapter(chapter);
 			model.setForm(form);
 			model.setAnswers(setupAnswers(create.getAnswers(), model));
 
-			if (create.getChild() != null) {
-				if (create.getChild().getUuid() == null) {
-					Optional<Visit> visit = response.stream().filter(v -> v.getChild() != null && v.getChild().getTempID() == model.getChild().getTempID()).findAny();
-					if (visit.isPresent()) {
-						model.setChild(visit.get().getChild());
-					} else {
-						model.setChild(getChildBO().persist(create.getChild(), details));
-					}
-				} else {
-					model.setChild(getChildBO().patch(create.getChild(), details));
-				}
-			}
+			if (responsible != null)
+				model.setResponsible(responsible);
 
-			if (create.getResponsible() != null) {
-				if (create.getResponsible().getUuid() == null) {
-					Optional<Visit> visit = response.stream().filter(v -> v.getResponsible() != null && v.getResponsible().getTempID() == model.getResponsible().getTempID()).findAny();
-					if (visit.isPresent()) {
-						model.setResponsible(visit.get().getResponsible());
+			if (child != null)
+				model.setChild(child);
+
+			if (responsible == null && child == null) {
+				if (create.getChild() != null) {
+					create.getChild().getResponsibles().stream().filter(r -> r.getTempID() == create.getChild().getMother().getTempID()).findAny().ifPresent(remove -> create.getChild().getResponsibles().remove(remove));
+
+					if (create.getChild().getUuid() == null) {
+						Optional<Visit> visit = response.stream().filter(v -> v.getChild() != null && v.getChild().getMobileId() == model.getChild().getMobileId()).findAny();
+						if (visit.isPresent()) {
+							model.setChild(visit.get().getChild());
+						} else {
+							model.setChild(getChildBO().persist(create.getChild(), details));
+						}
 					} else {
-						model.setResponsible(getResponsibleBO().persist(create.getResponsible(), details));
+						model.setChild(getChildBO().patch(create.getChild(), details));
 					}
-				} else {
-					model.setResponsible(getResponsibleBO().patch(create.getResponsible(), details));
+
+					response.stream().filter(v -> (v.getChild() != null && v.getChild().getMother() != null) && v.getChild().getMother().getMobileId() == create.getChild().getMother().getTempID()).findAny().ifPresent(item -> model.getChild().setMother(item.getResponsible()));
+				}
+
+				if (create.getResponsible() != null) {
+					if (create.getResponsible().getUuid() == null) {
+						Optional<Visit> visit = response.stream().filter(v -> v.getResponsible() != null && v.getResponsible().getMobileId() == model.getResponsible().getMobileId()).findAny();
+						if (visit.isPresent()) {
+							model.setResponsible(visit.get().getResponsible());
+						} else {
+							model.setResponsible(getResponsibleBO().persist(create.getResponsible(), details));
+						}
+					} else {
+						model.setResponsible(getResponsibleBO().patch(create.getResponsible(), details));
+					}
+
+					response.stream().filter(v -> (v.getChild() != null && v.getChild().getMother() != null) && v.getChild().getMother().getMobileId() == create.getResponsible().getTempID()).findAny().ifPresent(item -> model.setResponsible(item.getChild().getMother()));
 				}
 			}
 

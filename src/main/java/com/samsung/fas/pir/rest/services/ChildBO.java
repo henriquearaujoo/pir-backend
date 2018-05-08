@@ -71,7 +71,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 				}
 			} else {
 				try {
-					response.add(getDao().save(persist(item, details)));
+					response.add(getDao().save(patch(item, details)));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -89,6 +89,10 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	protected Child persist(ChildDTO create, UserDetails details) {
 		Child					model			= create.getModel();
 		Responsible				mother			= create.getMother() != null? create.getMother().getUuid() != null? getResponsibleDAO().findOne(create.getMother().getUuid()) : create.getMother().getModel() : null;
+		City					city			= mother != null && create.getMother().getCommunity() != null? getCityDAO().findOne(create.getMother().getCommunity().getCityUUID()) : null;
+		Community				community		= city != null && create.getMother().getCommunity() != null? create.getMother().getCommunity().getUuid() != null? getCommunityDAO().findOne(create.getMother().getCommunity().getUuid()) : create.getMother().getCommunity().getModel() : null;
+		Collection<Responsible>	responsibles	= getResponsibleDAO().findAllByMobileIdIn(create.getResponsibles().stream().map(ResponsibleDTO::getTempID).collect(Collectors.toList()));
+		Collection<Responsible> rmodels			= getResponsibleBO().internalSaving(create.getResponsibles(), details);
 
 		if (mother != null && mother.getMother() == null)
 			throw new RESTException("not.mother");
@@ -96,12 +100,25 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		if (mother != null && mother.getId() != 0)
 			model.getMother().setId(mother.getId());
 
-		model.setResponsibles(getResponsibleBO().internalSaving(create.getResponsibles(), details));
+		model.setMother(mother);
+		model.setResponsibles(responsibles);
+
+		responsibles.forEach(responsible -> {
+			rmodels.stream().filter(dto -> dto.getMobileId() == responsible.getMobileId()).findAny().ifPresent(rmodels::remove) ;
+		});
+
+		model.getResponsibles().addAll(rmodels);
 		model.getResponsibles().forEach(responsible -> {
 			if (responsible.getChildren() == null)
 				responsible.setChildren(new ArrayList<>());
 			responsible.getChildren().add(model);
 		});
+
+		if (community != null)
+			model.getMother().setCommunity(community);
+
+		if (city != null)
+			model.getMother().getCommunity().setCity(city);
 
 		return model;
 	}
@@ -117,13 +134,18 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		if (mother != null && mother.getId() != 0)
 			model.getMother().setId(mother.getId());
 
-		model.getResponsibles().forEach(responsibleModel -> {
-			responsibleModel.setId(responsibles.stream().filter(community -> community.getUuid().compareTo(responsibleModel.getUuid()) == 0).findAny().orElse(responsibleModel).getId());
-			responsibleModel.getCommunity().setId(communities.stream().filter(community -> community.getUuid().compareTo(responsibleModel.getCommunity().getUuid()) == 0).findAny().orElse(responsibleModel.getCommunity()).getId());
-			responsibleModel.getCommunity().setCity(cities.stream().filter(city -> city.getUuid().compareTo(update.getResponsibles().stream().filter(dto -> dto.getCommunity().getCityUUID().compareTo(city.getUuid()) == 0).findAny().orElseThrow(() -> new RESTException("not.found")).getCommunity().getCityUUID()) == 0).findAny().orElseThrow(() -> new RESTException("not.found")));
+		update.getResponsibles().forEach(rcreate -> {
+			Responsible responsible = getResponsibleDAO().findOneByMobileId(rcreate.getTempID());
+			if (responsible == null) {
+				model.getResponsibles().add(getResponsibleBO().persist(rcreate, details));
+			}
 		});
 
-		child.setTempID(model.getTempID());
+		responsibles.forEach(responsible -> {
+			model.getResponsibles().stream().filter(dto -> dto.getMobileId() == responsible.getMobileId()).findAny().ifPresent(model.getResponsibles()::remove);
+		});
+
+		child.setMobileId(model.getMobileId());
 		child.setName(model.getName());
 		child.setFatherName(model.getFatherName());
 		child.setGender(model.getGender());
@@ -146,6 +168,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 
 		child.getResponsibles().clear();
 		child.getResponsibles().addAll(model.getResponsibles());
+		child.getResponsibles().addAll(responsibles);
 
 		return child;
 	}

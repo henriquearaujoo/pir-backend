@@ -28,6 +28,14 @@ public class ResponsibleDAO extends BaseDAO<Responsible, Long, IResponsible, QRe
 		this.emanager = emanager;
 	}
 
+	public Responsible findOneByMobileId(long id) {
+		return getRepository().findByMobileId(id);
+	}
+
+	public Collection<Responsible> findAllByMobileIdIn(Collection<Long> collection) {
+		return getRepository().findAllByMobileIdIn(collection);
+	}
+
 	public Collection<Responsible> findAllIn(Collection<UUID> collection) {
 		return getRepository().findAllByUuidIn(collection);
 	}

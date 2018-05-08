@@ -98,7 +98,7 @@ public class VisitDTO {
 		setAgentRating(visit.getAgentRating());
 		setDoneAt(visit.getDoneAt());
 		setDuration(visit.getDuration());
-		setTempID(visit.getTempID());
+		setTempID(visit.getMobileId());
 
 		setAnswers(visit.getAnswers() != null? visit.getAnswers().stream().map(answer -> new AnswerDTO(answer, true)).collect(Collectors.toList()) : null);
 		setAgentUUID(visit.getAgent().getUuid());
@@ -112,7 +112,7 @@ public class VisitDTO {
 	public Visit getModel() {
 		Visit model = new Visit();
 
-		model.setTempID(getTempID());
+		model.setMobileId(getTempID());
 		model.setUuid(getUuid());
 		model.setNumber(getNumber());
 		model.setFamilyRating(getFamilyRating());

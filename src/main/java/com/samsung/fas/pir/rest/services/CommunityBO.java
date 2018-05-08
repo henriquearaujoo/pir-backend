@@ -81,7 +81,7 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 	}
 
 	protected static Community setupCommunity(Community community, Community model, City city) {
-		community.setTempID(model.getTempID());
+		community.setMobileId(model.getMobileId());
 		community.setName(model.getName());
 		community.setWaterSupply(model.getWaterSupply());
 		community.setGarbageDestination(model.getGarbageDestination());

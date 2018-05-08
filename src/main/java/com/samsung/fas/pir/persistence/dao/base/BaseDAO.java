@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -62,8 +63,8 @@ public abstract class BaseDAO<T, ID extends Serializable, TR extends IBaseReposi
 	}
 
 	@Override
-	public Set<T> save(Iterable<T> models) {
-		return StreamSupport.stream(repository.saveAll(models).spliterator(), false).collect(Collectors.toSet());
+	public List<T> save(Iterable<T> models) {
+		return StreamSupport.stream(repository.saveAll(models).spliterator(), false).collect(Collectors.toList());
 	}
 
 	@Override

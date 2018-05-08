@@ -15,15 +15,15 @@ import java.util.Collection;
 import java.util.Date;
 
 @Entity
-@Table(name = "child")
+@Table(name = "child", uniqueConstraints = @UniqueConstraint(columnNames = {"id", "mother_id"}, name = "child_mother"))
 @DynamicUpdate
 @DynamicInsert
 @Alias("Criança")
 public class Child extends BaseID {
-	@Transient
 	@Getter
 	@Setter
-	private		long			tempID;
+	@Column(unique = true)
+	private		long			mobileId;
 
 	@Getter
 	@Setter
@@ -125,7 +125,7 @@ public class Child extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn
 	@Alias("Mãe")
 	private 	Responsible		mother;

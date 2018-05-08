@@ -13,6 +13,8 @@ import javax.annotation.Nonnull;
 
 @Repository
 public interface IChild extends IBaseRepository<Child, Long, QChild> {
+	Child findByMobileId(long id);
+
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QChild root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

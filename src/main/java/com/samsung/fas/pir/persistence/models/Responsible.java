@@ -20,10 +20,10 @@ import java.util.Date;
 @DynamicInsert
 @Alias("Responsável")
 public class Responsible extends BaseID {
-	@Transient
 	@Getter
 	@Setter
-	private		long				tempID;
+	@Column(unique = true)
+	private		long				mobileId;
 
 	@Getter
 	@Setter

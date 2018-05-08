@@ -172,7 +172,7 @@ public class CommunityDTO {
 	}
 
 	public CommunityDTO(Community community, boolean detailed) {
-		setTempID(community.getTempID());
+		setTempID(community.getMobileId());
 		setUuid(community.getUuid());
 		setName(community.getName());
 		setWaterSupply(community.getWaterSupply());
@@ -203,7 +203,7 @@ public class CommunityDTO {
 	@JsonIgnore
 	public Community getModel() {
 		Community model = new Community();
-		model.setTempID(getTempID());
+		model.setMobileId(getTempID());
 		model.setUuid(getUuid());
 		model.setName(getName());
 		model.setWaterSupply(getWaterSupply());

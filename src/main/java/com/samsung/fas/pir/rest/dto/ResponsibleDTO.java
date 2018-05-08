@@ -140,7 +140,7 @@ public class ResponsibleDTO {
 	}
 
 	public ResponsibleDTO(Responsible responsible, boolean detailed) {
-		setTempID(responsible.getTempID());
+		setTempID(responsible.getMobileId());
 		setName(responsible.getName());
 		setUuid(responsible.getUuid());
 		setBirth(new SimpleDateFormat("dd-MM-yyyy").format(responsible.getBirth()));
@@ -163,7 +163,7 @@ public class ResponsibleDTO {
 	@JsonIgnore
 	public Responsible getModel() {
 		Responsible model = new Responsible();
-		model.setTempID(getTempID());
+		model.setMobileId(getTempID());
 		model.setFamilyHasChildren(hasOtherChildren());
 		model.setName(getName());
 		model.setUuid(getUuid());

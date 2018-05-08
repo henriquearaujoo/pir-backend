@@ -120,8 +120,9 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		Community 		community	= update.getCommunity().getModel();
 
 		if (model.getCommunity().getUuid() != null) {
-			community.setId(community.getUuid() != null ? getCommunityDAO().findOne(community.getUuid()).getId() : 0L);
-			community.setCity(getCityDAO().findOne(update.getCommunity().getCityUUID()));
+//			community.setId(community.getUuid() != null ? getCommunityDAO().findOne(community.getUuid()).getId() : 0L);
+//			community.setCity(getCityDAO().findOne(update.getCommunity().getCityUUID()));
+			community = CommunityBO.setupCommunity(getCommunityDAO().findOne(community.getUuid()), model.getCommunity(), getCityDAO().findOne(update.getCommunity().getCityUUID()));
 		} else {
 			Community c = getCommunityDAO().findOne(model.getCommunity().getName(), getCityDAO().findOne(update.getCommunity().getCityUUID()).getId());
 			if (c != null) {
@@ -151,6 +152,7 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		responsible.setHasSanitation(model.isHasSanitation());
 		responsible.setHasWaterTreatment(model.isHasWaterTreatment());
 		responsible.setObservations(model.getObservations());
+		responsible.setMobileId(model.getMobileId());
 
 		return responsible;
 	}

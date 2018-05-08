@@ -137,7 +137,7 @@ public class ChildDTO {
 	}
 
 	public ChildDTO(Child child, boolean detailed) {
-		setTempID(child.getTempID());
+		setTempID(child.getMobileId());
 		setUuid(child.getUuid());
 		setName(child.getName());
 		setBirth(new SimpleDateFormat("dd-MM-yyyy").format(child.getBirth()));
@@ -164,7 +164,7 @@ public class ChildDTO {
 	public Child getModel() {
 		Child model = new Child();
 
-		model.setTempID(getTempID());
+		model.setMobileId(getTempID());
 		model.setUuid(getUuid());
 		model.setName(getName());
 		model.setFatherName(getFatherName());
@@ -182,6 +182,7 @@ public class ChildDTO {
 		model.setVacinationUpToDate(isVacinationUpToDate());
 		model.setRelationDifficulties(isHasRelationDifficulties());
 		model.setResponsibles(getResponsibles() != null? getResponsibles().stream().map(ResponsibleDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
+		model.setMother(getMother() != null? getMother().getModel() : null);
 
 		try {
 			model.setBirth(new SimpleDateFormat("dd-MM-yyyy").parse(getBirth()));

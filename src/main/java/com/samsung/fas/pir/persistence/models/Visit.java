@@ -19,8 +19,8 @@ import java.util.Date;
 public class Visit extends BaseID {
 	@Getter
 	@Setter
-	@Transient
-	private 	long			tempID;
+	@Column(unique = true)
+	private 	long			mobileId;
 
 	@Getter
 	@Setter
