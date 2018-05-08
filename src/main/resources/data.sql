@@ -3,38 +3,37 @@
 
 INSERT INTO pages (title_url, url_path)
 VALUES
-	('user-list', 'user-list'),
-	('profile-list', 'profile-list'),
-	('user', 'user'),
-	('user-edit', 'user-edit'),
-	('user-details', 'user-details'),
-	('page-list', 'page-list'),
-	('template-chapter', 'template-chapter'),
-	('chapter-dashboard',	'chapter-dashboard'),
-	('community-list', 'community-list'),
-	('community', 'community'),
-	('child-list', 'child-list'),
-	('responsible-list', 'responsible-list'),
-	('responsible', 'responsible'),
-	('child', 'child'),
-	('community-details',	'community-details'),
-	('responsible-details',	'responsible-details'),
-	('child-details',	'child-details'),
-	('pregnant', 'pregnant'),
-	('pregnant-list', 'pregnant-list'),
-	('child', 'child'),
-	('pregnant-details', 'pregnant-details'),
-	('agent-information', 'agent-information'),
-	('agent', 'agent'),
-	('agent-details', 'agent-details'),
-	('agent-location', 'agent-location'),
-	('agent-map', 'agent-map'),
-	('visit-historic', 'visit-historic'),
-	('family-list', 'family-list'),
-	('visit-historic-list', 'visit-historic-list'),
-	('form-template','form-template'),
-	('form-template-list','form-template-list'),
-	('form-template-detailed','form-template-detailed')
+	('Lista de Capítulos', 'capitulos'),
+	('Registro de Capítulos', 'capitulos/dashboard'),
+	('Lista de Usuários', 'usuarios'),
+	('Registro de Usuários', 'usuarios/registro'),
+	('Detalhes do Usuário', 'usuarios/detalhes'),
+	('Informaçoes do Agente', 'agente-dashboard'),
+	('Registro do Agente', 'agente-dashboard/registro'),
+	('Detalhes do Agente', 'agente-dashboard/detalhes'),
+	('Localização do Agente', 'agente-dashboard/localizacao'),
+	('Histórico de Visita', 'agente-visita'),
+	('Lista de Visitas', 'agente-visita/historico'),
+	('Desempenho do Agente', 'agente-desempenho'),
+	('Mapa dos Agentes', 'agentes-mapa'),
+	('Lista de Perfis', 'perfis'),
+	('Lista de Responsáveis', 'responsaveis'),
+	('Detalhes do Responsável', 'responsaveis/detalhes'),
+	('Registro do Responsável', 'responsaveis/registro'),
+	('Lista de Gestantes', 'gestantes'),
+	('Detalhes da Gestante', 'gestantes/detalhes'),
+	('Registro da Gestante', 'gestantes/registro'),
+	('Lista de Crianças', 'criancas'),
+	('Detalhes da Criança', 'criancas/detalhes'),
+	('Registro da Criança', 'criancas/registro'),
+	('Lista de Comunidades', 'comunidades'),
+	('Registro da Comunidade', 'comunidades/registro'),
+	('Detalhes da Comunidade', 'comunidades/detalhes'),
+	('Lista de Formulários', 'formularios'),
+	('Registro de Formulário', 'formularios/registro'),
+	('Detalhes do Formulário', 'formularios/detalhes'),
+	('Dashboard', 'dashboard'),
+	('Registro de Capítulos', 'capitulos/registro')
 ON CONFLICT DO NOTHING;
 
 /* User */
@@ -49,12 +48,12 @@ ON CONFLICT DO NOTHING;
 /* Page Profile Permissions */
 INSERT INTO profile_pages (can_create, can_delete, can_read, can_update, page_id, profile_id)
 	(SELECT cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), pages.id, profile.id
-	 FROM pir.public.profile, public.pages)
+	 FROM public.profile, public.pages)
 ON CONFLICT DO NOTHING;
 
 /* Account */
 INSERT INTO account (id, credentials_expired, enabled, expired, locked, password, login, profile_id)
-VALUES((SELECT id FROM "user" WHERE name = 'Administrator'), FALSE, TRUE, FALSE, FALSE, '$2a$10$DHiwEO0otW0exjRhcsuhj.mJMUxZ2oAtQ/3SxVEXlETFd8WBn0Hqy', 'admin', (SELECT id FROM pir.public.profile WHERE title = 'Administrator'))
+VALUES((SELECT id FROM "user" WHERE name = 'Administrator'), FALSE, TRUE, FALSE, FALSE, '$2a$10$DHiwEO0otW0exjRhcsuhj.mJMUxZ2oAtQ/3SxVEXlETFd8WBn0Hqy', 'admin', (SELECT id FROM public.profile WHERE title = 'Administrator'))
 ON CONFLICT DO NOTHING;
 
 INSERT INTO states (id, uf_abbr, name)

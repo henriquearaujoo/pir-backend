@@ -7,11 +7,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.Address;
 import lombok.Getter;
 import lombok.Setter;
-
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -43,7 +43,7 @@ public class AddressDTO {
 	@Setter
 	@JsonProperty("city_id")
 	@NotNull(message="user.address.city.missing")
-	private		String			cityId;
+	private 	UUID			cityUUID;
 
 	@Getter
 	@Setter

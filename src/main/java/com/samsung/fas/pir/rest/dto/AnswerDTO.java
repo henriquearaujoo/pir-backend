@@ -4,58 +4,72 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.persistence.enums.EAnswerType;
 import com.samsung.fas.pir.persistence.models.Answer;
-import com.samsung.fas.pir.rest.utils.IDCoder;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
-
+import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AnswerDTO {
 	@Getter
 	@Setter
+	@JsonProperty("external_id")
+	private		long		tempID;
+
+	@Getter
+	@Setter
 	@JsonProperty("id")
-	private		String			id;
-
-	@Getter
-	@Setter
-	@JsonProperty("question_id")
-	private 	String			questionID;
-
-	@Getter
-	@Setter
-	@JsonProperty("type")
-	@NotNull(message = "type.missing")
-	private 	EAnswerType 	type;
+	private		UUID		uuid;
 
 	@Getter
 	@Setter
 	@JsonProperty("answer")
-	@NotBlank(message = "answer.missing")
-	private 	String			answer;
+	private 	String		answer;
+
+	@Getter(onMethod = @__({@JsonIgnore}))
+	@Setter
+	@JsonProperty(value = "question_id", access = JsonProperty.Access.WRITE_ONLY)
+	private 	UUID		questionUUID;
+
+	@Getter(onMethod = @__({@JsonIgnore}))
+	@Setter
+	@JsonProperty(value = "alternative_id", access = JsonProperty.Access.WRITE_ONLY)
+	private 	UUID		alternativeUUID;
+
+	@ApiModelProperty(readOnly = true, hidden = true)
+	@Getter
+	@Setter(onMethod = @__({@JsonIgnore}))
+	@JsonProperty(value = "alternative")
+	private 	AlternativeDTO		alternative;
+
+	@ApiModelProperty(readOnly = true, hidden = true)
+	@Getter
+	@Setter(onMethod = @__({@JsonIgnore}))
+	@JsonProperty(value = "question")
+	private 	QuestionDTO			question;
 
 	public AnswerDTO() {
 		super();
 	}
 
 	public AnswerDTO(Answer answer, boolean detailed) {
-		setId(IDCoder.encode(answer.getUuid()));
+		setTempID(answer.getTempID());
+		setUuid(answer.getUuid());
 		setAnswer(answer.getDescription());
-		setType(answer.getType());
-		setQuestionID(IDCoder.encode(answer.getQuestion().getUuid()));
+		setQuestion(answer.getQuestion() != null? new QuestionDTO(answer.getQuestion(), false) : null);
+		setAlternative(answer.getAlternative() != null? new AlternativeDTO(answer.getAlternative(), false) : null);
 	}
 
 	@JsonIgnore
 	public Answer getModel() {
-		Answer 		a	= new Answer();
-		a.setUuid(IDCoder.decode(getId()));
-		a.setDescription(getAnswer());
-		a.setType(getType());
-		return a;
+		Answer answer = new Answer();
+		answer.setDescription(getAnswer());
+		answer.setUuid(getUuid());
+		answer.setTempID(getTempID());
+		return answer;
 	}
+
 }

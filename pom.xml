@@ -5,11 +5,11 @@
 
 	<groupId>com.samsung.fas.pir</groupId>
 	<artifactId>pir</artifactId>
-	<version>0.0.8-SNAPSHOT</version>
+	<version>0.0.9-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>PIR</name>
-	<description>Demo project for Spring Boot</description>
+	<description>PIR - Primeira Infância Ribeirinha</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

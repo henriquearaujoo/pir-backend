@@ -10,7 +10,7 @@ public class CTools {
 	public static float calculateChapterCompleteness(Chapter entity) {
 		float	complete	= 25.0f;
 
-		if (entity.getConclusion() != null && entity.getConclusion().getQuestions() != null) {
+		if (entity.getConclusion() != null) {
 			complete 	+= 25.0f;
 		}
 

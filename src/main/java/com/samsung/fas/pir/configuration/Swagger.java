@@ -36,11 +36,11 @@ public class Swagger {
 					   .apiInfo(new ApiInfo(
 							   "PIR REST Documentation",
 							   "Documentation for PIR REST Services",
-							   "0.0.8",
+							   "DEVELOPMENT 0.0.9",
 							   "Terms of Service: TODO",
 							   new Contact("Instituto ITN", "http://www.institutoitn.com.br", "contato@institutoitn.com.br"),
-							   "Apache License Version 2.0",
-							   "https://www.apache.org/licenses/LICENSE-2.0",
+							   "TO DEFINE",
+							   "TO DEFINE",
 							   Collections.singleton(new VendorExtension<String>() {
 								   @Override
 								   public String getName() {

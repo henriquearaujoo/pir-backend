@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.enums.EFormQuestionType;
 import com.samsung.fas.pir.persistence.models.FormQuestion;
-import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-
 import org.hibernate.validator.constraints.NotBlank;
+
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -20,41 +20,41 @@ public class FormQuestionDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private 		String					id;
+	private		UUID		uuid;
 
 	@Getter
 	@Setter
 	@JsonProperty("form_id")
-	private 		String					formID;
+	private 	UUID		formUUID;
 
 	@Getter
 	@Setter
 	@JsonProperty("description")
 	@NotBlank(message = "description.missing")
-	private 		String					description;
+	private 	String		description;
 
 	@Getter
 	@Setter
 	@JsonProperty("type")
 	@NotNull(message = "type.missing")
-	private 		String					type;
+	private 	String		type;
 
 	@Getter
 	@Setter
 	@JsonProperty("is_enabled")
-	private 		boolean					enabled;
+	private 	boolean		enabled;
 
 	@Setter(value = AccessLevel.PRIVATE)
 	@Getter
 	@JsonProperty(value = "form", access = JsonProperty.Access.READ_ONLY)
-	private 		FormDTO					form;
+	private 	FormDTO		form;
 
 	public FormQuestionDTO() {
 		super();
 	}
 
 	public FormQuestionDTO(FormQuestion question, boolean detailed) {
-		setId(IDCoder.encode(question.getUuid()));
+		setUuid(question.getUuid());
 		setDescription(question.getDescription());
 		setType(question.getType().getValue());
 		setEnabled(question.isEnabled());
@@ -64,7 +64,7 @@ public class FormQuestionDTO {
 	@JsonIgnore
 	public FormQuestion getModel() {
 		FormQuestion model = new FormQuestion();
-		model.setUuid(IDCoder.decode(getId()));
+		model.setUuid(getUuid());
 		model.setDescription(getDescription());
 		model.setType(EFormQuestionType.setValue(getType()));
 		model.setEnabled(isEnabled());

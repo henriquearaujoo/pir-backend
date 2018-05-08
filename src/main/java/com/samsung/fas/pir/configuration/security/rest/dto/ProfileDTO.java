@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.configuration.security.persistence.models.Authority;
 import com.samsung.fas.pir.persistence.models.Profile;
-import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Collection;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -18,17 +18,17 @@ public class ProfileDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private 	String 				id;
+	private		UUID		uuid;
 
 	@Getter
 	@Setter
 	@JsonProperty("title")
-	private		String				title;
+	private		String		title;
 
 	@Getter
 	@Setter
 	@JsonProperty("description")
-	private		String				description;
+	private		String		description;
 
 	@Getter
 	@Setter
@@ -36,7 +36,7 @@ public class ProfileDTO {
 	private 	Collection<String>	authorities;
 
 	public ProfileDTO(Profile profile) {
-		setId(IDCoder.encode(profile.getUuid()));
+		setUuid(profile.getUuid());
 		setTitle(profile.getTitle());
 		setDescription(profile.getDescription());
 		setAuthorities(profile.getAuthorities().stream().map(Authority::getAuthority).collect(Collectors.toList()));

@@ -2,11 +2,10 @@ package com.samsung.fas.pir.rest.controllers;
 
 import com.samsung.fas.pir.rest.controllers.utils.MultipartFileSender;
 import com.samsung.fas.pir.rest.dto.FileDTO;
-import com.samsung.fas.pir.rest.services.FileService;
+import com.samsung.fas.pir.rest.services.FileBO;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,10 +20,10 @@ import java.util.HashSet;
 @RequestMapping("/rest/file")
 @RestController
 public class FileController {
-	private final FileService service;
+	private final FileBO service;
 
 	@Autowired
-	public FileController(FileService service) {
+	public FileController(FileBO service) {
 		this.service = service;
 	}
 

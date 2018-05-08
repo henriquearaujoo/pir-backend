@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.samsung.fas.pir.persistence.enums.EAnswerType;
 import com.samsung.fas.pir.persistence.models.Question;
-import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
-
 import org.hibernate.validator.constraints.NotBlank;
+
 import java.util.Collection;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -19,40 +20,47 @@ public class QuestionDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private		String						id;
+	private		UUID			uuid;
 
 	@Getter
 	@Setter
 	@JsonProperty("conclusion_id")
-	private 	String						conclusionID;
+	private 	UUID			conclusionUUID;
 
 	@Getter
 	@Setter
 	@JsonProperty("description")
 	@NotBlank(message = "description.missing")
-	private 	String						description;
+	private 	String			description;
 
-	@JsonProperty("answers")
+	@Getter
+	@Setter
+	@JsonProperty("type")
+	private		EAnswerType		type;
+
+	@JsonProperty("alternatives")
 	@Setter
 	@Getter
-	private		Collection<AnswerDTO>	answers;
+	private		Collection<AlternativeDTO>	answers;
 
 	public QuestionDTO() {
 		super();
 	}
 
 	public QuestionDTO(Question question, boolean detailed) {
-		setId(IDCoder.encode(question.getUuid()));
+		setUuid(question.getUuid());
 		setDescription(question.getDescription());
-		setConclusionID(IDCoder.encode(question.getConclusion().getUuid()));
-		setAnswers(question.getAnswers() != null? question.getAnswers().stream().map(item -> new AnswerDTO(item, false)).collect(Collectors.toSet()) : null);
+		setType(question.getType());
+		setConclusionUUID(question.getConclusion().getUuid());
+		setAnswers(question.getAlternatives() != null? question.getAlternatives().stream().map(item -> new AlternativeDTO(item, false)).collect(Collectors.toSet()) : null);
 	}
 
 	@JsonIgnore
 	public Question getModel() {
 		Question model = new Question();
-		model.setUuid(getId() != null && !getId().trim().isEmpty()? IDCoder.decode(getId()) : null);
+		model.setUuid(getUuid());
 		model.setDescription(getDescription());
+		model.setType(getType());
 		return model;
 	}
 }

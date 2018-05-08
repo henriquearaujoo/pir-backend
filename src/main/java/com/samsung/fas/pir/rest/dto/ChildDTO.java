@@ -6,23 +6,33 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.enums.EChildGender;
 import com.samsung.fas.pir.persistence.models.Child;
-import com.samsung.fas.pir.rest.utils.IDCoder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-
-import javax.validation.constraints.Min;
 import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ChildDTO {
 	@Getter
 	@Setter
+	@JsonProperty("external_id")
+	private		long			tempID;
+
+	@Getter
+	@Setter
 	@JsonProperty("id")
-	private 	String 			id;
+	private 	UUID 			uuid;
 
 	@Getter
 	@Setter
@@ -44,10 +54,9 @@ public class ChildDTO {
 	@Getter
 	@Setter
 	@JsonProperty("gender")
-	@NotBlank(message = "gender.missing")
-	private 	String 			gender;
+	@NotNull(message = "gender.missing")
+	private 	EChildGender 	gender;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("has_civil_registration")
@@ -58,7 +67,6 @@ public class ChildDTO {
 	@JsonProperty("civil_reg_justificative")
 	private 	String			civilRegistrationJustificative;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("has_education_diff")
@@ -69,7 +77,6 @@ public class ChildDTO {
 	@JsonProperty("education_diff_specification")
 	private 	String			educationDifficultySpecification;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("is_premature_born")
@@ -93,25 +100,21 @@ public class ChildDTO {
 	@NotBlank(message = "playswithwho.missing")
 	private 	String			playsWithWho;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("is_mensaly_weighted")
 	private 	boolean			mensalWeight;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("is_in_social_program")
-	private 	boolean			isInSocialEducationalPrograms;
+	private 	boolean			inSocialEducationalPrograms;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("is_vacination_uptodate")
 	private 	boolean			vacinationUpToDate;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("has_relation_diff")
@@ -119,71 +122,66 @@ public class ChildDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty("responsible_id")
-	@NotBlank(message = "responsible.id.missing")
-	private 	String				responsibleID;
-
-	@Getter
-	@Setter
-	@JsonProperty("mother_id")
-	private 	String				motherID;
-
-	@Getter
-	@Setter
 	@JsonProperty("mother")
-	private ResponsibleDTO mother;
+	@Valid
+	private		ResponsibleDTO 	mother;
 
 	@Getter
 	@Setter
 	@JsonProperty("responsible")
-	private ResponsibleDTO responsible;
+	@Valid
+	private		Collection<ResponsibleDTO>	responsibles;
 
 	public ChildDTO() {
 		super();
 	}
 
 	public ChildDTO(Child child, boolean detailed) {
-		setId(IDCoder.encode(child.getUuid()));
+		setTempID(child.getTempID());
+		setUuid(child.getUuid());
 		setName(child.getName());
 		setBirth(new SimpleDateFormat("dd-MM-yyyy").format(child.getBirth()));
 		setFatherName(child.getFatherName());
-		setGender(child.getGender().toString());
-		hasCivilRegistration(child.isHasCivilRegistration());
+		setGender(child.getGender());
+		setHasCivilRegistration(child.isHasCivilRegistration());
 		setCivilRegistrationJustificative(child.getCivilRegistrationJustificative());
-		hasEducationDifficulty(child.isHasEducationDifficulty());
+		setHasEducationDifficulty(child.isHasEducationDifficulty());
 		setEducationDifficultySpecification(child.getEducationDifficultySpecification());
-		isPrematureBorn(child.isPrematureBorn());
+		setPrematureBorn(child.isPrematureBorn());
 		setBornWeek(child.getBornWeek());
 		setWhoTakeCare(child.getWhoTakeCare());
 		setPlaysWithWho(child.getPlaysWithWho());
-		mensalWeight(child.isMensalWeight());
-		isInSocialEducationalPrograms(child.isSocialEducationalPrograms());
-		vacinationUpToDate(child.isVacinationUpToDate());
-		hasRelationDifficulties(child.isRelationDifficulties());
+		setMensalWeight(child.isMensalWeight());
+		setInSocialEducationalPrograms(child.isSocialEducationalPrograms());
+		setVacinationUpToDate(child.isVacinationUpToDate());
+		setHasRelationDifficulties(child.isRelationDifficulties());
 		setMother(child.getMother() != null? new ResponsibleDTO(child.getMother(), false) : null);
-		setResponsible(new ResponsibleDTO(child.getResponsible(), false));
+		setResponsibles(child.getResponsibles() != null? child.getResponsibles().stream().map(responsible -> new ResponsibleDTO(responsible, false)).collect(Collectors.toList()) : null);
+
 	}
 
 	@JsonIgnore
 	public Child getModel() {
 		Child model = new Child();
 
-		model.setUuid(IDCoder.decode(getId()));
+		model.setTempID(getTempID());
+		model.setUuid(getUuid());
 		model.setName(getName());
 		model.setFatherName(getFatherName());
-		model.setGender(EChildGender.valueOf(getGender()));
-		model.setHasCivilRegistration(hasCivilRegistration());
+		model.setGender(getGender());
+		model.setHasCivilRegistration(isHasCivilRegistration());
 		model.setCivilRegistrationJustificative(getCivilRegistrationJustificative());
-		model.setHasEducationDifficulty(hasEducationDifficulty());
+		model.setHasEducationDifficulty(isHasEducationDifficulty());
 		model.setEducationDifficultySpecification(getEducationDifficultySpecification());
 		model.setPrematureBorn(isPrematureBorn());
 		model.setBornWeek(getBornWeek());
 		model.setWhoTakeCare(getWhoTakeCare());
 		model.setPlaysWithWho(getPlaysWithWho());
-		model.setMensalWeight(mensalWeight());
+		model.setMensalWeight(isMensalWeight());
 		model.setSocialEducationalPrograms(isInSocialEducationalPrograms());
-		model.setVacinationUpToDate(vacinationUpToDate());
-		model.setRelationDifficulties(hasRelationDifficulties());
+		model.setVacinationUpToDate(isVacinationUpToDate());
+		model.setRelationDifficulties(isHasRelationDifficulties());
+		model.setResponsibles(getResponsibles() != null? getResponsibles().stream().map(ResponsibleDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 
 		try {
 			model.setBirth(new SimpleDateFormat("dd-MM-yyyy").parse(getBirth()));

@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.Chapter;
-import com.samsung.fas.pir.rest.utils.IDCoder;
+import com.samsung.fas.pir.rest.utils.CTools;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,7 +18,8 @@ import java.util.stream.Collectors;
 public class ChapterDetailedDTO {
 	@Getter
 	@Setter
-	private		String					id;
+	@JsonProperty("id")
+	private 	UUID					uuid;
 
 	@Getter
 	@Setter
@@ -97,8 +99,7 @@ public class ChapterDetailedDTO {
 	@Getter
 	@Setter
 	@JsonProperty("percentage")
-	private 	float 					untilComplete		= 25.0f;
-
+	private 	float 					untilComplete;
 
 	@Getter
 	@Setter
@@ -116,7 +117,7 @@ public class ChapterDetailedDTO {
 	}
 
 	public ChapterDetailedDTO(Chapter chapter, boolean detailed) {
-		setId(IDCoder.encode(chapter.getUuid()));
+		setUuid(chapter.getUuid());
 		setChapter(chapter.getChapter());
 		setVersion(chapter.getVersion());
 		setTitle(chapter.getTitle());
@@ -129,10 +130,11 @@ public class ChapterDetailedDTO {
 		setTimeUntilNext(chapter.getTimeUntilNext()/1000/3600/24);
 		setStatus(chapter.isValid());
 		setResources(chapter.getResources());
+		setUntilComplete(CTools.calculateChapterCompleteness(chapter));
 		setGreetings(chapter.getGreetings() != null? new GreetingsDTO(chapter.getGreetings(), true) : null);
 		setIntervention(chapter.getIntervention() != null? new InterventionDTO(chapter.getIntervention(), true) : null);
 		setConclusion(chapter.getConclusion() != null? new ConclusionDTO(chapter.getConclusion(), true) : null);
-		Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMedias(item.stream().map(FileDTO::toDTO).collect(Collectors.toSet())));
-		Optional.ofNullable(chapter.getThumbnails()).ifPresent(item -> setThumbnails(item.stream().map(FileDTO::toDTO).collect(Collectors.toSet())));
+		Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMedias(item.stream().map(FileDTO::new).collect(Collectors.toSet())));
+		Optional.ofNullable(chapter.getThumbnails()).ifPresent(item -> setThumbnails(item.stream().map(FileDTO::new).collect(Collectors.toSet())));
 	}
 }

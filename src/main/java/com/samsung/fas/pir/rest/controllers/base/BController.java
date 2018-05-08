@@ -1,9 +1,8 @@
 package com.samsung.fas.pir.rest.controllers.base;
 
-import com.samsung.fas.pir.persistence.dao.base.IBaseDAO;
-import com.samsung.fas.pir.configuration.security.persistence.models.Account;
-import com.samsung.fas.pir.rest.services.base.BService;
-import com.samsung.fas.pir.rest.utils.IDCoder;
+import com.samsung.fas.pir.rest.services.base.IBaseBO;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,17 +11,20 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.util.Collection;
+import java.util.UUID;
 
-public abstract class BController<TEntity, TDTO, TDAO extends IBaseDAO<TEntity, Long>> {
-	protected final BService<TEntity, TDTO, TDAO, Long> service;
+public abstract class BController<BO extends IBaseBO<?, DTO, Long>, DTO> {
+	@Getter(AccessLevel.PROTECTED)
+	private	final	BO	service;
 
-	public BController(BService<TEntity, TDTO, TDAO, Long> service) {
-		this.service = service;
+	public BController(BO service) {
+		this.service 	= service;
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/{id}")
-	public ResponseEntity<?> findOne(@PathVariable("id") String id, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(service.findOne(IDCoder.decode(id), details));
+	public ResponseEntity<?> findOne(@PathVariable("id") UUID id, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(service.findOne(id, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET)
@@ -36,12 +38,23 @@ public abstract class BController<TEntity, TDTO, TDAO extends IBaseDAO<TEntity, 
 	}
 
 	@RequestMapping(method= RequestMethod.POST)
-	public ResponseEntity<?> save(@RequestBody @Valid TDTO dto, @ApiIgnore @AuthenticationPrincipal Account account) {
+	public ResponseEntity<DTO> save(@RequestBody @Valid DTO dto, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
 		return ResponseEntity.ok(service.save(dto, account));
 	}
 
 	@RequestMapping(method= RequestMethod.PUT)
-	public ResponseEntity<?> update(@RequestBody @Valid TDTO dto, @ApiIgnore @AuthenticationPrincipal Account account) {
+	public ResponseEntity<DTO> update(@RequestBody @Valid DTO dto, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
 		return ResponseEntity.ok(service.update(dto, account));
 	}
+
+	@RequestMapping(method= RequestMethod.POST, path = "/collection")
+	public ResponseEntity<Collection<DTO>> save(@RequestBody @Valid Collection<DTO> collection, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
+		return ResponseEntity.ok(service.save(collection, account));
+	}
+
+	@RequestMapping(method= RequestMethod.PUT, path = "/collection")
+	public ResponseEntity<Collection<DTO>> update(@RequestBody @Valid Collection<DTO> collection, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
+		return ResponseEntity.ok(service.update(collection, account));
+	}
 }
+

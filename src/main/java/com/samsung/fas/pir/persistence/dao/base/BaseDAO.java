@@ -3,12 +3,13 @@ package com.samsung.fas.pir.persistence.dao.base;
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTException;
-import com.samsung.fas.pir.persistence.repositories.base.BRepository;
+import com.samsung.fas.pir.persistence.repositories.base.IBaseRepository;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.Optional;
 import java.util.Set;
@@ -16,56 +17,67 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public abstract class BaseDAO<TEntity, TPK extends Serializable, TQuery extends EntityPath<TEntity>> implements IBaseDAO<TEntity, TPK> {
-	protected final BRepository<TEntity, TPK, TQuery> repository;
+public abstract class BaseDAO<T, ID extends Serializable, TR extends IBaseRepository<T, ID, TQ>, TQ extends EntityPath<T>> implements IBaseDAO<T, ID> {
+	@Getter(AccessLevel.PROTECTED)
+	private	final	TR	repository;
 
 	@Autowired
-	public BaseDAO(BRepository<TEntity, TPK, TQuery> repository) {
+	public BaseDAO(TR repository) {
 		this.repository = repository;
 	}
 
-	public TEntity findOne(TPK id) {
+	@Override
+	public T findOne(ID id) {
 		return repository.findById(Optional.ofNullable(id).orElseThrow(() -> new RESTException("id.missing"))).orElseThrow(() -> new RESTException("not.found"));
 	}
 
 	@Override
-	public TEntity findOne(UUID uuid) {
+	public T findOne(UUID uuid) {
 		return repository.findByUuid(Optional.ofNullable(uuid).orElseThrow(() -> new RESTException("id.missing"))).orElseThrow(() -> new RESTException("not.found"));
 	}
 
-	public Set<TEntity> findAll() {
+	@Override
+	public Set<T> findAll() {
 		return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toSet());
 	}
 
-	public Set<TEntity> findAll(Predicate predicate) {
+	@Override
+	public Set<T> findAll(Predicate predicate) {
 		return StreamSupport.stream(repository.findAll(predicate).spliterator(), false).collect(Collectors.toSet());
 	}
 
-	public Page<TEntity> findAll(Predicate predicate, Pageable pageable) {
+	@Override
+	public Page<T> findAll(Predicate predicate, Pageable pageable) {
 		return repository.findAll(predicate, pageable);
 	}
 
-	public Page<TEntity> findAll(Pageable pageable) {
+	@Override
+	public Page<T> findAll(Pageable pageable) {
 		return repository.findAll(pageable);
 	}
 
-	public TEntity save(TEntity model) {
+	@Override
+	public T save(T model) {
 		return repository.save(model);
 	}
 
-	public Set<TEntity> save(Iterable<TEntity> models) {
+	@Override
+	public Set<T> save(Iterable<T> models) {
 		return StreamSupport.stream(repository.saveAll(models).spliterator(), false).collect(Collectors.toSet());
 	}
 
-	public void delete(TPK id) {
+	@Override
+	public void delete(ID id) {
 		repository.deleteById(id);
 	}
 
-	public TPK delete(UUID id) {
+	@Override
+	public ID delete(UUID id) {
 		return repository.deleteByUuid(id).orElseThrow(() -> new RESTException("cannot.delete"));
 	}
 
-	public void delete(TEntity entity) {
+	@Override
+	public void delete(T entity) {
 		repository.delete(entity);
 	}
 }

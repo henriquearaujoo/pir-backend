@@ -8,20 +8,20 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.UUID;
 
-public interface IBaseDAO<TEntity, TPK extends Serializable>{
-	TEntity findOne(TPK id);
-	TEntity findOne(UUID uuid);
+public interface IBaseDAO<T, ID extends Serializable>{
+	T findOne(ID id);
+	T findOne(UUID uuid);
 
-	Collection<TEntity> findAll();
-	Collection<TEntity> findAll(Predicate predicate);
+	Collection<T> findAll();
+	Collection<T> findAll(Predicate predicate);
 
-	Page<TEntity> findAll(Predicate predicate, Pageable pageable);
-	Page<TEntity> findAll(Pageable pageable);
+	Page<T> findAll(Predicate predicate, Pageable pageable);
+	Page<T> findAll(Pageable pageable);
 
-	TEntity save(TEntity model);
-	Collection<TEntity> save(Iterable<TEntity> models);
+	T save(T model);
+	Collection<T> save(Iterable<T> models);
 
-	TPK delete(UUID id);
-	void delete(TPK id);
-	void delete(TEntity entity);
+	ID delete(UUID id);
+	void delete(ID id);
+	void delete(T entity);
 }
