@@ -17,12 +17,12 @@ public class CommunityDAO extends BaseDAO<Community, Long, ICommunity,  QCommuni
 		super(repository);
 	}
 
-	public Community findOneByMobileId(long id) {
-		return getRepository().findByMobileId(id);
-	}
-
 	public Community findOne(String name, long id) {
 		return getRepository().findOneByNameIgnoreCaseAndCityId(name, id);
+	}
+
+	public Community findOne(String name, UUID id) {
+		return getRepository().findOneByNameIgnoreCaseAndCityUuid(name, id);
 	}
 
 	public Collection<Community> findAllIn(Collection<UUID> collection) {

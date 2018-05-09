@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ChildDAO extends BaseDAO<Child, Long, IChild, QChild> {
-	public Child findOneByMobileId(long id) {
-		return getRepository().findByMobileId(id);
+	public Child findOne(long mobile, long agent) {
+		return getRepository().findByMobileIdAndAgentId(mobile, agent);
 	}
 
 	@Autowired

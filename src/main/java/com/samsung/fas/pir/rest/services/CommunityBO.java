@@ -1,10 +1,12 @@
 package com.samsung.fas.pir.rest.services;
 
+import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.exception.RESTException;
 import com.samsung.fas.pir.persistence.dao.CityDAO;
 import com.samsung.fas.pir.persistence.dao.CommunityDAO;
 import com.samsung.fas.pir.persistence.models.City;
 import com.samsung.fas.pir.persistence.models.Community;
+import com.samsung.fas.pir.persistence.models.User;
 import com.samsung.fas.pir.rest.dto.CommunityDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import lombok.Getter;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,49 +33,55 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 
 	@Override
 	public CommunityDTO save(CommunityDTO create, UserDetails account) {
-		Community	model		= create.getModel();
-		City 		city		= getCityDAO().findOne(create.getCityUUID());
-		model.setCity(city);
-		return new CommunityDTO(getDao().save(model), true);
+		return new CommunityDTO(create(create, account), true);
 	}
 
 	@Override
 	public CommunityDTO update(CommunityDTO update, UserDetails account) {
-		Community	model		= update.getModel();
-		Community	community	= getDao().findOne(model.getUuid());
-		City		city		= getCityDAO().findOne(update.getCityUUID());
-
-		return new CommunityDTO(getDao().save(setupCommunity(community, model, city)), true);
+		return new CommunityDTO(patch(update, null, account), true);
 	}
 
 	@Override
 	public Collection<CommunityDTO> save(Collection<CommunityDTO> collection, UserDetails account) {
+		return saveCollection(collection, account).stream().map(item -> new CommunityDTO(item, true)).collect(Collectors.toList());
+	}
+
+	protected Community create(CommunityDTO create, UserDetails account) {
+		Community	model		= create.getModel();
+		City 		city		= getCityDAO().findOne(create.getCityUUID());
+		model.setCity(city);
+		return getDao().save(model);
+	}
+
+	protected Community patch(CommunityDTO update, Community cmmnty, UserDetails account) {
+		Community	model		= update.getModel();
+		Community	community	= cmmnty == null? Optional.ofNullable(getDao().findOne(update.getName().toLowerCase(), update.getCityUUID())).orElse(getDao().findOne(model.getUuid())) : cmmnty;
+		City		city		= getCityDAO().findOne(update.getCityUUID());
+		return getDao().save(setupCommunity(community, model, city));
+	}
+
+	protected Collection<Community> saveCollection(Collection<CommunityDTO> collection, UserDetails account) {
 		ArrayList<Community>	response	= new ArrayList<>();
 		ArrayList<City>			cities		= (ArrayList<City>) getCityDAO().findAllIn(collection.stream().map(CommunityDTO::getCityUUID).collect(Collectors.toList()));
 
 		for (CommunityDTO item : collection) {
 			Community	model		= item.getModel();
 			City		city		= cities.stream().filter(c -> c.getUuid().compareTo(item.getCityUUID()) == 0).findAny().orElseThrow(() -> new RESTException("not.found"));
+			Community	community	= getDao().findOne(item.getName().toLowerCase(), item.getCityUUID());
 
-			if (model.getUuid() == null) {
-				model.setCity(city);
-			} else {
-				model = setupCommunity(getDao().findOne(model.getUuid()), model, city);
+			if (community == null && model.getUuid() != null) {
+				community = getDao().findOne(model.getUuid());
 			}
 
-			try {
-				Community 	community	= getDao().findOne(model.getName(), city.getId());
-				if (community != null) {
-					response.add(getDao().save(setupCommunity(community, model, city)));
-				} else {
-					response.add(getDao().save(model));
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (community == null) {
+				model.setCity(city);
+				response.add(getDao().save(model));
+			} else {
+				response.add(getDao().save(setupCommunity(community, model, city)));
 			}
 		}
 
-		return response.stream().map(item -> new CommunityDTO(item, true)).collect(Collectors.toList());
+		return response;
 	}
 
 	@Override

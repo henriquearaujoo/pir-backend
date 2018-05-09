@@ -157,7 +157,6 @@ public class ChildDTO {
 		setHasRelationDifficulties(child.isRelationDifficulties());
 		setMother(child.getMother() != null? new ResponsibleDTO(child.getMother(), false) : null);
 		setResponsibles(child.getResponsibles() != null? child.getResponsibles().stream().map(responsible -> new ResponsibleDTO(responsible, false)).collect(Collectors.toList()) : null);
-
 	}
 
 	@JsonIgnore

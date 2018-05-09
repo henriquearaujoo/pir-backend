@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import sun.management.Agent;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -133,8 +134,8 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 			Chapter			chapter		= getChapterDAO().findOne(create.getChapterUUID());
 			Form			form		= create.getFormUUID() != null? getFormDAO().findOne(create.getFormUUID()) : null;
 			//
-			Responsible		responsible	= model.getResponsible() != null? getResponsibleDAO().findOneByMobileId(model.getResponsible().getMobileId()) : null;
-			Child			child		= model.getChild() != null? getChildDAO().findOneByMobileId(model.getChild().getMobileId()) : null;
+			Responsible		responsible	= model.getResponsible() != null? getResponsibleDAO().findOne(model.getResponsible().getMobileId(), ((User) details).getId()) : null;
+			Child			child		= model.getChild() != null? getChildDAO().findOne(model.getChild().getMobileId(), ((User) details).getId()) : null;
 
 			model.setAgent(agent);
 			model.setChapter(chapter);
@@ -171,7 +172,7 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 						if (visit.isPresent()) {
 							model.setResponsible(visit.get().getResponsible());
 						} else {
-							model.setResponsible(getResponsibleBO().persist(create.getResponsible(), details));
+							model.setResponsible(getResponsibleBO().create(create.getResponsible(), details));
 						}
 					} else {
 						model.setResponsible(getResponsibleBO().patch(create.getResponsible(), details));
@@ -212,7 +213,7 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 	private Responsible setup(ResponsibleDTO create, UserDetails details) {
 		if (create != null) {
 			if (create.getUuid() == null) {
-				return getResponsibleBO().persist(create, details);
+				return getResponsibleBO().create(create, details);
 			}
 			return getResponsibleDAO().findOne(create.getUuid());
 		}

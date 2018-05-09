@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @Repository
 public interface IResponsible extends IBaseRepository<Responsible, Long, QResponsible> {
-	Responsible findByMobileId(long id);
+	Responsible findByMobileIdAndAgentId(long mobile, long agent);
 	Collection<Responsible> findAllByMobileIdIn(Collection<Long> collection);
 	Collection<Responsible> findAllByUuidIn(Collection<UUID> collection);
 	Collection<Responsible> findAllByMotherIsNull();

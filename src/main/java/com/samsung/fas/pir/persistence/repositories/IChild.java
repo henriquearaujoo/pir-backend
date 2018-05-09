@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 
 @Repository
 public interface IChild extends IBaseRepository<Child, Long, QChild> {
-	Child findByMobileId(long id);
+	Child findByMobileIdAndAgentId(long mobile, long agent);
 
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QChild root) {

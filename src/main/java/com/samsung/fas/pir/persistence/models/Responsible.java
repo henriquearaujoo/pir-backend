@@ -15,14 +15,14 @@ import java.util.Collection;
 import java.util.Date;
 
 @Entity
-@Table(name = "responsible")
+@Table(name = "responsible", uniqueConstraints = @UniqueConstraint(columnNames = {"mobile_id", "agent_id"}, name = "agent_responsible"))
 @DynamicUpdate
 @DynamicInsert
 @Alias("Responsável")
 public class Responsible extends BaseID {
 	@Getter
 	@Setter
-	@Column(unique = true)
+	@Column(name = "mobile_id")
 	private		long				mobileId;
 
 	@Getter
@@ -46,7 +46,7 @@ public class Responsible extends BaseID {
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Enumerated(EnumType.STRING)
 	@Alias("Tipo de Residência")
 	private 	EHabitationType 	habitationType;
@@ -59,25 +59,25 @@ public class Responsible extends BaseID {
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Vive Com")
 	private 	String				liveWith;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Fonte de Renda da Família")
 	private 	String				familyIncome;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Participação na Renda")
 	private 	String				incomeParticipation;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Tratamento de Água")
 	private 	String				drinkingWaterTreatment;
 
@@ -135,4 +135,10 @@ public class Responsible extends BaseID {
 	@OneToMany(mappedBy = "responsible")
 	@Alias("Visitas")
 	private 	Collection<Visit>	visits;
+
+	@Getter
+	@Setter
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumn
+	private 	User				agent;
 }

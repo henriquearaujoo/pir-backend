@@ -81,7 +81,17 @@ public class User extends BaseID implements Serializable {
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "agent")
+	private 	Collection<Child>		children;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "agent")
+	private 	Collection<Responsible>	responsibles;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "agent")
 	@Alias("Visitas")
-	private		Collection<Visit>	visits;
+	private		Collection<Visit>		visits;
 	// endregion
 }

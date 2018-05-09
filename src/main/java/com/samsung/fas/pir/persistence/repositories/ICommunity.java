@@ -15,8 +15,8 @@ import java.util.UUID;
 
 @Repository
 public interface ICommunity extends IBaseRepository<Community, Long, QCommunity> {
-	Community findByMobileId(long id);
 	Community findOneByNameIgnoreCaseAndCityId(String name, long id);
+	Community findOneByNameIgnoreCaseAndCityUuid(String name, UUID id);
 	Collection<Community> findAllByUuidIn(Collection<UUID> collection);
 
 	@Override

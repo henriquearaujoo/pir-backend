@@ -15,14 +15,17 @@ import java.util.Collection;
 import java.util.Date;
 
 @Entity
-@Table(name = "child", uniqueConstraints = @UniqueConstraint(columnNames = {"id", "mother_id"}, name = "child_mother"))
+@Table(name = "child", uniqueConstraints = {
+	@UniqueConstraint(columnNames = {"id", "mother_id"}, name = "child_mother"),
+	@UniqueConstraint(columnNames = {"mobile_id", "agent_id"}, name = "agent_child"),
+})
 @DynamicUpdate
 @DynamicInsert
 @Alias("Criança")
 public class Child extends BaseID {
 	@Getter
 	@Setter
-	@Column(unique = true)
+	@Column(name = "mobile_id")
 	private		long			mobileId;
 
 	@Getter
@@ -141,4 +144,10 @@ public class Child extends BaseID {
 	@ManyToMany(cascade = CascadeType.ALL)
 	@Alias("Responsável")
 	private 	Collection<Responsible>		responsibles;
+
+	@Getter
+	@Setter
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumn
+	private 	User			agent;
 }

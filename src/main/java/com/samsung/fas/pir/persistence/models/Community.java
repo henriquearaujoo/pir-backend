@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.*;
+import sun.management.Agent;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -14,15 +15,17 @@ import javax.persistence.Table;
 import java.util.Collection;
 
 @Entity
-@Table(name = "community", uniqueConstraints = @UniqueConstraint(name = "community_name", columnNames = {"name", "city_id"}))
+@Table(name = "community", uniqueConstraints = {
+	@UniqueConstraint(name = "community_name", columnNames = {"name", "city_id"})
+})
 @DynamicUpdate
 @DynamicInsert
 @Alias("Comunidade")
 public class Community extends BaseID {
 	@Getter
 	@Setter
-	@Column(unique = true)
-	private		long				mobileId;
+	@Transient
+	private		long			mobileId;
 
 	@Getter
 	@Setter

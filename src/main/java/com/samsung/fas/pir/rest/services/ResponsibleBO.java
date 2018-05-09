@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.querydsl.core.types.Predicate;
+import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.exception.RESTException;
 import com.samsung.fas.pir.persistence.dao.CityDAO;
 import com.samsung.fas.pir.persistence.dao.CommunityDAO;
@@ -8,6 +9,7 @@ import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
 import com.samsung.fas.pir.persistence.models.Community;
 import com.samsung.fas.pir.persistence.models.Mother;
 import com.samsung.fas.pir.persistence.models.Responsible;
+import com.samsung.fas.pir.persistence.models.User;
 import com.samsung.fas.pir.rest.dto.ResponsibleDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import lombok.AccessLevel;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -26,6 +29,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, ResponsibleDTO, Long> {
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	private		CommunityBO			communityBO;
+
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
 	private		CommunityDAO		communityDAO;
@@ -57,7 +64,7 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 
 	@Override
 	public ResponsibleDTO save(ResponsibleDTO create, UserDetails account) {
-		return new ResponsibleDTO(getDao().save(persist(create, account)), true);
+		return new ResponsibleDTO(getDao().save(create(create, account)), true);
 	}
 
 	@Override
@@ -67,24 +74,35 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 
 	@Override
 	public Collection<ResponsibleDTO> save(Collection<ResponsibleDTO> collection, UserDetails details) {
-		return internalSaving(collection, details).stream().map(responsible -> new ResponsibleDTO(responsible, true)).collect(Collectors.toList());
+		return saveCollection(collection, details).stream().map(responsible -> new ResponsibleDTO(responsible, true)).collect(Collectors.toList());
 	}
 
-	protected Collection<Responsible> internalSaving(Collection<ResponsibleDTO> collection, UserDetails details) {
+	protected Collection<Responsible> saveCollection(Collection<ResponsibleDTO> collection, UserDetails account) {
 		ArrayList<Responsible>		response		= new ArrayList<>();
 
 		for (ResponsibleDTO item : collection) {
-			if (item.getUuid() == null) {
-				try {
-					response.add(getDao().save(persist(item, details)));
-				} catch (Exception e) {
-					e.printStackTrace();
+			Responsible	model		= item.getModel();
+			Community	community	= Optional.ofNullable(getCommunityDAO().findOne(item.getCommunity().getName().toLowerCase(), item.getCommunity().getCityUUID())).orElse(model.getCommunity().getUuid() != null? getCommunityDAO().findOne(model.getCommunity().getUuid()) : null);
+//			Responsible	responsible	= model.getUuid() != null ? getDao().findOne(model.getUuid()) : null;
+			Responsible	responsible	= Optional.ofNullable(getDao().findOne(item.getTempID(), ((Account) account).getUser().getId())).orElse(item.getUuid() != null? getDao().findOne(item.getUuid()) : null);
+
+			if (responsible == null) {
+				if (community != null) {
+					model.setCommunity(getCommunityBO().patch(item.getCommunity(), community, account));
+					model.setAgent(((Account) account).getUser());
+					response.add(getDao().save(model));
+				} else {
+					model.setCommunity(getCommunityBO().create(item.getCommunity(), account));
+					model.setAgent(((Account) account).getUser());
+					response.add(getDao().save(model));
 				}
 			} else {
-				try {
-					response.add(getDao().save(patch(item, details)));
-				} catch (Exception e) {
-					e.printStackTrace();
+				if (community != null) {
+					responsible.setAgent(((Account) account).getUser());
+					response.add(getDao().save(setupResponsible(responsible, model, getCommunityBO().patch(item.getCommunity(), community, account))));
+				} else {
+					responsible.setAgent(((Account) account).getUser());
+					response.add(getDao().save(setupResponsible(responsible, model, getCommunityBO().create(item.getCommunity(), account))));
 				}
 			}
 		}
@@ -96,9 +114,11 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		return null;
 	}
 
-	protected Responsible persist(ResponsibleDTO create, UserDetails details) {
+	protected Responsible create(ResponsibleDTO create, UserDetails details) {
 		Responsible		model		= create.getModel();
 		Community		community	= getCommunityDAO().findOne(model.getCommunity().getName(), getCityDAO().findOne(create.getCommunity().getCityUUID()).getId());
+
+		model.setAgent(((User) details));
 
 		if (model.getCommunity() != null) {
 			if (model.getCommunity().getUuid() != null) {
@@ -111,23 +131,28 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 				}
 			}
 		}
+
 		return model;
 	}
 
-	protected Responsible patch(ResponsibleDTO update, UserDetails details) {
+	protected Responsible patch(ResponsibleDTO update, UserDetails account) {
 		Responsible		model		= update.getModel();
-		Responsible		responsible	= getDao().findOne(model.getUuid());
+		Responsible		responsible	= getDao().findOne(update.getTempID(), ((Account) account).getUser().getId());
 		Community 		community	= update.getCommunity().getModel();
 
+		if (responsible == null) {
+			responsible = getDao().findOne(model.getUuid());
+		}
+
+		responsible.setAgent(((Account) account).getUser());
+
 		if (model.getCommunity().getUuid() != null) {
-//			community.setId(community.getUuid() != null ? getCommunityDAO().findOne(community.getUuid()).getId() : 0L);
-//			community.setCity(getCityDAO().findOne(update.getCommunity().getCityUUID()));
 			community = CommunityBO.setupCommunity(getCommunityDAO().findOne(community.getUuid()), model.getCommunity(), getCityDAO().findOne(update.getCommunity().getCityUUID()));
 		} else {
 			Community c = getCommunityDAO().findOne(model.getCommunity().getName(), getCityDAO().findOne(update.getCommunity().getCityUUID()).getId());
 			if (c != null) {
-				community.setId(c.getId());
-				community.setCity(getCityDAO().findOne(update.getCommunity().getCityUUID()));
+				c.setCity(getCityDAO().findOne(update.getCommunity().getCityUUID()));
+				community = c;
 			} else {
 				community.setCity(getCityDAO().findOne(update.getCommunity().getCityUUID()));
 			}
