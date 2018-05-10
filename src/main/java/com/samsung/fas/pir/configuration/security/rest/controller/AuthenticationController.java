@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -39,13 +40,13 @@ public class AuthenticationController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, path = "/login")
-	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO request) throws AuthenticationException {
+	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO request, Device device) throws AuthenticationException {
 		try {
 			Authentication 	authentication 	= manager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 			HttpHeaders 	headers 		= new HttpHeaders();
 
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-			headers.add(HttpHeaders.AUTHORIZATION, token.generateToken((Account) authentication.getPrincipal()));
+			headers.add(HttpHeaders.AUTHORIZATION, token.generateToken((Account) authentication.getPrincipal(), device));
 
 			return new ResponseEntity(headers, HttpStatus.OK);
 		} catch (NullPointerException e) {

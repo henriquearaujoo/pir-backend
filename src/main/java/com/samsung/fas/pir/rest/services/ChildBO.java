@@ -59,6 +59,10 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 
 	@Override
 	public Collection<ChildDTO> save(Collection<ChildDTO> collection, UserDetails account) {
+		return saveCollection(collection, account).stream().map(child -> new ChildDTO(child, true)).collect(Collectors.toList());
+	}
+
+	protected Collection<Child> saveCollection(Collection<ChildDTO> collection, UserDetails account) {
 		ArrayList<Child>		response		= new ArrayList<>();
 
 		for (ChildDTO item : collection) {
@@ -93,7 +97,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 			}
 		}
 
-		return response.stream().map(child -> new ChildDTO(child, true)).collect(Collectors.toList());
+		return response;
 	}
 
 	@Override

@@ -17,7 +17,6 @@ import javax.persistence.Query;
 import java.util.Collection;
 import java.util.UUID;
 
-// TODO: Change Queries
 @Service
 public class ResponsibleDAO extends BaseDAO<Responsible, Long, IResponsible, QResponsible> {
 	private	final EntityManager emanager;

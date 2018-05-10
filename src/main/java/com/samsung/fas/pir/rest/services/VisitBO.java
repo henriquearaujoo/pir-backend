@@ -125,63 +125,65 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 	}
 
 	@Override
-	public Collection<VisitDTO> save(Collection<VisitDTO> collection, UserDetails details) {
+	public Collection<VisitDTO> save(Collection<VisitDTO> collection, UserDetails account) {
 		ArrayList<Visit> response = new ArrayList<>();
 
-		for (VisitDTO create : collection) {
-			Visit			model		= create.getModel();
-			User			agent		= getUserDAO().findOne(create.getAgentUUID());
-			Chapter			chapter		= getChapterDAO().findOne(create.getChapterUUID());
-			Form			form		= create.getFormUUID() != null? getFormDAO().findOne(create.getFormUUID()) : null;
-			//
-			Responsible		responsible	= model.getResponsible() != null? getResponsibleDAO().findOne(model.getResponsible().getMobileId(), ((User) details).getId()) : null;
-			Child			child		= model.getChild() != null? getChildDAO().findOne(model.getChild().getMobileId(), ((User) details).getId()) : null;
+		for (VisitDTO item : collection) {
+			Visit			model		= item.getModel();
+			User			agent		= getUserDAO().findOne(item.getAgentUUID());
+			Chapter			chapter		= getChapterDAO().findOne(item.getChapterUUID());
+			Form			form		= item.getFormUUID() != null? getFormDAO().findOne(item.getFormUUID()) : null;
+//			Responsible		responsible	= model.getResponsible() != null? Optional.ofNullable(getResponsibleDAO().findOne(model.getResponsible().getMobileId(), ((User) account).getId())).orElse(model.getResponsible().getUuid() != null? getResponsibleDAO().findOne(model.getResponsible().getUuid()) : null) : null;
+//			Child			child		= model.getChild() != null? Optional.ofNullable(getChildDAO().findOne(model.getChild().getMobileId(), ((User) account).getId())).orElse(model.getChild().getUuid() != null? getChildDAO().findOne(model.getChild().getUuid()) : null) : null;
 
 			model.setAgent(agent);
 			model.setChapter(chapter);
 			model.setForm(form);
-			model.setAnswers(setupAnswers(create.getAnswers(), model));
+			model.setAnswers(setupAnswers(item.getAnswers(), model));
+			model.setResponsible(item.getResponsible() != null? getResponsibleBO().saveCollection(Collections.singletonList(item.getResponsible()), account).iterator().next() : null);
+			model.setChild(item.getChild() != null? getChildBO().saveCollection(Collections.singletonList(item.getChild()), account).iterator().next() : null);
 
-			if (responsible != null)
-				model.setResponsible(responsible);
 
-			if (child != null)
-				model.setChild(child);
-
-			if (responsible == null && child == null) {
-				if (create.getChild() != null) {
-					create.getChild().getResponsibles().stream().filter(r -> r.getTempID() == create.getChild().getMother().getTempID()).findAny().ifPresent(remove -> create.getChild().getResponsibles().remove(remove));
-
-					if (create.getChild().getUuid() == null) {
-						Optional<Visit> visit = response.stream().filter(v -> v.getChild() != null && v.getChild().getMobileId() == model.getChild().getMobileId()).findAny();
-						if (visit.isPresent()) {
-							model.setChild(visit.get().getChild());
-						} else {
-							model.setChild(getChildBO().persist(create.getChild(), details));
-						}
-					} else {
-						model.setChild(getChildBO().patch(create.getChild(), details));
-					}
-
-					response.stream().filter(v -> (v.getChild() != null && v.getChild().getMother() != null) && v.getChild().getMother().getMobileId() == create.getChild().getMother().getTempID()).findAny().ifPresent(item -> model.getChild().setMother(item.getResponsible()));
-				}
-
-				if (create.getResponsible() != null) {
-					if (create.getResponsible().getUuid() == null) {
-						Optional<Visit> visit = response.stream().filter(v -> v.getResponsible() != null && v.getResponsible().getMobileId() == model.getResponsible().getMobileId()).findAny();
-						if (visit.isPresent()) {
-							model.setResponsible(visit.get().getResponsible());
-						} else {
-							model.setResponsible(getResponsibleBO().create(create.getResponsible(), details));
-						}
-					} else {
-						model.setResponsible(getResponsibleBO().patch(create.getResponsible(), details));
-					}
-
-					response.stream().filter(v -> (v.getChild() != null && v.getChild().getMother() != null) && v.getChild().getMother().getMobileId() == create.getResponsible().getTempID()).findAny().ifPresent(item -> model.setResponsible(item.getChild().getMother()));
-				}
-			}
-
+//			if (responsible != null)
+//				model.setResponsible(responsible);
+//
+//			if (child != null)
+//				model.setChild(child);
+//
+//			if (responsible == null && child == null) {
+//				if (create.getChild() != null) {
+//					create.getChild().getResponsibles().stream().filter(r -> r.getTempID() == create.getChild().getMother().getTempID()).findAny().ifPresent(remove -> create.getChild().getResponsibles().remove(remove));
+//
+//					if (create.getChild().getUuid() == null) {
+//						Optional<Visit> visit = response.stream().filter(v -> v.getChild() != null && v.getChild().getMobileId() == model.getChild().getMobileId()).findAny();
+//						if (visit.isPresent()) {
+//							model.setChild(visit.get().getChild());
+//						} else {
+//							model.setChild(getChildBO().persist(create.getChild(), details));
+//						}
+//					} else {
+//						model.setChild(getChildBO().patch(create.getChild(), details));
+//					}
+//
+//					response.stream().filter(v -> (v.getChild() != null && v.getChild().getMother() != null) && v.getChild().getMother().getMobileId() == create.getChild().getMother().getTempID()).findAny().ifPresent(item -> model.getChild().setMother(item.getResponsible()));
+//				}
+//
+//				if (create.getResponsible() != null) {
+//					if (create.getResponsible().getUuid() == null) {
+//						Optional<Visit> visit = response.stream().filter(v -> v.getResponsible() != null && v.getResponsible().getMobileId() == model.getResponsible().getMobileId()).findAny();
+//						if (visit.isPresent()) {
+//							model.setResponsible(visit.get().getResponsible());
+//						} else {
+//							model.setResponsible(getResponsibleBO().create(create.getResponsible(), details));
+//						}
+//					} else {
+//						model.setResponsible(getResponsibleBO().patch(create.getResponsible(), details));
+//					}
+//
+//					response.stream().filter(v -> (v.getChild() != null && v.getChild().getMother() != null) && v.getChild().getMother().getMobileId() == create.getResponsible().getTempID()).findAny().ifPresent(item -> model.setResponsible(item.getChild().getMother()));
+//				}
+//			}
+//
 			response.add(getDao().save(model));
 		}
 

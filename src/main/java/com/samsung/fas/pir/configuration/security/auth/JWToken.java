@@ -10,6 +10,7 @@ import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.configuration.security.rest.dto.ProfileDTO;
 import com.samsung.fas.pir.configuration.security.rest.dto.UserDTO;
 import com.samsung.fas.pir.persistence.enums.EAudience;
+import com.samsung.fas.pir.persistence.enums.EProfileType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -19,6 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -38,13 +40,13 @@ public class JWToken {
 	}
 
 	@SuppressWarnings("unchecked")
-	public String generateToken(Account account) {
+	public String generateToken(Account account, Device device) {
 		AccountDTO	 data		= new AccountDTO(account);
 		JwtBuilder	builder 	= Jwts.builder();
 
 		// Token generation
 		builder.setClaims(new ObjectMapper().convertValue(data, Map.class));
-		builder.setAudience(EAudience.WEB.getValue());
+		builder.setAudience(device.isMobile() || device.isTablet()? EAudience.MOBILE.getValue() : EAudience.WEB.getValue());
 		builder.setIssuer(getProperties().getAppName());
 		builder.setIssuedAt(new Date());
 		builder.setExpiration(new Date(new Date().getTime() + getProperties().getExpiresIn() * 1000 * 3600 * 24));
@@ -70,10 +72,12 @@ public class JWToken {
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		Account 		account 	= (Account) userDetails;
 		AccountDTO 		accountDTO 	= getAccount(token);
+		EAudience		audience	= EAudience.setValue(Objects.requireNonNull(getClaims(token)).getAudience());
 		Date 			created 	= issuedAt(token);
 		Date			expiration	= expiresAt(token);
 		Date			now			= new Date();
-		return (accountDTO != null && accountDTO.getUsername().equals(account.getUsername()) && now.before(expiration) && now.after(created) && created.before(expiration));
+		return (accountDTO != null && accountDTO.getUsername().equals(account.getUsername()) && (now.before(expiration) && now.after(created) && created.before(expiration) ||
+		account.getProfile().getType().compareTo(EProfileType.AGENT) == 0 && audience.compareTo(EAudience.MOBILE) == 0));
 	}
 
 	private Claims getClaims(String token) {
