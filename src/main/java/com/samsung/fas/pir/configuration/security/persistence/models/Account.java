@@ -41,22 +41,22 @@ public class Account implements UserDetails {
 
 	@Getter
 	@Setter
-	@Column(name="enabled", nullable=false)
+	@Column(nullable=false)
 	private		boolean				enabled;
 
 	@Getter
 	@Setter
-	@Column(name="expired", nullable=false)
+	@Column(nullable=false)
 	private		boolean				accountNonExpired;
 
 	@Getter
 	@Setter
-	@Column(name="locked", nullable=false)
+	@Column(nullable=false)
 	private		boolean				accountNonLocked;
 
 	@Getter
 	@Setter
-	@Column(name="credentials_expired", nullable=false)
+	@Column(nullable=false)
 	private		boolean				credentialsNonExpired;
 
 	@Getter
