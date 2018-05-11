@@ -143,10 +143,13 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 		chapter.setFamilyTasks(model.getFamilyTasks());
 		chapter.setEstimatedTime(model.getEstimatedTime());
 		chapter.setTimeUntilNext(model.getTimeUntilNext());
-		chapter.getMedias().clear();
-		chapter.getThumbnails().clear();
-		chapter.getMedias().addAll(model.getMedias() != null? model.getMedias() : new ArrayList<>());
-		chapter.getThumbnails().addAll(model.getThumbnails() != null? model.getThumbnails() : new ArrayList<>());
+
+		chapter.getThumbnails().forEach(thumb -> model.getThumbnails().stream().filter(item -> thumb.getUuid().compareTo(item.getUuid()) == 0).findAny().ifPresent(item -> model.getThumbnails().remove(item)));
+		chapter.getThumbnails().addAll(model.getThumbnails());
+
+		chapter.getMedias().forEach(media -> model.getMedias().stream().filter(item -> media.getUuid().compareTo(item.getUuid()) == 0).findAny().ifPresent(item -> model.getMedias().remove(item)));
+		chapter.getMedias().addAll(model.getMedias());
+
 		return new ChapterDTO(getDao().save(chapter), true);
 	}
 
