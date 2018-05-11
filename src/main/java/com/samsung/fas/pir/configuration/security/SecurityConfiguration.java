@@ -25,15 +25,21 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-	private	final 	AccountService 	service;
-	private	final 	AuthEntryPoint 	entry;
-	private	final 	JWToken			token;
+	private	final 	AccountService 				service;
+	private	final 	AuthEntryPoint 				entry;
+	private	final 	JWToken						token;
+	private	final 	CookieCsrfTokenRepository	repository;
 
 	@Autowired
-	public SecurityConfiguration(AuthEntryPoint entry, JWToken token, AccountService service, AuthenticationManagerBuilder builder) throws Exception {
+	public SecurityConfiguration(AuthEntryPoint entry,
+								 JWToken token,
+								 AccountService service,
+								 AuthenticationManagerBuilder builder,
+								 CookieCsrfTokenRepository repository) throws Exception {
 		this.service	= service;
 		this.entry		= entry;
 		this.token		= token;
+		this.repository	= repository;
 		builder.userDetailsService(this.service);
 	}
 
@@ -50,7 +56,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.httpBasic()
 		.authenticationEntryPoint(entry)
 		.and().cors()
-		.and().csrf().disable();//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+		.and().csrf().csrfTokenRepository(repository);
+//		.and().csrf().csrfTokenRepository(repository);
 	}
 
 	@Override

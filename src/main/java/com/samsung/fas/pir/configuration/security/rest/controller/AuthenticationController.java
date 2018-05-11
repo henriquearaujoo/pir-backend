@@ -17,9 +17,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 
@@ -28,25 +31,30 @@ import javax.validation.constraints.Email;
 @RestController
 @Validated
 public class AuthenticationController {
-	private	final 	JWToken 		token;
-	private	final 	AuthManager	 	manager;
-	private	final 	AccountService 	service;
+	private	final 	JWToken 					token;
+	private	final 	AuthManager	 				manager;
+	private	final 	AccountService 				service;
+	private	final 	CookieCsrfTokenRepository	repository;
 
 	@Autowired
-	public AuthenticationController(JWToken token, AuthManager manager, AccountService service) {
+	public AuthenticationController(JWToken token, AuthManager manager, AccountService service, CookieCsrfTokenRepository repository) {
 		this.token 		= token;
 		this.manager 	= manager;
 		this.service 	= service;
+		this.repository	= repository;
 	}
 
 	@RequestMapping(method = RequestMethod.POST, path = "/login")
-	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO request, Device device) throws AuthenticationException {
+	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO authRequest, HttpServletRequest request, HttpServletResponse response, Device device) throws AuthenticationException {
 		try {
-			Authentication 	authentication 	= manager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+			Authentication 	authentication 	= manager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 			HttpHeaders 	headers 		= new HttpHeaders();
 
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			headers.add(HttpHeaders.AUTHORIZATION, token.generateToken((Account) authentication.getPrincipal(), device));
+
+			repository.saveToken(repository.generateToken(request), request, response);
+			repository.loadToken(request);
 
 			return new ResponseEntity(headers, HttpStatus.OK);
 		} catch (NullPointerException e) {
