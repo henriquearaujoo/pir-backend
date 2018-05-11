@@ -45,6 +45,7 @@ ON CONFLICT DO NOTHING;
 INSERT INTO profile (id, status, created_at, description, title, type, updated_at, created_by, modified_by)
 VALUES (1, TRUE, current_date, 'Administrator ROLE', 'Administrator', 'ADMIN', current_date, (SELECT id FROM "user" WHERE name = 'Administrator'), (SELECT id FROM "user" WHERE name = 'Administrator'))
 ON CONFLICT DO NOTHING;
+
 /* Page Profile Permissions */
 INSERT INTO profile_pages (can_create, can_delete, can_read, can_update, page_id, profile_id)
 	(SELECT cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), cast(TRUE AS BOOLEAN), pages.id, profile.id
@@ -52,8 +53,8 @@ INSERT INTO profile_pages (can_create, can_delete, can_read, can_update, page_id
 ON CONFLICT DO NOTHING;
 
 /* Account */
-INSERT INTO account (id, credentials_expired, enabled, expired, locked, password, login, profile_id)
-VALUES((SELECT id FROM "user" WHERE name = 'Administrator'), FALSE, TRUE, FALSE, FALSE, '$2a$10$DHiwEO0otW0exjRhcsuhj.mJMUxZ2oAtQ/3SxVEXlETFd8WBn0Hqy', 'admin', (SELECT id FROM public.profile WHERE title = 'Administrator'))
+INSERT INTO account (id, credentials_non_expired, enabled, account_non_expired, account_non_locked, password, login, profile_id)
+VALUES((SELECT id FROM "user" WHERE name = 'Administrator'), TRUE, TRUE, TRUE, TRUE, '$2a$10$DHiwEO0otW0exjRhcsuhj.mJMUxZ2oAtQ/3SxVEXlETFd8WBn0Hqy', 'admin', (SELECT id FROM public.profile WHERE title = 'Administrator'))
 ON CONFLICT DO NOTHING;
 
 INSERT INTO states (id, uf_abbr, name)
