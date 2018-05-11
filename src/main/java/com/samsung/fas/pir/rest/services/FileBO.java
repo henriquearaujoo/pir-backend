@@ -85,7 +85,7 @@ public class FileBO {
 	}
 
 	private String getUploadDir() {
-//		String uploadPath = new File("/opt/pir/", UPLOAD_DIR).getAbsolutePath();
+//		String uploadPath = new File("/files/pir").getAbsolutePath();
 		String uploadPath = new File(System.getProperty("user.home") + "/PIRService", "/Data").getAbsolutePath();
 
 		if(!new File(uploadPath).exists())
