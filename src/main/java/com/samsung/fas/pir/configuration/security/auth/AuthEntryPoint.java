@@ -10,7 +10,6 @@ import java.io.IOException;
 
 @Component
 public class AuthEntryPoint implements AuthenticationEntryPoint {
-	// Secured endpoint error message (not login entry point)
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "unauthorized");
