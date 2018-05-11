@@ -56,7 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.httpBasic()
 		.authenticationEntryPoint(entry)
 		.and().cors()
-		.and().csrf().csrfTokenRepository(repository);
+		.and().csrf().disable();
 //		.and().csrf().csrfTokenRepository(repository);
 	}
 
