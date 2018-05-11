@@ -15,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -81,6 +82,7 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 		return new UserDTO(getDao().save(model), true);
 	}
 
+	@CacheEvict("accountsCache")
 	@Override
 	public UserDTO update(UserDTO update, UserDetails principal) {
 		User		model		= update.getModel();

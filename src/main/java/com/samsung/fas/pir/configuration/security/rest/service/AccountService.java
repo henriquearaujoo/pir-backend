@@ -9,6 +9,7 @@ import com.samsung.fas.pir.configuration.security.rest.dto.ResetPasswordDTO;
 import freemarker.template.TemplateException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -39,6 +40,7 @@ public class AccountService implements UserDetailsService {
 		this.encoder		= encoder;
 	}
 
+	@Cacheable("accountsCache")
 	@Override
 	public UserDetails loadUserByUsername(String username) {
 		Account account = repository.findByUsername(username);
