@@ -27,6 +27,11 @@ public class FileController {
 		this.service = service;
 	}
 
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ResponseEntity<?> findAll() throws IOException {
+		return ResponseEntity.ok(service.findAll());
+	}
+
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public ResponseEntity<?> upload(@RequestParam("file") MultipartFile[] files) throws IOException {
 		Collection<FileDTO> response = new HashSet<>();
@@ -41,7 +46,7 @@ public class FileController {
 	@RequestMapping(value = "/download/{fileid}", method = RequestMethod.GET)
 	public void download(@PathVariable("fileid") long fileId, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		FileDTO metadata		= service.findOne(fileId);
-		File 					file			= service.getFile(metadata);
+		File 	file			= service.getFile(metadata);
 
 		response.setContentType(metadata.getContent());
 		response.setHeader("Content-Disposition", "inline; filename=" + metadata.getName());

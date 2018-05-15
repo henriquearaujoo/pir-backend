@@ -14,7 +14,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class FileBO {
@@ -105,5 +108,9 @@ public class FileBO {
 
 	public void delete(long fileId) {
 		repository.deleteById(fileId);
+	}
+
+	public Collection<FileDTO> findAll() {
+		return StreamSupport.stream(repository.findAll().spliterator(), false).map(FileDTO::new).collect(Collectors.toList());
 	}
 }

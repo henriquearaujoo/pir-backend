@@ -40,7 +40,7 @@ public class AccountService implements UserDetailsService {
 		this.encoder		= encoder;
 	}
 
-	@Cacheable("accountsCache")
+//	@Cacheable("accountsCache")
 	@Override
 	public UserDetails loadUserByUsername(String username) {
 		Account account = repository.findByUsername(username);
