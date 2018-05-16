@@ -9,7 +9,7 @@ import lombok.Setter;
 
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true, value = {"nodes", "visited"})
+@JsonIgnoreProperties(ignoreUnknown = true, value = {"nodes"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Node {
 	@Getter

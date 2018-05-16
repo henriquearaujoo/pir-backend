@@ -66,6 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers(HttpMethod.OPTIONS)
 		.antMatchers(HttpMethod.POST, "/rest/firebase/authentication/**")
 		.antMatchers(HttpMethod.POST, "/rest/authentication/**")
+		.antMatchers(HttpMethod.GET, "/rest/graph/**")
 		.antMatchers(HttpMethod.GET, "/rest/file/**")
 		.antMatchers(HttpMethod.GET, "/rest/firebase/**")
 		.antMatchers("/assets/**", "/webjars/**", "/api-docs/**")

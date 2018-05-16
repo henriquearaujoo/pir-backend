@@ -8,7 +8,7 @@ import lombok.Setter;
 
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true, value = {"visited"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Path {
 	@Getter
@@ -30,9 +30,4 @@ public class Path {
 	@Setter
 	@JsonProperty("joins")
 	private 					List<Path>		joins;
-
-	@Getter
-	@Setter
-	@JsonProperty("visited")
-	private 	transient		boolean			visited;
 }

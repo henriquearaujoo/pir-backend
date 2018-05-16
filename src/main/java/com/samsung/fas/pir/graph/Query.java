@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.graph;
 
 import com.querydsl.core.JoinType;
+import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -19,6 +20,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import static com.querydsl.core.group.GroupBy.*;
 
 @Component
 public class Query {
@@ -31,7 +35,14 @@ public class Query {
 		setManager(manager);
 	}
 
-	public JPAQuery<?> query(Path root, JPAQuery<?> query, EntityPathBase<?> rootPath, List<EntityPathBase<?>> paths) {
+	public Map<?, ?> query(Path root) {
+		EntityPath<?>			group	= path(findClass("com.samsung.fas.pir", "Visit", Table.class));
+		EntityPath<?>			grouped	= path(findClass("com.samsung.fas.pir", "Address", Table.class));
+
+		return query(root, null, null, null).transform(groupBy(group).as(set(null), list(grouped)));
+	}
+
+	private JPAQuery<?> query(Path root, JPAQuery<?> query, EntityPathBase<?> rootPath, List<EntityPathBase<?>> paths) {
 		Class<?>					clazz	= findClass("com.samsung.fas.pir", root.getEntity(), Table.class);
 		EntityPathBase<?>			path	= path(clazz);
 
