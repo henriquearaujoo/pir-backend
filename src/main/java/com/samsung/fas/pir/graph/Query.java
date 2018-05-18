@@ -1,11 +1,14 @@
 package com.samsung.fas.pir.graph;
 
 import com.querydsl.core.JoinType;
+import com.querydsl.core.group.AbstractGroupExpression;
 import com.querydsl.core.types.EntityPath;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.samsung.fas.pir.persistence.annotations.Alias;
+import com.samsung.fas.pir.rest.dto.annotations.DTO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,11 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Table;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,14 +39,51 @@ public class Query {
 	}
 
 	public Map<?, ?> query(Path root) {
-		EntityPath<?>			group	= path(findClass("com.samsung.fas.pir", "Visit", Table.class));
-		EntityPath<?>			grouped	= path(findClass("com.samsung.fas.pir", "Address", Table.class));
+		EntityPath<?>			grouper		= path(findClass("com.samsung.fas.pir", root.getEntity()));
+		Map<?, ?>				map			= query(root, null, null, null).transform(groupBy(grouper).as(listing(root.getGrouped()).toArray(new Expression<?>[0])));
+		Map<Object, Object>		response	= new HashMap<>();
 
-		return query(root, null, null, null).transform(groupBy(group).as(set(null), list(grouped)));
+		map.forEach((key, value) -> {
+			Class<?>	kclass		= key != null? findClass("com.samsung.fas.pir", key.getClass().getSimpleName() + "DTO", DTO.class): null;
+			Class<?>	vclass		= value != null? findClass("com.samsung.fas.pir", value.getClass().getSimpleName() + "DTO", DTO.class): null;
+
+			try {
+				response.put(
+					kclass != null? kclass.getDeclaredConstructor(key.getClass(), boolean.class).newInstance(key, true) : "",
+					vclass != null? vclass.getDeclaredConstructor(value.getClass(), boolean.class).newInstance(value, true) : null
+				);
+			} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+		});
+
+		return response;
+	}
+
+	private List<Expression<?>> listing(List<String> grouped) {
+		List<Expression<?>> as = new ArrayList<>();
+
+		grouped.forEach(item -> {
+			as.add(list(path(findClass("com.samsung.fas.pir", item))));
+		});
+
+		return as;
+	}
+
+	private AbstractGroupExpression<?, ?> mapping(List<String> entities, EntityPath<?> parent) {
+		if (parent == null) {
+			return mapping(entities, path(findClass("com.samsung.fas.pir", entities.remove(0))));
+		} else {
+			if (entities.iterator().hasNext() && entities.size() > 1) {
+				return map(parent, mapping(entities, path(findClass("com.samsung.fas.pir", entities.remove(0)))));
+			} else {
+				return map(parent, path(findClass("com.samsung.fas.pir", entities.remove(0))));
+			}
+		}
 	}
 
 	private JPAQuery<?> query(Path root, JPAQuery<?> query, EntityPathBase<?> rootPath, List<EntityPathBase<?>> paths) {
-		Class<?>					clazz	= findClass("com.samsung.fas.pir", root.getEntity(), Table.class);
+		Class<?>					clazz	= findClass("com.samsung.fas.pir", root.getEntity());
 		EntityPathBase<?>			path	= path(clazz);
 
 
@@ -81,8 +121,13 @@ public class Query {
 	}
 
 	@SuppressWarnings("SameParameterValue")
-	private Class<?> findClass(String prefix, String className, Class<? extends Annotation> annotation) {
+	private Class<?> findClass(String prefix, String className) {
 		return new Reflections(prefix).getSubTypesOf(EntityPathBase.class).stream().filter(clazz -> clazz.getSimpleName().equalsIgnoreCase("Q" + className)).findAny().orElse(null);
+	}
+
+	@SuppressWarnings("SameParameterValue")
+	private Class<?> findClass(String prefix, String className, Class<? extends Annotation> annotation) {
+		return new Reflections(prefix).getTypesAnnotatedWith(annotation).stream().filter(clazz -> clazz.getSimpleName().equalsIgnoreCase(className)).findAny().orElse(null);
 	}
 
 	private EntityPathBase<?> path(Class<?> clazz) {

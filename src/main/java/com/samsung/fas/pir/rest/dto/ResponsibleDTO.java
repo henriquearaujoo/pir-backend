@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.samsung.fas.pir.persistence.enums.EHabitationType;
 import com.samsung.fas.pir.persistence.models.Mother;
 import com.samsung.fas.pir.persistence.models.Responsible;
+import com.samsung.fas.pir.rest.dto.annotations.DTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -16,6 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 
+@DTO(Responsible.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponsibleDTO {

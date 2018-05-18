@@ -2,11 +2,13 @@ package com.samsung.fas.pir.rest.dto;
 
 import com.fasterxml.jackson.annotation.*;
 import com.samsung.fas.pir.persistence.models.FileData;
+import com.samsung.fas.pir.rest.dto.annotations.DTO;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
 
+@DTO(FileData.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FileDTO {

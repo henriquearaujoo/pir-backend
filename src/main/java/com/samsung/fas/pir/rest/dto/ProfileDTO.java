@@ -3,6 +3,7 @@ package com.samsung.fas.pir.rest.dto;
 import com.fasterxml.jackson.annotation.*;
 import com.samsung.fas.pir.persistence.enums.EProfileType;
 import com.samsung.fas.pir.persistence.models.Profile;
+import com.samsung.fas.pir.rest.dto.annotations.DTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
@@ -10,6 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import java.util.Date;
 import java.util.UUID;
 
+@DTO(Profile.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProfileDTO {

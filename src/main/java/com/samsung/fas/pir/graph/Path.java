@@ -14,20 +14,15 @@ public class Path {
 	@Getter
 	@Setter
 	@JsonProperty("entity")
-	private 					String			entity;
+	private 	String			entity;
 
 	@Getter
 	@Setter
-	@JsonProperty("foreign")
-	private 					String			foreign;
-
-	@Getter
-	@Setter
-	@JsonProperty("labels")
-	private						List<String>	selections;
+	@JsonProperty("grouped")
+	private		List<String>	grouped;
 
 	@Getter
 	@Setter
 	@JsonProperty("joins")
-	private 					List<Path>		joins;
+	private 	List<Path>		joins;
 }
