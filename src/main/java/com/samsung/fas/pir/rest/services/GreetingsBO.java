@@ -17,7 +17,7 @@ public class GreetingsBO extends BaseBO<Greetings, GreetingsDAO, GreetingsDTO, L
 	private	final ChapterDAO cdao;
 
 	@Autowired
-	public GreetingsBO(GreetingsDAO dao, @Autowired ChapterDAO cdao) {
+	public GreetingsBO(GreetingsDAO dao, ChapterDAO cdao) {
 		super(dao);
 		this.cdao = cdao;
 	}

@@ -31,25 +31,25 @@ public class AnswerDTO {
 	@JsonProperty("answer")
 	private 	String		answer;
 
-	@Getter(onMethod = @__({@JsonIgnore}))
+	@Getter
 	@Setter
 	@JsonProperty(value = "question_id", access = JsonProperty.Access.WRITE_ONLY)
 	private 	UUID		questionUUID;
 
-	@Getter(onMethod = @__({@JsonIgnore}))
+	@Getter
 	@Setter
 	@JsonProperty(value = "alternative_id", access = JsonProperty.Access.WRITE_ONLY)
 	private 	UUID		alternativeUUID;
 
 	@ApiModelProperty(readOnly = true, hidden = true)
 	@Getter
-	@Setter(onMethod = @__({@JsonIgnore}))
+	@Setter
 	@JsonProperty(value = "alternative")
 	private 	AlternativeDTO		alternative;
 
 	@ApiModelProperty(readOnly = true, hidden = true)
 	@Getter
-	@Setter(onMethod = @__({@JsonIgnore}))
+	@Setter
 	@JsonProperty(value = "question")
 	private 	QuestionDTO			question;
 

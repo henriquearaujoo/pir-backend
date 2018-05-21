@@ -2,12 +2,10 @@ package com.samsung.fas.pir.rest.services;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
-import com.samsung.fas.pir.exception.RESTException;
 import com.samsung.fas.pir.persistence.dao.CityDAO;
 import com.samsung.fas.pir.persistence.dao.CommunityDAO;
 import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
 import com.samsung.fas.pir.persistence.models.Community;
-import com.samsung.fas.pir.persistence.models.Mother;
 import com.samsung.fas.pir.persistence.models.Responsible;
 import com.samsung.fas.pir.persistence.models.User;
 import com.samsung.fas.pir.rest.dto.ResponsibleDTO;
@@ -21,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -30,20 +27,23 @@ import java.util.stream.Collectors;
 @Service
 public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, ResponsibleDTO, Long> {
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	@Setter(AccessLevel.PRIVATE)
 	private		CommunityBO			communityBO;
 
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	@Setter(AccessLevel.PRIVATE)
 	private		CommunityDAO		communityDAO;
 
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	@Setter(AccessLevel.PRIVATE)
 	private		CityDAO				cityDAO;
 
 	@Autowired
-	public ResponsibleBO(ResponsibleDAO dao) {
+	public ResponsibleBO(ResponsibleDAO dao, CommunityDAO communityDAO, CityDAO cityDAO, CommunityBO communityBO) {
 		super(dao);
+		setCommunityBO(communityBO);
+		setCommunityDAO(communityDAO);
+		setCityDAO(cityDAO);
 	}
 
 	public Collection<ResponsibleDTO> findAllResponsible() {

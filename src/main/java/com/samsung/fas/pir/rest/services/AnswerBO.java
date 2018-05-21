@@ -16,16 +16,18 @@ import java.util.Collection;
 @Service
 public class AnswerBO extends BaseBO<Answer, AnswerDAO, AnswerDTO, Long> {
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__(@Autowired))
+	@Setter(AccessLevel.PRIVATE)
 	private		AlternativeDAO	alternativeDAO;
 
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__(@Autowired))
+	@Setter(AccessLevel.PRIVATE)
 	private		QuestionDAO		questionDAO;
 
 	@Autowired
-	protected AnswerBO(AnswerDAO dao) {
+	protected AnswerBO(AnswerDAO dao, AlternativeDAO alternativeDAO, QuestionDAO questionDAO) {
 		super(dao);
+		setAlternativeDAO(alternativeDAO);
+		setQuestionDAO(questionDAO);
 	}
 
 	@Override

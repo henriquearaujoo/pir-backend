@@ -17,7 +17,7 @@ public class InterventionBO extends BaseBO<Intervention, InterventionDAO, Interv
 	private	final ChapterDAO cdao;
 
 	@Autowired
-	public InterventionBO(InterventionDAO dao, @Autowired ChapterDAO cdao) {
+	public InterventionBO(InterventionDAO dao, ChapterDAO cdao) {
 		super(dao);
 		this.cdao = cdao;
 	}

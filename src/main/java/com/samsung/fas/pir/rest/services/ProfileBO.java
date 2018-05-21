@@ -21,7 +21,7 @@ public class ProfileBO extends BaseBO<Profile, ProfileDAO, ProfileDTO, Long> {
 	private	final PageDAO pdao;
 
 	@Autowired
-	public ProfileBO(ProfileDAO dao, @Autowired PageDAO pdao) {
+	public ProfileBO(ProfileDAO dao, PageDAO pdao) {
 		super(dao);
 		this.pdao 	= pdao;
 	}

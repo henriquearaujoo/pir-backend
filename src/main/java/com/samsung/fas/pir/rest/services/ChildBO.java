@@ -1,12 +1,14 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
-import com.samsung.fas.pir.exception.RESTException;
 import com.samsung.fas.pir.persistence.dao.ChildDAO;
 import com.samsung.fas.pir.persistence.dao.CityDAO;
 import com.samsung.fas.pir.persistence.dao.CommunityDAO;
 import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
-import com.samsung.fas.pir.persistence.models.*;
+import com.samsung.fas.pir.persistence.models.Child;
+import com.samsung.fas.pir.persistence.models.City;
+import com.samsung.fas.pir.persistence.models.Community;
+import com.samsung.fas.pir.persistence.models.Responsible;
 import com.samsung.fas.pir.rest.dto.ChildDTO;
 import com.samsung.fas.pir.rest.dto.ResponsibleDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
@@ -17,34 +19,42 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	@Setter(AccessLevel.PRIVATE)
 	private		ResponsibleBO		responsibleBO;
 
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	@Setter(AccessLevel.PRIVATE)
 	private		CommunityBO			communityBO;
 
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	@Setter(AccessLevel.PRIVATE)
 	private		ResponsibleDAO		responsibleDAO;
 
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	@Setter(AccessLevel.PRIVATE)
 	private		CommunityDAO		communityDAO;
 
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	@Setter(AccessLevel.PRIVATE)
 	private		CityDAO				cityDAO;
 
 	@Autowired
-	public ChildBO(ChildDAO dao) {
+	public ChildBO(ChildDAO dao, ResponsibleDAO responsibleDAO, CommunityDAO communityDAO,
+				   CityDAO cityDAO, ResponsibleBO responsibleBO, CommunityBO communityBO) {
 		super(dao);
+		setCommunityBO(communityBO);
+		setResponsibleBO(responsibleBO);
+		setResponsibleDAO(responsibleDAO);
+		setCommunityDAO(communityDAO);
+		setCityDAO(cityDAO);
 	}
 
 	@Override

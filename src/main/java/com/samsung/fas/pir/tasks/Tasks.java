@@ -1,6 +1,5 @@
 package com.samsung.fas.pir.tasks;
 
-import com.samsung.fas.pir.configuration.security.persistence.repository.IPasswordRecoverRepository;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,8 +13,13 @@ import java.util.Objects;
 @Component
 public class Tasks {
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	@Setter(AccessLevel.PRIVATE)
 	private CacheManager manager;
+
+	@Autowired
+	public Tasks(CacheManager manager) {
+		setManager(manager);
+	}
 
 	@Scheduled(fixedDelay = 1200 * 1000, initialDelay = 1200 * 1000)
 	public void inactivateTechnicals() {

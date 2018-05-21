@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.enums.ECommunityZone;
-import com.samsung.fas.pir.persistence.models.City;
 import com.samsung.fas.pir.persistence.models.Community;
 import com.samsung.fas.pir.rest.dto.annotations.DTO;
 import io.swagger.annotations.ApiModelProperty;
@@ -166,7 +165,7 @@ public class CommunityDTO {
 
 	@ApiModelProperty(hidden = true, readOnly = true)
 	@Getter
-	@Setter(onMethod = @__({@JsonIgnore}))
+	@Setter
 	@JsonProperty
 	private 	CityDTO			city;
 

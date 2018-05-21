@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.google.common.hash.Hashing;
+import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.exception.RESTException;
 import com.samsung.fas.pir.persistence.dao.CityDAO;
 import com.samsung.fas.pir.persistence.dao.ProfileDAO;
@@ -8,14 +9,12 @@ import com.samsung.fas.pir.persistence.dao.UserDAO;
 import com.samsung.fas.pir.persistence.models.City;
 import com.samsung.fas.pir.persistence.models.Profile;
 import com.samsung.fas.pir.persistence.models.User;
-import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.rest.dto.UserDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,24 +25,28 @@ import java.util.Collection;
 @Service
 public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	@Setter(AccessLevel.PRIVATE)
 	private		CityDAO			cdao;
 
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	@Setter(AccessLevel.PRIVATE)
 	private		ProfileDAO		pdao;
 
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	@Setter(AccessLevel.PRIVATE)
 	private 	UserDAO			userDAO;
 
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	@Setter(AccessLevel.PRIVATE)
 	private		PasswordEncoder	encoder;
 
 	@Autowired
-	public UserBO(UserDAO dao) {
+	public UserBO(UserDAO dao, CityDAO cityDAO, ProfileDAO profileDAO, UserDAO userDAO, PasswordEncoder encoder) {
 		super(dao);
+		setCdao(cityDAO);
+		setPdao(profileDAO);
+		setUserDAO(userDAO);
+		setEncoder(encoder);
 	}
 
 	@Override

@@ -1,14 +1,13 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.exception.RESTException;
 import com.samsung.fas.pir.persistence.dao.CityDAO;
 import com.samsung.fas.pir.persistence.dao.CommunityDAO;
 import com.samsung.fas.pir.persistence.models.City;
 import com.samsung.fas.pir.persistence.models.Community;
-import com.samsung.fas.pir.persistence.models.User;
 import com.samsung.fas.pir.rest.dto.CommunityDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +22,13 @@ import java.util.stream.Collectors;
 @Service
 public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, Long> {
 	@Getter
-	@Setter(onMethod = @__({@Autowired}))
+	@Setter(AccessLevel.PRIVATE)
 	private		CityDAO		cityDAO;
 
 	@Autowired
-	public CommunityBO(CommunityDAO dao, @Autowired CityDAO cdao) {
+	public CommunityBO(CommunityDAO dao, CityDAO cdao) {
 		super(dao);
+		setCityDAO(cdao);
 	}
 
 	@Override

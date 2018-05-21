@@ -89,7 +89,7 @@ public class UserDTO {
 
 	@ApiModelProperty(readOnly = true, hidden = true)
 	@Getter
-	@Setter(onMethod = @__({@JsonIgnore}))
+	@Setter
 	@JsonProperty("visits")
 	private 	Collection<VisitDTO>	visits;
 

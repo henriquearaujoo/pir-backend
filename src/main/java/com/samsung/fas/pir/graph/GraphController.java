@@ -23,16 +23,17 @@ import javax.validation.Valid;
 @RestController
 public class GraphController {
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	@Setter(AccessLevel.PRIVATE)
 	private		Graph		graph;
 
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE, onMethod = @__({@Autowired}))
+	@Setter(AccessLevel.PRIVATE)
 	private		Query		query;
 
 	@Autowired
-	public GraphController(Graph graph) {
+	public GraphController(Graph graph, Query query) {
 		setGraph(graph);
+		setQuery(query);
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/graph")

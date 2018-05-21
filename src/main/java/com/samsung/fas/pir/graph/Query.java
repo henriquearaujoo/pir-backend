@@ -2,6 +2,7 @@ package com.samsung.fas.pir.graph;
 
 import com.querydsl.core.JoinType;
 import com.querydsl.core.group.AbstractGroupExpression;
+import com.querydsl.core.group.Group;
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.EntityPathBase;
@@ -45,13 +46,17 @@ public class Query {
 
 		map.forEach((key, value) -> {
 			Class<?>	kclass		= key != null? findClass("com.samsung.fas.pir", key.getClass().getSimpleName() + "DTO", DTO.class): null;
-			Class<?>	vclass		= value != null? findClass("com.samsung.fas.pir", value.getClass().getSimpleName() + "DTO", DTO.class): null;
 
 			try {
-				response.put(
-					kclass != null? kclass.getDeclaredConstructor(key.getClass(), boolean.class).newInstance(key, true) : "",
-					vclass != null? vclass.getDeclaredConstructor(value.getClass(), boolean.class).newInstance(value, true) : null
-				);
+				if (((Group) value) != null) {
+					for (Object o : ((Group) value).toArray()) {
+						Class<?>	vclass		= o != null? findClass("com.samsung.fas.pir", o.getClass().getSimpleName() + "DTO", DTO.class): null;
+						response.put(
+								kclass != null? kclass.getDeclaredConstructor(key.getClass(), boolean.class).newInstance(key, true) : "",
+								vclass != null? vclass.getDeclaredConstructor(o.getClass(), boolean.class).newInstance(o, true) : null
+						);
+					}
+				}
 			} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 				e.printStackTrace();
 			}
@@ -63,9 +68,8 @@ public class Query {
 	private List<Expression<?>> listing(List<String> grouped) {
 		List<Expression<?>> as = new ArrayList<>();
 
-		grouped.forEach(item -> {
-			as.add(list(path(findClass("com.samsung.fas.pir", item))));
-		});
+		if (grouped != null)
+			grouped.forEach(item -> as.add(list(path(findClass("com.samsung.fas.pir", item)))));
 
 		return as;
 	}
