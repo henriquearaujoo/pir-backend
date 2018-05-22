@@ -1,6 +1,5 @@
 package com.samsung.fas.pir.graph;
 
-import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.util.stream.Collectors;
 
 @Api(value = "Graph", description = "REST Controller for Entity Graph", tags = "GRAPH")
 @RequestMapping(value = "/rest", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -43,6 +43,6 @@ public class GraphController {
 
 	@RequestMapping(method= RequestMethod.POST, path = "/query")
 	public ResponseEntity<?> query(@RequestBody @Valid Path root, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(new Gson().toJson(getQuery().query(root)));
+		return ResponseEntity.ok(getQuery().query(root).entrySet().stream().map(item -> new Response(item.getKey(), item.getValue())).collect(Collectors.toList()));
 	}
 }
