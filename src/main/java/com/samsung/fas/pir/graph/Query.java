@@ -18,10 +18,7 @@ import javax.persistence.EntityManager;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,26 +38,31 @@ public class Query {
 
 	public Map<?, ?> query(@Nonnull Path root) {
 		PathBuilder<?> 				grouper		= path(findClass("com.samsung.fas.pir", root.getEntity(), Entity.class));
-		Map<Object, List<Object>>	map			= new HashMap<>();
-		Map<Object, List<Object>>	response	= new HashMap<>();
+		Map<Object, Object>			map			= new HashMap<>();
+		Map<Object, Object>			response	= new HashMap<>();
 
 		query(new JPAQuery<>(manager), root, null, grouper, map);
 
-		map.forEach((key, list) -> {
+		map.forEach((key, obj) -> {
 			try {
 				Class<?>			kclass		= key != null? findClass("com.samsung.fas.pir", key.getClass().getSimpleName() + "DTO", DTO.class): null;
 				Object				kobj		= kclass != null? kclass.getDeclaredConstructor(key.getClass(), boolean.class).newInstance(key, false) : null;
 				ArrayList<Object>	values		= new ArrayList<>();
 
-				if (list != null) {
-					for (Object value : list) {
-						Class<?>	vclass		= value != null? findClass("com.samsung.fas.pir", value.getClass().getSimpleName() + "DTO", DTO.class): null;
-						Object		vobj		= vclass != null? vclass.getDeclaredConstructor(value.getClass(), boolean.class).newInstance(value, false) : null;
-						values.add(vobj);
+				if (obj != null) {
+					if (obj.getClass().isInstance(new ArrayList<>())) {
+						for (Object value : (List) obj) {
+							Class<?>	vclass		= value != null? findClass("com.samsung.fas.pir", value.getClass().getSimpleName() + "DTO", DTO.class): null;
+							Object		vobj		= vclass != null? vclass.getDeclaredConstructor(value.getClass(), boolean.class).newInstance(value, false) : null;
+							values.add(vobj);
+						}
+						response.put(kobj, values);
+					} else {
+						Class<?>	vclass		= findClass("com.samsung.fas.pir", obj.getClass().getSimpleName() + "DTO", DTO.class);
+						Object		vobj		= vclass != null? vclass.getDeclaredConstructor(obj.getClass(), boolean.class).newInstance(obj, false) : null;
+						response.put(kobj, Collections.singletonList(vobj));
 					}
 				}
-				response.put(kobj, values);
-
 			} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 				e.printStackTrace();
 			}
@@ -69,7 +71,7 @@ public class Query {
 		return response;
 	}
 
-	private void query(@Nonnull JPAQuery<?> query, @Nonnull Path root, PathBuilder<?> rootPath, @Nonnull PathBuilder<?> grouper, @Nonnull Map<Object, List<Object>> map) {
+	private void query(@Nonnull JPAQuery<?> query, @Nonnull Path root, PathBuilder<?> rootPath, @Nonnull PathBuilder<?> grouper, @Nonnull Map<Object, Object> map) {
 		Class<?>			clazz	= findClass("com.samsung.fas.pir", root.getEntity(), Entity.class);
 		PathBuilder<?>		path	= path(clazz);
 
@@ -82,9 +84,13 @@ public class Query {
 				query(query.clone(manager), root.getJoins().get(i), path, grouper, map);
 			}
 		} else {
-			query.from(rootPath).getMetadata().addJoin(JoinType.LEFTJOIN, path);
-			query.getMetadata().addJoinCondition(Expressions.stringPath(rootPath, getPropertyName(path.getType(), rootPath.getType().getDeclaredFields()).concat("id")).eq(Expressions.stringPath(path, getPropertyName(rootPath.getType(), path.getType().getDeclaredFields()).concat("id"))));
-			query.distinct().transform(groupBy(grouper).as(list(new PathBuilder<Object>(clazz, clazz.getSimpleName())))).forEach((k, v) -> map.merge(k, v, (o, n) -> Stream.concat(o.stream(), n.stream()).collect(Collectors.toList())));
+			if (rootPath == null) {
+				map.putAll(query.from(path).distinct().transform(groupBy(grouper).as(list(new PathBuilder<Object>(clazz, clazz.getSimpleName())))));
+			} else {
+				query.from(rootPath).getMetadata().addJoin(JoinType.LEFTJOIN, path);
+				query.getMetadata().addJoinCondition(Expressions.stringPath(rootPath, getPropertyName(path.getType(), rootPath.getType().getDeclaredFields()).concat("id")).eq(Expressions.stringPath(path, getPropertyName(rootPath.getType(), path.getType().getDeclaredFields()).concat("id"))));
+				query.distinct().transform(groupBy(grouper).as(list(new PathBuilder<Object>(clazz, clazz.getSimpleName())))).forEach((k, v) -> map.merge(k, v, (o, n) -> Stream.concat(((List<?>) o).stream(), ((List<?>) n).stream()).collect(Collectors.toList())));
+			}
 		}
 	}
 
