@@ -18,11 +18,6 @@ public class Path {
 
 	@Getter
 	@Setter
-	@JsonProperty("grouped")
-	private		List<String>	grouped;
-
-	@Getter
-	@Setter
 	@JsonProperty("joins")
 	private 	List<Path>		joins;
 }

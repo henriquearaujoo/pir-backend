@@ -39,7 +39,7 @@ public class Query {
 		setManager(manager);
 	}
 
-	public Map<?, ?> query(Path root) {
+	public Map<?, ?> query(@Nonnull Path root) {
 		PathBuilder<?> 				grouper		= path(findClass("com.samsung.fas.pir", root.getEntity(), Entity.class));
 		Map<Object, List<Object>>	map			= new HashMap<>();
 		Map<Object, List<Object>>	response	= new HashMap<>();
@@ -98,11 +98,11 @@ public class Query {
 	}
 
 	@SuppressWarnings("SameParameterValue")
-	private Class<?> findClass(String prefix, String className, Class<? extends Annotation> annotation) {
+	private Class<?> findClass(@Nonnull String prefix, @Nonnull String className, @Nonnull Class<? extends Annotation> annotation) {
 		return new Reflections(prefix).getTypesAnnotatedWith(annotation).stream().filter(clazz -> clazz.getSimpleName().equalsIgnoreCase(className)).findAny().orElse(null);
 	}
 
-	private PathBuilder<Object> path(Class<?> clazz) {
+	private PathBuilder<Object> path(@Nonnull Class<?> clazz) {
 		return new PathBuilder<>(clazz, clazz.getSimpleName());
 	}
 }
