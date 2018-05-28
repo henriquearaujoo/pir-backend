@@ -1,8 +1,10 @@
 package com.samsung.fas.pir.graph;
 
 import com.querydsl.core.JoinType;
+import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -37,41 +39,48 @@ public class Query {
 		setGraph(graph);
 	}
 
+	private Object toDTO(Object entity) {
+		try {
+			Class<?>	clazz	= entity != null? graph.getDtos().get(entity.getClass().getSimpleName() + "DTO") : null;
+			return clazz != null? clazz.getDeclaredConstructor(entity.getClass(), boolean.class).newInstance(entity, false) : null;
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	public Map<?, ?> query(@Nonnull Path root) {
-		PathBuilder<?> 						grouper		= path(graph.getEntities().get(root.getEntity()));
-		Map<Object, ?>						map			= new HashMap<>();
-		Map<Object, Map<String, Object>>	response	= new HashMap<>();
+		PathBuilder<?> 							grouper		= path(graph.getEntities().get(root.getEntity()));
+		Map<Object, Map<String, List<Object>>>	map			= new HashMap<>();
+		Map<Object, Map<String, List<Object>>>	response	= new HashMap<>();
 
 		query(new JPAQuery<>(manager), root, null, grouper, map);
 
-		map.forEach((key, obj) -> {
+		map.forEach((key, value) -> {
 			try {
-				Class<?>			kclass		= key != null? graph.getDtos().get(key.getClass().getSimpleName() + "DTO") : null;
-				Object				kobj		= kclass != null? kclass.getDeclaredConstructor(key.getClass(), boolean.class).newInstance(key, false) : null;
-				Map<String, Object>	emap		= new HashMap<>();
-				ArrayList<Object>	values		= new ArrayList<>();
+				if (key != null) {
+					Class<?>					kclass		= key != null? graph.getDtos().get(key.getClass().getSimpleName() + "DTO") : null;
+					Object						kobj		= kclass != null? kclass.getDeclaredConstructor(key.getClass(), boolean.class).newInstance(key, false) : null;
+					ArrayList<Object>			values		= new ArrayList<>();
+					Map<String, List<Object>>	submap		= new HashMap<>();
 
-				if (obj != null) {
-					if (obj.getClass().isInstance(new ArrayList<>())) {
-						if (kobj != null) {
-							for (Object value : (List) obj) {
-								Class<?>	vclass		= value != null? graph.getDtos().get(value.getClass().getSimpleName() + "DTO") : null;
-								Object		vobj		= vclass != null? vclass.getDeclaredConstructor(value.getClass(), boolean.class).newInstance(value, false) : null;
-								values.add(vobj);
-								emap.put(value != null? value.getClass().getSimpleName() : "VOID", values);
+					if (value != null) {
+						value.forEach((subkey, subvalue) -> {
+							for (Object v : subvalue) {
+								try {
+									Class<?>	vclass		= v != null? graph.getDtos().get(v.getClass().getSimpleName() + "DTO") : null;
+									Object		vobj		= vclass != null? vclass.getDeclaredConstructor(v.getClass(), boolean.class).newInstance(v, false) : null;
+									values.add(vobj);
+								} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+									e.printStackTrace();
+								}
 							}
-							response.put(kobj, emap);
-						}
-					} else {
-						if (kobj != null) {
-							Class<?>	vclass		= graph.getDtos().get(obj.getClass().getSimpleName() + "DTO");
-							Object		vobj		= vclass != null? vclass.getDeclaredConstructor(obj.getClass(), boolean.class).newInstance(obj, false) : null;
-							emap.put(obj.getClass().getSimpleName(), Collections.singletonList(vobj));
-							response.put(kobj, emap);
-						}
+							submap.put(subkey, values);
+							response.put(kobj, submap);
+						});
 					}
 				}
-			} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		});
@@ -79,9 +88,9 @@ public class Query {
 		return response;
 	}
 
-	private void query(@Nonnull JPAQuery<?> query, @Nonnull Path root, PathBuilder<?> rootPath, @Nonnull PathBuilder<?> grouper, @Nonnull Map<Object, ?> map) {
-		Class<?>			clazz	= getGraph().getEntities().get(root.getEntity());
-		PathBuilder<?>		path	= path(clazz);
+	private void query(@Nonnull JPAQuery<?> query, @Nonnull Path root, PathBuilder<?> rootPath, @Nonnull PathBuilder<?> grouper, @Nonnull Map<Object, Map<String, List<Object>>> map) {
+		Class<?>				clazz	= getGraph().getEntities().get(root.getEntity());
+		PathBuilder<Object>		path	= path(clazz);
 
 		if (root.getJoins() != null) {
 			for (int i = 0; i < root.getJoins().size(); i++) {
@@ -93,11 +102,11 @@ public class Query {
 			}
 		} else {
 			if (rootPath == null) {
-				map.putAll(query.from(path).distinct().transform(groupBy(grouper).as(list(new PathBuilder<Object>(clazz, clazz.getSimpleName())))));
+				map.putAll(query.from(path).distinct().transform(groupBy(grouper).as(GroupBy.map(Expressions.constant(clazz.getSimpleName()), list(path)))));
 			} else {
 				query.from(rootPath).getMetadata().addJoin(JoinType.FULLJOIN, path);
 				query.getMetadata().addJoinCondition(Expressions.stringPath(rootPath, getPropertyName(path.getType(), rootPath.getType().getDeclaredFields()).concat("id")).eq(Expressions.stringPath(path, getPropertyName(rootPath.getType(), path.getType().getDeclaredFields()).concat("id"))));
-				query.distinct().transform(groupBy(grouper).as(list(new PathBuilder<Object>(clazz, clazz.getSimpleName())))).forEach((k, v) -> map.merge(k, v, (o, n) -> Stream.concat(((List<Object>) o).stream(), ((List<Object>) n).stream()).collect(Collectors.toList())));
+				map.putAll(query.distinct().transform(groupBy(grouper).as(GroupBy.map(Expressions.constant(clazz.getSimpleName()), list(path)))));
 			}
 		}
 	}
