@@ -39,48 +39,37 @@ public class Query {
 		setGraph(graph);
 	}
 
-	private Object toDTO(Object entity) {
-		try {
-			Class<?>	clazz	= entity != null? graph.getDtos().get(entity.getClass().getSimpleName() + "DTO") : null;
-			return clazz != null? clazz.getDeclaredConstructor(entity.getClass(), boolean.class).newInstance(entity, false) : null;
-		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
 	public Map<?, ?> query(@Nonnull Path root) {
 		PathBuilder<?> 							grouper		= path(graph.getEntities().get(root.getEntity()));
 		Map<Object, Map<String, List<Object>>>	map			= new HashMap<>();
 		Map<Object, Map<String, List<Object>>>	response	= new HashMap<>();
 
-		query(new JPAQuery<>(manager), root, null, grouper, map);
+		query(new JPAQuery<>(manager), root, null, grouper, map, root.getGroup());
 
 		map.forEach((key, value) -> {
 			try {
 				if (key != null) {
-					Class<?>					kclass		= key != null? graph.getDtos().get(key.getClass().getSimpleName() + "DTO") : null;
-					Object						kobj		= kclass != null? kclass.getDeclaredConstructor(key.getClass(), boolean.class).newInstance(key, false) : null;
-					ArrayList<Object>			values		= new ArrayList<>();
-					Map<String, List<Object>>	submap		= new HashMap<>();
+					Class<?>					keyClass		= graph.getDtos().get(key.getClass().getSimpleName() + "DTO");																	// DTO Key Class
+					Object						keyObject		= keyClass != null? keyClass.getDeclaredConstructor(key.getClass(), boolean.class).newInstance(key, false) : null;		// DTO Key Instance
+					Map<String, List<Object>>	subMap			= new HashMap<>();																												// DTO Inner Map
 
-					if (value != null) {
-						value.forEach((subkey, subvalue) -> {
-							for (Object v : subvalue) {
-								try {
-									Class<?>	vclass		= v != null? graph.getDtos().get(v.getClass().getSimpleName() + "DTO") : null;
-									Object		vobj		= vclass != null? vclass.getDeclaredConstructor(v.getClass(), boolean.class).newInstance(v, false) : null;
-									values.add(vobj);
-								} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-									e.printStackTrace();
-								}
+					value.forEach((stringKey, valuesList) -> {
+						try {
+							ArrayList<Object>	values			= new ArrayList<>();																											// DTO Values
+							for (Object v : valuesList) {
+								Class<?>		valueClass		= graph.getDtos().get(v.getClass().getSimpleName() + "DTO");																	// DTO Value Class
+								Object			valueObject		= valueClass != null? valueClass.getDeclaredConstructor(v.getClass(), boolean.class).newInstance(v, false) : null;		// DTO Value Object
+								values.add(valueObject);
 							}
-							submap.put(subkey, values);
-							response.put(kobj, submap);
-						});
-					}
+							subMap.put(stringKey, values);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					});
+
+					response.put(keyObject, subMap);
 				}
-			} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		});
@@ -88,7 +77,7 @@ public class Query {
 		return response;
 	}
 
-	private void query(@Nonnull JPAQuery<?> query, @Nonnull Path root, PathBuilder<?> rootPath, @Nonnull PathBuilder<?> grouper, @Nonnull Map<Object, Map<String, List<Object>>> map) {
+	private void query(@Nonnull JPAQuery<?> query, @Nonnull Path root, PathBuilder<?> rootPath, @Nonnull PathBuilder<?> grouper, @Nonnull Map<Object, Map<String, List<Object>>> map, List<String> group) {
 		Class<?>				clazz	= getGraph().getEntities().get(root.getEntity());
 		PathBuilder<Object>		path	= path(clazz);
 
@@ -98,7 +87,7 @@ public class Query {
 					query.from(rootPath).getMetadata().addJoin(JoinType.FULLJOIN, path);
 					query.getMetadata().addJoinCondition(Expressions.stringPath(rootPath, getPropertyName(path.getType(), rootPath.getType().getDeclaredFields()).concat("id")).eq(Expressions.stringPath(path, getPropertyName(rootPath.getType(), path.getType().getDeclaredFields()).concat("id"))));
 				}
-				query(root.getJoins().size() > 1? query.clone(manager) : query, root.getJoins().get(i), path, grouper, map);
+				query(root.getJoins().size() > 1? query.clone(manager) : query, root.getJoins().get(i), path, grouper, map, group);
 			}
 		} else {
 			if (rootPath == null) {
@@ -106,7 +95,15 @@ public class Query {
 			} else {
 				query.from(rootPath).getMetadata().addJoin(JoinType.FULLJOIN, path);
 				query.getMetadata().addJoinCondition(Expressions.stringPath(rootPath, getPropertyName(path.getType(), rootPath.getType().getDeclaredFields()).concat("id")).eq(Expressions.stringPath(path, getPropertyName(rootPath.getType(), path.getType().getDeclaredFields()).concat("id"))));
-				map.putAll(query.distinct().transform(groupBy(grouper).as(GroupBy.map(Expressions.constant(clazz.getSimpleName()), list(path)))));
+
+				for (String item : group) {
+					Class<?>				itemClass	= getGraph().getEntities().get(item);
+					PathBuilder<Object>		itemPath	= path(itemClass);
+					query.distinct().transform(groupBy(grouper).as(GroupBy.map(Expressions.constant(itemClass.getSimpleName()), list(itemPath)))).forEach((k, v) -> v.forEach((key, value) -> map.merge(k, v, (old, cur) -> {
+						old.merge(key, value, (o, n) -> Stream.concat(o.stream(), n.stream()).collect(Collectors.toList()));
+						return old;
+					})));
+				}
 			}
 		}
 	}
