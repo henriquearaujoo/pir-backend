@@ -1,5 +1,7 @@
 package com.samsung.fas.pir.graph;
 
+import com.samsung.fas.pir.graph.dto.NodeDTO;
+import com.samsung.fas.pir.graph.dto.PropertyDTO;
 import com.samsung.fas.pir.persistence.annotations.Alias;
 import com.samsung.fas.pir.rest.dto.annotations.DTO;
 import lombok.AccessLevel;
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
 public class Graph {
 	@Getter(AccessLevel.PUBLIC)
 	@Setter(AccessLevel.PRIVATE)
-	private		List<Node>					graph;
+	private		List<NodeDTO>					graph;
 
 	@Getter(AccessLevel.PUBLIC)
 	@Setter(AccessLevel.PRIVATE)
@@ -46,14 +48,14 @@ public class Graph {
 	}
 
 	@SuppressWarnings("SameParameterValue")
-	private List<Node> setupGraph(String prefix) {
+	private List<NodeDTO> setupGraph(String prefix) {
 		Set<Class<?>> 	classes	= new Reflections(prefix).getTypesAnnotatedWith(Table.class);
-		List<Node>		graph	= classes.stream().map(item -> new Node(item.getAnnotation(Table.class).name(), item.getSimpleName(), item.getAnnotation(Alias.class) != null? item.getAnnotation(Alias.class).value() : null)).collect(Collectors.toList());
+		List<NodeDTO>		graph	= classes.stream().map(item -> new NodeDTO(item.getAnnotation(Table.class).name(), item.getSimpleName(), item.getAnnotation(Alias.class) != null? item.getAnnotation(Alias.class).value() : null)).collect(Collectors.toList());
 
-		graph.forEach(node -> {
-			Class<?>	clazz	= classes.stream().filter(item -> item.getSimpleName().equalsIgnoreCase(node.getEntity())).findAny().orElse(null);
-			node.setProperties(clazz != null? Arrays.stream(ArrayUtils.addAll(setupFields(clazz))).map(item -> new Property(item.getName(), getTypeName(item), item.getAnnotation(Alias.class) != null? item.getAnnotation(Alias.class).value() : null)).collect(Collectors.toList()) : new ArrayList<>());
-			node.setNodes(graph.stream().filter(item ->  node.getProperties().stream().filter(n -> n.getType().toLowerCase().contains(item.getEntity().toLowerCase())).findAny().orElse(null) != null).collect(Collectors.toList()));
+		graph.forEach(nodeDTO -> {
+			Class<?>	clazz	= classes.stream().filter(item -> item.getSimpleName().equalsIgnoreCase(nodeDTO.getEntity())).findAny().orElse(null);
+			nodeDTO.setProperties(clazz != null? Arrays.stream(ArrayUtils.addAll(setupFields(clazz))).map(item -> new PropertyDTO(item.getName(), getTypeName(item), item.getAnnotation(Alias.class) != null? item.getAnnotation(Alias.class).value() : null)).collect(Collectors.toList()) : new ArrayList<>());
+			nodeDTO.setNodeDTOS(graph.stream().filter(item ->  nodeDTO.getProperties().stream().filter(n -> n.getType().toLowerCase().contains(item.getEntity().toLowerCase())).findAny().orElse(null) != null).collect(Collectors.toList()));
 		});
 
 		return graph;

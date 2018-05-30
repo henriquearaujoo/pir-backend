@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @DTO(Address.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddressDTO {
 	@Getter
 	@Setter

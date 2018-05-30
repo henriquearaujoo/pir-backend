@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @DTO(Visit.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class VisitFrontDTO {
 	@Getter
 	@Setter

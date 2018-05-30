@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @DTO(Rule.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RuleDTO {
 	@Getter
 	@Setter

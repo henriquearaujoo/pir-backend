@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @DTO(Page.class)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PageDTO {
 	@Getter

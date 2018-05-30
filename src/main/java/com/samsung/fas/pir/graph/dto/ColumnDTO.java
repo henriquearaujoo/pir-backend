@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.graph;
+package com.samsung.fas.pir.graph.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Path {
+public class ColumnDTO {
 	@Getter
 	@Setter
 	@JsonProperty("entity")
@@ -18,11 +18,21 @@ public class Path {
 
 	@Getter
 	@Setter
-	@JsonProperty("leafs")
-	private 	List<String>	group;
+	@JsonProperty("property")
+	private		String			column;
 
 	@Getter
 	@Setter
-	@JsonProperty("joins")
-	private 	List<Path>		joins;
+	@JsonProperty("values")
+	private 	List<Object>	values;
+
+	public ColumnDTO() {
+		super();
+	}
+
+	public ColumnDTO(String entity, String column, List<Object> values) {
+		setEntity(entity);
+		setColumn(column);
+		setValues(values);
+	}
 }

@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.graph;
+package com.samsung.fas.pir.graph.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -9,9 +9,9 @@ import lombok.Setter;
 
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true, value = {"nodes"})
+@JsonIgnoreProperties(ignoreUnknown = true, value = {"nodeDTOS"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Node {
+public class NodeDTO {
 	@Getter
 	@Setter
 	@JsonProperty(value = "table", access = JsonProperty.Access.READ_ONLY)
@@ -30,18 +30,18 @@ public class Node {
 	@Getter
 	@Setter
 	@JsonProperty(value = "properties", access = JsonProperty.Access.READ_ONLY)
-	private				List<Property>		properties;
+	private				List<PropertyDTO>		properties;
 
 	@Getter
 	@Setter
-	@JsonProperty("nodes")
-	private	transient	List<Node>			nodes;
+	@JsonProperty("nodeDTOS")
+	private	transient	List<NodeDTO> nodeDTOS;
 
-	public Node() {
+	public NodeDTO() {
 		super();
 	}
 
-	public Node(String table, String entity, String alias) {
+	public NodeDTO(String table, String entity, String alias) {
 		setTable(table);
 		setEntity(entity);
 		setAlias(alias);

@@ -1,10 +1,14 @@
-package com.samsung.fas.pir.graph;
+package com.samsung.fas.pir.graph.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Property {
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class PropertyDTO {
 	@Getter
 	@Setter
 	@JsonProperty("property")
@@ -20,7 +24,7 @@ public class Property {
 	@JsonProperty("alias")
 	private 	String		alias;
 
-	public Property(String property, String type, String alias) {
+	public PropertyDTO(String property, String type, String alias) {
 		setProperty(property);
 		setType(type);
 		setAlias(alias);

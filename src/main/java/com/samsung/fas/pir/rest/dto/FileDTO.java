@@ -10,7 +10,7 @@ import java.util.Date;
 
 @DTO(FileData.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FileDTO {
 	@Getter
 	@Setter

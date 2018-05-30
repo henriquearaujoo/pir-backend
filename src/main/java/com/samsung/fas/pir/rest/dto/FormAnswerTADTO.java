@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import java.util.UUID;
 
 @DTO(FormAnswerTA.class)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FormAnswerTADTO {
 	@Getter

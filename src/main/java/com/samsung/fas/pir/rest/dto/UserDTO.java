@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @DTO(User.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
 	@Getter
 	@Setter

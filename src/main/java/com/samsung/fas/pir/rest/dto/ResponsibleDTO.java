@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 @DTO(Responsible.class)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponsibleDTO {
 	@Getter

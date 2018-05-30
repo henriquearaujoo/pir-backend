@@ -1,5 +1,7 @@
 package com.samsung.fas.pir.graph;
 
+import com.samsung.fas.pir.graph.dto.PathDTO;
+import com.samsung.fas.pir.graph.dto.MapDTO;
 import io.swagger.annotations.Api;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -42,7 +44,7 @@ public class GraphController {
 	}
 
 	@RequestMapping(method= RequestMethod.POST, path = "/query")
-	public ResponseEntity<?> query(@RequestBody @Valid Path root, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(getQuery().query(root).entrySet().stream().map(item -> new Response(item.getKey(), item.getValue())).collect(Collectors.toList()));
+	public ResponseEntity<?> query(@RequestBody @Valid PathDTO root, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getQuery().query(root));
 	}
 }

@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @DTO(FormQuestion.class)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FormQuestionDTO {
 	@Getter

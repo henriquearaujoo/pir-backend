@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @DTO(Chapter.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ChapterDTO {
 	@Getter
 	@Setter

@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @DTO(Community.class)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommunityDTO {
 	@Getter

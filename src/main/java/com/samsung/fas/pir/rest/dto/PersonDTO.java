@@ -15,7 +15,7 @@ import javax.validation.constraints.Pattern;
 
 @DTO(Person.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PersonDTO {
 	@Getter
 	@Setter
