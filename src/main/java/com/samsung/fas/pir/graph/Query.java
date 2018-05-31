@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Nonnull;
 import javax.persistence.EntityManager;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -79,7 +80,60 @@ public class Query {
 			}
 		});
 
-		return new ResponseDTO(responseMap.entrySet().stream().map(item -> new MapDTO(item.getKey(), item.getValue())).collect(Collectors.toList()), table);
+//		setupTable(map, table);
+		return new ResponseDTO(responseMap.entrySet().stream().map(item -> new MapDTO(item.getKey(), item.getValue())).collect(Collectors.toList()), null);
+	}
+
+	@SuppressWarnings("Duplicates")
+	private void setupTable(Map<Object, Map<String, List<Object>>> map, List<ColumnDTO> table) {
+		map.forEach((key, value) -> {
+			Field[]		keyFields		= key.getClass().getDeclaredFields();
+			String		keyEntity		= key.getClass().getAnnotation(Alias.class) != null? key.getClass().getAnnotation(Alias.class).value() : null;
+
+			for (Field keyField : keyFields) {
+				keyField.setAccessible(true);
+				try {
+					String		columnName		= keyField.getAnnotation(Alias.class) != null? keyField.getAnnotation(Alias.class).value() : null;
+					Object		columnValue		= keyField.get(key);
+					ColumnDTO	column			= table.stream().filter(c -> c.getEntity().equalsIgnoreCase(keyEntity)).filter(c -> c.getColumn().equalsIgnoreCase(columnName)).findAny().orElse(null);
+
+					if (keyEntity != null && columnName != null) {
+						if (column != null) {
+							if (column.getValues() != null) {
+								column.getValues().add(String.valueOf(columnValue));
+							} else {
+								column.setValues(new ArrayList<>(Collections.singletonList(String.valueOf(columnValue))));
+							}
+						} else {
+							table.add(new ColumnDTO(keyEntity, columnName, new ArrayList<>(Collections.singletonList(String.valueOf(columnValue)))));
+						}
+					}
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+
+	@SuppressWarnings("Duplicates")
+	private void setupOtherColumns(List<Map<String, List<Object>>> list, List<ColumnDTO> table, String parent) {
+		List<ColumnDTO>		parentColumns		= table.stream().filter(item -> item.getEntity().equalsIgnoreCase(parent)).collect(Collectors.toList());
+
+		list.forEach(map -> {
+			map.forEach((key, value) -> {
+				parentColumns.forEach(col -> {
+					//
+				});
+
+				value.forEach(object -> {
+					Field[]		fields		= object.getClass().getDeclaredFields();
+					String		entity		= object.getClass().getAnnotation(Alias.class) != null? object.getClass().getAnnotation(Alias.class).value() : null;
+
+				});
+			});
+		});
 	}
 
 	private void query(@Nonnull JPAQuery<?> query, @Nonnull PathDTO root, PathBuilder<?> rootPath, @Nonnull PathBuilder<?> grouper, @Nonnull Map<Object, Map<String, List<Object>>> map, List<String> group, List<ColumnDTO> table, String groupBy) {
@@ -100,7 +154,6 @@ public class Query {
 			} else {
 				query.from(rootPath).getMetadata().addJoin(JoinType.FULLJOIN, path);
 				query.getMetadata().addJoinCondition(Expressions.stringPath(rootPath, getPropertyName(path.getType(), rootPath.getType().getDeclaredFields()).concat("id")).eq(Expressions.stringPath(path, getPropertyName(rootPath.getType(), path.getType().getDeclaredFields()).concat("id"))));
-				table.addAll(setupTable(query, grouper, group, groupBy));
 				for (String item : group) {
 					Class<?>				itemClass	= getGraph().getEntities().get(item);
 					PathBuilder<Object>		itemPath	= path(itemClass);
@@ -113,49 +166,7 @@ public class Query {
 		}
 	}
 
-	private List<ColumnDTO> setupTable(JPAQuery<?> query, PathBuilder<?> root, List<String> groups, String groupBy) {
-		PathBuilder<?>[]		paths		= Stream.concat(Stream.of(root), groups.stream().map(group -> path(getGraph().getEntities().get(group)))).toArray(PathBuilder[]::new);
-		ArrayList<ColumnDTO>	table		= new ArrayList<>();
-
-		query.select(paths).distinct().fetch().forEach(row -> {
-			for (Object item : row.toArray()) {
-				if (item != null) {
-					String		entity		= item.getClass().getAnnotation(Alias.class) != null? item.getClass().getAnnotation(Alias.class).value() : null;
-					Field[]		fields		= item.getClass().getDeclaredFields();
-
-					for (Field field : fields) {
-						field.setAccessible(true);
-						try {
-							String		key		= field.getAnnotation(Alias.class) != null? field.getAnnotation(Alias.class).value() : null;
-							Object		value	= field.get(item);
-							ColumnDTO	column	= table.stream().filter(c -> c.getColumn().equalsIgnoreCase(key) && c.getEntity().equalsIgnoreCase(entity)).findAny().orElse(null);
-
-							if (entity != null && key != null) {
-								if (column != null) {
-									if (column.getValues() != null) {
-										column.getValues().add(String.valueOf(value));
-									} else {
-										column.setValues(new ArrayList<>(Collections.singletonList(String.valueOf(value))));
-									}
-									table.add(column);
-								} else {
-									table.add(new ColumnDTO(entity, key, new ArrayList<>(Collections.singletonList(String.valueOf(value)))));
-								}
-							}
-						} catch (IllegalAccessException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		});
-
-		return regularMatrix(table, groupBy);
-	}
-
-
-
-	private List<ColumnDTO> regularMatrix(List<ColumnDTO> table, String groupBy) {
+	private List<ColumnDTO> normalize(List<ColumnDTO> table, String groupBy) {
 		Class<?>	clazz		= getGraph().getEntities().get(groupBy);
 		ColumnDTO	column		= table.stream().max(Comparator.comparingInt(itemA -> itemA.getValues().size())).orElse(null);
 		long		size		= column != null? column.getValues().size() : 0L;
@@ -172,7 +183,6 @@ public class Query {
 
 		return table;
 	}
-
 
 	private String getPropertyName(Class<?> type, Field[] fields) {
 		for (Field field : fields) {
