@@ -18,11 +18,11 @@ public class PathDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty("leafs")
-	private 	List<String>	group;
+	@JsonProperty("isLeaf")
+	private 	boolean			group;
 
 	@Getter
 	@Setter
 	@JsonProperty("joins")
-	private 	List<PathDTO>		joins;
+	private 	List<PathDTO>	joins;
 }
