@@ -47,10 +47,9 @@ public class Graph {
 		return new Reflections(prefix).getTypesAnnotatedWith(Entity.class).stream().collect(Collectors.toMap(Class::getSimpleName, value -> value));
 	}
 
-	@SuppressWarnings("SameParameterValue")
 	private List<NodeDTO> setupGraph(String prefix) {
 		Set<Class<?>> 	classes	= new Reflections(prefix).getTypesAnnotatedWith(Table.class);
-		List<NodeDTO>		graph	= classes.stream().map(item -> new NodeDTO(item.getAnnotation(Table.class).name(), item.getSimpleName(), item.getAnnotation(Alias.class) != null? item.getAnnotation(Alias.class).value() : null)).collect(Collectors.toList());
+		List<NodeDTO>	graph	= classes.stream().map(item -> new NodeDTO(item.getAnnotation(Table.class).name(), item.getSimpleName(), item.getAnnotation(Alias.class) != null? item.getAnnotation(Alias.class).value() : null)).collect(Collectors.toList());
 
 		graph.forEach(nodeDTO -> {
 			Class<?>	clazz	= classes.stream().filter(item -> item.getSimpleName().equalsIgnoreCase(nodeDTO.getEntity())).findAny().orElse(null);
@@ -58,7 +57,7 @@ public class Graph {
 			nodeDTO.setNodeDTOS(graph.stream().filter(item ->  nodeDTO.getProperties().stream().filter(n -> n.getType().toLowerCase().contains(item.getEntity().toLowerCase())).findAny().orElse(null) != null).collect(Collectors.toList()));
 		});
 
-		return graph;
+		return graph.stream().sorted((va, vb) -> va.getEntity().compareToIgnoreCase(vb.getEntity())).collect(Collectors.toList());
 	}
 
 	// Recursion

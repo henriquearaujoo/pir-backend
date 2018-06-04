@@ -37,7 +37,7 @@ public class ChapterDAO extends BaseDAO<Chapter, Long, IChapter, QChapter> {
 		JPAQuery<Chapter>	query 		= new JPAQuery<>(emanager);
 		QChapter 			chapter		= new QChapter("chapters");
 		QChapter 			achapter	= new QChapter("active");
-		return query.select(chapter).from(chapter).innerJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).orderBy(chapter.chapter.asc()).orderBy(chapter.version.asc()).fetch();
+		return query.select(chapter).from(chapter).innerJoin(achapter).on(achapter.chapter.eq(chapter.chapter).and(achapter.valid.isTrue())).orderBy(chapter.chapter.asc(), chapter.version.asc()).fetch();
 	}
 
 	public List<Chapter> findAllValid(Predicate predicate) {
@@ -71,7 +71,7 @@ public class ChapterDAO extends BaseDAO<Chapter, Long, IChapter, QChapter> {
 		JPAQuery<Chapter>	query 		= new JPAQuery<>(emanager);
 		QChapter 			chapters	= new QChapter("chapters");
 		QChapter 			actives		= new QChapter("active_chapters");
-		return query.select(chapters).from(chapters).leftJoin(actives).on(actives.chapter.eq(chapters.chapter).and(actives.valid.isTrue())).where(actives.id.isNull()).fetch();
+		return query.select(chapters).from(chapters).leftJoin(actives).on(actives.chapter.eq(chapters.chapter).and(actives.valid.isTrue())).where(actives.id.isNull()).orderBy(chapters.chapter.asc(), chapters.version.asc()).fetch();
 	}
 
 	public List<Chapter> findAllInvalid(Predicate predicate) {

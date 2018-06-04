@@ -29,11 +29,11 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 
 	// region find all valid
 	public Collection<ChapterDTO> findAllValid() {
-		return getDao().findAllValid().stream().map(item -> new ChapterDTO(item ,false)).collect(Collectors.toSet());
+		return getDao().findAllValid().stream().map(item -> new ChapterDTO(item ,false)).collect(Collectors.toList());
 	}
 
 	public Collection<ChapterDTO> findAllValid(Predicate predicate) {
-		return getDao().findAllValid(predicate).stream().map(item -> new ChapterDTO(item ,false)).collect(Collectors.toSet());
+		return getDao().findAllValid(predicate).stream().map(item -> new ChapterDTO(item ,false)).collect(Collectors.toList());
 	}
 
 	public Page<ChapterDTO> findAllValid(Pageable pageable) {
@@ -45,11 +45,11 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 	}
 
 	public Collection<ChapterDetailedDTO> findAllValidDetailed() {
-		return getDao().findAllValid().stream().map(item -> new ChapterDetailedDTO(item ,false)).collect(Collectors.toSet());
+		return getDao().findAllValid().stream().map(item -> new ChapterDetailedDTO(item ,false)).collect(Collectors.toList());
 	}
 
 	public Collection<ChapterDetailedDTO> findAllValidDetailed(Predicate predicate) {
-		return getDao().findAllValid(predicate).stream().map(item -> new ChapterDetailedDTO(item ,false)).collect(Collectors.toSet());
+		return getDao().findAllValid(predicate).stream().map(item -> new ChapterDetailedDTO(item ,false)).collect(Collectors.toList());
 	}
 
 	public Page<ChapterDetailedDTO> findAllValidDetailed(Predicate predicate, Pageable pageable) {
@@ -59,7 +59,7 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 
 	// region find all invalid
 	public Collection<ChapterDTO> findAllInvalid() {
-		return getDao().findAllInvalid().stream().map(item -> new ChapterDTO(item ,false)).collect(Collectors.toSet());
+		return getDao().findAllInvalid().stream().map(item -> new ChapterDTO(item ,false)).collect(Collectors.toList());
 	}
 
 	public Page<ChapterDTO> findAllInvalid(Pageable pageable) {
@@ -71,11 +71,11 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 	}
 
 	public Collection<ChapterDetailedDTO> findAllInvalidDetailed() {
-		return getDao().findAllInvalid().stream().map(item -> new ChapterDetailedDTO(item ,false)).collect(Collectors.toSet());
+		return getDao().findAllInvalid().stream().map(item -> new ChapterDetailedDTO(item ,false)).collect(Collectors.toList());
 	}
 
 	public Collection<ChapterDetailedDTO> findAllInvalidDetailed(Predicate predicate) {
-		return getDao().findAllInvalid(predicate).stream().map(item -> new ChapterDetailedDTO(item ,false)).collect(Collectors.toSet());
+		return getDao().findAllInvalid(predicate).stream().map(item -> new ChapterDetailedDTO(item ,false)).collect(Collectors.toList());
 	}
 
 	public Page<ChapterDetailedDTO> findAllInvalidDetailed(Predicate predicate, Pageable pageable) {
@@ -85,11 +85,11 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 
 	// region find all detailed
 	public Collection<ChapterDetailedDTO> findAllDetailed() {
-		return getDao().findAll().stream().map(item -> new ChapterDetailedDTO(item, true)).collect(Collectors.toSet());
+		return getDao().findAll().stream().map(item -> new ChapterDetailedDTO(item, true)).collect(Collectors.toList());
 	}
 
 	public Collection<ChapterDetailedDTO> findAllDetailed(Predicate predicate) {
-		return getDao().findAll(predicate).stream().map(item -> new ChapterDetailedDTO(item, true)).collect(Collectors.toSet());
+		return getDao().findAll(predicate).stream().map(item -> new ChapterDetailedDTO(item, true)).collect(Collectors.toList());
 	}
 
 	public Page<ChapterDetailedDTO> findAllDetailed(Pageable pageable) {
@@ -144,11 +144,8 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 		chapter.setEstimatedTime(model.getEstimatedTime());
 		chapter.setTimeUntilNext(model.getTimeUntilNext());
 
-		chapter.getThumbnails().forEach(thumb -> model.getThumbnails().stream().filter(item -> thumb.getUuid().compareTo(item.getUuid()) == 0).findAny().ifPresent(item -> model.getThumbnails().remove(item)));
-		chapter.getThumbnails().addAll(model.getThumbnails());
-
-		chapter.getMedias().forEach(media -> model.getMedias().stream().filter(item -> media.getUuid().compareTo(item.getUuid()) == 0).findAny().ifPresent(item -> model.getMedias().remove(item)));
-		chapter.getMedias().addAll(model.getMedias());
+		//noinspection ResultOfMethodCallIgnored
+		chapter.getMedias().forEach(media -> model.getMedias().stream().filter(item -> item.getUuid() != null && media.getUuid().compareTo(item.getUuid()) == 0).noneMatch(item -> chapter.getMedias().add(item)));
 
 		return new ChapterDTO(getDao().save(chapter), true);
 	}

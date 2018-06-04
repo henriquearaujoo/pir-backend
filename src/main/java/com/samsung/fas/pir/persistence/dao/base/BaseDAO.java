@@ -9,6 +9,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.io.Serializable;
 import java.util.List;
@@ -39,7 +40,7 @@ public abstract class BaseDAO<T, ID extends Serializable, TR extends IBaseReposi
 
 	@Override
 	public Set<T> findAll() {
-		return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toSet());
+		return StreamSupport.stream(repository.findAll(new Sort(Sort.Direction.ASC, "id")).spliterator(), false).collect(Collectors.toSet());
 	}
 
 	@Override

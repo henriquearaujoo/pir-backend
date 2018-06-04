@@ -23,6 +23,11 @@ public class ColumnDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("type")
+	private 	String			type;
+
+	@Getter
+	@Setter
 	@JsonProperty("values")
 	private 	List<Object>	values;
 
@@ -30,9 +35,10 @@ public class ColumnDTO {
 		super();
 	}
 
-	public ColumnDTO(String entity, String column, List<Object> values) {
+	public ColumnDTO(String entity, String column, String type, List<Object> values) {
 		setEntity(entity);
 		setColumn(column);
+		setType(type);
 		setValues(values);
 	}
 }

@@ -2,14 +2,12 @@ package com.samsung.fas.pir.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.enums.EChildGender;
 import com.samsung.fas.pir.persistence.models.Child;
 import com.samsung.fas.pir.rest.dto.annotations.DTO;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.Valid;
@@ -87,7 +85,7 @@ public class ChildDTO {
 	@Getter
 	@Setter
 	@JsonProperty("born_week")
-	@Min(value = 1, message = "invalid.value")
+	@Min(value = 0, message = "invalid.value")
 	private 	int				bornWeek;
 
 	@Getter

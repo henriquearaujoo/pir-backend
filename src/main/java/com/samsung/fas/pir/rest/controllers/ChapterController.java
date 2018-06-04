@@ -1,7 +1,6 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.models.Chapter;
 import com.samsung.fas.pir.rest.controllers.base.BController;
 import com.samsung.fas.pir.rest.dto.ChapterDTO;
@@ -9,7 +8,6 @@ import com.samsung.fas.pir.rest.dto.ChapterDetailedDTO;
 import com.samsung.fas.pir.rest.services.ChapterBO;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;

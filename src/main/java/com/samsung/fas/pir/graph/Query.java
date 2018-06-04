@@ -1,9 +1,7 @@
 package com.samsung.fas.pir.graph;
 
 import com.querydsl.core.JoinType;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.group.GroupBy;
-import com.querydsl.core.types.dsl.ArrayPath;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -12,8 +10,8 @@ import com.samsung.fas.pir.graph.dto.MapDTO;
 import com.samsung.fas.pir.graph.dto.PathDTO;
 import com.samsung.fas.pir.graph.dto.ResponseDTO;
 import com.samsung.fas.pir.persistence.annotations.Alias;
-import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.BaseNID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,14 +21,12 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Nonnull;
 import javax.persistence.EntityManager;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
-import static com.querydsl.core.group.GroupBy.sortedSet;
 
 @Component
 public class Query {
@@ -56,7 +52,18 @@ public class Query {
 
 		query(new JPAQuery<>(manager), root, null, grouper, map);
 
-		map = map.entrySet().stream().sorted(Map.Entry.comparingByKey((keyA, keyB) -> (keyA != null && keyB != null)? (int) (((BaseID) keyA).getId() - ((BaseID) keyB).getId()) : 0)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (o, n) -> o, LinkedHashMap::new));
+		map = map.entrySet().stream().sorted(Map.Entry.comparingByKey((keyA, keyB) -> {
+			if (keyA instanceof BaseNID && keyB instanceof BaseNID) {
+				return (int) (((BaseNID) keyA).getId() - ((BaseNID) keyB).getId());
+			} else if (keyA instanceof BaseNID && keyB instanceof BaseID) {
+				return (int) (((BaseNID) keyA).getId() - ((BaseID) keyB).getId());
+			} else if (keyA instanceof BaseID && keyB instanceof BaseNID) {
+				return (int) (((BaseID) keyA).getId() - ((BaseNID) keyB).getId());
+			} else if (keyA instanceof BaseID && keyB instanceof BaseID) {
+				return (int) (((BaseID) keyA).getId() - ((BaseID) keyB).getId());
+			}
+			return 0;
+		})).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (o, n) -> o, LinkedHashMap::new));
 
 		map.forEach((key, value) -> {
 			try {
@@ -117,6 +124,7 @@ public class Query {
 			field.setAccessible(true);
 			try {
 				String		columnName		= field.getAnnotation(Alias.class) != null? field.getAnnotation(Alias.class).value() : null;
+				String		columnType		= field.getType().getSimpleName();
 				Object		columnValue		= entity != null? field.get(entity) : null;
 				ColumnDTO	column			= table.stream().filter(c -> c.getEntity().equalsIgnoreCase(entityName)).filter(c -> c.getColumn().equalsIgnoreCase(columnName)).findAny().orElse(null);
 
@@ -128,7 +136,7 @@ public class Query {
 							column.setValues(new ArrayList<>(Collections.singletonList(String.valueOf(columnValue))));
 						}
 					} else {
-						table.add(new ColumnDTO(entityName, columnName, new ArrayList<>(Collections.singletonList(String.valueOf(columnValue)))));
+						table.add(new ColumnDTO(entityName, columnName, columnType, new ArrayList<>(Collections.singletonList(String.valueOf(columnValue)))));
 					}
 				}
 
@@ -148,14 +156,14 @@ public class Query {
 				query.getMetadata().addJoinCondition(Expressions.stringPath(rootPath, getPropertyName(path.getType(), rootPath.getType().getDeclaredFields()).concat("id")).eq(Expressions.stringPath(path, getPropertyName(rootPath.getType(), path.getType().getDeclaredFields()).concat("id"))));
 				query.from(rootPath).distinct().transform(groupBy(grouper).as(GroupBy.map(Expressions.constant(clazz.getSimpleName()), list(path)))).forEach((k, v) -> v.forEach((key, value) -> {
 					map.merge(k, v, (old, cur) -> {
-						old.merge(key, value, (o, n) -> Stream.concat(o.stream(), n.stream()).collect(Collectors.toList()));
+						old.merge(key, value, (o, n) -> Stream.concat(o.stream(), n.stream()).distinct().collect(Collectors.toList()));
 						return old;
 					});
 				}));
 			} else {
 				query.from(grouper).distinct().transform(groupBy(grouper).as(GroupBy.map(Expressions.constant(clazz.getSimpleName()), list(path)))).forEach((k, v) -> v.forEach((key, value) -> {
 					map.merge(k, v, (old, cur) -> {
-						old.merge(key, value, (o, n) -> Stream.concat(o.stream(), n.stream()).collect(Collectors.toList()));
+						old.merge(key, value, (o, n) -> Stream.concat(o.stream(), n.stream()).distinct().collect(Collectors.toList()));
 						return old;
 					});
 				}));
