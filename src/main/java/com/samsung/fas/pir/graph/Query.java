@@ -102,13 +102,16 @@ public class Query {
 			if (key != null) {
 				Field[]		fields		= key.getClass().getDeclaredFields();
 				String		entity		= key.getClass().getAnnotation(Alias.class) != null? key.getClass().getAnnotation(Alias.class).value() : null;
+				String		className	= key.getClass().getSimpleName();
 				value.forEach((name, list) -> {
 					if (list.size() > 0) {
 						list.forEach(item -> {
 							Field[]		itemFields		= item.getClass().getDeclaredFields();
 							String		itemName		= item.getClass().getAnnotation(Alias.class) != null? item.getClass().getAnnotation(Alias.class).value() : null;
 							addValuesToTable(entity, key, fields, table);
-							addValuesToTable(itemName, item, itemFields, table);
+							if (!name.equalsIgnoreCase(className)) {
+								addValuesToTable(itemName, item, itemFields, table);
+							}
 						});
 					} else {
 						addValuesToTable(entity, key, fields, table);
