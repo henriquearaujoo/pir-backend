@@ -180,24 +180,6 @@ public class Query {
 		}
 	}
 
-	private List<ColumnDTO> normalize(List<ColumnDTO> table, String groupBy) {
-		Class<?>	clazz		= getGraph().getEntities().get(groupBy);
-		ColumnDTO	column		= table.stream().max(Comparator.comparingInt(itemA -> itemA.getValues().size())).orElse(null);
-		long		size		= column != null? column.getValues().size() : 0L;
-
-		for (ColumnDTO item : table) {
-			if (!item.getEntity().equalsIgnoreCase(clazz.getAnnotation(Alias.class).value())) {
-				if (item.getValues().size() < size) {
-					for (long i = item.getValues().size(); i < size; i++) {
-						item.getValues().add(null);
-					}
-				}
-			}
-		}
-
-		return table;
-	}
-
 	private String getPropertyName(Class<?> type, Field[] fields) {
 		for (Field field : fields) {
 			if (field.getType() == type) {
