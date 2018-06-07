@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
-import com.samsung.fas.pir.persistence.annotations.Alias;
+import com.samsung.fas.pir.graph.annotations.Alias;
+import com.samsung.fas.pir.persistence.enums.ECivilState;
 import com.samsung.fas.pir.persistence.enums.EHabitationType;
 import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 
 @Entity
-@Table(name = "responsible", uniqueConstraints = @UniqueConstraint(columnNames = {"mobile_id", "agent_id"}, name = "agent_responsible"))
+@Table(name = "responsible")
 @DynamicUpdate
 @DynamicInsert
 @Alias("Responsável")
@@ -111,32 +112,33 @@ public class Responsible extends BaseID {
 
 	@Getter
 	@Setter
-	@OneToOne(mappedBy = "responsible", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Alias("Mãe")
-	private 	Mother				mother;
+	@Column(nullable = false)
+	@Alias("No. de Filhos")
+	private 	long				childrenCount;
 
 	@Getter
 	@Setter
-	@ManyToMany(mappedBy = "responsibles")
-	@Alias("Crianças")
-	private 	Collection<Child>	children;
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	@Alias("Estado Civil")
+	private 	ECivilState 		civilState;
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(optional = false)
 	@JoinColumn
 	@Alias("Comunidade")
 	private 	Community			community;
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "responsible")
-	@Alias("Visitas")
-	private 	Collection<Visit>	visits;
+	@ManyToMany(mappedBy = "responsibles", cascade = CascadeType.ALL)
+	@Alias("Crianças")
+	private 	Collection<Child>	children;
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn
-	private 	User				agent;
+	@OneToOne(mappedBy = "responsible", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Alias("Mãe")
+	private 	Mother				mother;
 }

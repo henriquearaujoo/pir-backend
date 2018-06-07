@@ -1,4 +1,4 @@
-package com.samsung.fas.pir.persistence.annotations;
+package com.samsung.fas.pir.graph.annotations;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

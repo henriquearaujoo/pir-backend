@@ -2,11 +2,10 @@ package com.samsung.fas.pir.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.enums.ECommunityZone;
 import com.samsung.fas.pir.persistence.models.Community;
-import com.samsung.fas.pir.rest.dto.annotations.DTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +13,10 @@ import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @DTO(Community.class)
 //@JsonInclude(JsonInclude.Include.NON_NULL)
@@ -23,7 +25,7 @@ public class CommunityDTO {
 	@Getter
 	@Setter
 	@JsonProperty("external_id")
-	private		long		tempID;
+	private		long			tempID;
 
 	@Getter
 	@Setter
@@ -110,7 +112,7 @@ public class CommunityDTO {
 	@Getter
 	@Setter
 	@JsonProperty("has_eletricity")
-	private 	boolean			hasEletricity;
+	private 	boolean			hasElectricity;
 
 	@Accessors(fluent = true)
 	@Getter
@@ -159,9 +161,15 @@ public class CommunityDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("responsibles")
+	private 	List<ResponsibleDTO>		responsible;
+
+	@Getter
+	@Setter
 	@JsonProperty("city_id")
 	@NotNull(message = "city.id.missing")
 	private 	UUID			cityUUID;
+
 
 	@ApiModelProperty(hidden = true, readOnly = true)
 	@Getter
@@ -186,20 +194,21 @@ public class CommunityDTO {
 		hasElementarySchool(community.hasElementarySchool());
 		hasHighSchool(community.hasHighSchool());
 		hasCollege(community.hasCollege());
-		hasEletricity(community.hasElectricity());
+		hasElectricity(community.hasElectricity());
 		hasCommunityCenter(community.hasCommunityCenter());
 		hasReligiousPlace(community.hasReligiousPlace());
 		hasCulturalEvents(community.hasCulturalEvents());
 		hasPatron(community.hasPatron());
 		setCommunityZone(community.getCommunityZone().getValue());
 		hasCommunityLeaders(community.hasCommunityLeaders());
-		setCity(new CityDTO(community.getCity(), false));
 		setCulturalProductions(community.getCulturalProductions());
 		setCommunityZone(community.getCommunityZone().toString());
 		setRegional(community.getRegional());
 		setUc(community.getUc());
 		setLatitude(community.getLatitude());
 		setLongitude(community.getLongitude());
+		setCity(new CityDTO(community.getCity(), false));
+		setResponsible(detailed? community.getResponsible() != null? community.getResponsible().stream().map(item -> new ResponsibleDTO(item, false)).collect(Collectors.toList()) : new ArrayList<>() : null);
 	}
 
 	@JsonIgnore
@@ -217,7 +226,7 @@ public class CommunityDTO {
 		model.hasElementarySchool(hasElementarySchool());
 		model.hasHighSchool(hasHighSchool());
 		model.hasCollege(hasCollege());
-		model.hasElectricity(hasEletricity());
+		model.hasElectricity(hasElectricity());
 		model.hasCommunityCenter(hasCommunityCenter());
 		model.hasReligiousPlace(hasReligiousPlace());
 		model.hasCulturalEvents(hasCulturalEvents());
@@ -229,6 +238,7 @@ public class CommunityDTO {
 		model.setCommunityZone(ECommunityZone.setValue(getCommunityZone()));
 		model.setLatitude(getLatitude());
 		model.setLongitude(getLongitude());
+		model.setResponsible(getResponsible() != null? getResponsible().stream().map(ResponsibleDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		return model;
 	}
 }

@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.Date;
 
 @Entity
-@Table(name = "profile", uniqueConstraints = @UniqueConstraint(columnNames = "title", name = "title"))
+@Table(name = "profile", uniqueConstraints = @UniqueConstraint(columnNames = "title", name = "profile_name"))
 @DynamicUpdate
 @DynamicInsert
 public class Profile extends BaseID {

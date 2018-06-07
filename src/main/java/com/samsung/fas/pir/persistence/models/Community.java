@@ -1,6 +1,6 @@
 package com.samsung.fas.pir.persistence.models;
 
-import com.samsung.fas.pir.persistence.annotations.Alias;
+import com.samsung.fas.pir.graph.annotations.Alias;
 import com.samsung.fas.pir.persistence.enums.ECommunityZone;
 import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
@@ -172,12 +172,12 @@ public class Community extends BaseID {
 	@Setter
 	@OneToMany(mappedBy = "community")
 	@Alias("Responsáveis")
-	private 	Collection<Responsible>	responsibles;
+	private 	Collection<Responsible>	responsible;
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "city_id")
 	@Alias("Município")
 	private 	City			city;
 }

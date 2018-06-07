@@ -1,10 +1,14 @@
 package com.samsung.fas.pir.rest.dto;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.samsung.fas.pir.graph.annotations.DTO;
+import com.samsung.fas.pir.persistence.enums.ECivilState;
 import com.samsung.fas.pir.persistence.enums.EHabitationType;
 import com.samsung.fas.pir.persistence.models.Mother;
 import com.samsung.fas.pir.persistence.models.Responsible;
-import com.samsung.fas.pir.rest.dto.annotations.DTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -15,7 +19,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @DTO(Responsible.class)
 //@JsonInclude(JsonInclude.Include.NON_NULL)
@@ -94,36 +101,54 @@ public class ResponsibleDTO {
 	@Getter
 	@Setter
 	@JsonProperty("has_hospital_nearby")
-	private 	boolean		hasHospital;
+	private 	boolean			hasHospital;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("has_sanitation")
-	private 	boolean		hasSanitation;
+	private 	boolean			hasSanitation;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("has_water_treatment")
-	private 	boolean		hasWaterTreatment;
+	private 	boolean			hasWaterTreatment;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@JsonProperty("has_other_children")
-	private 	boolean		hasOtherChildren;
+	private 	boolean			hasOtherChildren;
 
 	@Getter
 	@Setter
 	@JsonProperty("observations")
-	private 	String		observations;
+	private 	String			observations;
+
+	@Getter
+	@Setter
+	@JsonProperty("children_count")
+	@Min(value = 0, message = "invalid.count")
+	private 	long			childrenCount;
+
+	@Getter
+	@Setter
+	@JsonProperty("civil_state")
+	@NotBlank(message = "civil.state.missing")
+	private 	String			civilState;
 
 	@Getter
 	@Setter
 	@JsonProperty("mother")
 	@Valid
 	private 	MotherDTO		mother;
+
+	@Getter
+	@Setter
+	@JsonProperty("children")
+	@Valid
+	private 	List<ChildDTO>	children;
 
 	@Getter
 	@Setter
@@ -138,7 +163,7 @@ public class ResponsibleDTO {
 
 	public ResponsibleDTO(Mother mother, boolean detailed) {
 		this(mother.getResponsible(), true);
-		setMother(new MotherDTO(mother, false));
+		setMother(new MotherDTO(mother, detailed));
 	}
 
 	public ResponsibleDTO(Responsible responsible, boolean detailed) {
@@ -158,8 +183,11 @@ public class ResponsibleDTO {
 		hasWaterTreatment(responsible.isHasWaterTreatment());
 		setObservations(responsible.getObservations());
 		hasOtherChildren(responsible.isFamilyHasChildren());
-		setCommunity(new CommunityDTO(responsible.getCommunity(), false));
-		setMother(responsible.getMother() != null? new MotherDTO(responsible.getMother(), false) : null);
+		setChildrenCount(responsible.getChildrenCount());
+		setCivilState(responsible.getCivilState().toString());
+		setMother(responsible.getMother() != null? new MotherDTO(responsible.getMother(), detailed) : null);
+		setCommunity(detailed? new CommunityDTO(responsible.getCommunity(), false) : null);
+		setChildren(responsible.getChildren() != null? responsible.getChildren().stream().map(item -> new ChildDTO(item, false)).collect(Collectors.toList()) : new ArrayList<>());
 	}
 
 	@JsonIgnore
@@ -180,6 +208,8 @@ public class ResponsibleDTO {
 		model.setHasSanitation(hasSanitation());
 		model.setHasWaterTreatment(hasWaterTreatment());
 		model.setObservations(getObservations());
+		model.setChildrenCount(getChildrenCount());
+		model.setCivilState(ECivilState.valueOf(civilState));
 		model.setMother(getMother() != null? getMother().getModel() : null);
 		model.setCommunity(getCommunity() != null? getCommunity().getModel() : null);
 

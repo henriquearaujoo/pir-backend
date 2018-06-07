@@ -1,6 +1,6 @@
 package com.samsung.fas.pir.persistence.models;
 
-import com.samsung.fas.pir.persistence.annotations.Alias;
+import com.samsung.fas.pir.graph.annotations.Alias;
 import com.samsung.fas.pir.persistence.enums.EChildGender;
 import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
@@ -24,128 +24,127 @@ public class Child extends BaseID {
 	@Getter
 	@Setter
 	@Column(name = "mobile_id")
-	private		long			mobileId;
+	private		long						mobileId;
 
 	@Getter
 	@Setter
 	@Column(nullable = false, columnDefinition = "VARCHAR(100)")
 	@Alias("Nome")
-	private 	String			name;
+	private 	String						name;
 
 	@Getter
 	@Setter
 	@Temporal(TemporalType.DATE)
 	@Column(nullable = false)
 	@Alias("Data de Nascimento")
-	private 	Date			birth;
+	private 	Date						birth;
 
 	@Getter
 	@Setter
 	@Column(columnDefinition = "VARCHAR(100)")
 	@Alias("Nome do Pai")
-	private 	String			fatherName;
+	private 	String						fatherName;
 
 	@Getter
 	@Setter
 	@Enumerated(EnumType.STRING)
 	@Column
 	@Alias("Sexo")
-	private 	EChildGender 	gender;
+	private 	EChildGender 				gender;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
 	@Alias("Possui Registro Civil")
-	private 	boolean			hasCivilRegistration;
+	private 	boolean						hasCivilRegistration;
 
 	@Getter
 	@Setter
 	@Column(columnDefinition = "TEXT")
 	@Alias("Justificativa de Registro Civil")
-	private 	String			civilRegistrationJustificative;
+	private 	String						civilRegistrationJustification;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
 	@Alias("Possui Dificuldades Educacionais")
-	private 	boolean			hasEducationDifficulty;
+	private 	boolean						hasEducationDifficulty;
 
 	@Getter
 	@Setter
 	@Column(columnDefinition = "TEXT")
 	@Alias("Descrição das Dificuldades Educacionais")
-	private 	String			educationDifficultySpecification;
+	private 	String						educationDifficultySpecification;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
 	@Alias("Nasceu Prematuramente")
-	private 	boolean			prematureBorn;
+	private 	boolean						prematureBorn;
 
 	@Getter
 	@Setter
 	@Column
 	@Alias("Semana do Nascimento Prematuro")
-	private 	int				bornWeek;
+	private 	int							bornWeek;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
 	@Alias("Quem Cuida")
-	private 	String			whoTakeCare;
+	private 	String						whoTakeCare;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
 	@Alias("Brinca com Quem")
-	private 	String			playsWithWho;
+	private 	String						playsWithWho;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
 	@Alias("Medição Mensal de Peso")
-	private 	boolean			mensalWeight;
+	private 	boolean						monthlyWeighted;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
 	@Alias("Participa de Programas Educacionais")
-	private 	boolean			socialEducationalPrograms;
+	private 	boolean						socialEducationalPrograms;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
 	@Alias("Vacinação em Dia")
-	private 	boolean			vacinationUpToDate;
+	private 	boolean						vaccinationUpToDate;
 
 	@Getter
 	@Setter
 	@Column(nullable = false)
 	@Alias("Possui Dificuldade de Relação")
-	private 	boolean			relationDifficulties;
+	private 	boolean						relationDifficulties;
 
 	@Getter
 	@Setter
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinColumn
-	@Alias("Mãe")
-	private 	Responsible		mother;
-
-	@Getter
-	@Setter
-	@OneToMany(mappedBy = "child", cascade = CascadeType.MERGE)
+	@OneToMany(mappedBy = "child", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@Alias("Visitas")
-	private 	Collection<Visit>	visits;
+	private 	Collection<Visit>			visits;
 
 	@Getter
 	@Setter
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany
 	@Alias("Responsável")
 	private 	Collection<Responsible>		responsibles;
 
 	@Getter
 	@Setter
+	@ManyToOne
+	@Alias("Mãe")
+	private 	Mother						mother;
+
+	@Getter
+	@Setter
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn
-	private 	User			agent;
+	private 	User						agent;
 }

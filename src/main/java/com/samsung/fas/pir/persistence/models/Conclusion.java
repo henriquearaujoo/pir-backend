@@ -1,6 +1,6 @@
 package com.samsung.fas.pir.persistence.models;
 
-import com.samsung.fas.pir.persistence.annotations.Alias;
+import com.samsung.fas.pir.graph.annotations.Alias;
 import com.samsung.fas.pir.persistence.models.base.BaseNID;
 import lombok.Getter;
 import lombok.Setter;

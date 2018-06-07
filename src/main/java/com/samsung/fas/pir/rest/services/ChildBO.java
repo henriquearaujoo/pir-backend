@@ -82,12 +82,12 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 
 			if (child == null) {
 				if (mother != null) {
-					model.setMother(item.getMother() != null? getResponsibleBO().patch(item.getMother(), account) : null);
+//					model.setMother(item.getMother() != null? getResponsibleBO().patch(item.getMother(), account) : null);
 					model.setAgent(((Account) account).getUser());
 					model.setResponsibles(getResponsibleBO().saveCollection(item.getResponsibles(), account));
 					response.add(getDao().save(model));
 				} else {
-					model.setMother(item.getMother() != null? getResponsibleBO().create(item.getMother(), account) : null);
+//					model.setMother(item.getMother() != null? getResponsibleBO().create(item.getMother(), account) : null);
 					model.setAgent(((Account) account).getUser());
 					model.setResponsibles(getResponsibleBO().saveCollection(item.getResponsibles(), account));
 					response.add(getDao().save(model));
@@ -134,6 +134,11 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		Collection<Community>	communities		= getCommunityDAO().findAllIn(update.getResponsibles().stream().map(responsibleDTO -> responsibleDTO.getCommunity().getUuid()).collect(Collectors.toList()));
 		Collection<City>		cities			= getCityDAO().findAllIn(update.getResponsibles().stream().map(responsibleDTO -> responsibleDTO.getCommunity().getCityUUID()).collect(Collectors.toList()));
 
+//		child.setMother(mother);
+		child.getResponsibles().clear();
+		child.getResponsibles().addAll(responsibles);
+
+
 		return child;
 	}
 
@@ -143,18 +148,18 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		child.setFatherName(model.getFatherName());
 		child.setGender(model.getGender());
 		child.setHasCivilRegistration(model.isHasCivilRegistration());
-		child.setCivilRegistrationJustificative(model.getCivilRegistrationJustificative());
+//		child.setCivilRegistrationJustificative(model.getCivilRegistrationJustificative());
 		child.setHasEducationDifficulty(model.isHasEducationDifficulty());
 		child.setEducationDifficultySpecification(model.getEducationDifficultySpecification());
 		child.setPrematureBorn(model.isPrematureBorn());
 		child.setBornWeek(model.getBornWeek());
 		child.setWhoTakeCare(model.getWhoTakeCare());
 		child.setPlaysWithWho(model.getPlaysWithWho());
-		child.setMensalWeight(model.isMensalWeight());
+//		child.setMensalWeight(model.isMensalWeight());
 		child.setSocialEducationalPrograms(model.isSocialEducationalPrograms());
-		child.setVacinationUpToDate(model.isVacinationUpToDate());
+//		child.setVacinationUpToDate(model.isVacinationUpToDate());
 		child.setRelationDifficulties(model.isHasEducationDifficulty());
-		child.setMother(mother);
+//		child.setMother(mother);
 
 		return child;
 	}

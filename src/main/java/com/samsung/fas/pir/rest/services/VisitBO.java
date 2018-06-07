@@ -111,7 +111,7 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 		Responsible	responsible	= setup(create.getResponsible(), account);
 
 		model.setChild(child);
-		model.setResponsible(responsible);
+//		model.setResponsible(responsible);
 		model.setForm(form);
 		model.setChapter(chapter);
 		model.setAgent(agent);
@@ -147,7 +147,7 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 			model.setChapter(chapter);
 			model.setForm(form);
 			model.setAnswers(setupAnswers(item.getAnswers(), model));
-			model.setResponsible(item.getResponsible() != null? getResponsibleBO().saveCollection(Collections.singletonList(item.getResponsible()), account).iterator().next() : null);
+//			model.setResponsible(item.getResponsible() != null? getResponsibleBO().saveCollection(Collections.singletonList(item.getResponsible()), account).iterator().next() : null);
 			model.setChild(item.getChild() != null? getChildBO().saveCollection(Collections.singletonList(item.getChild()), account).iterator().next() : null);
 
 			response.add(getDao().save(model));

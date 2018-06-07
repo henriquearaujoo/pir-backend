@@ -7,7 +7,6 @@ import com.samsung.fas.pir.persistence.dao.CommunityDAO;
 import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
 import com.samsung.fas.pir.persistence.models.Community;
 import com.samsung.fas.pir.persistence.models.Responsible;
-import com.samsung.fas.pir.persistence.models.User;
 import com.samsung.fas.pir.rest.dto.ResponsibleDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import lombok.AccessLevel;
@@ -89,19 +88,19 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 			if (responsible == null) {
 				if (community != null) {
 					model.setCommunity(getCommunityBO().patch(item.getCommunity(), community, account));
-					model.setAgent(((Account) account).getUser());
+//					model.setAgent(((Account) account).getUser());
 					response.add(getDao().save(model));
 				} else {
 					model.setCommunity(getCommunityBO().create(item.getCommunity(), account));
-					model.setAgent(((Account) account).getUser());
+//					model.setAgent(((Account) account).getUser());
 					response.add(getDao().save(model));
 				}
 			} else {
 				if (community != null) {
-					responsible.setAgent(((Account) account).getUser());
+//					responsible.setAgent(((Account) account).getUser());
 					response.add(getDao().save(setupResponsible(responsible, model, getCommunityBO().patch(item.getCommunity(), community, account))));
 				} else {
-					responsible.setAgent(((Account) account).getUser());
+//					responsible.setAgent(((Account) account).getUser());
 					response.add(getDao().save(setupResponsible(responsible, model, getCommunityBO().create(item.getCommunity(), account))));
 				}
 			}
@@ -118,7 +117,8 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		Responsible		model		= create.getModel();
 		Community		community	= getCommunityDAO().findOne(model.getCommunity().getName(), getCityDAO().findOne(create.getCommunity().getCityUUID()).getId());
 
-		model.setAgent(((User) details));
+		model.setMother(model.getMother());
+//		model.setAgent(((User) details));
 
 		if (model.getCommunity() != null) {
 			if (model.getCommunity().getUuid() != null) {
@@ -144,7 +144,12 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 			responsible = getDao().findOne(model.getUuid());
 		}
 
-		responsible.setAgent(((Account) account).getUser());
+		if (model.getMother() != null) {
+			model.getMother().setResponsible(responsible);
+			model.getMother().setId(responsible.getId());
+			responsible.setMother(model.getMother());
+		}
+//		responsible.setAgent(((Account) account).getProfile().getType().compareTo(EProfileType.AGENT) == 0? ((Account) account).getUser() : responsible.getAgent());
 
 		if (model.getCommunity().getUuid() != null) {
 			community = CommunityBO.setupCommunity(getCommunityDAO().findOne(community.getUuid()), model.getCommunity(), getCityDAO().findOne(update.getCommunity().getCityUUID()));

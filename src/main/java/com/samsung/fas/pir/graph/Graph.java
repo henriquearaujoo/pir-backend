@@ -1,9 +1,9 @@
 package com.samsung.fas.pir.graph;
 
+import com.samsung.fas.pir.graph.annotations.Alias;
+import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.graph.dto.NodeDTO;
 import com.samsung.fas.pir.graph.dto.PropertyDTO;
-import com.samsung.fas.pir.persistence.annotations.Alias;
-import com.samsung.fas.pir.rest.dto.annotations.DTO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

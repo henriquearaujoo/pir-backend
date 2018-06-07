@@ -2,10 +2,9 @@ package com.samsung.fas.pir.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.Visit;
-import com.samsung.fas.pir.rest.dto.annotations.DTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -105,7 +104,7 @@ public class VisitFrontDTO {
 		setChapter(new ChapterDTO(visit.getChapter(), false));
 		setFormUUID(visit.getForm() != null? visit.getForm().getUuid() : null);
 		setChild(visit.getChild() != null? new ChildDTO(visit.getChild(), false) : null);
-		setResponsible(visit.getResponsible() != null? new ResponsibleDTO(visit.getResponsible(), false) : null);
+//		setResponsible(visit.getResponsible() != null? new ResponsibleDTO(visit.getResponsible(), false) : null);
 	}
 
 	@JsonIgnore
@@ -119,7 +118,7 @@ public class VisitFrontDTO {
 		model.setAgentRating(getAgentRating());
 		model.setDoneAt(getDoneAt());
 		model.setDuration(getDuration());
-		model.setResponsible(getResponsible() != null? getResponsible().getModel() : null);
+//		model.setResponsible(getResponsible() != null? getResponsible().getModel() : null);
 		model.setChild(getChild() != null? getChild().getModel() : null);
 //		model.setAnswers(getAnswers() != null? getAnswers().stream().map(AnswerDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 

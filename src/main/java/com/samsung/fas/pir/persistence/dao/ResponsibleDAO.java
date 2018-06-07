@@ -5,7 +5,9 @@ import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.samsung.fas.pir.persistence.dao.base.BaseDAO;
 import com.samsung.fas.pir.persistence.dao.utils.SBPage;
-import com.samsung.fas.pir.persistence.models.*;
+import com.samsung.fas.pir.persistence.models.QMother;
+import com.samsung.fas.pir.persistence.models.QResponsible;
+import com.samsung.fas.pir.persistence.models.Responsible;
 import com.samsung.fas.pir.persistence.repositories.IResponsible;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,8 +29,10 @@ public class ResponsibleDAO extends BaseDAO<Responsible, Long, IResponsible, QRe
 		this.emanager = emanager;
 	}
 
+	@Deprecated
 	public Responsible findOne(long mobile, long agent) {
-		return getRepository().findByMobileIdAndAgentId(mobile, agent);
+//		return getRepository().findByMobileIdAndAgentId(mobile, agent);
+		return null;
 	}
 
 	public Collection<Responsible> findAllByMobileIdIn(Collection<Long> collection) {

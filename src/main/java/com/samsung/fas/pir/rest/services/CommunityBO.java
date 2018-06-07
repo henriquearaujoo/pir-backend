@@ -38,7 +38,10 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 
 	@Override
 	public CommunityDTO update(CommunityDTO update, UserDetails account) {
-		return new CommunityDTO(patch(update, null, account), true);
+		Community	model		= update.getModel();
+		Community	community	= getDao().findOne(model.getUuid());
+		City		city		= getCityDAO().findOne(update.getCityUUID());
+		return new CommunityDTO(getDao().save(setupCommunity(community, model, city)), true);
 	}
 
 	@Override

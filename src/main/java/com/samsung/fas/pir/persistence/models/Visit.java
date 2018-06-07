@@ -1,6 +1,6 @@
 package com.samsung.fas.pir.persistence.models;
 
-import com.samsung.fas.pir.persistence.annotations.Alias;
+import com.samsung.fas.pir.graph.annotations.Alias;
 import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
@@ -57,19 +57,19 @@ public class Visit extends BaseID {
 	@Setter
 	@ManyToOne(optional = false)
 	@JoinColumn
-	@Alias("Usuário")
+	@Alias("Agente")
 	private 	User			agent;
 
 	@Getter
 	@Setter
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne
 	@JoinColumn
-	@Alias("Responsável")
-	private 	Responsible		responsible;
+	@Alias("Mãe - Gravidez")
+	private 	Pregnancy		pregnancy;
 
 	@Getter
 	@Setter
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne
 	@JoinColumn
 	@Alias("Criança")
 	private 	Child			child;

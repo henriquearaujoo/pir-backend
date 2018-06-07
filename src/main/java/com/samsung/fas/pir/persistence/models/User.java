@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
-import com.samsung.fas.pir.persistence.annotations.Alias;
+import com.samsung.fas.pir.graph.annotations.Alias;
 import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,13 +25,13 @@ public class User extends BaseID implements Serializable {
 	@Setter
 	@Column(nullable=false)
 	@Alias("Nome")
-	private		String			name;
+	private		String					name;
 
 	@Getter
 	@Setter
 	@Column(nullable=false)
 	@Alias("Email")
-	private		String			email;
+	private		String					email;
 
 	@Getter
 	@Setter
@@ -39,54 +39,56 @@ public class User extends BaseID implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable=false, nullable=false)
 	@Alias("Data de Registro")
-	private 	Date 			registerDate;
+	private 	Date 					registerDate;
 
 	@Getter
 	@Setter
-	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "user", orphanRemoval = true)
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
 	@Alias("PF")
-	private 	Person			person;
+	private 	Person					person;
 
 	@Getter
 	@Setter
-	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "user", orphanRemoval = true)
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
 	@Alias("PJ")
-	private 	LegalEntity		entity;
+	private 	LegalEntity				entity;
 
 	@Getter
 	@Setter
 	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "user", orphanRemoval = true)
 	@Alias("Endereço")
-	private		Address			address;
+	private		Address					address;
 
 	@Getter
 	@Setter
 	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "user", orphanRemoval = true)
 	@Alias("Conta")
-	private 	Account 		account;
+	private 	Account 				account;
 
 	// region Agent
 	@Getter
 	@Setter
 	@Column
 	@Alias("Latitude")
-	private 	Double			latitude;
+	private 	Double					latitude;
 
 	@Getter
 	@Setter
 	@Column
 	@Alias("Longitude")
-	private 	Double			longitude;
+	private 	Double					longitude;
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "agent")
+	@Alias("Agente - Crianças")
 	private 	Collection<Child>		children;
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "agent")
-	private 	Collection<Responsible>	responsibles;
+	@Alias("Agente - Mães - Gestações")
+	private 	Collection<Pregnancy>	pregnancies;
 
 	@Getter
 	@Setter
