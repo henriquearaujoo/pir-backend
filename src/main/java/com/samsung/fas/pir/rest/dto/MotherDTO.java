@@ -2,18 +2,26 @@ package com.samsung.fas.pir.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.Mother;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @DTO(Mother.class)
-//@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MotherDTO {
+	@Getter
+	@Setter
+	@JsonProperty("responsible")
+	private 	ResponsibleDTO			responsible;
+
 	@Getter
 	@Setter
 	@JsonProperty("is_pregnant")
@@ -29,13 +37,16 @@ public class MotherDTO {
 	}
 
 	public MotherDTO(Mother mother, boolean detailed) {
-		// TODO
+		setPregnant(mother.isPregnant());
+		setPregnancies(mother.getPregnancies() != null? mother.getPregnancies().stream().map(item -> new PregnancyDTO(item, true)).collect(Collectors.toList()) : new ArrayList<>());
+		setResponsible(detailed? new ResponsibleDTO(mother.getResponsible(), false) : null);
 	}
 
 	@JsonIgnore
 	public Mother getModel() {
 		Mother model = new Mother();
-
+		model.setPregnancies(pregnancies != null? pregnancies.stream().map(PregnancyDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
+		model.setPregnant(isPregnant());
 		return model;
 	}
 }
