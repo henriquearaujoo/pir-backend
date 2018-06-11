@@ -126,13 +126,18 @@ public class Responsible extends BaseID {
 	@Getter
 	@Setter
 	@ManyToOne(optional = false)
+	private 	User				agent;
+
+	@Getter
+	@Setter
+	@ManyToOne(optional = false)
 	@JoinColumn
 	@Alias("Comunidade")
 	private 	Community			community;
 
 	@Getter
 	@Setter
-	@ManyToMany(mappedBy = "responsibles", cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "responsible", cascade = CascadeType.ALL)
 	@Alias("Crianças")
 	private 	Collection<Child>	children;
 

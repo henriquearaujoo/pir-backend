@@ -103,57 +103,60 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 
 	@Override
 	public VisitDTO save(VisitDTO create, UserDetails account) {
-		Visit		model		= create.getModel();
-		User		agent		= getUserDAO().findOne(create.getAgentUUID());
-		Chapter		chapter		= getChapterDAO().findOne(create.getChapterUUID());
-		Form		form		= getFormDAO().findOne(create.getFormUUID());
-		Child		child		= setup(create.getChild(), account);
-		Responsible	responsible	= setup(create.getResponsible(), account);
-
-		model.setChild(child);
-//		model.setResponsible(responsible);
-		model.setForm(form);
-		model.setChapter(chapter);
-		model.setAgent(agent);
-
-		return new VisitDTO(getDao().save(model), true);
+//		Visit		model		= create.getModel();
+//		User		agent		= getUserDAO().findOne(create.getAgentUUID());
+//		Chapter		chapter		= getChapterDAO().findOne(create.getChapterUUID());
+//		Form		form		= getFormDAO().findOne(create.getFormUUID());
+//		Child		child		= setup(create.getChild(), account);
+//		Responsible	responsible	= setup(create.getResponsible(), account);
+//
+//		model.setChild(child);
+////		model.setResponsible(responsible);
+//		model.setForm(form);
+//		model.setChapter(chapter);
+//		model.setAgent(agent);
+//
+//		return new VisitDTO(getDao().save(model), true);
+		return null;
 	}
 
 	@Override
 	public VisitDTO update(VisitDTO update, UserDetails account) {
-		Visit		model		= update.getModel();
-		Visit		visit		= getDao().findOne(model.getUuid());
-
-		visit.setNumber(model.getNumber());
-		visit.setFamilyRating(model.getFamilyRating());
-		visit.setAgentRating(model.getAgentRating());
-		visit.setDoneAt(model.getDoneAt());
-		visit.setDuration(model.getDuration());
-
-		return new VisitDTO(getDao().save(visit), true);
+//		Visit		model		= update.getModel();
+//		Visit		visit		= getDao().findOne(model.getUuid());
+//
+//		visit.setNumber(model.getNumber());
+//		visit.setFamilyRating(model.getFamilyRating());
+//		visit.setAgentRating(model.getAgentRating());
+//		visit.setDoneAt(model.getDoneAt());
+//		visit.setDuration(model.getDuration());
+//
+//		return new VisitDTO(getDao().save(visit), true);
+		return null;
 	}
 
 	@Override
 	public Collection<VisitDTO> save(Collection<VisitDTO> collection, UserDetails account) {
-		ArrayList<Visit> response = new ArrayList<>();
-
-		for (VisitDTO item : collection) {
-			Visit			model		= item.getModel();
-			User			agent		= getUserDAO().findOne(item.getAgentUUID());
-			Chapter			chapter		= getChapterDAO().findOne(item.getChapterUUID());
-			Form			form		= item.getFormUUID() != null? getFormDAO().findOne(item.getFormUUID()) : null;
-
-			model.setAgent(agent);
-			model.setChapter(chapter);
-			model.setForm(form);
-			model.setAnswers(setupAnswers(item.getAnswers(), model));
-//			model.setResponsible(item.getResponsible() != null? getResponsibleBO().saveCollection(Collections.singletonList(item.getResponsible()), account).iterator().next() : null);
-			model.setChild(item.getChild() != null? getChildBO().saveCollection(Collections.singletonList(item.getChild()), account).iterator().next() : null);
-
-			response.add(getDao().save(model));
-		}
-
-		return response.stream().map(visit -> new VisitDTO(visit, true)).collect(Collectors.toList());
+//		ArrayList<Visit> response = new ArrayList<>();
+//
+//		for (VisitDTO item : collection) {
+//			Visit			model		= item.getModel();
+//			User			agent		= getUserDAO().findOne(item.getAgentUUID());
+//			Chapter			chapter		= getChapterDAO().findOne(item.getChapterUUID());
+//			Form			form		= item.getFormUUID() != null? getFormDAO().findOne(item.getFormUUID()) : null;
+//
+//			model.setAgent(agent);
+//			model.setChapter(chapter);
+//			model.setForm(form);
+//			model.setAnswers(setupAnswers(item.getAnswers(), model));
+////			model.setResponsible(item.getResponsible() != null? getResponsibleBO().saveCollection(Collections.singletonList(item.getResponsible()), account).iterator().next() : null);
+//			model.setChild(item.getChild() != null? getChildBO().saveCollection(Collections.singletonList(item.getChild()), account).iterator().next() : null);
+//
+//			response.add(getDao().save(model));
+//		}
+//
+//		return response.stream().map(visit -> new VisitDTO(visit, true)).collect(Collectors.toList());
+		return null;
 	}
 
 	@Override
@@ -162,39 +165,40 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 	}
 
 	private List<Answer> setupAnswers(Collection<AnswerDTO> collection, Visit visit) {
-		List<Answer>	answers		= new ArrayList<>();
-
-		for (AnswerDTO createAnswer : collection) {
-			Answer		model		= createAnswer.getModel();
-			Question 	question	= createAnswer.getQuestionUUID() != null? getQuestionDAO().findOne(createAnswer.getQuestionUUID()) : null;
-			Alternative alternative	= createAnswer.getAlternativeUUID() != null? getAlternativeDAO().findOne(createAnswer.getAlternativeUUID()) : null;
-
-			model.setAlternative(alternative);
-			model.setQuestion(question);
-			model.setVisit(visit);
-			answers.add(model);
-		}
-
-		return answers;
+//		List<Answer>	answers		= new ArrayList<>();
+//
+//		for (AnswerDTO createAnswer : collection) {
+//			Answer		model		= createAnswer.getModel();
+//			Question 	question	= createAnswer.getQuestionUUID() != null? getQuestionDAO().findOne(createAnswer.getQuestionUUID()) : null;
+//			Alternative alternative	= createAnswer.getAlternativeUUID() != null? getAlternativeDAO().findOne(createAnswer.getAlternativeUUID()) : null;
+//
+//			model.setAlternative(alternative);
+//			model.setQuestion(question);
+//			model.setVisit(visit);
+//			answers.add(model);
+//		}
+//
+//		return answers;
+		return null;
 	}
 
 	private Responsible setup(ResponsibleDTO create, UserDetails details) {
-		if (create != null) {
-			if (create.getUuid() == null) {
-				return getResponsibleBO().create(create, details);
-			}
-			return getResponsibleDAO().findOne(create.getUuid());
-		}
+//		if (create != null) {
+//			if (create.getUuid() == null) {
+//				return getResponsibleBO().create(create, details);
+//			}
+//			return getResponsibleDAO().findOne(create.getUuid());
+//		}
 		return null;
 	}
 
 	private Child setup(ChildDTO create, UserDetails details) {
-		if (create != null) {
-			if (create.getUuid() == null) {
-				return getChildBO().persist(create, details);
-			}
-			return getChildDAO().findOne(create.getUuid());
-		}
+//		if (create != null) {
+//			if (create.getUuid() == null) {
+//				return getChildBO().persist(create, details);
+//			}
+//			return getChildDAO().findOne(create.getUuid());
+//		}
 		return null;
 	}
 }

@@ -170,7 +170,7 @@ public class Community extends BaseID {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "community")
+	@OneToMany(mappedBy = "community", cascade = CascadeType.ALL)
 	@Alias("Responsáveis")
 	private 	Collection<Responsible>	responsible;
 

@@ -10,10 +10,13 @@ import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.UUID;
 
 @Repository
 public interface IChild extends IBaseRepository<Child, Long, QChild> {
 	Child findByMobileIdAndAgentId(long mobile, long agent);
+	Collection<Child> findAllByUuidIn(Collection<UUID> collection);
 
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QChild root) {

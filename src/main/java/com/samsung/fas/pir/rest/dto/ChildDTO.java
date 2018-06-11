@@ -156,7 +156,7 @@ public class ChildDTO {
 //		setVacinationUpToDate(child.isVacinationUpToDate());
 		setHasRelationDifficulties(child.isRelationDifficulties());
 		setMother(child.getMother() != null? new ResponsibleDTO(child.getMother(), false) : null);
-		setResponsibles(child.getResponsibles() != null? child.getResponsibles().stream().map(responsible -> new ResponsibleDTO(responsible, false)).collect(Collectors.toList()) : null);
+//		setResponsibles(child.getResponsibles() != null? child.getResponsibles().stream().map(responsible -> new ResponsibleDTO(responsible, false)).collect(Collectors.toList()) : null);
 	}
 
 	@JsonIgnore
@@ -180,7 +180,7 @@ public class ChildDTO {
 		model.setSocialEducationalPrograms(isInSocialEducationalPrograms());
 //		model.setVacinationUpToDate(isVacinationUpToDate());
 		model.setRelationDifficulties(isHasRelationDifficulties());
-		model.setResponsibles(getResponsibles() != null? getResponsibles().stream().map(ResponsibleDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
+//		model.setResponsibles(getResponsibles() != null? getResponsibles().stream().map(ResponsibleDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 //		model.setMother(getMother() != null? getMother().getModel() : null);
 
 		try {

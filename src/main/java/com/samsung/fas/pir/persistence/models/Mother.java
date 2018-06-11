@@ -34,4 +34,10 @@ public class Mother extends BaseNID {
 	@OneToMany(mappedBy = "pregnant", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@Alias("Gestações")
 	private 	Collection<Pregnancy>	pregnancies;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "mother", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@Alias("Filhos")
+	private 	Collection<Child>		children;
 }

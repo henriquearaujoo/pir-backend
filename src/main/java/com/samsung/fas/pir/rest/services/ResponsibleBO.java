@@ -2,11 +2,12 @@ package com.samsung.fas.pir.rest.services;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
-import com.samsung.fas.pir.persistence.dao.CityDAO;
+import com.samsung.fas.pir.persistence.dao.ChildDAO;
 import com.samsung.fas.pir.persistence.dao.CommunityDAO;
 import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
-import com.samsung.fas.pir.persistence.models.Community;
-import com.samsung.fas.pir.persistence.models.Responsible;
+import com.samsung.fas.pir.persistence.dao.UserDAO;
+import com.samsung.fas.pir.persistence.models.*;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.ResponsibleDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import lombok.AccessLevel;
@@ -20,29 +21,31 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, ResponsibleDTO, Long> {
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)
-	private		CommunityBO			communityBO;
+	private		ChildDAO		childDAO;
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)
-	private		CommunityDAO		communityDAO;
+	private		CommunityDAO	communityDAO;
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)
-	private		CityDAO				cityDAO;
+	private		UserDAO 		userDAO;
+
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
+	private		ChildBO			childBO;
 
 	@Autowired
-	public ResponsibleBO(ResponsibleDAO dao, CommunityDAO communityDAO, CityDAO cityDAO, CommunityBO communityBO) {
+	public ResponsibleBO(ResponsibleDAO dao, ChildDAO childDAO, ChildBO childBO) {
 		super(dao);
-		setCommunityBO(communityBO);
-		setCommunityDAO(communityDAO);
-		setCityDAO(cityDAO);
+		setChildDAO(childDAO);
+		setChildBO(childBO);
 	}
 
 	public Collection<ResponsibleDTO> findAllResponsible() {
@@ -63,110 +66,41 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 
 	@Override
 	public ResponsibleDTO save(ResponsibleDTO create, UserDetails account) {
-		return new ResponsibleDTO(getDao().save(create(create, account)), true);
+		Responsible		model		= create.getModel();
+		Responsible		responsible	= model.getUuid() != null? getDao().findOne(model.getUuid()) : null;
+		Community		community	= getCommunityDAO().findOne(create.getCommunityUUID());
+		return responsible != null? new ResponsibleDTO(getDao().save(setupResponsible(responsible, community, ((Account) account).getUser())), true) : new ResponsibleDTO(getDao().save(setupResponsible(model, community, ((Account) account).getUser())), true);
 	}
 
 	@Override
 	public ResponsibleDTO update(ResponsibleDTO update, UserDetails account) {
-		return new ResponsibleDTO(getDao().save(patch(update, account)), true);
+		Responsible		model		= update.getModel();
+		Responsible		responsible	= model.getUuid() != null? getDao().findOne(model.getUuid()) : null;
+		Community		community	= getCommunityDAO().findOne(update.getCommunityUUID());
+		return responsible != null? new ResponsibleDTO(getDao().save(setupResponsible(responsible, community, ((Account) account).getUser())), true) : new ResponsibleDTO(getDao().save(setupResponsible(model, community, ((Account) account).getUser())), true);
 	}
 
 	@Override
 	public Collection<ResponsibleDTO> save(Collection<ResponsibleDTO> collection, UserDetails details) {
-		return saveCollection(collection, details).stream().map(responsible -> new ResponsibleDTO(responsible, true)).collect(Collectors.toList());
-	}
-
-	protected Collection<Responsible> saveCollection(Collection<ResponsibleDTO> collection, UserDetails account) {
-		ArrayList<Responsible>		response		= new ArrayList<>();
-
-		for (ResponsibleDTO item : collection) {
-			Responsible	model		= item.getModel();
-			Community	community	= Optional.ofNullable(getCommunityDAO().findOne(item.getCommunity().getName().toLowerCase(), item.getCommunity().getCityUUID())).orElse(model.getCommunity().getUuid() != null? getCommunityDAO().findOne(model.getCommunity().getUuid()) : null);
-//			Responsible	responsible	= model.getUuid() != null ? getDao().findOne(model.getUuid()) : null;
-			Responsible	responsible	= Optional.ofNullable(getDao().findOne(item.getTempID(), ((Account) account).getUser().getId())).orElse(item.getUuid() != null? getDao().findOne(item.getUuid()) : null);
-
-			if (responsible == null) {
-				if (community != null) {
-					model.setCommunity(getCommunityBO().patch(item.getCommunity(), community, account));
-//					model.setAgent(((Account) account).getUser());
-					response.add(getDao().save(model));
-				} else {
-					model.setCommunity(getCommunityBO().create(item.getCommunity(), account));
-//					model.setAgent(((Account) account).getUser());
-					response.add(getDao().save(model));
-				}
-			} else {
-				if (community != null) {
-//					responsible.setAgent(((Account) account).getUser());
-					response.add(getDao().save(setupResponsible(responsible, model, getCommunityBO().patch(item.getCommunity(), community, account))));
-				} else {
-//					responsible.setAgent(((Account) account).getUser());
-					response.add(getDao().save(setupResponsible(responsible, model, getCommunityBO().create(item.getCommunity(), account))));
-				}
-			}
-		}
-		return response;
+		return collection.stream().map(item -> save(item, details)).collect(Collectors.toList());
 	}
 
 	@Override
-	public Collection<ResponsibleDTO> update(Collection<ResponsibleDTO> update, UserDetails details) {
-		return null;
+	public Collection<ResponsibleDTO> update(Collection<ResponsibleDTO> collection, UserDetails details) {
+		return collection.stream().map(item -> update(item, details)).collect(Collectors.toList());
 	}
 
-	protected Responsible create(ResponsibleDTO create, UserDetails details) {
-		Responsible		model		= create.getModel();
-		Community		community	= getCommunityDAO().findOne(model.getCommunity().getName(), getCityDAO().findOne(create.getCommunity().getCityUUID()).getId());
-
-		model.setMother(model.getMother());
-//		model.setAgent(((User) details));
-
-		if (model.getCommunity() != null) {
-			if (model.getCommunity().getUuid() != null) {
-				model.setCommunity(CommunityBO.setupCommunity(community, model.getCommunity(), getCityDAO().findOne(create.getCommunity().getCityUUID())));
-			} else {
-				if (community != null) {
-					model.setCommunity(CommunityBO.setupCommunity(community, model.getCommunity(), getCityDAO().findOne(create.getCommunity().getCityUUID())));
-				} else {
-					model.getCommunity().setCity(getCityDAO().findOne(create.getCommunity().getCityUUID()));
-				}
-			}
+	Responsible setupResponsible(Responsible model, Community community, User agent) {
+		model.setCommunity(community);
+		model.setAgent(agent);
+		model.getMother().setResponsible(model);
+		if (model.getChildren() != null) {
+			model.setChildren(setupChild(model, model.getChildren()));
 		}
-
 		return model;
 	}
 
-	protected Responsible patch(ResponsibleDTO update, UserDetails account) {
-		Responsible		model		= update.getModel();
-		Responsible		responsible	= getDao().findOne(update.getTempID(), ((Account) account).getUser().getId());
-		Community 		community	= update.getCommunity().getModel();
-
-		if (responsible == null) {
-			responsible = getDao().findOne(model.getUuid());
-		}
-
-		if (model.getMother() != null) {
-			model.getMother().setResponsible(responsible);
-			model.getMother().setId(responsible.getId());
-			responsible.setMother(model.getMother());
-		}
-//		responsible.setAgent(((Account) account).getProfile().getType().compareTo(EProfileType.AGENT) == 0? ((Account) account).getUser() : responsible.getAgent());
-
-		if (model.getCommunity().getUuid() != null) {
-			community = CommunityBO.setupCommunity(getCommunityDAO().findOne(community.getUuid()), model.getCommunity(), getCityDAO().findOne(update.getCommunity().getCityUUID()));
-		} else {
-			Community c = getCommunityDAO().findOne(model.getCommunity().getName(), getCityDAO().findOne(update.getCommunity().getCityUUID()).getId());
-			if (c != null) {
-				c.setCity(getCityDAO().findOne(update.getCommunity().getCityUUID()));
-				community = c;
-			} else {
-				community.setCity(getCityDAO().findOne(update.getCommunity().getCityUUID()));
-			}
-		}
-
-		return setupResponsible(responsible, model, community);
-	}
-
-	protected static Responsible setupResponsible(Responsible responsible, Responsible model, Community community) {
+	Responsible setupResponsible(Responsible responsible, Responsible model, Community community, User agent) {
 		responsible.setFamilyHasChildren(model.isFamilyHasChildren());
 		responsible.setName(model.getName());
 		responsible.setCommunity(community);
@@ -183,7 +117,58 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		responsible.setHasWaterTreatment(model.isHasWaterTreatment());
 		responsible.setObservations(model.getObservations());
 		responsible.setMobileId(model.getMobileId());
+		responsible.setMother(model.getMother());
+		responsible.setAgent(agent);
+
+		if (model.getMother() != null) {
+			model.getMother().setResponsible(responsible);
+			if (model.getMother().getChildren() != null) {
+				responsible.getMother().getChildren().clear();
+				responsible.getMother().getChildren().addAll(setupChild(responsible.getMother(), model.getMother().getChildren()));
+			}
+		}
+
+		if (model.getChildren() != null) {
+			responsible.getChildren().clear();
+			responsible.getChildren().addAll(setupChild(responsible, model.getChildren()));
+		}
 
 		return responsible;
+	}
+
+	@SuppressWarnings("Duplicates")
+	private Collection<Child> setupChild(Responsible responsible, Collection<Child> collection) {
+		Collection<Child>		persisted		= getChildDAO().findAllIn(collection.stream().map(Base::getUuid).collect(Collectors.toList()));
+		return collection.stream().map(item -> {
+			Child		child		= persisted.stream().filter(entity -> entity.getUuid().compareTo(item.getUuid()) == 0).findAny().orElse(null);
+			if (responsible.getChildren() == null) {
+				responsible.setChildren(new ArrayList<>());
+			}
+			if (child != null) {
+				responsible.getChildren().add(child);
+				return getChildBO().setupChild(child, item, responsible);
+			} else {
+				responsible.getChildren().add(item);
+				return getChildBO().setupChild(item, responsible);
+			}
+		}).collect(Collectors.toList());
+	}
+
+	@SuppressWarnings("Duplicates")
+	private Collection<Child> setupChild(Mother mother, Collection<Child> collection) {
+		Collection<Child>		persisted		= getChildDAO().findAllIn(collection.stream().map(Base::getUuid).collect(Collectors.toList()));
+		return collection.stream().map(item -> {
+			Child		child		= persisted.stream().filter(entity -> entity.getUuid().compareTo(item.getUuid()) == 0).findAny().orElse(null);
+			if (mother.getChildren() == null) {
+				mother.setChildren(new ArrayList<>());
+			}
+			if (child != null) {
+				mother.getChildren().add(child);
+				return getChildBO().setupChild(child, item, mother);
+			} else {
+				mother.getChildren().add(item);
+				return getChildBO().setupChild(item, mother);
+			}
+		}).collect(Collectors.toList());
 	}
 }

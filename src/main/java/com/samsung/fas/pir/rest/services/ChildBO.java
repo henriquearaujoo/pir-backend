@@ -5,10 +5,7 @@ import com.samsung.fas.pir.persistence.dao.ChildDAO;
 import com.samsung.fas.pir.persistence.dao.CityDAO;
 import com.samsung.fas.pir.persistence.dao.CommunityDAO;
 import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
-import com.samsung.fas.pir.persistence.models.Child;
-import com.samsung.fas.pir.persistence.models.City;
-import com.samsung.fas.pir.persistence.models.Community;
-import com.samsung.fas.pir.persistence.models.Responsible;
+import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.rest.dto.ChildDTO;
 import com.samsung.fas.pir.rest.dto.ResponsibleDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
@@ -26,88 +23,24 @@ import java.util.stream.Collectors;
 
 @Service
 public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
-	@Getter(AccessLevel.PRIVATE)
-	@Setter(AccessLevel.PRIVATE)
-	private		ResponsibleBO		responsibleBO;
-
-	@Getter(AccessLevel.PRIVATE)
-	@Setter(AccessLevel.PRIVATE)
-	private		CommunityBO			communityBO;
-
-	@Getter(AccessLevel.PRIVATE)
-	@Setter(AccessLevel.PRIVATE)
-	private		ResponsibleDAO		responsibleDAO;
-
-	@Getter(AccessLevel.PRIVATE)
-	@Setter(AccessLevel.PRIVATE)
-	private		CommunityDAO		communityDAO;
-
-	@Getter(AccessLevel.PRIVATE)
-	@Setter(AccessLevel.PRIVATE)
-	private		CityDAO				cityDAO;
-
 	@Autowired
-	public ChildBO(ChildDAO dao, ResponsibleDAO responsibleDAO, CommunityDAO communityDAO,
-				   CityDAO cityDAO, ResponsibleBO responsibleBO, CommunityBO communityBO) {
+	public ChildBO(ChildDAO dao) {
 		super(dao);
-		setCommunityBO(communityBO);
-		setResponsibleBO(responsibleBO);
-		setResponsibleDAO(responsibleDAO);
-		setCommunityDAO(communityDAO);
-		setCityDAO(cityDAO);
 	}
 
 	@Override
 	public ChildDTO save(ChildDTO create, UserDetails account) {
-		return new ChildDTO(getDao().save(persist(create, account)), true);
+		return null;
 	}
 
 	@Override
 	public ChildDTO update(ChildDTO update, UserDetails account) {
-		return new ChildDTO(getDao().save(patch(update, account)), true);
+		return null;
 	}
 
 	@Override
 	public Collection<ChildDTO> save(Collection<ChildDTO> collection, UserDetails account) {
-		return saveCollection(collection, account).stream().map(child -> new ChildDTO(child, true)).collect(Collectors.toList());
-	}
-
-	protected Collection<Child> saveCollection(Collection<ChildDTO> collection, UserDetails account) {
-		ArrayList<Child>		response		= new ArrayList<>();
-
-		for (ChildDTO item : collection) {
-			Child		model		= item.getModel();
-			Child		child		= Optional.ofNullable(getDao().findOne(item.getTempID(), ((Account) account).getUser().getId())).orElse(model.getUuid() != null? getDao().findOne(model.getUuid()) : null);
-			Responsible	mother		= Optional.ofNullable(item.getMother() != null? getResponsibleDAO().findOne(item.getMother().getTempID(), ((Account) account).getUser().getId()) : null).orElse(model.getMother() != null && model.getMother().getUuid() != null? getResponsibleDAO().findOne(model.getMother().getUuid()) : null);
-
-			if (child == null) {
-				if (mother != null) {
-//					model.setMother(item.getMother() != null? getResponsibleBO().patch(item.getMother(), account) : null);
-					model.setAgent(((Account) account).getUser());
-					model.setResponsibles(getResponsibleBO().saveCollection(item.getResponsibles(), account));
-					response.add(getDao().save(model));
-				} else {
-//					model.setMother(item.getMother() != null? getResponsibleBO().create(item.getMother(), account) : null);
-					model.setAgent(((Account) account).getUser());
-					model.setResponsibles(getResponsibleBO().saveCollection(item.getResponsibles(), account));
-					response.add(getDao().save(model));
-				}
-			} else {
-				if (mother != null) {
-					child.setAgent(((Account) account).getUser());
-					child.getResponsibles().clear();
-					child.getResponsibles().addAll(getResponsibleBO().saveCollection(item.getResponsibles(), account));
-					response.add(getDao().save(setupChild(child, model, item.getMother() != null? getResponsibleBO().patch(item.getMother(), account) : null)));
-				} else {
-					child.setAgent(((Account) account).getUser());
-					child.getResponsibles().clear();
-					child.getResponsibles().addAll(getResponsibleBO().saveCollection(item.getResponsibles(), account));
-					response.add(getDao().save(setupChild(child, model, item.getMother() != null? getResponsibleBO().create(item.getMother(), account) : null)));
-				}
-			}
-		}
-
-		return response;
+		return null;
 	}
 
 	@Override
@@ -115,52 +48,44 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		return null;
 	}
 
-	protected Child persist(ChildDTO create, UserDetails details) {
-		Child					model			= create.getModel();
-		Responsible				mother			= create.getMother() != null? create.getMother().getUuid() != null? getResponsibleDAO().findOne(create.getMother().getUuid()) : create.getMother().getModel() : null;
-		City					city			= mother != null && create.getMother().getCommunity() != null? getCityDAO().findOne(create.getMother().getCommunity().getCityUUID()) : null;
-		Community				community		= city != null && create.getMother().getCommunity() != null? create.getMother().getCommunity().getUuid() != null? getCommunityDAO().findOne(create.getMother().getCommunity().getUuid()) : create.getMother().getCommunity().getModel() : null;
-		Collection<Responsible>	responsibles	= getResponsibleDAO().findAllByMobileIdIn(create.getResponsibles().stream().map(ResponsibleDTO::getTempID).collect(Collectors.toList()));
-		Collection<Responsible> rmodels			= getResponsibleBO().saveCollection(create.getResponsibles(), details);
-
-		return model;
+	Child setupChild(Child model, Responsible responsible) {
+		return null;
 	}
 
-	protected Child patch(ChildDTO update, UserDetails details) {
-		Child					model			= update.getModel();
-		Child					child			= getDao().findOne(model.getUuid());
-		Responsible				mother			= update.getMother() != null? update.getMother().getUuid() != null? getResponsibleDAO().findOne(update.getMother().getUuid()) : update.getMother().getModel() : null;
-		Collection<Responsible>	responsibles	= getResponsibleDAO().findAllIn(update.getResponsibles().stream().map(ResponsibleDTO::getUuid).collect(Collectors.toList()));
-		Collection<Community>	communities		= getCommunityDAO().findAllIn(update.getResponsibles().stream().map(responsibleDTO -> responsibleDTO.getCommunity().getUuid()).collect(Collectors.toList()));
-		Collection<City>		cities			= getCityDAO().findAllIn(update.getResponsibles().stream().map(responsibleDTO -> responsibleDTO.getCommunity().getCityUUID()).collect(Collectors.toList()));
+	Child setupChild(Child model, Mother mother) {
+		return null;
+	}
 
-//		child.setMother(mother);
-		child.getResponsibles().clear();
-		child.getResponsibles().addAll(responsibles);
-
-
+	Child setupChild(Child child, Child model, Responsible responsible) {
+		setupChild(child, model);
+		if (child.getResponsible().stream().filter(item -> item.getUuid().compareTo(responsible.getUuid()) == 0).findAny() == null) {
+			child.getResponsible().add(responsible);
+		}
 		return child;
 	}
 
-	protected Child setupChild(Child child, Child model, Responsible mother) {
+	Child setupChild(Child child, Child model, Mother mother) {
+		setupChild(child, model);
+		child.setMother(mother);
+		return child;
+	}
+
+	private void setupChild(Child child, Child model) {
 		child.setMobileId(model.getMobileId());
 		child.setName(model.getName());
 		child.setFatherName(model.getFatherName());
 		child.setGender(model.getGender());
 		child.setHasCivilRegistration(model.isHasCivilRegistration());
-//		child.setCivilRegistrationJustificative(model.getCivilRegistrationJustificative());
+		child.setCivilRegistrationJustification(model.getCivilRegistrationJustification());
 		child.setHasEducationDifficulty(model.isHasEducationDifficulty());
 		child.setEducationDifficultySpecification(model.getEducationDifficultySpecification());
 		child.setPrematureBorn(model.isPrematureBorn());
 		child.setBornWeek(model.getBornWeek());
 		child.setWhoTakeCare(model.getWhoTakeCare());
 		child.setPlaysWithWho(model.getPlaysWithWho());
-//		child.setMensalWeight(model.isMensalWeight());
+		child.setMonthlyWeighted(model.isMonthlyWeighted());
 		child.setSocialEducationalPrograms(model.isSocialEducationalPrograms());
-//		child.setVacinationUpToDate(model.isVacinationUpToDate());
+		child.setVaccinationUpToDate(model.isVaccinationUpToDate());
 		child.setRelationDifficulties(model.isHasEducationDifficulty());
-//		child.setMother(mother);
-
-		return child;
 	}
 }

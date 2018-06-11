@@ -30,13 +30,13 @@ import java.util.stream.Collectors;
 public class ResponsibleDTO {
 	@Getter
 	@Setter
-	@JsonProperty("external_id")
-	private		long		tempID;
+	@JsonProperty("id")
+	private		UUID		uuid;
 
 	@Getter
 	@Setter
-	@JsonProperty("id")
-	private		UUID		uuid;
+	@JsonProperty("external_id")
+	private		long		tempID;
 
 	@Getter
 	@Setter
@@ -149,6 +149,12 @@ public class ResponsibleDTO {
 	@JsonProperty("children")
 	@Valid
 	private 	List<ChildDTO>	children;
+
+	@Getter
+	@Setter
+	@JsonProperty("community_id")
+	@NotNull(message = "city.id.missing")
+	private 	UUID			communityUUID;
 
 	@Getter
 	@Setter

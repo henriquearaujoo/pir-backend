@@ -24,13 +24,13 @@ import java.util.stream.Collectors;
 public class CommunityDTO {
 	@Getter
 	@Setter
-	@JsonProperty("external_id")
-	private		long			tempID;
+	@JsonProperty("id")
+	private 	UUID 			uuid;
 
 	@Getter
 	@Setter
-	@JsonProperty("id")
-	private 	UUID 			uuid;
+	@JsonProperty("external_id")
+	private		long			tempID;
 
 	@Getter
 	@Setter
@@ -161,7 +161,7 @@ public class CommunityDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty("responsibles")
+	@JsonProperty("responsible")
 	private 	List<ResponsibleDTO>		responsible;
 
 	@Getter

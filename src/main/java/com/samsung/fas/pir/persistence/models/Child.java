@@ -134,7 +134,7 @@ public class Child extends BaseID {
 	@Setter
 	@ManyToMany
 	@Alias("Responsável")
-	private 	Collection<Responsible>		responsibles;
+	private 	Collection<Responsible>		responsible;
 
 	@Getter
 	@Setter
