@@ -6,11 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.enums.EAnswerType;
 import com.samsung.fas.pir.persistence.models.Question;
+import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -53,7 +55,7 @@ public class QuestionDTO {
 		setDescription(question.getDescription());
 		setType(question.getType());
 		setConclusionUUID(question.getConclusion().getUuid());
-		setAnswers(question.getAlternatives() != null? question.getAlternatives().stream().map(item -> new AlternativeDTO(item, false)).collect(Collectors.toSet()) : null);
+		setAnswers(question.getAlternatives() != null? question.getAlternatives().stream().sorted(Comparator.comparing(BaseID::getId)).map(item -> new AlternativeDTO(item, false)).collect(Collectors.toList()) : null);
 	}
 
 	@JsonIgnore

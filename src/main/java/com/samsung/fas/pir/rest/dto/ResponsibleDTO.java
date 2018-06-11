@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -52,7 +53,7 @@ public class ResponsibleDTO {
 	@Getter
 	@Setter
 	@JsonProperty("birth")
-	@NotNull(message = "date.missing")
+	@NotEmpty(message = "date.missing")
 	@JsonFormat(pattern = "dd-MM-yyyy", shape = JsonFormat.Shape.STRING)
 	private 	String 		birth;
 

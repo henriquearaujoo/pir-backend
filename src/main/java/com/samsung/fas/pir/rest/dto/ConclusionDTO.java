@@ -5,11 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.Conclusion;
+import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -46,7 +48,7 @@ public class ConclusionDTO {
 		setUuid(conclusion.getUuid());
 		setDescription(conclusion.getDescription());
 		setChapterUUID(conclusion.getChapter().getUuid());
-		setQuestions(conclusion.getQuestions() != null? conclusion.getQuestions().stream().map(item -> new QuestionDTO(item, false)).collect(Collectors.toSet()) : null);
+		setQuestions(conclusion.getQuestions() != null? conclusion.getQuestions().stream().sorted(Comparator.comparing(BaseID::getId)).map(item -> new QuestionDTO(item, false)).collect(Collectors.toList()) : null);
 	}
 
 	@JsonIgnore

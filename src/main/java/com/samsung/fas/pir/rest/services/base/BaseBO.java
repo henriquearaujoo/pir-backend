@@ -43,12 +43,12 @@ public abstract class BaseBO<T, DAO extends IBaseDAO<T, ID>, DTO, ID extends Ser
 
 	@Override
 	public Collection<DTO> findAll(UserDetails details) {
-		return getDao().findAll().parallelStream().map(item -> toDTO(item, false)).collect(Collectors.toList());
+		return getDao().findAll().stream().map(item -> toDTO(item, false)).collect(Collectors.toList());
 	}
 
 	@Override
 	public Collection<DTO> findAll(Predicate predicate, UserDetails details) {
-		return getDao().findAll(predicate).parallelStream().map(item -> toDTO(item, false)).collect(Collectors.toList());
+		return getDao().findAll(predicate).stream().map(item -> toDTO(item, false)).collect(Collectors.toList());
 	}
 
 	@Override

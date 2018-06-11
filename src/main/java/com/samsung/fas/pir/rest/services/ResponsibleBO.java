@@ -2,10 +2,7 @@ package com.samsung.fas.pir.rest.services;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
-import com.samsung.fas.pir.persistence.dao.ChildDAO;
-import com.samsung.fas.pir.persistence.dao.CommunityDAO;
-import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
-import com.samsung.fas.pir.persistence.dao.UserDAO;
+import com.samsung.fas.pir.persistence.dao.*;
 import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.ResponsibleDTO;
@@ -36,6 +33,10 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)
 	private		UserDAO 		userDAO;
+
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
+	private		MotherDAO		motherDAO;
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)
@@ -93,9 +94,11 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 	Responsible setupResponsible(Responsible model, Community community, User agent) {
 		model.setCommunity(community);
 		model.setAgent(agent);
-		model.getMother().setResponsible(model);
-		if (model.getChildren() != null) {
-			model.setChildren(setupChild(model, model.getChildren()));
+		if (model.getMother() != null) {
+			model.getMother().setResponsible(model);
+			if (model.getChildren() != null) {
+				model.setChildren(setupChild(model, model.getChildren()));
+			}
 		}
 		return model;
 	}
@@ -117,15 +120,18 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		responsible.setHasWaterTreatment(model.isHasWaterTreatment());
 		responsible.setObservations(model.getObservations());
 		responsible.setMobileId(model.getMobileId());
-		responsible.setMother(model.getMother());
 		responsible.setAgent(agent);
 
 		if (model.getMother() != null) {
-			model.getMother().setResponsible(responsible);
-			if (model.getMother().getChildren() != null) {
-				responsible.getMother().getChildren().clear();
-				responsible.getMother().getChildren().addAll(setupChild(responsible.getMother(), model.getMother().getChildren()));
+			if (responsible.getMother() == null) {
+				responsible.setMother(model.getMother());
+				responsible.getMother().setChildren(new ArrayList<>());
 			}
+			responsible.getMother().setPregnant(model.getMother().isPregnant());
+			responsible.getMother().getChildren().clear();
+			responsible.getMother().getChildren().addAll(model.getMother().getChildren() != null? setupChild(responsible.getMother(), model.getMother().getChildren()) : new ArrayList<>());
+		} else {
+			responsible.setMother(null);
 		}
 
 		if (model.getChildren() != null) {

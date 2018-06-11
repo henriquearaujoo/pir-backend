@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -107,15 +108,16 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 	}
 
 	private Collection<Responsible> setupResponsible(Community community, Collection<Responsible> collection, UserDetails account) {
-		Collection<Responsible>		persisted		= getResponsibleDAO().findAllIn(collection.stream().map(Base::getUuid).collect(Collectors.toList()));
+		Collection<UUID>			modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
-			Responsible		responsible		= persisted.stream().filter(entity -> entity.getUuid().compareTo(item.getUuid()) == 0).findAny().orElse(null);
+			UUID			uuid			= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
+			Responsible		responsible		= uuid != null? getResponsibleDAO().findOne(uuid) : null;
 			if (responsible != null) {
 				responsible.setCommunity(community);
-				return getResponsibleBO().setupResponsible(responsible, item, community, ((Account) account).getUser());
+				return getResponsibleBO().setupResponsible(responsible, item, community, account != null? ((Account) account).getUser() : null);
 			} else {
 				item.setCommunity(community);
-				return getResponsibleBO().setupResponsible(item, community, ((Account) account).getUser());
+				return getResponsibleBO().setupResponsible(item, community, account != null? ((Account) account).getUser() : null);
 			}
 		}).collect(Collectors.toList());
 	}

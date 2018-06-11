@@ -125,7 +125,7 @@ public class Responsible extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false)
+	@ManyToOne
 	private 	User				agent;
 
 	@Getter

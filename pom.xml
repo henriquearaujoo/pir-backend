@@ -177,6 +177,14 @@
 		</dependency>
 		<!-- GSON -->
 
+		<!-- Hibernate 5.2.13 Downgrade - BUG FIX: One to One merge operation -->
+		<!--<dependency>-->
+			<!--<groupId>org.hibernate</groupId>-->
+			<!--<artifactId>hibernate-core</artifactId>-->
+			<!--<version>5.2.13.Final</version>-->
+		<!--</dependency>-->
+		<!-- Hibernate 5.2.13 Downgrade - BUG FIX: One to One merge operation -->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

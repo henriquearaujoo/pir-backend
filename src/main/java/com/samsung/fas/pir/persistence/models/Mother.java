@@ -18,8 +18,9 @@ import java.util.Collection;
 public class Mother extends BaseNID {
 	@Getter
 	@Setter
-	@OneToOne(optional = false)
 	@JoinColumn(name = "id")
+	@OneToOne(optional = false)
+	@MapsId
 	@Alias("Responsável")
 	private 	Responsible				responsible;
 

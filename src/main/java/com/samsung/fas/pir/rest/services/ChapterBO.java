@@ -89,7 +89,7 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 	}
 
 	public Collection<ChapterDetailedDTO> findAllDetailed(Predicate predicate) {
-		return getDao().findAll(predicate).stream().map(item -> new ChapterDetailedDTO(item, true)).collect(Collectors.toList());
+		return getDao().findAll(predicate).stream().sorted(Comparator.comparing(o -> ((Chapter) o).getChapter()).thenComparing(o -> ((Chapter) o).getVersion())).map(item -> new ChapterDetailedDTO(item, true)).collect(Collectors.toList());
 	}
 
 	public Page<ChapterDetailedDTO> findAllDetailed(Pageable pageable) {
