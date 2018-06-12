@@ -217,11 +217,12 @@ public class ResponsibleDTO {
 		model.setObservations(getObservations());
 		model.setChildrenCount(getChildrenCount());
 		model.setCivilState(ECivilState.valueOf(civilState));
-		model.setMother(getMother() != null? getMother().getModel() : null);
 		model.setCommunity(getCommunity() != null? getCommunity().getModel() : null);
 
-		if (model.getMother() != null) {
-			model.getMother().setResponsible(model);
+		if (getMother() != null) {
+			Mother modelMother = getMother().getModel();
+			modelMother.setResponsible(model);
+			model.setMother(modelMother);
 		}
 
 		try {

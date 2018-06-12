@@ -100,10 +100,8 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 		community.setRegional(model.getRegional());
 		community.setLatitude(model.getLatitude());
 		community.setLongitude(model.getLongitude());
-		if (model.getResponsible() != null) {
-			community.getResponsible().clear();
-			community.getResponsible().addAll(setupResponsible(community, model.getResponsible(), account));
-		}
+		community.getResponsible().clear();
+		community.getResponsible().addAll(setupResponsible(community, model.getResponsible(), account));
 		return community;
 	}
 

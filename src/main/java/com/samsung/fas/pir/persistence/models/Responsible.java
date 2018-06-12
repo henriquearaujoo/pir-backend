@@ -10,6 +10,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -137,13 +138,13 @@ public class Responsible extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToMany(mappedBy = "responsible", cascade = CascadeType.ALL)
-	@Alias("Crianças")
-	private 	Collection<Child>	children;
-
-	@Getter
-	@Setter
 	@OneToOne(mappedBy = "responsible", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Alias("Mãe")
 	private 	Mother				mother;
+
+	@Getter
+	@Setter
+	@ManyToMany(mappedBy = "responsible", cascade = CascadeType.ALL)
+	@Alias("Crianças")
+	private 	Collection<Child>	children			= new ArrayList<>();
 }

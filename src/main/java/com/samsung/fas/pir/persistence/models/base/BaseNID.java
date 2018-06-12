@@ -12,6 +12,5 @@ public abstract class BaseNID extends Base {
 	@Getter
 	@Setter
 	@Id
-	@Column
 	private		long			id;
 }

@@ -140,6 +140,7 @@ public class Child extends BaseID {
 	@Setter
 	@ManyToOne
 	@Alias("Mãe")
+	@JoinColumn(name = "mother_id")
 	private 	Mother						mother;
 
 	@Getter

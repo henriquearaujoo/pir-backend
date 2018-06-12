@@ -10,6 +10,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
@@ -170,14 +171,14 @@ public class Community extends BaseID {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@Alias("Responsáveis")
-	private 	Collection<Responsible>		responsible;
-
-	@Getter
-	@Setter
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "city_id")
 	@Alias("Município")
 	private 	City						city;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@Alias("Responsáveis")
+	private 	Collection<Responsible>		responsible			= new ArrayList<>();
 }

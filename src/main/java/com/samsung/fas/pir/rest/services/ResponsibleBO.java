@@ -127,6 +127,7 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 				responsible.setMother(model.getMother());
 				responsible.getMother().setChildren(new ArrayList<>());
 			}
+			model.getMother().setResponsible(responsible);
 			responsible.getMother().setPregnant(model.getMother().isPregnant());
 			responsible.getMother().getChildren().clear();
 			responsible.getMother().getChildren().addAll(model.getMother().getChildren() != null? setupChild(responsible.getMother(), model.getMother().getChildren()) : new ArrayList<>());
