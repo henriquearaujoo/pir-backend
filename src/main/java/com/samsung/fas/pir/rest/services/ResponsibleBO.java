@@ -16,8 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -94,12 +93,18 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 	Responsible setupResponsible(Responsible model, Community community, User agent) {
 		model.setCommunity(community);
 		model.setAgent(agent);
+
+		if (model.getChildren() != null) {
+			model.setChildren(setupChild(model, model.getChildren(), agent));
+		}
+
 		if (model.getMother() != null) {
 			model.getMother().setResponsible(model);
-			if (model.getChildren() != null) {
-				model.setChildren(setupChild(model, model.getChildren()));
+			if (model.getChildren() != null && model.getMother().getChildren() != null) {
+				model.getMother().setChildren(model.getMother().getChildren().stream().map(motherChild -> model.getChildren().stream().filter(respChild -> respChild.getMobileId() == motherChild.getMobileId()).findAny().orElse(motherChild)).collect(Collectors.toList()));
 			}
 		}
+
 		return model;
 	}
 
@@ -125,56 +130,53 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		if (model.getMother() != null) {
 			if (responsible.getMother() == null) {
 				responsible.setMother(model.getMother());
-				responsible.getMother().setChildren(new ArrayList<>());
 			}
 			model.getMother().setResponsible(responsible);
 			responsible.getMother().setPregnant(model.getMother().isPregnant());
+			responsible.getMother().getChildren().forEach(item -> item.setMother(null));
 			responsible.getMother().getChildren().clear();
-			responsible.getMother().getChildren().addAll(model.getMother().getChildren() != null? setupChild(responsible.getMother(), model.getMother().getChildren()) : new ArrayList<>());
+			responsible.getMother().getChildren().addAll(setupChild(responsible.getMother(), model.getMother().getChildren(), agent));
 		} else {
 			responsible.setMother(null);
 		}
 
 		if (model.getChildren() != null) {
-			responsible.getChildren().clear();
-			responsible.getChildren().addAll(setupChild(responsible, model.getChildren()));
+			List<UUID>	collection	= model.getChildren().stream().map(Base::getUuid).filter(Objects::nonNull).collect(Collectors.toList());
+			responsible.getChildren().forEach(item -> {
+				if (collection.stream().filter(uuid -> item.getUuid().compareTo(uuid) == 0).findAny().orElse(null) == null) {
+					item.setResponsible(null);
+				}
+			});
+			responsible.setChildren(new ArrayList<>(setupChild(responsible, model.getChildren(), agent)));
 		}
 
 		return responsible;
 	}
 
 	@SuppressWarnings("Duplicates")
-	private Collection<Child> setupChild(Responsible responsible, Collection<Child> collection) {
-		Collection<Child>		persisted		= getChildDAO().findAllIn(collection.stream().map(Base::getUuid).collect(Collectors.toList()));
+	private Collection<Child> setupChild(Responsible responsible, Collection<Child> collection, User agent) {
+		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
-			Child		child		= persisted.stream().filter(entity -> entity.getUuid().compareTo(item.getUuid()) == 0).findAny().orElse(null);
-			if (responsible.getChildren() == null) {
-				responsible.setChildren(new ArrayList<>());
-			}
+			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
+			Child		child		= uuid != null? getChildDAO().findOne(uuid) : agent != null? getChildDAO().findOne(item.getMobileId(), agent.getId()) : null;
 			if (child != null) {
-				responsible.getChildren().add(child);
 				return getChildBO().setupChild(child, item, responsible);
 			} else {
-				responsible.getChildren().add(item);
-				return getChildBO().setupChild(item, responsible);
+				return getChildBO().setupChild(item, responsible, agent);
 			}
 		}).collect(Collectors.toList());
 	}
 
 	@SuppressWarnings("Duplicates")
-	private Collection<Child> setupChild(Mother mother, Collection<Child> collection) {
-		Collection<Child>		persisted		= getChildDAO().findAllIn(collection.stream().map(Base::getUuid).collect(Collectors.toList()));
+	private Collection<Child> setupChild(Mother mother, Collection<Child> collection, User agent) {
+		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
-			Child		child		= persisted.stream().filter(entity -> entity.getUuid().compareTo(item.getUuid()) == 0).findAny().orElse(null);
-			if (mother.getChildren() == null) {
-				mother.setChildren(new ArrayList<>());
-			}
+			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
+			Child		child		= uuid != null? getChildDAO().findOne(uuid) : agent != null? getChildDAO().findOne(item.getMobileId(), agent.getId()) : null;
 			if (child != null) {
-				mother.getChildren().add(child);
 				return getChildBO().setupChild(child, item, mother);
 			} else {
-				mother.getChildren().add(item);
-				return getChildBO().setupChild(item, mother);
+				return getChildBO().setupChild(item, mother, agent);
 			}
 		}).collect(Collectors.toList());
 	}

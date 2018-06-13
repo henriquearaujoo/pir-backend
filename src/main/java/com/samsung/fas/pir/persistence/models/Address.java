@@ -1,26 +1,24 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.graph.annotations.Alias;
-import com.samsung.fas.pir.persistence.models.base.BaseNID;
+import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "address")
 @DynamicUpdate
 @DynamicInsert
 @Alias("Endereço")
-public class Address extends BaseNID implements Serializable {
+public class Address extends BaseID {
 	@Getter
 	@Setter
 	@MapsId
 	@OneToOne(optional = false)
-	@JoinColumn(name = "id")
 	@Alias("Usuário")
 	private 	User			user;
 

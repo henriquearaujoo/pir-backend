@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -126,18 +127,6 @@ public class Child extends BaseID {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "child", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@Alias("Visitas")
-	private 	Collection<Visit>			visits;
-
-	@Getter
-	@Setter
-	@ManyToMany
-	@Alias("Responsável")
-	private 	Collection<Responsible>		responsible;
-
-	@Getter
-	@Setter
 	@ManyToOne
 	@Alias("Mãe")
 	@JoinColumn(name = "mother_id")
@@ -145,7 +134,19 @@ public class Child extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn
 	private 	User						agent;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "child", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@Alias("Visitas")
+	private 	Collection<Visit>			visits						= new ArrayList<>();
+
+	@Getter
+	@Setter
+	@ManyToMany
+	@Alias("Responsável")
+	private 	Collection<Responsible>		responsible					= new ArrayList<>();
 }

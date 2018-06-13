@@ -48,25 +48,33 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		return null;
 	}
 
-	Child setupChild(Child model, Responsible responsible) {
-		return null;
-	}
-
-	Child setupChild(Child model, Mother mother) {
-		return null;
+	Child setupChild(Child model, Responsible responsible, User agent) {
+		model.getResponsible().add(responsible);
+		model.setAgent(agent);
+		return model;
 	}
 
 	Child setupChild(Child child, Child model, Responsible responsible) {
 		setupChild(child, model);
-		if (child.getResponsible().stream().filter(item -> item.getUuid().compareTo(responsible.getUuid()) == 0).findAny() == null) {
+		if (child.getResponsible().stream().filter(item -> item.getUuid().compareTo(responsible.getUuid()) == 0).findAny().orElse(null) == null) {
 			child.getResponsible().add(responsible);
 		}
 		return child;
 	}
 
+	Child setupChild(Child model, Mother mother, User agent) {
+		model.setMother(mother);
+		model.setAgent(agent);
+//		mother.getChildren().add(model);
+		return model;
+	}
+
 	Child setupChild(Child child, Child model, Mother mother) {
 		setupChild(child, model);
 		child.setMother(mother);
+//		if (mother.getChildren().stream().filter(item -> item.getUuid().compareTo(child.getUuid()) == 0).findAny().orElse(null) == null) {
+//			mother.getChildren().add(child);
+//		}
 		return child;
 	}
 

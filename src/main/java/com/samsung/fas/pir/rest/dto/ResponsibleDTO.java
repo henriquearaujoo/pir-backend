@@ -218,11 +218,15 @@ public class ResponsibleDTO {
 		model.setChildrenCount(getChildrenCount());
 		model.setCivilState(ECivilState.valueOf(civilState));
 		model.setCommunity(getCommunity() != null? getCommunity().getModel() : null);
+		model.setChildren(getChildren() != null? getChildren().stream().map(ChildDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 
 		if (getMother() != null) {
 			Mother modelMother = getMother().getModel();
 			modelMother.setResponsible(model);
 			model.setMother(modelMother);
+			if (model.getChildren() != null && model.getMother().getChildren() != null) {
+				model.getMother().setChildren(model.getMother().getChildren().stream().map(motherChild -> model.getChildren().stream().filter(respChild -> respChild.getMobileId() == motherChild.getMobileId()).findAny().orElse(motherChild)).collect(Collectors.toList()));
+			}
 		}
 
 		try {

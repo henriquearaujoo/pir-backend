@@ -12,5 +12,10 @@ public abstract class BaseID extends Base {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
-	private		long			id;
+	private		long			id			= -1;
+
+	@Getter
+	@Setter
+	@Column(name = "erased", columnDefinition = "DEFAULT FALSE")
+	private 	boolean			erased		= false;
 }

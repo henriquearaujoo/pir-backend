@@ -32,13 +32,19 @@ public class MotherDTO {
 	@JsonProperty("pregnancies")
 	private 	List<PregnancyDTO> 		pregnancies;
 
+	@Getter
+	@Setter
+	@JsonProperty("children")
+	private 	List<ChildDTO> 			children;
+
 	public MotherDTO() {
 		super();
 	}
 
 	public MotherDTO(Mother mother, boolean detailed) {
 		setPregnant(mother.isPregnant());
-		setPregnancies(mother.getPregnancies() != null? mother.getPregnancies().stream().map(item -> new PregnancyDTO(item, true)).collect(Collectors.toList()) : new ArrayList<>());
+		setPregnancies(mother.getPregnancies().stream().map(item -> new PregnancyDTO(item, true)).collect(Collectors.toList()));
+		setChildren(mother.getChildren().stream().map(item -> new ChildDTO(item, false)).collect(Collectors.toList()));
 		setResponsible(detailed? new ResponsibleDTO(mother.getResponsible(), false) : null);
 	}
 
@@ -46,6 +52,7 @@ public class MotherDTO {
 	public Mother getModel() {
 		Mother model = new Mother();
 		model.setPregnancies(pregnancies != null? pregnancies.stream().map(PregnancyDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
+		model.setChildren(getChildren() != null? getChildren().stream().map(ChildDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		model.setPregnant(isPregnant());
 		return model;
 	}

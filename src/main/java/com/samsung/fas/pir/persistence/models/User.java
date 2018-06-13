@@ -61,7 +61,7 @@ public class User extends BaseID implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "user", orphanRemoval = true)
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
 	@Alias("Conta")
 	private 	Account 				account;
 

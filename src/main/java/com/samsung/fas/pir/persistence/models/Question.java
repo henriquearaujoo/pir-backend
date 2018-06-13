@@ -38,8 +38,8 @@ public class Question extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "conclusion_id")
 	@Alias("Conclusão")
 	private 	Conclusion				conclusion;
 

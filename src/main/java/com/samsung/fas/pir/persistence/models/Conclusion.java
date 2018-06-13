@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.graph.annotations.Alias;
-import com.samsung.fas.pir.persistence.models.base.BaseNID;
+import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -15,12 +15,11 @@ import java.util.Set;
 @DynamicUpdate
 @DynamicInsert
 @Alias("Conclusão")
-public class Conclusion extends BaseNID {
+public class Conclusion extends BaseID {
 	@Getter
 	@Setter
 	@MapsId
-	@OneToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
+	@OneToOne(optional = false)
 	@Alias("Capítulo")
 	private 	Chapter			chapter;
 

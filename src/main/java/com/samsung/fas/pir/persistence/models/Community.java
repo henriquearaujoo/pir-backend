@@ -178,7 +178,7 @@ public class Community extends BaseID {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Alias("Responsáveis")
 	private 	Collection<Responsible>		responsible			= new ArrayList<>();
 }

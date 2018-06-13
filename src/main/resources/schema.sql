@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS profile (
 );
 
 CREATE TABLE IF NOT EXISTS account (
-	id                  		BIGINT       NOT NULL	CONSTRAINT account_pkey	PRIMARY KEY	CONSTRAINT fk_user	REFERENCES "user",
+	user_id              		BIGINT       NOT NULL	CONSTRAINT account_pkey	PRIMARY KEY	CONSTRAINT fk_user	REFERENCES "user",
 	credentials_non_expired BOOLEAN      NOT NULL,
 	enabled             		BOOLEAN      NOT NULL,
 	account_non_expired     BOOLEAN      NOT NULL,

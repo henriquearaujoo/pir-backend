@@ -53,7 +53,7 @@ INSERT INTO profile_pages (can_create, can_delete, can_read, can_update, page_id
 ON CONFLICT DO NOTHING;
 
 /* Account */
-INSERT INTO account (id, credentials_non_expired, enabled, account_non_expired, account_non_locked, password, login, profile_id)
+INSERT INTO account (user_id, credentials_non_expired, enabled, account_non_expired, account_non_locked, password, login, profile_id)
 VALUES((SELECT id FROM "user" WHERE name = 'Administrator'), TRUE, TRUE, TRUE, TRUE, '$2a$10$DHiwEO0otW0exjRhcsuhj.mJMUxZ2oAtQ/3SxVEXlETFd8WBn0Hqy', 'admin', (SELECT id FROM public.profile WHERE title = 'Administrator'))
 ON CONFLICT DO NOTHING;
 

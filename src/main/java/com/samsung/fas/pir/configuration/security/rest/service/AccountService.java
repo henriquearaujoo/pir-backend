@@ -74,7 +74,7 @@ public class AccountService implements UserDetailsService {
 
 		try {
 			prepository.save(precover);
-			emailservice.sendSimpleMessage(email, "noreply@itn.com.br", "Recuperar Senha", content);
+			emailservice.sendSimpleMessage(email, "noreply@timeitn.com.br", "Recuperar Senha", content);
 			return "email.sent";
 		} catch (MessagingException | IOException | TemplateException e) {
 			e.printStackTrace();

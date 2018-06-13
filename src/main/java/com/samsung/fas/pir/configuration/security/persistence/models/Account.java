@@ -26,7 +26,6 @@ public class Account implements UserDetails {
 	@Setter
 	@MapsId
 	@OneToOne(optional = false)
-	@JoinColumn(name = "id")
 	private 	User				user;
 
 	@Getter

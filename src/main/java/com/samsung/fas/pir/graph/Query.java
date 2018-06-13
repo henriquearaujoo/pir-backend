@@ -11,7 +11,6 @@ import com.samsung.fas.pir.graph.dto.MapDTO;
 import com.samsung.fas.pir.graph.dto.PathDTO;
 import com.samsung.fas.pir.graph.dto.ResponseDTO;
 import com.samsung.fas.pir.persistence.models.base.BaseID;
-import com.samsung.fas.pir.persistence.models.base.BaseNID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,18 +51,7 @@ public class Query {
 
 		query(new JPAQuery<>(manager), root, null, grouper, map);
 
-		map = map.entrySet().stream().sorted(Map.Entry.comparingByKey((keyA, keyB) -> {
-			if (keyA instanceof BaseNID && keyB instanceof BaseNID) {
-				return (int) (((BaseNID) keyA).getId() - ((BaseNID) keyB).getId());
-			} else if (keyA instanceof BaseNID && keyB instanceof BaseID) {
-				return (int) (((BaseNID) keyA).getId() - ((BaseID) keyB).getId());
-			} else if (keyA instanceof BaseID && keyB instanceof BaseNID) {
-				return (int) (((BaseID) keyA).getId() - ((BaseNID) keyB).getId());
-			} else if (keyA instanceof BaseID && keyB instanceof BaseID) {
-				return (int) (((BaseID) keyA).getId() - ((BaseID) keyB).getId());
-			}
-			return 0;
-		})).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (o, n) -> o, LinkedHashMap::new));
+		map = map.entrySet().stream().sorted(Map.Entry.comparingByKey((keyA, keyB) -> (int) (((BaseID) keyA).getId() - ((BaseID) keyB).getId()))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (o, n) -> o, LinkedHashMap::new));
 
 		map.forEach((key, value) -> {
 			try {
