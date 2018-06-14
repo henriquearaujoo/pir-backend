@@ -13,4 +13,8 @@ public class PregnancyDAO extends BaseDAO<Pregnancy, Long, IPregnancy, QPregnanc
 	public PregnancyDAO(IPregnancy repository) {
 		super(repository);
 	}
+
+	public Pregnancy findOne(long mobile, long agent) {
+		return getRepository().findByMobileIdAndAgentId(mobile, agent);
+	}
 }

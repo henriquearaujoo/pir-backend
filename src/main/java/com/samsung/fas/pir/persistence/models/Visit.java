@@ -19,7 +19,7 @@ import java.util.Date;
 public class Visit extends BaseID {
 	@Getter
 	@Setter
-	@Transient
+	@Column(name = "mobile_id")
 	private 	long			mobileId;
 
 	@Getter
@@ -90,7 +90,7 @@ public class Visit extends BaseID {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "visit", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "visit", cascade = CascadeType.ALL)
 	@Alias("Respostas")
 	private 	Collection<Answer>		answers;
 }

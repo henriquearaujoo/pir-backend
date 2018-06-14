@@ -13,6 +13,8 @@ import javax.annotation.Nonnull;
 
 @Repository
 public interface IVisit extends IBaseRepository<Visit, Long, QVisit> {
+	Visit findByMobileIdAndAgentId(long mobileID, long agentID);
+
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QVisit root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

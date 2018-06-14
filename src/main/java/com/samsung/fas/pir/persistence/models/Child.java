@@ -140,7 +140,7 @@ public class Child extends BaseID {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "child", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
 	@Alias("Visitas")
 	private 	Collection<Visit>			visits						= new ArrayList<>();
 

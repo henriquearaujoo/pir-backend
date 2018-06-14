@@ -13,6 +13,8 @@ import javax.annotation.Nonnull;
 
 @Repository
 public interface IPregnancy extends IBaseRepository<Pregnancy, Long, QPregnancy> {
+	Pregnancy findByMobileIdAndAgentId(long mobileID, long agentID);
+
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QPregnancy root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

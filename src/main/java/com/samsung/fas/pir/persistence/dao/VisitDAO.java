@@ -13,4 +13,8 @@ public class VisitDAO extends BaseDAO<Visit, Long, IVisit, QVisit> {
 	public VisitDAO(IVisit repository) {
 		super(repository);
 	}
+
+	public Visit findOne(long mobileID, long agentID) {
+		return getRepository().findByMobileIdAndAgentId(mobileID, agentID);
+	}
 }

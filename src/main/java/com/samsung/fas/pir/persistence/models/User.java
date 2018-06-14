@@ -11,6 +11,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -82,24 +83,24 @@ public class User extends BaseID implements Serializable {
 	@Setter
 	@OneToMany(mappedBy = "agent")
 	@Alias("Responsáveis")
-	private 	Collection<Responsible>	responsible;
+	private 	Collection<Responsible>	responsible			= new ArrayList<>();
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "agent")
 	@Alias("Agente - Crianças")
-	private 	Collection<Child>		children;
+	private 	Collection<Child>		children			= new ArrayList<>();
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "agent")
 	@Alias("Agente - Mães - Gestações")
-	private 	Collection<Pregnancy>	pregnancies;
+	private 	Collection<Pregnancy>	pregnancies			= new ArrayList<>();
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "agent")
 	@Alias("Visitas")
-	private		Collection<Visit>		visits;
+	private		Collection<Visit>		visits				= new ArrayList<>();
 	// endregion
 }

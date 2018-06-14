@@ -43,8 +43,8 @@ public class MotherDTO {
 
 	public MotherDTO(Mother mother, boolean detailed) {
 		setPregnant(mother.isPregnant());
-		setPregnancies(mother.getPregnancies().stream().map(item -> new PregnancyDTO(item, true)).collect(Collectors.toList()));
-		setChildren(mother.getChildren().stream().map(item -> new ChildDTO(item, false)).collect(Collectors.toList()));
+		setPregnancies(mother.getPregnancies().stream().map(item -> new PregnancyDTO(item, false)).collect(Collectors.toList()));
+		setChildren(detailed? mother.getChildren().stream().map(item -> new ChildDTO(item, false)).collect(Collectors.toList()) : null);
 		setResponsible(detailed? new ResponsibleDTO(mother.getResponsible(), false) : null);
 	}
 

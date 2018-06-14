@@ -4,10 +4,13 @@ import com.samsung.fas.pir.graph.annotations.Alias;
 import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -26,6 +29,11 @@ public class Pregnancy extends BaseID {
 
 	@Getter
 	@Setter
+	@Column(name = "mobile_id")
+	private		long					mobileId;
+
+	@Getter
+	@Setter
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false, nullable = false)
 	@Alias("Registrado Em")
@@ -33,14 +41,14 @@ public class Pregnancy extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false)
+	@ManyToOne
 	@JoinColumn
 	@Alias("Agente")
 	private 		User				agent;
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "pregnancy", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@OneToMany(mappedBy = "pregnancy", cascade = CascadeType.ALL)
 	@Alias("Visitas")
-	private			Collection<Visit>	visits;
+	private			Collection<Visit>	visits			= new ArrayList<>();
 }

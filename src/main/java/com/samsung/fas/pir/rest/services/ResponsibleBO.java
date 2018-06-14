@@ -39,13 +39,23 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)
+	private		PregnancyDAO	pregnancyDAO;
+
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
+	private		PregnancyBO		pregnancyBO;
+
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
 	private		ChildBO			childBO;
 
 	@Autowired
-	public ResponsibleBO(ResponsibleDAO dao, ChildDAO childDAO, ChildBO childBO) {
+	public ResponsibleBO(ResponsibleDAO dao, ChildDAO childDAO, PregnancyDAO pregnancyDAO, PregnancyBO pregnancyBO, ChildBO childBO) {
 		super(dao);
 		setChildDAO(childDAO);
+		setPregnancyDAO(pregnancyDAO);
 		setChildBO(childBO);
+		setPregnancyBO(pregnancyBO);
 	}
 
 	public Collection<ResponsibleDTO> findAllResponsible() {
@@ -103,6 +113,9 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 			if (model.getChildren() != null && model.getMother().getChildren() != null) {
 				model.getMother().setChildren(model.getMother().getChildren().stream().map(motherChild -> model.getChildren().stream().filter(respChild -> respChild.getMobileId() == motherChild.getMobileId()).findAny().orElse(motherChild)).collect(Collectors.toList()));
 			}
+			if (model.getMother().getPregnancies() != null) {
+				model.getMother().getPregnancies().forEach(item -> item.setPregnant(model.getMother()));
+			}
 		}
 
 		return model;
@@ -136,6 +149,8 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 			responsible.getMother().getChildren().forEach(item -> item.setMother(null));
 			responsible.getMother().getChildren().clear();
 			responsible.getMother().getChildren().addAll(setupChild(responsible.getMother(), model.getMother().getChildren(), agent));
+			responsible.getMother().getPregnancies().clear();
+			responsible.getMother().getPregnancies().addAll(setupPregnancy(responsible.getMother(), model.getMother().getPregnancies(), agent));
 		} else {
 			responsible.setMother(null);
 		}
@@ -151,6 +166,19 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		}
 
 		return responsible;
+	}
+
+	private Collection<Pregnancy> setupPregnancy(Mother mother, Collection<Pregnancy> collection, User agent) {
+		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
+		return collection.stream().map(item -> {
+			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
+			Pregnancy	pregnancy	= uuid != null? getPregnancyDAO().findOne(uuid) : agent != null? getPregnancyDAO().findOne(item.getMobileId(), agent.getId()) : null;
+			if (pregnancy != null) {
+				return getPregnancyBO().setupPregnancy(pregnancy, item, mother, agent);
+			} else {
+				return getPregnancyBO().setupPregnancy(item, mother, agent);
+			}
+		}).collect(Collectors.toList());
 	}
 
 	@SuppressWarnings("Duplicates")

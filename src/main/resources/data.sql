@@ -33,7 +33,8 @@ VALUES
 	('Registro de Formulário', 'formularios/registro'),
 	('Detalhes do Formulário', 'formularios/detalhes'),
 	('Dashboard', 'dashboard'),
-	('Registro de Capítulos', 'capitulos/registro')
+	('Registro de Capítulos', 'capitulos/registro'),
+	('Relatório', 'relatorio')
 ON CONFLICT DO NOTHING;
 
 /* User */
