@@ -1,13 +1,12 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.persistence.models.Rule;
+import com.samsung.fas.pir.persistence.models.Pregnancy;
 import com.samsung.fas.pir.rest.controllers.base.BController;
-import com.samsung.fas.pir.rest.dto.RuleDTO;
-import com.samsung.fas.pir.rest.services.RuleBO;
+import com.samsung.fas.pir.rest.dto.PregnancyDTO;
+import com.samsung.fas.pir.rest.services.PregnancyBO;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.MediaType;
@@ -19,24 +18,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.Collection;
-
-@Api(value = "Rules", description = "REST Controller for Rules", tags = "RULES")
-@RequestMapping(value = "/rest/rules", produces = MediaType.APPLICATION_JSON_VALUE)
+@Api(value = "Pregnancy", description = "REST Controller for Pregnancies", tags = "PREGNANCIES")
+@RequestMapping(value = "/rest/mothers/pregnancies", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
-public class RulesController extends BController<RuleBO, RuleDTO> {
+public class PregnancyController extends BController<PregnancyBO, PregnancyDTO> {
 	@Autowired
-	public RulesController(RuleBO service) {
+	public PregnancyController(PregnancyBO service) {
 		super(service);
 	}
 
-	@RequestMapping(method= RequestMethod.GET, value="/search")
-	public ResponseEntity<Collection<RuleDTO>> search(@QuerydslPredicate(root = Rule.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	@RequestMapping(method= RequestMethod.GET, path = "/search")
+	public ResponseEntity<?> search(@QuerydslPredicate(root = Pregnancy.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(getService().findAll(predicate, details));
 	}
 
-	@RequestMapping(method= RequestMethod.GET, value="/search/page")
-	public ResponseEntity<Page<RuleDTO>> search(@QuerydslPredicate(root = Rule.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+	@RequestMapping(method= RequestMethod.GET, path = "/search/page")
+	public ResponseEntity<?> search(@QuerydslPredicate(root = Pregnancy.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(getService().findAll(predicate, pageable, details));
 	}
 }

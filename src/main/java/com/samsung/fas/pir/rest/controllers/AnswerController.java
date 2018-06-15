@@ -1,10 +1,8 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.persistence.models.Alternative;
 import com.samsung.fas.pir.persistence.models.Answer;
 import com.samsung.fas.pir.rest.controllers.base.BController;
-import com.samsung.fas.pir.rest.dto.AlternativeDTO;
 import com.samsung.fas.pir.rest.dto.AnswerDTO;
 import com.samsung.fas.pir.rest.services.AnswerBO;
 import io.swagger.annotations.Api;

@@ -12,10 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -39,13 +36,13 @@ public abstract class BaseDAO<T, ID extends Serializable, TR extends IBaseReposi
 	}
 
 	@Override
-	public Set<T> findAll() {
-		return StreamSupport.stream(repository.findAll(new Sort(Sort.Direction.ASC, "id")).spliterator(), false).collect(Collectors.toSet());
+	public Collection<T> findAll() {
+		return StreamSupport.stream(repository.findAll(new Sort(Sort.Direction.ASC, "id")).spliterator(), false).collect(Collectors.toList());
 	}
 
 	@Override
-	public Set<T> findAll(Predicate predicate) {
-		return StreamSupport.stream(repository.findAll(predicate).spliterator(), false).collect(Collectors.toSet());
+	public Collection<T> findAll(Predicate predicate) {
+		return StreamSupport.stream(repository.findAll(predicate).spliterator(), false).collect(Collectors.toList());
 	}
 
 	@Override
@@ -64,7 +61,7 @@ public abstract class BaseDAO<T, ID extends Serializable, TR extends IBaseReposi
 	}
 
 	@Override
-	public List<T> save(Iterable<T> models) {
+	public Collection<T> save(Iterable<T> models) {
 		return StreamSupport.stream(repository.saveAll(models).spliterator(), false).collect(Collectors.toList());
 	}
 

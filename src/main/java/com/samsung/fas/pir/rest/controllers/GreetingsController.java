@@ -1,7 +1,6 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.persistence.dao.GreetingsDAO;
 import com.samsung.fas.pir.persistence.models.Greetings;
 import com.samsung.fas.pir.rest.controllers.base.BController;
 import com.samsung.fas.pir.rest.dto.GreetingsDTO;

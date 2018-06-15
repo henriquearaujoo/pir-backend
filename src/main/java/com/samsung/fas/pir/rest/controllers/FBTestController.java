@@ -1,9 +1,7 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import io.swagger.annotations.Api;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @Api(value = "Firebase Test", description = "Firebase Test Controller", tags = "FIREBASE")

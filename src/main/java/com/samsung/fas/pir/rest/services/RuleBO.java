@@ -1,11 +1,11 @@
 package com.samsung.fas.pir.rest.services;
 
+import com.samsung.fas.pir.configuration.security.persistence.models.Account;
+import com.samsung.fas.pir.configuration.security.persistence.models.Authority;
 import com.samsung.fas.pir.persistence.dao.RuleDAO;
 import com.samsung.fas.pir.persistence.models.Page;
 import com.samsung.fas.pir.persistence.models.Profile;
 import com.samsung.fas.pir.persistence.models.Rule;
-import com.samsung.fas.pir.configuration.security.persistence.models.Account;
-import com.samsung.fas.pir.configuration.security.persistence.models.Authority;
 import com.samsung.fas.pir.rest.dto.RuleDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;

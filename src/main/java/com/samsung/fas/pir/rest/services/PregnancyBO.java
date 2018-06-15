@@ -14,7 +14,6 @@ import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
@@ -60,16 +59,14 @@ public class PregnancyBO extends BaseBO<Pregnancy, PregnancyDAO, PregnancyDTO, L
 		model.setAgent(agent);
 		model.setPregnant(mother);
 		model.setRegisteredAt(new Date());
-		model.getVisits().clear();
-		model.getVisits().addAll(setupVisit(model, model.getVisits(), agent));
+		model.setVisits(setupVisit(model, model.getVisits(), agent));
 		return model;
 	}
 
 	Pregnancy setupPregnancy(Pregnancy pregnancy, Pregnancy model, Mother mother, User agent) {
 		pregnancy.setRegisteredAt(model.getRegisteredAt());
 		pregnancy.setPregnant(mother);
-		pregnancy.getVisits().clear();
-		pregnancy.getVisits().addAll(setupVisit(pregnancy, model.getVisits(), agent));
+		pregnancy.setVisits(setupVisit(pregnancy, model.getVisits(), agent));
 		return pregnancy;
 	}
 
@@ -78,9 +75,9 @@ public class PregnancyBO extends BaseBO<Pregnancy, PregnancyDAO, PregnancyDTO, L
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
-			Visit		visit		= uuid != null? getVisitDAO().findOne(uuid) : agent != null? getVisitDAO().findOne(item.getMobileId(), agent.getId()) : null;
+			Visit		visit		= uuid != null? getVisitDAO().findOne(uuid) : null;
 			if (visit != null) {
-				return getVisitBO().setupVisit(visit, item, pregnancy);
+				return getVisitBO().setupVisit(visit, item, pregnancy, agent);
 			} else {
 				return getVisitBO().setupVisit(item, pregnancy, agent);
 			}

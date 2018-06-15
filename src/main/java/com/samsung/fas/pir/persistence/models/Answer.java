@@ -18,7 +18,7 @@ public class Answer extends BaseID {
 	@Getter
 	@Setter
 	@Transient
-	private 	long			tempID;
+	private 	long			mobileId;
 
 	@Getter
 	@Setter

@@ -1,7 +1,6 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.persistence.models.User;
 import com.samsung.fas.pir.persistence.models.Visit;
 import com.samsung.fas.pir.rest.controllers.base.BController;
 import com.samsung.fas.pir.rest.dto.VisitDTO;

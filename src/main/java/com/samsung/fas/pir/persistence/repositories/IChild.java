@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @Repository
 public interface IChild extends IBaseRepository<Child, Long, QChild> {
-	Child findByMobileIdAndAgentId(long mobile, long agent);
+//	Child findByMobileIdAndAgentId(long mobile, long agent);
 	Collection<Child> findAllByUuidIn(Collection<UUID> collection);
 
 	@Override

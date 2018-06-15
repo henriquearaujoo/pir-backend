@@ -16,7 +16,6 @@ import java.util.Date;
 @Entity
 @Table(name = "child", uniqueConstraints = {
 	@UniqueConstraint(columnNames = {"id", "mother_id"}, name = "child_mother"),
-	@UniqueConstraint(columnNames = {"mobile_id", "agent_id"}, name = "agent_child"),
 })
 @DynamicUpdate
 @DynamicInsert
@@ -24,7 +23,7 @@ import java.util.Date;
 public class Child extends BaseID {
 	@Getter
 	@Setter
-	@Column(name = "mobile_id")
+	@Transient
 	private		long						mobileId;
 
 	@Getter

@@ -18,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -129,9 +130,15 @@ public class ChildDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("visits")
+	@Valid
+	private		List<VisitDTO>				visits;
+
+	@Getter
+	@Setter
 	@JsonProperty("responsible")
 	@Valid
-	private		Collection<ResponsibleDTO>	responsible;
+	private 	List<ResponsibleDTO> 		responsible;
 
 	public ChildDTO() {
 		super();
@@ -158,6 +165,7 @@ public class ChildDTO {
 		setHasRelationDifficulties(child.isRelationDifficulties());
 		setMother(detailed? child.getMother() != null? new MotherDTO(child.getMother(), false) : null : null);
 		setResponsible(detailed? child.getResponsible().stream().map(responsible -> new ResponsibleDTO(responsible, false)).collect(Collectors.toList()) : null);
+		setVisits(child.getVisits() != null? child.getVisits().stream().map(item -> new VisitDTO(item, false)).collect(Collectors.toList()) : new ArrayList<>());
 	}
 
 	@JsonIgnore
@@ -182,6 +190,7 @@ public class ChildDTO {
 		model.setRelationDifficulties(isHasRelationDifficulties());
 		model.setResponsible(getResponsible() != null? getResponsible().stream().map(ResponsibleDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		model.setMother(getMother() != null? getMother().getModel() : null);
+		model.setVisits(getVisits() != null? getVisits().stream().map(VisitDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 
 		try {
 			model.setBirth(new SimpleDateFormat("dd-MM-yyyy").parse(getBirth()));

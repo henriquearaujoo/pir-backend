@@ -15,7 +15,6 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public abstract class BaseBO<T, DAO extends IBaseDAO<T, ID>, DTO, ID extends Serializable> implements IBaseBO<T, DTO, ID> {
 	@Getter(AccessLevel.PROTECTED)

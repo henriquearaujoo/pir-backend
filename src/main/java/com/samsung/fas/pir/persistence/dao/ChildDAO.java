@@ -12,9 +12,9 @@ import java.util.UUID;
 
 @Service
 public class ChildDAO extends BaseDAO<Child, Long, IChild, QChild> {
-	public Child findOne(long mobile, long agent) {
-		return getRepository().findByMobileIdAndAgentId(mobile, agent);
-	}
+//	public Child findOne(long mobile, long agent) {
+//		return getRepository().findByMobileIdAndAgentId(mobile, agent);
+//	}
 
 	public Collection<Child> findAllIn(Collection<UUID> collection) {
 		return getRepository().findAllByUuidIn(collection);

@@ -25,11 +25,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private	final 	CookieCsrfTokenRepository	repository;
 
 	@Autowired
-	public SecurityConfiguration(AuthEntryPoint entry,
-								 JWToken token,
-								 AccountService service,
-								 AuthenticationManagerBuilder builder,
-								 CookieCsrfTokenRepository repository) throws Exception {
+	public SecurityConfiguration(AuthEntryPoint entry, JWToken token, AccountService service, AuthenticationManagerBuilder builder, CookieCsrfTokenRepository repository) throws Exception {
 		this.service	= service;
 		this.entry		= entry;
 		this.token		= token;
@@ -40,7 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.antMatchers("/rest/**").permitAll()
+		.antMatchers("/rest/**").authenticated()
 		.and()
 		.addFilterBefore(new TokenAuthenticationFilter(token, service), BasicAuthenticationFilter.class)
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

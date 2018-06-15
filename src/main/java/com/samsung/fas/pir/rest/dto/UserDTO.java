@@ -2,6 +2,7 @@ package com.samsung.fas.pir.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.User;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 
 @DTO(User.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
 	@Getter
 	@Setter
@@ -112,16 +113,16 @@ public class UserDTO {
 		setUuid(user.getUuid());
 		setName(user.getName());
 		setEmail(user.getEmail());
-		setLogin(user.getAccount().getUsername());
 		setPassword(null);
 		setActive(user.getAccount().isEnabled() && user.getAccount().isAccountNonExpired() && user.getAccount().isAccountNonLocked() && user.getAccount().isCredentialsNonExpired());
-		setPerson(user.getPerson() != null? new PersonDTO(user.getPerson(), false) : null);
-		setEntity(user.getEntity() != null? new EntityDTO(user.getEntity(), false) : null);
-		setProfile(new ProfileDTO(user.getAccount().getProfile(), false));
-		setAddress(user.getAddress() != null? new AddressDTO(user.getAddress(), false) : null);
 		setLatidute(user.getLatitude());
 		setLongitude(user.getLongitude());
-		setVisits(user.getVisits() != null? user.getVisits().stream().map(item -> new VisitDTO(item, false)).collect(Collectors.toList()) : null);
+		setPerson(detailed && user.getPerson() != null? new PersonDTO(user.getPerson(), false) : null);
+		setEntity(detailed && user.getEntity() != null? new EntityDTO(user.getEntity(), false) : null);
+		setAddress(detailed? user.getAddress() != null? new AddressDTO(user.getAddress(), false) : null : null);
+		setProfile(detailed? new ProfileDTO(user.getAccount().getProfile(), false) : null);
+		setLogin(detailed? user.getAccount().getUsername() : null);
+		setVisits(detailed && user.getVisits() != null? user.getVisits().stream().map(item -> new VisitDTO(item, false)).collect(Collectors.toList()) : null);
 	}
 
 	@JsonIgnore

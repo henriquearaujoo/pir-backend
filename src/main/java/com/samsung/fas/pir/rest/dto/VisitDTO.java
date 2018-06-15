@@ -98,7 +98,7 @@ public class VisitDTO {
 		setAnswers(visit.getAnswers() != null? visit.getAnswers().stream().map(answer -> new AnswerDTO(answer, true)).collect(Collectors.toList()) : null);
 		setChapterUUID(visit.getChapter().getUuid());
 		setFormUUID(visit.getForm() != null? visit.getForm().getUuid() : null);
-		setChild(visit.getChild() != null? new ChildDTO(visit.getChild(), false) : null);
+		setChild(detailed && visit.getChild() != null? new ChildDTO(visit.getChild(), false) : null);
 		setPregnancy(detailed && visit.getPregnancy() != null? new PregnancyDTO(visit.getPregnancy(), false) : null);
 	}
 

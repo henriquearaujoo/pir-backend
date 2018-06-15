@@ -29,12 +29,6 @@ public class ResponsibleDAO extends BaseDAO<Responsible, Long, IResponsible, QRe
 		this.emanager = emanager;
 	}
 
-	@Deprecated
-	public Responsible findOne(long mobile, long agent) {
-//		return getRepository().findByMobileIdAndAgentId(mobile, agent);
-		return null;
-	}
-
 	public Collection<Responsible> findAllByMobileIdIn(Collection<Long> collection) {
 		return getRepository().findAllByMobileIdIn(collection);
 	}

@@ -23,7 +23,7 @@ public class Pregnancy extends BaseID {
 	@Getter
 	@Setter
 	@ManyToOne(optional = false)
-	@JoinColumn
+	@JoinColumn(name = "mother_id")
 	@Alias("Mãe")
 	private			Mother				pregnant;
 
@@ -50,5 +50,5 @@ public class Pregnancy extends BaseID {
 	@Setter
 	@OneToMany(mappedBy = "pregnancy", cascade = CascadeType.ALL)
 	@Alias("Visitas")
-	private			Collection<Visit>	visits			= new ArrayList<>();
+	private			Collection<Visit>	visits				= new ArrayList<>();
 }

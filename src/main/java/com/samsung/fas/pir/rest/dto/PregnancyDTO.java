@@ -9,6 +9,7 @@ import com.samsung.fas.pir.persistence.models.Pregnancy;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,12 +23,12 @@ public class PregnancyDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private 	UUID 		uuid;
+	private 	UUID 			uuid;
 
 	@Getter
 	@Setter
 	@JsonProperty("external_id")
-	private		long		tempID;
+	private		long			tempID;
 
 	@Getter
 	@Setter
@@ -47,6 +48,7 @@ public class PregnancyDTO {
 	@Getter
 	@Setter
 	@JsonProperty("visits")
+	@Valid
 	private		List<VisitDTO>	visits;
 
 	public PregnancyDTO() {
@@ -56,10 +58,10 @@ public class PregnancyDTO {
 	public PregnancyDTO(Pregnancy entity, boolean detailed) {
 		setUuid(entity.getUuid());
 		setTempID(entity.getMobileId());
-		setMother(detailed? new MotherDTO(entity.getPregnant(), false) : null);
 		setRegisteredAt(entity.getRegisteredAt());
-		setAgent(entity.getAgent() != null? new UserDTO(entity.getAgent(), true) : null);
 		setVisits(entity.getVisits() != null? entity.getVisits().stream().map(item -> new VisitDTO(item, false)).collect(Collectors.toList()) : new ArrayList<>());
+		setMother(detailed? new MotherDTO(entity.getPregnant(), false) : null);
+		setAgent(entity.getAgent() != null? new UserDTO(entity.getAgent(), false) : null);
 	}
 
 	@JsonIgnore
