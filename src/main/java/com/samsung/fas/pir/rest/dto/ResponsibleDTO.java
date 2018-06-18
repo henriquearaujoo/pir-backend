@@ -152,14 +152,11 @@ public class ResponsibleDTO {
 	@Getter
 	@Setter
 	@JsonProperty("community_id")
-	@NotNull(message = "city.id.missing")
 	private 	UUID			communityUUID;
 
 	@Getter
 	@Setter
 	@JsonProperty("community")
-	@NotNull(message = "community.missing")
-	@Valid
 	private 	CommunityDTO	community;
 
 	public ResponsibleDTO() {
@@ -191,8 +188,8 @@ public class ResponsibleDTO {
 		setChildrenCount(responsible.getChildrenCount());
 		setCivilState(responsible.getCivilState().toString());
 		setMother(responsible.getMother() != null? new MotherDTO(responsible.getMother(), device, detailed) : null);
-		setCommunity(detailed? new CommunityDTO(responsible.getCommunity(), device, false) : null);
-		setChildren(responsible.getChildren() != null? responsible.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>());
+		setCommunity(new CommunityDTO(responsible.getCommunity(), device, false));
+		setChildren(!device.isNormal()? responsible.getChildren() != null? responsible.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>() : null);
 	}
 
 	@JsonIgnore

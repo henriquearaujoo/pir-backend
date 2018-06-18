@@ -216,7 +216,7 @@ public class CommunityDTO {
 	@JsonIgnore
 	public Community getModel() {
 		Community model = new Community();
-		model.setMobileId(getTempID());
+		model.setMobileId(getTempID() != null? getTempID() : 0L);
 		model.setUuid(getUuid());
 		model.setName(getName());
 		model.setWaterSupply(getWaterSupply());

@@ -44,9 +44,9 @@ public class MotherDTO {
 
 	public MotherDTO(Mother mother, Device device, boolean detailed) {
 		setPregnant(mother.isPregnant());
-		setPregnancies(mother.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()));
-		setChildren(detailed? mother.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()) : null);
-		setResponsible(detailed? new ResponsibleDTO(mother.getResponsible(), device, false) : null);
+		setPregnancies(detailed || !device.isNormal()? mother.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()) : null);
+		setChildren(detailed || !device.isNormal()? mother.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()) : null);
+//		setResponsible(detailed? new ResponsibleDTO(mother.getResponsible(), device, false) : null);
 	}
 
 	@JsonIgnore

@@ -3,6 +3,7 @@ package com.samsung.fas.pir.rest.services;
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.persistence.dao.*;
+import com.samsung.fas.pir.persistence.enums.EProfileType;
 import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.ResponsibleDTO;
@@ -32,14 +33,6 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)
-	private		UserDAO 		userDAO;
-
-	@Getter(AccessLevel.PRIVATE)
-	@Setter(AccessLevel.PRIVATE)
-	private		MotherDAO		motherDAO;
-
-	@Getter(AccessLevel.PRIVATE)
-	@Setter(AccessLevel.PRIVATE)
 	private		PregnancyDAO	pregnancyDAO;
 
 	@Getter(AccessLevel.PRIVATE)
@@ -51,12 +44,13 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 	private		ChildBO			childBO;
 
 	@Autowired
-	public ResponsibleBO(ResponsibleDAO dao, ChildDAO childDAO, PregnancyDAO pregnancyDAO, PregnancyBO pregnancyBO, ChildBO childBO) {
+	public ResponsibleBO(ResponsibleDAO dao, ChildDAO childDAO, PregnancyDAO pregnancyDAO, CommunityDAO communityDAO, PregnancyBO pregnancyBO, ChildBO childBO) {
 		super(dao);
 		setChildDAO(childDAO);
 		setPregnancyDAO(pregnancyDAO);
 		setChildBO(childBO);
 		setPregnancyBO(pregnancyBO);
+		setCommunityDAO(communityDAO);
 	}
 
 	public Collection<ResponsibleDTO> findAllResponsible(Device device) {
@@ -87,8 +81,8 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 	public ResponsibleDTO update(ResponsibleDTO update, Device device, UserDetails account) {
 		Responsible		model		= update.getModel();
 		Responsible		responsible	= model.getUuid() != null? getDao().findOne(model.getUuid()) : null;
-		Community		community	= getCommunityDAO().findOne(update.getCommunityUUID());
-		return responsible != null? new ResponsibleDTO(getDao().save(setupResponsible(responsible, community, ((Account) account).getUser())), device, true) : new ResponsibleDTO(getDao().save(setupResponsible(model, community, ((Account) account).getUser())), device, true);
+		Community		community	= getCommunityDAO().findOne(model.getCommunity().getUuid());
+		return responsible != null? new ResponsibleDTO(getDao().save(setupResponsible(responsible, model, community, ((Account) account).getUser())), device, true) : new ResponsibleDTO(getDao().save(setupResponsible(model, community, ((Account) account).getUser())), device, true);
 	}
 
 	@Override
@@ -139,7 +133,8 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		responsible.setHasWaterTreatment(model.isHasWaterTreatment());
 		responsible.setObservations(model.getObservations());
 		responsible.setMobileId(model.getMobileId());
-		responsible.setAgent(agent);
+		responsible.setChildrenCount(model.getChildrenCount());
+		responsible.setAgent(agent.getAccount().getProfile().getType().compareTo(EProfileType.AGENT) == 0? agent : responsible.getAgent());
 
 		if (model.getMother() != null) {
 			if (responsible.getMother() == null) {
