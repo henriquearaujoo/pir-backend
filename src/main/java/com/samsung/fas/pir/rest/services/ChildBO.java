@@ -1,6 +1,10 @@
 package com.samsung.fas.pir.rest.services;
 
+import com.samsung.fas.pir.configuration.security.persistence.models.Account;
+import com.samsung.fas.pir.exception.RESTException;
 import com.samsung.fas.pir.persistence.dao.ChildDAO;
+import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
+import com.samsung.fas.pir.persistence.dao.UserDAO;
 import com.samsung.fas.pir.persistence.dao.VisitDAO;
 import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.models.base.Base;
@@ -13,45 +17,98 @@ import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("Duplicates")
 @Service
 public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	@Getter
 	@Setter
-	private		VisitDAO	visitDAO;
+	private		VisitDAO			visitDAO;
 
 	@Getter
 	@Setter
-	private		VisitBO		visitBO;
+	private 	UserDAO 			userDAO;
+
+	@Getter
+	@Setter
+	private 	ResponsibleDAO		responsibleDAO;
+
+	@Getter
+	@Setter
+	private		VisitBO				visitBO;
+	private List<Responsible> responsible;
 
 	@Autowired
-	public ChildBO(ChildDAO dao, VisitDAO visitDAO, VisitBO visitBO) {
+	public ChildBO(ChildDAO dao, ResponsibleDAO responsibleDAO, UserDAO userDAO, VisitDAO visitDAO, VisitBO visitBO) {
 		super(dao);
 		setVisitBO(visitBO);
 		setVisitDAO(visitDAO);
+		setResponsibleDAO(responsibleDAO);
+		setUserDAO(userDAO);
 	}
 
 	@Override
 	public ChildDTO save(ChildDTO create, Device device, UserDetails account) {
-		return null;
+		Child				model		= create.getModel();
+		Child				child		= create.getUuid() != null? getDao().findOne(create.getUuid()) : null;
+		Mother				mother		= create.getMother() != null? getResponsibleDAO().findOne(create.getMother().getResponsible().getUuid()).getMother() : null;
+		List<Responsible>	responsible	= create.getResponsible() != null? create.getResponsible().stream().map(item -> getResponsibleDAO().findOne(item.getUuid())).collect(Collectors.toList()) : new ArrayList<>();
+		User				agent		= create.getAgentID() != null? getUserDAO().findOne(create.getAgentID()) : null;
+
+		if (child == null) {
+			if (agent == null)
+				throw new RESTException("agent.missing");
+			model.setAgent(agent);
+			model.setResponsible(responsible);
+			responsible.forEach(resp -> resp.getChildren().add(model));
+			model.setVisits(setupVisit(model, model.getVisits(), agent));
+			return new ChildDTO(getDao().save(model), device, true);
+		} else {
+			setupChild(child, model);
+			child.setMother(mother);
+			responsible.forEach(resp -> resp.getChildren().remove(resp.getChildren().stream().filter(item -> item.getUuid().compareTo(child.getUuid()) == 0).findAny().orElse(new Child())));
+			child.setResponsible(responsible);
+			responsible.forEach(resp -> resp.getChildren().add(model));
+			return new ChildDTO(getDao().save(child), device, true);
+		}
 	}
 
 	@Override
 	public ChildDTO update(ChildDTO update, Device device, UserDetails account) {
-		return null;
+		Child				model		= update.getModel();
+		Child				child		= update.getUuid() != null? getDao().findOne(update.getUuid()) : null;
+		Mother				mother		= update.getMother() != null? getResponsibleDAO().findOne(update.getMother().getResponsible().getUuid()).getMother() : null;
+		List<Responsible>	responsible	= update.getResponsible() != null? update.getResponsible().stream().map(item -> getResponsibleDAO().findOne(item.getUuid())).collect(Collectors.toList()) : new ArrayList<>();
+		User				agent		= update.getAgentID() != null? getUserDAO().findOne(update.getAgentID()) : null;
+
+		if (child == null) {
+			if (agent == null)
+				throw new RESTException("agent.missing");
+			model.setAgent(agent);
+			model.setResponsible(responsible);
+			responsible.forEach(resp -> resp.getChildren().add(model));
+			model.setVisits(setupVisit(model, model.getVisits(), agent));
+			return new ChildDTO(getDao().save(model), device, true);
+		} else {
+			setupChild(child, model);
+			child.setMother(mother);
+			responsible.forEach(resp -> resp.getChildren().remove(resp.getChildren().stream().filter(item -> item.getUuid().compareTo(child.getUuid()) == 0).findAny().orElse(new Child())));
+			child.setResponsible(responsible);
+			responsible.forEach(resp -> resp.getChildren().add(model));
+			return new ChildDTO(getDao().save(child), device, true);
+		}
 	}
 
 	@Override
-	public Collection<ChildDTO> save(Collection<ChildDTO> collection, Device device, UserDetails account) {
-		return null;
+	public Collection<ChildDTO> save(Collection<ChildDTO> collection, Device device, UserDetails details) {
+		return collection.stream().map(item -> save(item, device, details)).collect(Collectors.toList());
 	}
 
 	@Override
 	public Collection<ChildDTO> update(Collection<ChildDTO> collection, Device device, UserDetails details) {
-		return null;
+		return collection.stream().map(item -> update(item, device, details)).collect(Collectors.toList());
 	}
 
 	// region Responsible

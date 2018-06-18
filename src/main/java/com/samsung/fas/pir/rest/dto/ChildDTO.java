@@ -125,8 +125,12 @@ public class ChildDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("agent_id")
+	private		UUID						agentID;
+
+	@Getter
+	@Setter
 	@JsonProperty("mother")
-	@Valid
 	private		MotherDTO 					mother;
 
 	@Getter
@@ -138,7 +142,6 @@ public class ChildDTO {
 	@Getter
 	@Setter
 	@JsonProperty("responsible")
-	@Valid
 	private 	List<ResponsibleDTO> 		responsible;
 
 	public ChildDTO() {
@@ -166,7 +169,7 @@ public class ChildDTO {
 		setHasRelationDifficulties(child.isRelationDifficulties());
 		setMother(detailed? child.getMother() != null? new MotherDTO(child.getMother(), device, false) : null : null);
 		setResponsible(detailed? child.getResponsible().stream().map(responsible -> new ResponsibleDTO(responsible, device, false)).collect(Collectors.toList()) : null);
-		setVisits(child.getVisits() != null? child.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>());
+		setVisits(!device.isNormal()? child.getVisits() != null? child.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>() : null);
 	}
 
 	@JsonIgnore
