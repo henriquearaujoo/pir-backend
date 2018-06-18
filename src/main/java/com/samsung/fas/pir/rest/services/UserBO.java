@@ -15,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,7 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 	}
 
 	@Override
-	public UserDTO save(UserDTO create, UserDetails principal) {
+	public UserDTO save(UserDTO create, Device device, UserDetails principal) {
 		User		model		= create.getModel();
 		String		password	= create.getPassword();
 		Profile	 	profile		= pdao.findOne(create.getProfileUUID());
@@ -82,12 +83,12 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 		else
 			model.getEntity().setUser(model);
 
-		return new UserDTO(getDao().save(model), true);
+		return new UserDTO(getDao().save(model), device, true);
 	}
 
 //	@CacheEvict("accountsCache")
 	@Override
-	public UserDTO update(UserDTO update, UserDetails principal) {
+	public UserDTO update(UserDTO update, Device device, UserDetails principal) {
 		User		model		= update.getModel();
 		User		user		= getDao().findOne(model.getUuid());
 		Profile		profile		= pdao.findOne(update.getProfileUUID());
@@ -132,16 +133,16 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 			user.setEntity(null);
 		}
 
-		return new UserDTO(getDao().save(user), true);
+		return new UserDTO(getDao().save(user), device, true);
 	}
 
 	@Override
-	public Collection<UserDTO> save(Collection<UserDTO> create, UserDetails details) {
+	public Collection<UserDTO> save(Collection<UserDTO> create, Device device, UserDetails details) {
 		return null;
 	}
 
 	@Override
-	public Collection<UserDTO> update(Collection<UserDTO> update, UserDetails details) {
+	public Collection<UserDTO> update(Collection<UserDTO> update, Device device, UserDetails details) {
 		return null;
 	}
 }

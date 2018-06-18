@@ -10,6 +10,7 @@ import com.samsung.fas.pir.persistence.models.Form;
 import com.samsung.fas.pir.persistence.models.Visit;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.mobile.device.Device;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -87,7 +88,7 @@ public class VisitDTO {
 		super();
 	}
 
-	public VisitDTO(Visit visit, boolean detailed) {
+	public VisitDTO(Visit visit, Device device, boolean detailed) {
 		setUuid(visit.getUuid());
 		setNumber(visit.getNumber());
 		setFamilyRating(visit.getFamilyRating());
@@ -98,8 +99,8 @@ public class VisitDTO {
 		setAnswers(visit.getAnswers() != null? visit.getAnswers().stream().map(answer -> new AnswerDTO(answer, true)).collect(Collectors.toList()) : null);
 		setChapterUUID(visit.getChapter().getUuid());
 		setFormUUID(visit.getForm() != null? visit.getForm().getUuid() : null);
-		setChild(detailed && visit.getChild() != null? new ChildDTO(visit.getChild(), false) : null);
-		setPregnancy(detailed && visit.getPregnancy() != null? new PregnancyDTO(visit.getPregnancy(), false) : null);
+		setChild(detailed && visit.getChild() != null? new ChildDTO(visit.getChild(), device, false) : null);
+		setPregnancy(detailed && visit.getPregnancy() != null? new PregnancyDTO(visit.getPregnancy(), device, false) : null);
 	}
 
 	@SuppressWarnings("Duplicates")

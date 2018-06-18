@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,38 +27,38 @@ public abstract class BController<BO extends IBaseBO<?, DTO, Long>, DTO> {
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/{id}")
-	public ResponseEntity<?> findOne(@PathVariable("id") UUID id, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(service.findOne(id, details));
+	public ResponseEntity<?> findOne(@PathVariable("id") UUID id, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(service.findOne(id, device, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET)
-	public ResponseEntity<?> findAll(@ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(service.findAll(details));
+	public ResponseEntity<?> findAll(Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(service.findAll(device, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/page")
-	public ResponseEntity<?> findAll(Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(service.findAll(pageable, details));
+	public ResponseEntity<?> findAll(Pageable pageable, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(service.findAll(pageable, device, details));
 	}
 
 	@RequestMapping(method= RequestMethod.POST)
-	public ResponseEntity<DTO> save(@RequestBody @Valid DTO dto, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
-		return ResponseEntity.ok(service.save(dto, account));
+	public ResponseEntity<DTO> save(@RequestBody @Valid DTO dto, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
+		return ResponseEntity.ok(service.save(dto, device, account));
 	}
 
 	@RequestMapping(method= RequestMethod.PUT)
-	public ResponseEntity<DTO> update(@RequestBody @Valid DTO dto, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
-		return ResponseEntity.ok(service.update(dto, account));
+	public ResponseEntity<DTO> update(@RequestBody @Valid DTO dto, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
+		return ResponseEntity.ok(service.update(dto, device, account));
 	}
 
 	@RequestMapping(method= RequestMethod.POST, path = "/collection")
-	public ResponseEntity<Collection<DTO>> save(@RequestBody @Valid Collection<DTO> collection, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
-		return ResponseEntity.ok(service.save(collection, account));
+	public ResponseEntity<Collection<DTO>> save(@RequestBody @Valid Collection<DTO> collection, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
+		return ResponseEntity.ok(service.save(collection, device, account));
 	}
 
 	@RequestMapping(method= RequestMethod.PUT, path = "/collection")
-	public ResponseEntity<Collection<DTO>> update(@RequestBody @Valid Collection<DTO> collection, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
-		return ResponseEntity.ok(service.update(collection, account));
+	public ResponseEntity<Collection<DTO>> update(@RequestBody @Valid Collection<DTO> collection, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
+		return ResponseEntity.ok(service.update(collection, device, account));
 	}
 }
 

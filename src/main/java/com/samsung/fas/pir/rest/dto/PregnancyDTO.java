@@ -8,6 +8,7 @@ import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.Pregnancy;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.mobile.device.Device;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -55,13 +56,13 @@ public class PregnancyDTO {
 		super();
 	}
 
-	public PregnancyDTO(Pregnancy entity, boolean detailed) {
+	public PregnancyDTO(Pregnancy entity, Device device, boolean detailed) {
 		setUuid(entity.getUuid());
 		setTempID(entity.getMobileId());
 		setRegisteredAt(entity.getRegisteredAt());
-		setVisits(entity.getVisits() != null? entity.getVisits().stream().map(item -> new VisitDTO(item, false)).collect(Collectors.toList()) : new ArrayList<>());
-		setMother(detailed? new MotherDTO(entity.getPregnant(), false) : null);
-		setAgent(entity.getAgent() != null? new UserDTO(entity.getAgent(), false) : null);
+		setVisits(entity.getVisits() != null? entity.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>());
+		setMother(detailed? new MotherDTO(entity.getPregnant(), device, false) : null);
+		setAgent(entity.getAgent() != null? new UserDTO(entity.getAgent(), device, false) : null);
 	}
 
 	@JsonIgnore

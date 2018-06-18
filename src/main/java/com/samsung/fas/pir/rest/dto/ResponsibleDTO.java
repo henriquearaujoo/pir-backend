@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.mobile.device.Device;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -165,12 +166,12 @@ public class ResponsibleDTO {
 		super();
 	}
 
-	public ResponsibleDTO(Mother mother, boolean detailed) {
-		this(mother.getResponsible(), true);
-		setMother(new MotherDTO(mother, detailed));
+	public ResponsibleDTO(Mother mother, Device device, boolean detailed) {
+		this(mother.getResponsible(), device, true);
+		setMother(new MotherDTO(mother, device, detailed));
 	}
 
-	public ResponsibleDTO(Responsible responsible, boolean detailed) {
+	public ResponsibleDTO(Responsible responsible, Device device, boolean detailed) {
 		setTempID(responsible.getMobileId());
 		setName(responsible.getName());
 		setUuid(responsible.getUuid());
@@ -189,9 +190,9 @@ public class ResponsibleDTO {
 		hasOtherChildren(responsible.isFamilyHasChildren());
 		setChildrenCount(responsible.getChildrenCount());
 		setCivilState(responsible.getCivilState().toString());
-		setMother(responsible.getMother() != null? new MotherDTO(responsible.getMother(), detailed) : null);
-		setCommunity(detailed? new CommunityDTO(responsible.getCommunity(), false) : null);
-		setChildren(responsible.getChildren() != null? responsible.getChildren().stream().map(item -> new ChildDTO(item, false)).collect(Collectors.toList()) : new ArrayList<>());
+		setMother(responsible.getMother() != null? new MotherDTO(responsible.getMother(), device, detailed) : null);
+		setCommunity(detailed? new CommunityDTO(responsible.getCommunity(), device, false) : null);
+		setChildren(responsible.getChildren() != null? responsible.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>());
 	}
 
 	@JsonIgnore

@@ -11,6 +11,7 @@ import com.samsung.fas.pir.rest.dto.PregnancyDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -36,22 +37,22 @@ public class PregnancyBO extends BaseBO<Pregnancy, PregnancyDAO, PregnancyDTO, L
 	}
 
 	@Override
-	public PregnancyDTO save(PregnancyDTO create, UserDetails details) {
+	public PregnancyDTO save(PregnancyDTO create, Device device, UserDetails details) {
 		return null;
 	}
 
 	@Override
-	public PregnancyDTO update(PregnancyDTO update, UserDetails details) {
+	public PregnancyDTO update(PregnancyDTO update, Device device, UserDetails details) {
 		return null;
 	}
 
 	@Override
-	public Collection<PregnancyDTO> save(Collection<PregnancyDTO> create, UserDetails details) {
+	public Collection<PregnancyDTO> save(Collection<PregnancyDTO> create, Device device, UserDetails details) {
 		return null;
 	}
 
 	@Override
-	public Collection<PregnancyDTO> update(Collection<PregnancyDTO> update, UserDetails details) {
+	public Collection<PregnancyDTO> update(Collection<PregnancyDTO> update, Device device, UserDetails details) {
 		return null;
 	}
 

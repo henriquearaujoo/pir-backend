@@ -35,36 +35,36 @@ public class VisitController extends BController<VisitBO, VisitDTO> {
 
 	@RequestMapping(method= RequestMethod.GET, path = "/front/{id}")
 	public ResponseEntity<?> findOneDetailed(@PathVariable("id") UUID id, @ApiIgnore @AuthenticationPrincipal UserDetails details, Device device) {
-		return ResponseEntity.ok(getService().findOneDetailed(id, details));
+		return ResponseEntity.ok(getService().findOneDetailed(id, device, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/front")
 	public ResponseEntity<?> findAllDetailed(@ApiIgnore @AuthenticationPrincipal UserDetails details, Device device) {
-		return ResponseEntity.ok(getService().findAll(details));
+		return ResponseEntity.ok(getService().findAll(device, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/front/page")
-	public ResponseEntity<?> findAllDetailed(Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(getService().findAllDetailed(pageable, details));
+	public ResponseEntity<?> findAllDetailed(Pageable pageable, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAllDetailed(pageable, device, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/front/search")
-	public ResponseEntity<?> findAllDeteailed(@QuerydslPredicate(root = Visit.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(getService().findAllDetailed(predicate, details));
+	public ResponseEntity<?> findAllDeteailed(@QuerydslPredicate(root = Visit.class) Predicate predicate, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAllDetailed(predicate, device, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/front/search/page")
-	public ResponseEntity<?> findAllDeteailed(@QuerydslPredicate(root = Visit.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(getService().findAllDetailed(predicate, pageable, details));
+	public ResponseEntity<?> findAllDeteailed(@QuerydslPredicate(root = Visit.class) Predicate predicate, Pageable pageable, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAllDetailed(predicate, pageable, device, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, value="/search")
-	public ResponseEntity<Collection<VisitDTO>> search(@QuerydslPredicate(root = Visit.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(getService().findAll(predicate, details));
+	public ResponseEntity<Collection<VisitDTO>> search(@QuerydslPredicate(root = Visit.class) Predicate predicate, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAll(predicate, device, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, value="/search/page")
-	public ResponseEntity<Page<VisitDTO>> search(@QuerydslPredicate(root = Visit.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(getService().findAll(predicate, pageable, details));
+	public ResponseEntity<Page<VisitDTO>> search(@QuerydslPredicate(root = Visit.class) Predicate predicate, Pageable pageable, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAll(predicate, pageable, device, details));
 	}
 }

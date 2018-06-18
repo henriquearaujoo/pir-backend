@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,32 +29,32 @@ public class ResponsibleController extends BController<ResponsibleBO, Responsibl
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/no-mother")
-	public ResponseEntity<?> findAllResponsbiles() {
-		return ResponseEntity.ok(getService().findAllResponsible());
+	public ResponseEntity<?> findAllResponsbiles(Device device) {
+		return ResponseEntity.ok(getService().findAllResponsible(device));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/no-mother/page")
-	public ResponseEntity<?> findAllResponsbiles(Pageable pageable) {
-		return ResponseEntity.ok(getService().findAllResponsible(pageable));
+	public ResponseEntity<?> findAllResponsbiles(Pageable pageable, Device device) {
+		return ResponseEntity.ok(getService().findAllResponsible(pageable, device));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/no-mother/search")
-	public ResponseEntity<?> findAllResponsbiles(@QuerydslPredicate(root = Responsible.class) Predicate predicate) {
-		return ResponseEntity.ok(getService().findAllResponsible(predicate));
+	public ResponseEntity<?> findAllResponsbiles(@QuerydslPredicate(root = Responsible.class) Predicate predicate, Device device) {
+		return ResponseEntity.ok(getService().findAllResponsible(predicate, device));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/no-mother/search/page")
-	public ResponseEntity<?> findAllResponsbiles(@QuerydslPredicate(root = Responsible.class) Predicate predicate, Pageable pageable) {
-		return ResponseEntity.ok(getService().findAllResponsible(pageable, predicate));
+	public ResponseEntity<?> findAllResponsbiles(@QuerydslPredicate(root = Responsible.class) Predicate predicate, Pageable pageable, Device device) {
+		return ResponseEntity.ok(getService().findAllResponsible(pageable, predicate, device));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/search")
-	public ResponseEntity<?> search(@QuerydslPredicate(root = Responsible.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(getService().findAll(predicate, details));
+	public ResponseEntity<?> search(@QuerydslPredicate(root = Responsible.class) Predicate predicate, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAll(predicate, device, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/search/page")
-	public ResponseEntity<?> search(@QuerydslPredicate(root = Responsible.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(getService().findAll(predicate, pageable, details));
+	public ResponseEntity<?> search(@QuerydslPredicate(root = Responsible.class) Predicate predicate, Pageable pageable, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAll(predicate, pageable, device, details));
 	}
 }

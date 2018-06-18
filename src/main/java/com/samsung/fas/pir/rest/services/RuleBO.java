@@ -9,6 +9,7 @@ import com.samsung.fas.pir.persistence.models.Rule;
 import com.samsung.fas.pir.rest.dto.RuleDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +24,12 @@ public class RuleBO extends BaseBO<Rule, RuleDAO, RuleDTO, Long> {
 	}
 
 	@Override
-	public RuleDTO save(RuleDTO create, UserDetails account) {
+	public RuleDTO save(RuleDTO create, Device device, UserDetails account) {
 		return null;
 	}
 
 	@Override
-	public RuleDTO update(RuleDTO update, UserDetails account) {
+	public RuleDTO update(RuleDTO update, Device device, UserDetails account) {
 		Rule					model			= update.getModel();
 		Rule					rule			= getDao().findOne(update.getUuid());
 		Profile 				profile			= rule.getProfile();
@@ -111,12 +112,12 @@ public class RuleBO extends BaseBO<Rule, RuleDAO, RuleDTO, Long> {
 	}
 
 	@Override
-	public Collection<RuleDTO> save(Collection<RuleDTO> create, UserDetails details) {
+	public Collection<RuleDTO> save(Collection<RuleDTO> create, Device device, UserDetails details) {
 		return null;
 	}
 
 	@Override
-	public Collection<RuleDTO> update(Collection<RuleDTO> update, UserDetails details) {
+	public Collection<RuleDTO> update(Collection<RuleDTO> update, Device device, UserDetails details) {
 		return null;
 	}
 }

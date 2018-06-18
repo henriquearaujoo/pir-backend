@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.mobile.device.Device;
 
 import java.util.UUID;
 
@@ -64,12 +65,12 @@ public class FormAnswerTADTO {
 		super();
 	}
 
-	public FormAnswerTADTO(FormAnswerTA answer, boolean detailed) {
+	public FormAnswerTADTO(FormAnswerTA answer, Device device, boolean detailed) {
 		setUuid(answer.getUuid());
 		canDoAlone(answer.canDoAlone());
 		canDoWithHelp(answer.canDoWithHelp());
 		canNotDo(answer.canNotDo());
 		setQuestion(new FormQuestionDTO(answer.getQuestion(), false));
-		setChild(new ChildDTO(answer.getChild(), false));
+		setChild(new ChildDTO(answer.getChild(), device, false));
 	}
 }

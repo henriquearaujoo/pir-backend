@@ -8,6 +8,7 @@ import com.samsung.fas.pir.persistence.models.Question;
 import com.samsung.fas.pir.rest.dto.QuestionDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,7 @@ public class QuestionBO extends BaseBO<Question, QuestionDAO, QuestionDTO, Long>
 	}
 
 	@Override
-	public QuestionDTO save(QuestionDTO create, UserDetails account) {
+	public QuestionDTO save(QuestionDTO create, Device device, UserDetails account) {
 		Question		model			= create.getModel();
 		Conclusion		conclusion		= cdao.findOne(create.getConclusionUUID());
 
@@ -51,7 +52,7 @@ public class QuestionBO extends BaseBO<Question, QuestionDAO, QuestionDTO, Long>
 	}
 
 	@Override
-	public QuestionDTO update(QuestionDTO update, UserDetails account) {
+	public QuestionDTO update(QuestionDTO update, Device device, UserDetails account) {
 		Question		model		= update.getModel();
 		Question		question	= getDao().findOne(model.getUuid());
 
@@ -62,12 +63,12 @@ public class QuestionBO extends BaseBO<Question, QuestionDAO, QuestionDTO, Long>
 	}
 
 	@Override
-	public Collection<QuestionDTO> save(Collection<QuestionDTO> create, UserDetails details) {
+	public Collection<QuestionDTO> save(Collection<QuestionDTO> create, Device device, UserDetails details) {
 		return null;
 	}
 
 	@Override
-	public Collection<QuestionDTO> update(Collection<QuestionDTO> update, UserDetails details) {
+	public Collection<QuestionDTO> update(Collection<QuestionDTO> update, Device device, UserDetails details) {
 		return null;
 	}
 }

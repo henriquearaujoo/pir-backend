@@ -7,6 +7,7 @@ import com.samsung.fas.pir.persistence.models.Conclusion;
 import com.samsung.fas.pir.rest.dto.ConclusionDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class ConclusionBO extends BaseBO<Conclusion, ConclusionDAO, ConclusionDT
 	}
 
 	@Override
-	public ConclusionDTO save(ConclusionDTO create, UserDetails account) {
+	public ConclusionDTO save(ConclusionDTO create, Device device, UserDetails account) {
 		Conclusion 	model		= create.getModel();
 		Chapter 	chapter		= cdao.findOne(create.getChapterUUID());
 
@@ -34,7 +35,7 @@ public class ConclusionBO extends BaseBO<Conclusion, ConclusionDAO, ConclusionDT
 	}
 
 	@Override
-	public ConclusionDTO update(ConclusionDTO update, UserDetails account) {
+	public ConclusionDTO update(ConclusionDTO update, Device device, UserDetails account) {
 		Conclusion	model		= update.getModel();
 		Conclusion	conclusion	= getDao().findOne(model.getUuid());
 
@@ -44,12 +45,12 @@ public class ConclusionBO extends BaseBO<Conclusion, ConclusionDAO, ConclusionDT
 	}
 
 	@Override
-	public Collection<ConclusionDTO> save(Collection<ConclusionDTO> create, UserDetails details) {
+	public Collection<ConclusionDTO> save(Collection<ConclusionDTO> create, Device device, UserDetails details) {
 		return null;
 	}
 
 	@Override
-	public Collection<ConclusionDTO> update(Collection<ConclusionDTO> update, UserDetails details) {
+	public Collection<ConclusionDTO> update(Collection<ConclusionDTO> update, Device device, UserDetails details) {
 		return null;
 	}
 }

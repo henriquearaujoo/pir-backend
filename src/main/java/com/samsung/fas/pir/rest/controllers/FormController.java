@@ -13,6 +13,7 @@ import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,12 +33,12 @@ public class FormController extends BController<FormBO, FormDTO> {
 	}
 
 	@RequestMapping(method= RequestMethod.GET, value="/search")
-	public ResponseEntity<Collection<FormDTO>> search(@QuerydslPredicate(root = Form.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(getService().findAll(predicate, details));
+	public ResponseEntity<Collection<FormDTO>> search(@QuerydslPredicate(root = Form.class) Predicate predicate, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAll(predicate, device, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, value="/search/page")
-	public ResponseEntity<Page<?>> search(@QuerydslPredicate(root = Form.class) Predicate predicate, @PageableDefault(sort = {"id"}) Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(getService().findAll(predicate, pageable, details));
+	public ResponseEntity<Page<?>> search(@QuerydslPredicate(root = Form.class) Predicate predicate, @PageableDefault(sort = {"id"}) Pageable pageable, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAll(predicate, pageable, device, details));
 	}
 }

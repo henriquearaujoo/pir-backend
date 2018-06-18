@@ -5,6 +5,7 @@ import com.samsung.fas.pir.persistence.models.State;
 import com.samsung.fas.pir.rest.dto.StateDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -22,22 +23,22 @@ public class StateCityBO extends BaseBO<State, StateDAO, StateDTO, Long> {
 	}
 
 	@Override
-	public StateDTO save(StateDTO cruStateDTO, UserDetails account) {
+	public StateDTO save(StateDTO cruStateDTO, Device device, UserDetails account) {
 		return null;
 	}
 
 	@Override
-	public StateDTO update(StateDTO cruStateDTO, UserDetails account) {
+	public StateDTO update(StateDTO cruStateDTO, Device device, UserDetails account) {
 		return null;
 	}
 
 	@Override
-	public Collection<StateDTO> save(Collection<StateDTO> create, UserDetails details) {
+	public Collection<StateDTO> save(Collection<StateDTO> create, Device device, UserDetails details) {
 		return null;
 	}
 
 	@Override
-	public Collection<StateDTO> update(Collection<StateDTO> update, UserDetails details) {
+	public Collection<StateDTO> update(Collection<StateDTO> update, Device device, UserDetails details) {
 		return null;
 	}
 }

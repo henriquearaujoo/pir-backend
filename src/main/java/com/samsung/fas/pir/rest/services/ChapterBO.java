@@ -4,6 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTException;
 import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.models.Chapter;
+import com.samsung.fas.pir.persistence.models.FileData;
 import com.samsung.fas.pir.rest.dto.ChapterDTO;
 import com.samsung.fas.pir.rest.dto.ChapterDetailedDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
@@ -11,9 +12,11 @@ import com.samsung.fas.pir.rest.utils.CTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -102,7 +105,7 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 	// endregion
 
 	@Override
-	public ChapterDTO save(ChapterDTO create, UserDetails account) {
+	public ChapterDTO save(ChapterDTO create, Device device, UserDetails account) {
 		Chapter			model		= create.getModel();
 		List<Chapter>	versions	= new ArrayList<>(getDao().findAllByChapter(create.getChapter()));
 
@@ -116,7 +119,7 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 	}
 
 	@Override
-	public ChapterDTO update(ChapterDTO update, UserDetails account) {
+	public ChapterDTO update(ChapterDTO update, Device device, UserDetails account) {
 		Chapter			model		= update.getModel();
 		Chapter			chapter		= getDao().findOne(model.getUuid());
 
@@ -143,20 +146,19 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 		chapter.setFamilyTasks(model.getFamilyTasks());
 		chapter.setEstimatedTime(model.getEstimatedTime());
 		chapter.setTimeUntilNext(model.getTimeUntilNext());
-
-		//noinspection ResultOfMethodCallIgnored
-		chapter.getMedias().forEach(media -> model.getMedias().stream().filter(item -> item.getUuid() != null && media.getUuid().compareTo(item.getUuid()) == 0).noneMatch(item -> chapter.getMedias().add(item)));
+		chapter.setMedias(model.getMedias().stream().filter(item -> chapter.getMedias().stream().filter(file -> file.getId() - item.getId() == 0).findAny().orElse(null) != null).collect(Collectors.toList()));
+		chapter.getMedias().addAll(model.getMedias().stream().filter(item -> chapter.getMedias().stream().filter(file -> file.getId() - item.getId() == 0).findAny().orElse(null) == null).collect(Collectors.toList()));
 
 		return new ChapterDTO(getDao().save(chapter), true);
 	}
 
 	@Override
-	public Collection<ChapterDTO> save(Collection<ChapterDTO> create, UserDetails details) {
+	public Collection<ChapterDTO> save(Collection<ChapterDTO> create, Device device, UserDetails details) {
 		return null;
 	}
 
 	@Override
-	public Collection<ChapterDTO> update(Collection<ChapterDTO> update, UserDetails details) {
+	public Collection<ChapterDTO> update(Collection<ChapterDTO> update, Device device, UserDetails details) {
 		return null;
 	}
 }

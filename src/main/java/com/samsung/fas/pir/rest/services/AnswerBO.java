@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,7 @@ public class AnswerBO extends BaseBO<Answer, AnswerDAO, AnswerDTO, Long> {
 	}
 
 	@Override
-	public AnswerDTO save(AnswerDTO create, UserDetails account) {
+	public AnswerDTO save(AnswerDTO create, Device device, UserDetails account) {
 		Answer		model		= create.getModel();
 		Question 	question	= create.getQuestionUUID() != null? getQuestionDAO().findOne(create.getQuestionUUID()) : null;
 		Alternative alternative	= create.getAlternativeUUID() != null? getAlternativeDAO().findOne(create.getAlternativeUUID()) : null;
@@ -48,7 +49,7 @@ public class AnswerBO extends BaseBO<Answer, AnswerDAO, AnswerDTO, Long> {
 	}
 
 	@Override
-	public AnswerDTO update(AnswerDTO update, UserDetails account) {
+	public AnswerDTO update(AnswerDTO update, Device device, UserDetails account) {
 		Answer		model		= update.getModel();
 		Answer		answer		= getDao().findOne(model.getUuid());
 		Question 	question	= update.getQuestionUUID() != null? getQuestionDAO().findOne(update.getQuestionUUID()) : null;
@@ -62,12 +63,12 @@ public class AnswerBO extends BaseBO<Answer, AnswerDAO, AnswerDTO, Long> {
 	}
 
 	@Override
-	public Collection<AnswerDTO> save(Collection<AnswerDTO> create, UserDetails details) {
+	public Collection<AnswerDTO> save(Collection<AnswerDTO> create, Device device, UserDetails details) {
 		return null;
 	}
 
 	@Override
-	public Collection<AnswerDTO> update(Collection<AnswerDTO> update, UserDetails details) {
+	public Collection<AnswerDTO> update(Collection<AnswerDTO> update, Device device, UserDetails details) {
 		return null;
 	}
 

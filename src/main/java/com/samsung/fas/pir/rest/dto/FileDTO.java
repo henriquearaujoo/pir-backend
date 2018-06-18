@@ -1,24 +1,27 @@
 package com.samsung.fas.pir.rest.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.FileData;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.UUID;
 
 @DTO(FileData.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FileDTO {
 	@Getter
 	@Setter
 	@JsonProperty(value="id")
 	private		long		id;
+
+	@Getter
+	@Setter
+	@JsonProperty(value="uuid")
+	private 	UUID 		uuid;
 
 	@Getter
 	@Setter
@@ -67,12 +70,14 @@ public class FileDTO {
 		extension	= entity.getExtension();
 		creation	= entity.getCreatedAt();
 		content		= entity.getContent();
+		uuid		= entity.getUuid();
 	}
 
 	@JsonIgnore
 	public FileData getModel() {
 		FileData model = new FileData();
 		model.setId(id);
+		model.setUuid(uuid);
 		model.setName(name);
 		model.setExtension(extension);
 		model.setPath(path);

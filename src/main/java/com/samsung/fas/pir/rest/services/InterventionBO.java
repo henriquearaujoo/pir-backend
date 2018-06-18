@@ -7,6 +7,7 @@ import com.samsung.fas.pir.persistence.models.Intervention;
 import com.samsung.fas.pir.rest.dto.InterventionDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class InterventionBO extends BaseBO<Intervention, InterventionDAO, Interv
 	}
 
 	@Override
-	public InterventionDTO save(InterventionDTO create, UserDetails account) {
+	public InterventionDTO save(InterventionDTO create, Device device, UserDetails account) {
 		Intervention	model		= create.getModel();
 		Chapter 		chapter		= cdao.findOne(create.getChapterdUUID());
 		model.setChapter(chapter);
@@ -31,7 +32,7 @@ public class InterventionBO extends BaseBO<Intervention, InterventionDAO, Interv
 	}
 
 	@Override
-	public InterventionDTO update(InterventionDTO update, UserDetails account) {
+	public InterventionDTO update(InterventionDTO update, Device device, UserDetails account) {
 		Intervention	model			= update.getModel();
 		Intervention	intervention	= getDao().findOne(model.getUuid());
 
@@ -41,12 +42,12 @@ public class InterventionBO extends BaseBO<Intervention, InterventionDAO, Interv
 	}
 
 	@Override
-	public Collection<InterventionDTO> save(Collection<InterventionDTO> create, UserDetails details) {
+	public Collection<InterventionDTO> save(Collection<InterventionDTO> create, Device device, UserDetails details) {
 		return null;
 	}
 
 	@Override
-	public Collection<InterventionDTO> update(Collection<InterventionDTO> update, UserDetails details) {
+	public Collection<InterventionDTO> update(Collection<InterventionDTO> update, Device device, UserDetails details) {
 		return null;
 	}
 }

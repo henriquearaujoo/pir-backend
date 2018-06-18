@@ -7,6 +7,7 @@ import com.samsung.fas.pir.persistence.models.Greetings;
 import com.samsung.fas.pir.rest.dto.GreetingsDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class GreetingsBO extends BaseBO<Greetings, GreetingsDAO, GreetingsDTO, L
 	}
 
 	@Override
-	public GreetingsDTO save(GreetingsDTO create, UserDetails account) {
+	public GreetingsDTO save(GreetingsDTO create, Device device, UserDetails account) {
 		Greetings	model		= create.getModel();
 		Chapter 	chapter		= cdao.findOne(create.getChapterUUID());
 		model.setChapter(chapter);
@@ -31,7 +32,7 @@ public class GreetingsBO extends BaseBO<Greetings, GreetingsDAO, GreetingsDTO, L
 	}
 
 	@Override
-	public GreetingsDTO update(GreetingsDTO update, UserDetails account) {
+	public GreetingsDTO update(GreetingsDTO update, Device device, UserDetails account) {
 		Greetings	model		= update.getModel();
 		Greetings	greetings	= getDao().findOne(model.getUuid());
 
@@ -45,12 +46,12 @@ public class GreetingsBO extends BaseBO<Greetings, GreetingsDAO, GreetingsDTO, L
 	}
 
 	@Override
-	public Collection<GreetingsDTO> save(Collection<GreetingsDTO> create, UserDetails details) {
+	public Collection<GreetingsDTO> save(Collection<GreetingsDTO> create, Device device, UserDetails details) {
 		return null;
 	}
 
 	@Override
-	public Collection<GreetingsDTO> update(Collection<GreetingsDTO> update, UserDetails details) {
+	public Collection<GreetingsDTO> update(Collection<GreetingsDTO> update, Device device, UserDetails details) {
 		return null;
 	}
 }

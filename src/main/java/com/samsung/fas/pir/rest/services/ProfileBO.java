@@ -9,6 +9,7 @@ import com.samsung.fas.pir.persistence.models.Rule;
 import com.samsung.fas.pir.rest.dto.ProfileDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public class ProfileBO extends BaseBO<Profile, ProfileDAO, ProfileDTO, Long> {
 	}
 
 	@Override
-	public ProfileDTO save(ProfileDTO create, UserDetails account) {
+	public ProfileDTO save(ProfileDTO create, Device device, UserDetails account) {
 		Profile				model		= create.getModel();
 		Collection<Page> 	pages		= pdao.findAll();
 		Collection<Rule>	rules		= new HashSet<>();
@@ -55,7 +56,7 @@ public class ProfileBO extends BaseBO<Profile, ProfileDAO, ProfileDTO, Long> {
 	}
 
 	@Override
-	public ProfileDTO update(ProfileDTO update, UserDetails account) {
+	public ProfileDTO update(ProfileDTO update, Device device, UserDetails account) {
 		Profile				model		= update.getModel();
 		Profile				profile		= getDao().findOne(model.getUuid());
 
@@ -69,12 +70,12 @@ public class ProfileBO extends BaseBO<Profile, ProfileDAO, ProfileDTO, Long> {
 	}
 
 	@Override
-	public Collection<ProfileDTO> save(Collection<ProfileDTO> create, UserDetails details) {
+	public Collection<ProfileDTO> save(Collection<ProfileDTO> create, Device device, UserDetails details) {
 		return null;
 	}
 
 	@Override
-	public Collection<ProfileDTO> update(Collection<ProfileDTO> update, UserDetails details) {
+	public Collection<ProfileDTO> update(Collection<ProfileDTO> update, Device device, UserDetails details) {
 		return null;
 	}
 }

@@ -8,6 +8,7 @@ import com.samsung.fas.pir.persistence.models.FormQuestion;
 import com.samsung.fas.pir.rest.dto.FormQuestionDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class FormQuestionBO extends BaseBO<FormQuestion, FormQuestionDAO, FormQu
 	}
 
 	@Override
-	public FormQuestionDTO save(FormQuestionDTO create, UserDetails account) {
+	public FormQuestionDTO save(FormQuestionDTO create, Device device, UserDetails account) {
 		FormQuestion	model		= create.getModel();
 		Form 			form		= fdao.findOne(create.getFormUUID());
 		model.setForm(form);
@@ -33,7 +34,7 @@ public class FormQuestionBO extends BaseBO<FormQuestion, FormQuestionDAO, FormQu
 	}
 
 	@Override
-	public FormQuestionDTO update(FormQuestionDTO update, UserDetails account) {
+	public FormQuestionDTO update(FormQuestionDTO update, Device device, UserDetails account) {
 		FormQuestion	model		= update.getModel();
 		FormQuestion	question	= getDao().findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTException("id.missing")));
 		question.setType(model.getType());
@@ -43,12 +44,12 @@ public class FormQuestionBO extends BaseBO<FormQuestion, FormQuestionDAO, FormQu
 	}
 
 	@Override
-	public Collection<FormQuestionDTO> save(Collection<FormQuestionDTO> create, UserDetails details) {
+	public Collection<FormQuestionDTO> save(Collection<FormQuestionDTO> create, Device device, UserDetails details) {
 		return null;
 	}
 
 	@Override
-	public Collection<FormQuestionDTO> update(Collection<FormQuestionDTO> update, UserDetails details) {
+	public Collection<FormQuestionDTO> update(Collection<FormQuestionDTO> update, Device device, UserDetails details) {
 		return null;
 	}
 }

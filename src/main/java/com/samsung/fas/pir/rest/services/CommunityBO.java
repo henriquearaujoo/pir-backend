@@ -14,6 +14,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -44,29 +45,29 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 	}
 
 	@Override
-	public CommunityDTO save(CommunityDTO create, UserDetails details) {
+	public CommunityDTO save(CommunityDTO create, Device device, UserDetails details) {
 		Community	model		= create.getModel();
 		Community	community	= model.getUuid() != null? getDao().findOne(model.getUuid()) : null;
 		City 		city		= getCityDAO().findOne(create.getCityUUID());
-		return community != null? new CommunityDTO(getDao().save(setupCommunity(community, model, city, details)), true) : new CommunityDTO(getDao().save(setupCommunity(model, city, details)), true);
+		return community != null? new CommunityDTO(getDao().save(setupCommunity(community, model, city, details)), device, true) : new CommunityDTO(getDao().save(setupCommunity(model, city, details)), device, true);
 	}
 
 	@Override
-	public CommunityDTO update(CommunityDTO update, UserDetails details) {
+	public CommunityDTO update(CommunityDTO update, Device device, UserDetails details) {
 		Community	model		= update.getModel();
 		Community	community	= model.getUuid() != null? getDao().findOne(model.getUuid()) : null;
 		City 		city		= getCityDAO().findOne(update.getCityUUID());
-		return community != null? new CommunityDTO(getDao().save(setupCommunity(community, model, city, details)), true) : new CommunityDTO(getDao().save(setupCommunity(model, city, details)), true);
+		return community != null? new CommunityDTO(getDao().save(setupCommunity(community, model, city, details)), device, true) : new CommunityDTO(getDao().save(setupCommunity(model, city, details)), device, true);
 	}
 
 	@Override
-	public Collection<CommunityDTO> save(Collection<CommunityDTO> collection, UserDetails details) {
-		return collection.stream().map(item -> save(item, details)).collect(Collectors.toList());
+	public Collection<CommunityDTO> save(Collection<CommunityDTO> collection, Device device, UserDetails details) {
+		return collection.stream().map(item -> save(item, device, details)).collect(Collectors.toList());
 	}
 
 	@Override
-	public Collection<CommunityDTO> update(Collection<CommunityDTO> collection, UserDetails details) {
-		return collection.stream().map(item -> update(item, details)).collect(Collectors.toList());
+	public Collection<CommunityDTO> update(Collection<CommunityDTO> collection, Device device, UserDetails details) {
+		return collection.stream().map(item -> update(item, device, details)).collect(Collectors.toList());
 	}
 
 	private Community setupCommunity(Community model, City city, UserDetails account) {

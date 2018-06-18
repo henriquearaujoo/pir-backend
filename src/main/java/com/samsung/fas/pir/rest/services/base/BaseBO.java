@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.inject.Inject;
@@ -31,33 +32,33 @@ public abstract class BaseBO<T, DAO extends IBaseDAO<T, ID>, DTO, ID extends Ser
 	}
 
 	@Override
-	public DTO findOne(ID id, UserDetails details) {
-		return toDTO(getDao().findOne(id), true);
+	public DTO findOne(ID id, Device device, UserDetails details) {
+		return toDTO(getDao().findOne(id), device, true);
 	}
 
 	@Override
-	public DTO findOne(UUID uuid, UserDetails details) {
-		return toDTO(getDao().findOne(uuid), true);
+	public DTO findOne(UUID uuid, Device device, UserDetails details) {
+		return toDTO(getDao().findOne(uuid), device, true);
 	}
 
 	@Override
-	public Collection<DTO> findAll(UserDetails details) {
-		return getDao().findAll().stream().map(item -> toDTO(item, false)).collect(Collectors.toList());
+	public Collection<DTO> findAll(Device device, UserDetails details) {
+		return getDao().findAll().stream().map(item -> toDTO(item, device, false)).collect(Collectors.toList());
 	}
 
 	@Override
-	public Collection<DTO> findAll(Predicate predicate, UserDetails details) {
-		return getDao().findAll(predicate).stream().map(item -> toDTO(item, false)).collect(Collectors.toList());
+	public Collection<DTO> findAll(Predicate predicate,  Device device, UserDetails details) {
+		return getDao().findAll(predicate).stream().map(item -> toDTO(item, device, false)).collect(Collectors.toList());
 	}
 
 	@Override
-	public Page<DTO> findAll(Predicate predicate, Pageable pageable, UserDetails details) {
-		return getDao().findAll(predicate, pageable).map(item -> toDTO(item, false));
+	public Page<DTO> findAll(Predicate predicate, Pageable pageable, Device device, UserDetails details) {
+		return getDao().findAll(predicate, pageable).map(item -> toDTO(item, device, false));
 	}
 
 	@Override
-	public Page<DTO> findAll(Pageable pageable, UserDetails details) {
-		return getDao().findAll(pageable).map(item -> toDTO(item, false));
+	public Page<DTO> findAll(Pageable pageable, Device device, UserDetails details) {
+		return getDao().findAll(pageable).map(item -> toDTO(item, device, false));
 	}
 
 	@Override
@@ -75,12 +76,16 @@ public abstract class BaseBO<T, DAO extends IBaseDAO<T, ID>, DTO, ID extends Ser
 		getDao().delete(id);
 	}
 
-	private DTO toDTO(T item, boolean detailed) {
+	private DTO toDTO(T item, Device device, boolean detailed) {
 		try {
-			return dto.getConstructor(entity, boolean.class).newInstance(item, detailed);
-		} catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-			e.printStackTrace();
-			throw new RuntimeException(dto.getName() + ": No constructor matches (T, Boolean)");
+			return dto.getConstructor(entity, Device.class, boolean.class).newInstance(item, device, detailed);
+		} catch (Exception e) {
+			try {
+				return dto.getConstructor(entity, boolean.class).newInstance(item, detailed);
+			} catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException ex) {
+				ex.printStackTrace();
+				throw new RuntimeException(dto.getName() + ": No constructor matches (T, Boolean) or (T, Device, Boolean");
+			}
 		}
 	}
 }

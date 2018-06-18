@@ -15,6 +15,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -49,43 +50,43 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 		setAnswerBO(answerBO);
 	}
 
-	public VisitFrontDTO findOneDetailed(UUID uuid, UserDetails details) {
-		return new VisitFrontDTO(getDao().findOne(uuid), true);
+	public VisitFrontDTO findOneDetailed(UUID uuid, Device device, UserDetails details) {
+		return new VisitFrontDTO(getDao().findOne(uuid), device, true);
 	}
 
-	public Collection<VisitFrontDTO> findAllDetailed(UserDetails details) {
-		return getDao().findAll().stream().map(visit -> new VisitFrontDTO(visit, false)).collect(Collectors.toList());
+	public Collection<VisitFrontDTO> findAllDetailed(Device device, UserDetails details) {
+		return getDao().findAll().stream().map(visit -> new VisitFrontDTO(visit, device, false)).collect(Collectors.toList());
 	}
 
-	public Collection<VisitFrontDTO> findAllDetailed(Predicate predicate, UserDetails details) {
-		return getDao().findAll(predicate).stream().map(visit -> new VisitFrontDTO(visit, false)).collect(Collectors.toList());
+	public Collection<VisitFrontDTO> findAllDetailed(Predicate predicate, Device device, UserDetails details) {
+		return getDao().findAll(predicate).stream().map(visit -> new VisitFrontDTO(visit, device, false)).collect(Collectors.toList());
 	}
 
-	public Page<VisitFrontDTO> findAllDetailed(Pageable pageable, UserDetails details) {
-		return getDao().findAll(pageable).map(visit -> new VisitFrontDTO(visit, false));
+	public Page<VisitFrontDTO> findAllDetailed(Pageable pageable, Device device, UserDetails details) {
+		return getDao().findAll(pageable).map(visit -> new VisitFrontDTO(visit, device, false));
 	}
 
-	public Page<VisitFrontDTO> findAllDetailed(Predicate predicate, Pageable pageable, UserDetails details) {
-		return getDao().findAll(predicate, pageable).map(visit -> new VisitFrontDTO(visit, false));
+	public Page<VisitFrontDTO> findAllDetailed(Predicate predicate, Pageable pageable, Device device, UserDetails details) {
+		return getDao().findAll(predicate, pageable).map(visit -> new VisitFrontDTO(visit, device, false));
 	}
 
 	@Override
-	public VisitDTO save(VisitDTO create, UserDetails account) {
+	public VisitDTO save(VisitDTO create, Device device, UserDetails account) {
 		return null;
 	}
 
 	@Override
-	public VisitDTO update(VisitDTO update, UserDetails account) {
+	public VisitDTO update(VisitDTO update, Device device, UserDetails account) {
 		return null;
 	}
 
 	@Override
-	public Collection<VisitDTO> save(Collection<VisitDTO> collection, UserDetails account) {
+	public Collection<VisitDTO> save(Collection<VisitDTO> collection, Device device, UserDetails account) {
 		return null;
 	}
 
 	@Override
-	public Collection<VisitDTO> update(Collection<VisitDTO> collection, UserDetails details) {
+	public Collection<VisitDTO> update(Collection<VisitDTO> collection, Device device, UserDetails details) {
 		return null;
 	}
 

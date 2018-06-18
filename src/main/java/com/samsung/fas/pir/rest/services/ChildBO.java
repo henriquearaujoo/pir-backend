@@ -9,6 +9,7 @@ import com.samsung.fas.pir.rest.services.base.BaseBO;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -34,22 +35,22 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	}
 
 	@Override
-	public ChildDTO save(ChildDTO create, UserDetails account) {
+	public ChildDTO save(ChildDTO create, Device device, UserDetails account) {
 		return null;
 	}
 
 	@Override
-	public ChildDTO update(ChildDTO update, UserDetails account) {
+	public ChildDTO update(ChildDTO update, Device device, UserDetails account) {
 		return null;
 	}
 
 	@Override
-	public Collection<ChildDTO> save(Collection<ChildDTO> collection, UserDetails account) {
+	public Collection<ChildDTO> save(Collection<ChildDTO> collection, Device device, UserDetails account) {
 		return null;
 	}
 
 	@Override
-	public Collection<ChildDTO> update(Collection<ChildDTO> collection, UserDetails details) {
+	public Collection<ChildDTO> update(Collection<ChildDTO> collection, Device device, UserDetails details) {
 		return null;
 	}
 

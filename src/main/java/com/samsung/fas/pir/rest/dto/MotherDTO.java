@@ -8,6 +8,7 @@ import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.Mother;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.mobile.device.Device;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,11 +42,11 @@ public class MotherDTO {
 		super();
 	}
 
-	public MotherDTO(Mother mother, boolean detailed) {
+	public MotherDTO(Mother mother, Device device, boolean detailed) {
 		setPregnant(mother.isPregnant());
-		setPregnancies(mother.getPregnancies().stream().map(item -> new PregnancyDTO(item, false)).collect(Collectors.toList()));
-		setChildren(detailed? mother.getChildren().stream().map(item -> new ChildDTO(item, false)).collect(Collectors.toList()) : null);
-		setResponsible(detailed? new ResponsibleDTO(mother.getResponsible(), false) : null);
+		setPregnancies(mother.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()));
+		setChildren(detailed? mother.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()) : null);
+		setResponsible(detailed? new ResponsibleDTO(mother.getResponsible(), device, false) : null);
 	}
 
 	@JsonIgnore

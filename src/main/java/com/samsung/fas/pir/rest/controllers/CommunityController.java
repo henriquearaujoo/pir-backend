@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,12 +29,12 @@ public class CommunityController extends BController<CommunityBO, CommunityDTO> 
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/search")
-	public ResponseEntity<?> search(@QuerydslPredicate(root = Community.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(getService().findAll(predicate, details));
+	public ResponseEntity<?> search(@QuerydslPredicate(root = Community.class) Predicate predicate, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAll(predicate, device, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/search/page")
-	public ResponseEntity<?> search(@QuerydslPredicate(root = Community.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(getService().findAll(predicate, pageable, details));
+	public ResponseEntity<?> search(@QuerydslPredicate(root = Community.class) Predicate predicate, Pageable pageable, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAll(predicate, pageable, device, details));
 	}
 }

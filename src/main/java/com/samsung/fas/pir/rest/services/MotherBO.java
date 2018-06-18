@@ -5,6 +5,7 @@ import com.samsung.fas.pir.persistence.models.Mother;
 import com.samsung.fas.pir.rest.dto.ResponsibleDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -18,22 +19,22 @@ public class MotherBO extends BaseBO<Mother, MotherDAO, ResponsibleDTO, Long> {
 	}
 
 	@Override
-	public ResponsibleDTO save(ResponsibleDTO cruResponsibleDTO, UserDetails account) {
+	public ResponsibleDTO save(ResponsibleDTO cruResponsibleDTO, Device device, UserDetails account) {
 		return null;
 	}
 
 	@Override
-	public ResponsibleDTO update(ResponsibleDTO cruResponsibleDTO, UserDetails account) {
+	public ResponsibleDTO update(ResponsibleDTO cruResponsibleDTO, Device device, UserDetails account) {
 		return null;
 	}
 
 	@Override
-	public Collection<ResponsibleDTO> save(Collection<ResponsibleDTO> create, UserDetails details) {
+	public Collection<ResponsibleDTO> save(Collection<ResponsibleDTO> create, Device device, UserDetails details) {
 		return null;
 	}
 
 	@Override
-	public Collection<ResponsibleDTO> update(Collection<ResponsibleDTO> update, UserDetails details) {
+	public Collection<ResponsibleDTO> update(Collection<ResponsibleDTO> update, Device device, UserDetails details) {
 		return null;
 	}
 }

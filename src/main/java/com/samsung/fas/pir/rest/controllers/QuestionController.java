@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,13 +34,13 @@ public class QuestionController extends BController<QuestionBO, QuestionDTO> {
 	}
 
 	@RequestMapping(method= RequestMethod.GET, value="/search")
-	public ResponseEntity<Collection<QuestionDTO>> search(@QuerydslPredicate(root = Question.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(getService().findAll(predicate, details));
+	public ResponseEntity<Collection<QuestionDTO>> search(@QuerydslPredicate(root = Question.class) Predicate predicate, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAll(predicate, device, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, value="/search/page")
-	public ResponseEntity<Page<QuestionDTO>> search(@QuerydslPredicate(root = Question.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(getService().findAll(predicate, pageable, details));
+	public ResponseEntity<Page<QuestionDTO>> search(@QuerydslPredicate(root = Question.class) Predicate predicate, Pageable pageable, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAll(predicate, pageable, device, details));
 	}
 
 	@RequestMapping(method= RequestMethod.DELETE, value="/{id}")

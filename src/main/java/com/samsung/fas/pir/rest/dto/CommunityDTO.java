@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.mobile.device.Device;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class CommunityDTO {
 	@Getter
 	@Setter
 	@JsonProperty("external_id")
-	private		long			tempID;
+	private		Long			tempID;
 
 	@Getter
 	@Setter
@@ -182,8 +183,8 @@ public class CommunityDTO {
 		super();
 	}
 
-	public CommunityDTO(Community community, boolean detailed) {
-		setTempID(community.getMobileId());
+	public CommunityDTO(Community community, Device device, boolean detailed) {
+		setTempID(!device.isNormal()? community.getMobileId() : null);
 		setUuid(community.getUuid());
 		setName(community.getName());
 		setWaterSupply(community.getWaterSupply());
@@ -209,7 +210,7 @@ public class CommunityDTO {
 		setLatitude(community.getLatitude());
 		setLongitude(community.getLongitude());
 		setCity(new CityDTO(community.getCity(), false));
-		setResponsible(detailed? community.getResponsible() != null? community.getResponsible().stream().map(item -> new ResponsibleDTO(item, false)).collect(Collectors.toList()) : new ArrayList<>() : null);
+		setResponsible(!device.isNormal()? community.getResponsible() != null? community.getResponsible().stream().map(item -> new ResponsibleDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>() : null);
 	}
 
 	@JsonIgnore

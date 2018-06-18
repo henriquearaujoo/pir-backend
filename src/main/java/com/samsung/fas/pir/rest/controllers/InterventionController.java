@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,12 +32,12 @@ public class InterventionController extends BController<InterventionBO, Interven
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/search")
-	public ResponseEntity<Collection<InterventionDTO>> search(@QuerydslPredicate(root = Intervention.class) Predicate predicate, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(getService().findAll(predicate, details));
+	public ResponseEntity<Collection<InterventionDTO>> search(@QuerydslPredicate(root = Intervention.class) Predicate predicate, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAll(predicate, device, details));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/search/page")
-	public ResponseEntity<Page<InterventionDTO>> search(@QuerydslPredicate(root = Intervention.class) Predicate predicate, Pageable pageable, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
-		return ResponseEntity.ok(getService().findAll(predicate, pageable, details));
+	public ResponseEntity<Page<InterventionDTO>> search(@QuerydslPredicate(root = Intervention.class) Predicate predicate, Pageable pageable, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAll(predicate, pageable, device, details));
 	}
 }

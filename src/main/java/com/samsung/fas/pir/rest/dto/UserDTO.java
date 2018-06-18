@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.mobile.device.Device;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -109,7 +110,7 @@ public class UserDTO {
 		super();
 	}
 
-	public UserDTO(User user, boolean detailed) {
+	public UserDTO(User user, Device device, boolean detailed) {
 		setUuid(user.getUuid());
 		setName(user.getName());
 		setEmail(user.getEmail());
@@ -117,12 +118,12 @@ public class UserDTO {
 		setActive(user.getAccount().isEnabled() && user.getAccount().isAccountNonExpired() && user.getAccount().isAccountNonLocked() && user.getAccount().isCredentialsNonExpired());
 		setLatidute(user.getLatitude());
 		setLongitude(user.getLongitude());
+		setProfile(new ProfileDTO(user.getAccount().getProfile(), false));
 		setPerson(detailed && user.getPerson() != null? new PersonDTO(user.getPerson(), false) : null);
 		setEntity(detailed && user.getEntity() != null? new EntityDTO(user.getEntity(), false) : null);
 		setAddress(detailed? user.getAddress() != null? new AddressDTO(user.getAddress(), false) : null : null);
-		setProfile(detailed? new ProfileDTO(user.getAccount().getProfile(), false) : null);
 		setLogin(detailed? user.getAccount().getUsername() : null);
-		setVisits(detailed && user.getVisits() != null? user.getVisits().stream().map(item -> new VisitDTO(item, false)).collect(Collectors.toList()) : null);
+		setVisits(detailed && user.getVisits() != null? user.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()) : null);
 	}
 
 	@JsonIgnore
@@ -139,5 +140,4 @@ public class UserDTO {
 		model.setLongitude(getLongitude());
 		return model;
 	}
-
 }

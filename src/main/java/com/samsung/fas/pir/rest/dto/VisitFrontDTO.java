@@ -7,6 +7,7 @@ import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.Visit;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.mobile.device.Device;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -90,7 +91,7 @@ public class VisitFrontDTO {
 		super();
 	}
 
-	public VisitFrontDTO(Visit visit, boolean detailed) {
+	public VisitFrontDTO(Visit visit, Device device, boolean detailed) {
 		setUuid(visit.getUuid());
 		setNumber(visit.getNumber());
 		setFamilyRating(visit.getFamilyRating());
@@ -100,10 +101,10 @@ public class VisitFrontDTO {
 		setTempID(visit.getMobileId());
 
 		setAnswers(visit.getAnswers() != null? visit.getAnswers().stream().map(answer -> new AnswerDTO(answer, true)).collect(Collectors.toList()) : null);
-		setAgent(new UserDTO(visit.getAgent(), false));
+		setAgent(new UserDTO(visit.getAgent(), device, false));
 		setChapter(new ChapterDTO(visit.getChapter(), false));
 		setFormUUID(visit.getForm() != null? visit.getForm().getUuid() : null);
-		setChild(visit.getChild() != null? new ChildDTO(visit.getChild(), false) : null);
+		setChild(visit.getChild() != null? new ChildDTO(visit.getChild(), device, false) : null);
 //		setResponsible(visit.getResponsible() != null? new ResponsibleDTO(visit.getResponsible(), false) : null);
 	}
 

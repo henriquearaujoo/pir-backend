@@ -10,6 +10,7 @@ import com.samsung.fas.pir.persistence.models.Child;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.mobile.device.Device;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -144,7 +145,7 @@ public class ChildDTO {
 		super();
 	}
 
-	public ChildDTO(Child child, boolean detailed) {
+	public ChildDTO(Child child, Device device, boolean detailed) {
 		setTempID(child.getMobileId());
 		setUuid(child.getUuid());
 		setName(child.getName());
@@ -163,9 +164,9 @@ public class ChildDTO {
 		setInSocialEducationalPrograms(child.isSocialEducationalPrograms());
 		setVaccinationUpToDate(child.isVaccinationUpToDate());
 		setHasRelationDifficulties(child.isRelationDifficulties());
-		setMother(detailed? child.getMother() != null? new MotherDTO(child.getMother(), false) : null : null);
-		setResponsible(detailed? child.getResponsible().stream().map(responsible -> new ResponsibleDTO(responsible, false)).collect(Collectors.toList()) : null);
-		setVisits(child.getVisits() != null? child.getVisits().stream().map(item -> new VisitDTO(item, false)).collect(Collectors.toList()) : new ArrayList<>());
+		setMother(detailed? child.getMother() != null? new MotherDTO(child.getMother(), device, false) : null : null);
+		setResponsible(detailed? child.getResponsible().stream().map(responsible -> new ResponsibleDTO(responsible, device, false)).collect(Collectors.toList()) : null);
+		setVisits(child.getVisits() != null? child.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>());
 	}
 
 	@JsonIgnore
