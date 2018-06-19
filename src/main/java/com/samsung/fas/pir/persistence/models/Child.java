@@ -148,4 +148,10 @@ public class Child extends BaseID {
 	@ManyToMany
 	@Alias("Responsável")
 	private 	Collection<Responsible>		responsible					= new ArrayList<>();
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
+	@Alias("Formulário - Respostas")
+	private 	Collection<SAnswer>			answers						= new ArrayList<>();
 }

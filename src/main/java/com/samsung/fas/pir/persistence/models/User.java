@@ -102,5 +102,11 @@ public class User extends BaseID implements Serializable {
 	@OneToMany(mappedBy = "agent")
 	@Alias("Visitas")
 	private		Collection<Visit>		visits				= new ArrayList<>();
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "agent")
+	@Alias("Formulário - Respostas")
+	private		Collection<SAnswer>		answers				= new ArrayList<>();
 	// endregion
 }
