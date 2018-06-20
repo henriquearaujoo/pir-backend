@@ -43,10 +43,4 @@ public class Mother extends BaseID {
 	@OneToMany(mappedBy = "mother", cascade = CascadeType.ALL)
 	@Alias("Filhos")
 	private 	Collection<Child>		children			= new ArrayList<>();
-
-	@Getter
-	@Setter
-	@OneToMany(mappedBy = "mother", cascade = CascadeType.ALL)
-	@Alias("Filhos")
-	private 	Collection<SAnswer>		answers				= new ArrayList<>();
 }

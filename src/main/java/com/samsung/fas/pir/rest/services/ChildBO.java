@@ -2,10 +2,7 @@ package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.exception.RESTException;
-import com.samsung.fas.pir.persistence.dao.ChildDAO;
-import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
-import com.samsung.fas.pir.persistence.dao.UserDAO;
-import com.samsung.fas.pir.persistence.dao.VisitDAO;
+import com.samsung.fas.pir.persistence.dao.*;
 import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.ChildDTO;
@@ -37,6 +34,10 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 
 	@Getter
 	@Setter
+	private 	MotherDAO 			motherDAO;
+
+	@Getter
+	@Setter
 	private		VisitBO				visitBO;
 	private List<Responsible> responsible;
 
@@ -53,7 +54,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	public ChildDTO save(ChildDTO create, Device device, UserDetails account) {
 		Child				model		= create.getModel();
 		Child				child		= create.getUuid() != null? getDao().findOne(create.getUuid()) : null;
-		Mother				mother		= create.getMother() != null? getResponsibleDAO().findOne(create.getMother().getResponsible().getUuid()).getMother() : null;
+//		Mother				mother		= create.getMother() != null? getMotherDAO().findOne(create.getMother().getResponsible().getUuid()).getMother() : null;
 		List<Responsible>	responsible	= create.getResponsible() != null? create.getResponsible().stream().map(item -> getResponsibleDAO().findOne(item.getUuid())).collect(Collectors.toList()) : new ArrayList<>();
 		User				agent		= create.getAgentID() != null? getUserDAO().findOne(create.getAgentID()) : null;
 
@@ -67,7 +68,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 			return new ChildDTO(getDao().save(model), device, true);
 		} else {
 			setupChild(child, model);
-			child.setMother(mother);
+//			child.setMother(mother);
 			responsible.forEach(resp -> resp.getChildren().remove(resp.getChildren().stream().filter(item -> item.getUuid().compareTo(child.getUuid()) == 0).findAny().orElse(new Child())));
 			child.setResponsible(responsible);
 			responsible.forEach(resp -> resp.getChildren().add(model));

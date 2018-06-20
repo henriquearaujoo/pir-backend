@@ -24,6 +24,6 @@ public class Survey extends BaseID {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "survey")
-	private 	List<SurveyQuestion>	surveyQuestions		= new ArrayList<>();
+	@OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
+	private 	List<SQuestion>			questions			= new ArrayList<>();
 }

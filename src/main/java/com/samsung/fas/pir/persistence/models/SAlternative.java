@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,5 +36,5 @@ public class SAlternative extends BaseID {
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "alternative")
-	private 	List<SAnswer> 			answers;
+	private 	List<SAnswer> 			answers			= new ArrayList<>();
 }

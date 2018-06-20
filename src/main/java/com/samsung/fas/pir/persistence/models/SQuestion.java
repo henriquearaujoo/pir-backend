@@ -34,6 +34,17 @@ public class SQuestion extends BaseID {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "question")
-	private 	List<SAlternative>		alternative			= new ArrayList<>();
+	@ManyToOne(optional = false)
+	@JoinColumn
+	private 	Survey					survey;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+	private 	List<SAlternative>		alternatives			= new ArrayList<>();
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "question",cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private 	List<SAnswer>			answers					= new ArrayList<>();
 }

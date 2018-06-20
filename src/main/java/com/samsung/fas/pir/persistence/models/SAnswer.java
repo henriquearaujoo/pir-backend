@@ -30,7 +30,7 @@ public class SAnswer extends BaseID {
 	@Setter
 	@ManyToOne(optional = false)
 	@JoinColumn
-	private 	SurveyQuestion	surveyQuestion;
+	private 	SQuestion		question;
 
 	@Getter
 	@Setter
@@ -48,6 +48,5 @@ public class SAnswer extends BaseID {
 	@Setter
 	@ManyToOne
 	@JoinColumn
-	private 	Mother 			mother;
-
+	private 	Responsible 	responsible;
 }

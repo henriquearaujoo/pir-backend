@@ -1,20 +1,29 @@
 package com.samsung.fas.pir.rest.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
-import com.samsung.fas.pir.persistence.models.SQuestion;
-import com.samsung.fas.pir.persistence.models.Survey;
+import com.samsung.fas.pir.persistence.models.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.mobile.device.Device;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @DTO(SQuestion.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SQuestionDTO {
+	@Getter
+	@Setter
+	@JsonProperty("id")
+	private 		UUID					id;
+
 	@Getter
 	@Setter
 	@JsonProperty("description")
@@ -33,7 +42,38 @@ public class SQuestionDTO {
 	@Getter
 	@Setter
 	@JsonProperty("alternatives")
-	private 		List<SAlternativeDTO>	alternative;
+	private 		List<SAlternativeDTO>	alternatives;
 
-	// TODO: getModel & Constructor
+	@Getter
+	@Setter
+	@JsonProperty("answers")
+	private 		List<SAnswerDTO>		answers;
+
+	public SQuestionDTO() {
+		super();
+	}
+
+	public SQuestionDTO(SQuestion entity, Device device, boolean detailed) {
+		setId(entity.getUuid());
+		setDescription(entity.getDescription());
+		setType(entity.getType());
+		setValueType(entity.getValueType());
+		setAlternatives(entity.getAlternatives().stream().map(alternative -> new SAlternativeDTO(alternative, device, false)).collect(Collectors.toList()));
+		setAnswers(entity.getAnswers().stream().map(answer -> new SAnswerDTO(answer, device, false)).collect(Collectors.toList()));
+	}
+
+	@JsonIgnore
+	public SQuestion getModel() {
+		SQuestion model = new SQuestion();
+		model.setUuid(getId());
+		model.setDescription(getDescription());
+		model.setType(getType());
+		model.setValueType(getValueType());
+		model.setAlternatives(getAlternatives() != null? getAlternatives().stream().map(item -> {
+			SAlternative alternative = item.getModel();
+			alternative.setQuestion(model);
+			return alternative;
+		}).collect(Collectors.toList()) : new ArrayList<>());
+		return model;
+	}
 }

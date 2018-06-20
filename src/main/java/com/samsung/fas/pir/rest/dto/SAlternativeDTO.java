@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.rest.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,13 +9,22 @@ import com.samsung.fas.pir.persistence.models.SAlternative;
 import com.samsung.fas.pir.persistence.models.SQuestion;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.mobile.device.Device;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @DTO(SAlternative.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SAlternativeDTO {
+	@Getter
+	@Setter
+	@JsonProperty("id")
+	private 		UUID				id;
+
 	@Getter
 	@Setter
 	@JsonProperty("description")
@@ -30,11 +40,24 @@ public class SAlternativeDTO {
 	@JsonProperty("question")
 	private 		SQuestionDTO		question;
 
-	@Getter
-	@Setter
-	@JsonProperty("answers")
-	private 		List<SAnswerDTO> 	answers;
+	public SAlternativeDTO() {
+		super();
+	}
 
+	public SAlternativeDTO(SAlternative entity, Device device, boolean detailed) {
+		setId(entity.getUuid());
+		setDescription(entity.getDescription());
+		setValueType(entity.getValueType());
+		setQuestion(detailed? new SQuestionDTO(entity.getQuestion(), device, false) : null);
+	}
 
-	// TODO: getModel & Constructor
+	@JsonIgnore
+	public SAlternative getModel() {
+		SAlternative model = new SAlternative();
+		model.setUuid(getId());
+		model.setValueType(getValueType());
+		model.setDescription(getDescription());
+		model.setQuestion(getQuestion() != null? getQuestion().getModel() : null);
+		return model;
+	}
 }
