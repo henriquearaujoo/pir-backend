@@ -1,11 +1,12 @@
 package com.samsung.fas.pir.persistence.dao;
 
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.samsung.fas.pir.persistence.dao.base.BaseDAO;
 import com.samsung.fas.pir.persistence.dao.utils.SBPage;
-import com.samsung.fas.pir.persistence.models.QMother;
+import com.samsung.fas.pir.persistence.enums.EGender;
 import com.samsung.fas.pir.persistence.models.QResponsible;
 import com.samsung.fas.pir.persistence.models.Responsible;
 import com.samsung.fas.pir.persistence.repositories.IResponsible;
@@ -21,12 +22,12 @@ import java.util.UUID;
 
 @Service
 public class ResponsibleDAO extends BaseDAO<Responsible, Long, IResponsible, QResponsible> {
-	private	final EntityManager emanager;
+	private		final	EntityManager	manager;
 
 	@Autowired
 	public ResponsibleDAO(IResponsible repository, EntityManager emanager) {
 		super(repository);
-		this.emanager = emanager;
+		this.manager = emanager;
 	}
 
 	public Collection<Responsible> findAllByMobileIdIn(Collection<Long> collection) {
@@ -38,25 +39,29 @@ public class ResponsibleDAO extends BaseDAO<Responsible, Long, IResponsible, QRe
 	}
 
 	public Collection<Responsible> findAllResponsible() {
-		return getRepository().findAllByMotherIsNull();
+		JPAQuery<Responsible> 	query 				= new JPAQuery<>(manager);
+		QResponsible 			responsible			= QResponsible.responsible;
+		return query.select(responsible).from(responsible).where(responsible.gender.eq(EGender.FEMALE).and(responsible.childrenCount.eq(Expressions.asNumber(0))).or(responsible.gender.eq(EGender.MALE))).fetch();
 	}
 
 	public Collection<Responsible> findAllResponsible(Predicate predicate) {
-		JPAQuery<Responsible> 	query 				= new JPAQuery<>(emanager);
+		JPAQuery<Responsible> 	query 				= new JPAQuery<>(manager);
 		QResponsible 			responsible			= QResponsible.responsible;
-		QMother 				mother				= QMother.mother;
-		return query.select(responsible).from(responsible).leftJoin(mother).on(responsible.id.eq(mother.id)).where(mother.id.isNull().and(predicate)).fetch();
+		return query.select(responsible).from(responsible).where(Expressions.allOf(responsible.gender.eq(EGender.FEMALE).and(responsible.childrenCount.eq(Expressions.asNumber(0))).or(responsible.gender.eq(EGender.MALE))).and(predicate)).fetch();
 	}
 
-	public Page<Responsible> findAllResponsible(Pageable pageable) {
-		return getRepository().findAllByMotherIsNull(pageable);
+	public Page<?> findAllResponsible(Pageable pageable) {
+		JPAQuery<Responsible> 	query 		= new JPAQuery<>(manager);
+		QResponsible 			responsible	= QResponsible.responsible;
+		JPAQuery<Responsible>	result		= query.select(responsible).from(responsible).where(Expressions.allOf(responsible.gender.eq(EGender.FEMALE).and(responsible.childrenCount.eq(Expressions.asNumber(0))).or(responsible.gender.eq(EGender.MALE))));
+		Query					page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Responsible.class, "responsible"));
+		return SBPage.getPageList(pageable, page, null);
 	}
 
 	public Page<?> findAllResponsible(Predicate predicate, Pageable pageable) {
-		JPAQuery<Responsible> 	query 		= new JPAQuery<>(emanager);
+		JPAQuery<Responsible> 	query 		= new JPAQuery<>(manager);
 		QResponsible 			responsible	= QResponsible.responsible;
-		QMother 				mother		= QMother.mother;
-		JPAQuery<Responsible>	result		= query.select(responsible).from(responsible).leftJoin(mother).on(responsible.id.eq(mother.id)).where(mother.id.isNull().and(predicate));
+		JPAQuery<Responsible>	result		= query.select(responsible).from(responsible).where(Expressions.allOf(responsible.gender.eq(EGender.FEMALE).and(responsible.childrenCount.eq(Expressions.asNumber(0))).or(responsible.gender.eq(EGender.MALE))).and(predicate));
 		Query					page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Responsible.class, "responsible"));
 		return SBPage.getPageList(pageable, page, null);
 	}

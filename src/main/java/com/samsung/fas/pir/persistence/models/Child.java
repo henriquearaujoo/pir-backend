@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.graph.annotations.Alias;
-import com.samsung.fas.pir.persistence.enums.EChildGender;
+import com.samsung.fas.pir.persistence.enums.EGender;
 import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,9 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 
 @Entity
-@Table(name = "child", uniqueConstraints = {
-	@UniqueConstraint(columnNames = {"id", "mother_id"}, name = "child_mother"),
-})
+@Table(name = "child")
 @DynamicUpdate
 @DynamicInsert
 @Alias("Criança")
@@ -50,7 +48,7 @@ public class Child extends BaseID {
 	@Enumerated(EnumType.STRING)
 	@Column
 	@Alias("Sexo")
-	private 	EChildGender 				gender;
+	private		EGender						gender;
 
 	@Getter
 	@Setter
@@ -123,13 +121,6 @@ public class Child extends BaseID {
 	@Column(nullable = false)
 	@Alias("Possui Dificuldade de Relação")
 	private 	boolean						relationDifficulties;
-
-	@Getter
-	@Setter
-	@ManyToOne
-	@Alias("Mãe")
-	@JoinColumn(name = "mother_id")
-	private 	Mother						mother;
 
 	@Getter
 	@Setter

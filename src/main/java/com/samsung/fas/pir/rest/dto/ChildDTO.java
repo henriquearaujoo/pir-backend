@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
-import com.samsung.fas.pir.persistence.enums.EChildGender;
+import com.samsung.fas.pir.persistence.enums.EGender;
 import com.samsung.fas.pir.persistence.models.Child;
 import lombok.Getter;
 import lombok.Setter;
@@ -58,7 +58,7 @@ public class ChildDTO {
 	@Setter
 	@JsonProperty("gender")
 	@NotNull(message = "gender.missing")
-	private 	EChildGender 				gender;
+	private 	EGender 					gender;
 
 	@Getter
 	@Setter
@@ -131,7 +131,7 @@ public class ChildDTO {
 	@Getter
 	@Setter
 	@JsonProperty("mother")
-	private		MotherDTO 					mother;
+	private		ResponsibleDTO 				mother;
 
 	@Getter
 	@Setter
@@ -167,7 +167,6 @@ public class ChildDTO {
 		setInSocialEducationalPrograms(child.isSocialEducationalPrograms());
 		setVaccinationUpToDate(child.isVaccinationUpToDate());
 		setHasRelationDifficulties(child.isRelationDifficulties());
-		setMother(detailed? child.getMother() != null? new MotherDTO(child.getMother(), device, false) : null : null);
 		setResponsible(detailed? child.getResponsible().stream().map(responsible -> new ResponsibleDTO(responsible, device, false)).collect(Collectors.toList()) : null);
 		setVisits(!device.isNormal()? child.getVisits() != null? child.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>() : null);
 	}
@@ -193,7 +192,6 @@ public class ChildDTO {
 		model.setVaccinationUpToDate(isVaccinationUpToDate());
 		model.setRelationDifficulties(isHasRelationDifficulties());
 		model.setResponsible(getResponsible() != null? getResponsible().stream().map(ResponsibleDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
-		model.setMother(getMother() != null? getMother().getModel() : null);
 		model.setVisits(getVisits() != null? getVisits().stream().map(VisitDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 
 		try {

@@ -2,8 +2,8 @@ package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.persistence.dao.PregnancyDAO;
 import com.samsung.fas.pir.persistence.dao.VisitDAO;
-import com.samsung.fas.pir.persistence.models.Mother;
 import com.samsung.fas.pir.persistence.models.Pregnancy;
+import com.samsung.fas.pir.persistence.models.Responsible;
 import com.samsung.fas.pir.persistence.models.User;
 import com.samsung.fas.pir.persistence.models.Visit;
 import com.samsung.fas.pir.persistence.models.base.Base;
@@ -56,7 +56,7 @@ public class PregnancyBO extends BaseBO<Pregnancy, PregnancyDAO, PregnancyDTO, L
 		return null;
 	}
 
-	Pregnancy setupPregnancy(Pregnancy model, Mother mother, User agent) {
+	Pregnancy setupPregnancy(Pregnancy model, Responsible mother, User agent) {
 		model.setAgent(agent);
 		model.setPregnant(mother);
 		model.setRegisteredAt(new Date());
@@ -64,7 +64,7 @@ public class PregnancyBO extends BaseBO<Pregnancy, PregnancyDAO, PregnancyDTO, L
 		return model;
 	}
 
-	Pregnancy setupPregnancy(Pregnancy pregnancy, Pregnancy model, Mother mother, User agent) {
+	Pregnancy setupPregnancy(Pregnancy pregnancy, Pregnancy model, Responsible mother, User agent) {
 		pregnancy.setRegisteredAt(model.getRegisteredAt());
 		pregnancy.setPregnant(mother);
 		pregnancy.setVisits(setupVisit(pregnancy, model.getVisits(), agent));

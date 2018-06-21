@@ -19,8 +19,6 @@ import java.util.UUID;
 public interface IResponsible extends IBaseRepository<Responsible, Long, QResponsible> {
 	Collection<Responsible> findAllByMobileIdIn(Collection<Long> collection);
 	Collection<Responsible> findAllByUuidIn(Collection<UUID> collection);
-	Collection<Responsible> findAllByMotherIsNull();
-	Page<Responsible> findAllByMotherIsNull(Pageable pageable);
 
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QResponsible root) {

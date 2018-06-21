@@ -34,7 +34,7 @@ public class PregnancyDTO {
 	@Getter
 	@Setter
 	@JsonProperty("mother")
-	private		MotherDTO		mother;
+	private		ResponsibleDTO	mother;
 
 	@Getter
 	@Setter
@@ -61,7 +61,7 @@ public class PregnancyDTO {
 		setTempID(entity.getMobileId());
 		setRegisteredAt(entity.getRegisteredAt());
 		setVisits(entity.getVisits() != null? entity.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>());
-		setMother(detailed? new MotherDTO(entity.getPregnant(), device, false) : null);
+		setMother(detailed? new ResponsibleDTO(entity.getPregnant(), device, false) : null);
 		setAgent(entity.getAgent() != null? new UserDTO(entity.getAgent(), device, false) : null);
 	}
 

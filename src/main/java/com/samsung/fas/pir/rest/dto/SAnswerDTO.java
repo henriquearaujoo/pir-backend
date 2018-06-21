@@ -59,7 +59,7 @@ public class SAnswerDTO {
 	public SAnswerDTO(SAnswer entity, Device device, boolean detailed) {
 		setId(entity.getUuid());
 		setDescription(entity.getDescription());
-		setAlternative(new SAlternativeDTO(entity.getAlternative(), device, false));
+		setAlternative(entity.getAlternative() != null? new SAlternativeDTO(entity.getAlternative(), device, false) : null);
 		setQuestion(new SQuestionDTO(entity.getQuestion(), device, false));
 		setChild(entity.getChild() != null? new ChildDTO(entity.getChild(), device, false) : null);
 		setResponsible(entity.getResponsible() != null? new ResponsibleDTO(entity.getResponsible(), device, false) : null);
@@ -74,7 +74,7 @@ public class SAnswerDTO {
 		SQuestion		question		= new SQuestion();
 		SAlternative	alternative		= new SAlternative();
 
-		question.setUuid(question.getUuid());
+		question.setUuid(getQuestion().getId());
 		child.setUuid(getChild().getUuid());
 		responsible.setUuid(getResponsible().getUuid());
 		alternative.setUuid(getAlternative().getId());

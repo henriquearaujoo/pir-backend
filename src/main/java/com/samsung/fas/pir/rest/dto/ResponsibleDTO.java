@@ -3,8 +3,8 @@ package com.samsung.fas.pir.rest.dto;
 import com.fasterxml.jackson.annotation.*;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.enums.ECivilState;
+import com.samsung.fas.pir.persistence.enums.EGender;
 import com.samsung.fas.pir.persistence.enums.EHabitationType;
-import com.samsung.fas.pir.persistence.models.Mother;
 import com.samsung.fas.pir.persistence.models.Responsible;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponsibleDTO {
+	// region Properties
 	@Getter
 	@Setter
 	@JsonProperty("id")
@@ -139,15 +140,31 @@ public class ResponsibleDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty("mother")
-	@Valid
-	private 	MotherDTO		mother;
+	@JsonProperty("is_pregnant")
+	private		boolean			pregnant;
+
+	@Getter
+	@Setter
+	@JsonProperty("gender")
+	private		String			gender;
+	// endregion
 
 	@Getter
 	@Setter
 	@JsonProperty("children")
 	@Valid
 	private 	List<ChildDTO>	children;
+
+	@Getter
+	@Setter
+	@JsonProperty("sons")
+	@Valid
+	private 	List<ChildDTO>	sons;
+
+	@Getter
+	@Setter
+	@JsonProperty("pregnancies")
+	private 	List<PregnancyDTO> 		pregnancies;
 
 	@Getter
 	@Setter
@@ -161,11 +178,6 @@ public class ResponsibleDTO {
 
 	public ResponsibleDTO() {
 		super();
-	}
-
-	public ResponsibleDTO(Mother mother, Device device, boolean detailed) {
-		this(mother.getResponsible(), device, true);
-		setMother(new MotherDTO(mother, device, detailed));
 	}
 
 	public ResponsibleDTO(Responsible responsible, Device device, boolean detailed) {
@@ -187,7 +199,12 @@ public class ResponsibleDTO {
 		hasOtherChildren(responsible.isFamilyHasChildren());
 		setChildrenCount(responsible.getChildrenCount());
 		setCivilState(responsible.getCivilState().toString());
-		setMother(responsible.getMother() != null? new MotherDTO(responsible.getMother(), device, detailed) : null);
+		setGender(responsible.getGender().getValue());
+
+		setPregnant(responsible.isPregnant());
+		setPregnancies(detailed /*|| !device.isNormal()*/? responsible.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()) : null);
+		setChildren(detailed /*|| !device.isNormal()*/? responsible.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()) : null);
+
 		setCommunity(new CommunityDTO(responsible.getCommunity(), device, false));
 		setChildren(!device.isNormal()? responsible.getChildren() != null? responsible.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>() : null);
 	}
@@ -211,18 +228,13 @@ public class ResponsibleDTO {
 		model.setHasWaterTreatment(hasWaterTreatment());
 		model.setObservations(getObservations());
 		model.setChildrenCount(getChildrenCount());
+		model.setGender(EGender.valueOf(getGender()));
 		model.setCivilState(ECivilState.valueOf(civilState));
+		model.setPregnant(isPregnant());
 		model.setCommunity(getCommunity() != null? getCommunity().getModel() : null);
 		model.setChildren(getChildren() != null? getChildren().stream().map(ChildDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
-
-		if (getMother() != null) {
-			Mother modelMother = getMother().getModel();
-			modelMother.setResponsible(model);
-			model.setMother(modelMother);
-			if (model.getChildren() != null && model.getMother().getChildren() != null) {
-				model.getMother().setChildren(model.getMother().getChildren().stream().map(motherChild -> model.getChildren().stream().filter(respChild -> respChild.getMobileId() == motherChild.getMobileId()).findAny().orElse(motherChild)).collect(Collectors.toList()));
-			}
-		}
+		model.setPregnancies(pregnancies != null? pregnancies.stream().map(PregnancyDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
+		model.setChildren(getChildren() != null? getChildren().stream().map(ChildDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 
 		try {
 			model.setBirth(new SimpleDateFormat("dd-MM-yyyy").parse(getBirth()));

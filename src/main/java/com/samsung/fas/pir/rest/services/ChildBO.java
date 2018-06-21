@@ -34,10 +34,6 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 
 	@Getter
 	@Setter
-	private 	MotherDAO 			motherDAO;
-
-	@Getter
-	@Setter
 	private		VisitBO				visitBO;
 	private List<Responsible> responsible;
 
@@ -80,7 +76,6 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	public ChildDTO update(ChildDTO update, Device device, UserDetails account) {
 		Child				model		= update.getModel();
 		Child				child		= update.getUuid() != null? getDao().findOne(update.getUuid()) : null;
-		Mother				mother		= update.getMother() != null? getResponsibleDAO().findOne(update.getMother().getResponsible().getUuid()).getMother() : null;
 		List<Responsible>	responsible	= update.getResponsible() != null? update.getResponsible().stream().map(item -> getResponsibleDAO().findOne(item.getUuid())).collect(Collectors.toList()) : new ArrayList<>();
 		User				agent		= update.getAgentID() != null? getUserDAO().findOne(update.getAgentID()) : null;
 
@@ -94,7 +89,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 			return new ChildDTO(getDao().save(model), device, true);
 		} else {
 			setupChild(child, model);
-			child.setMother(mother);
+//			child.setMother(mother);
 			responsible.forEach(resp -> resp.getChildren().remove(resp.getChildren().stream().filter(item -> item.getUuid().compareTo(child.getUuid()) == 0).findAny().orElse(new Child())));
 			child.setResponsible(responsible);
 			responsible.forEach(resp -> resp.getChildren().add(model));
@@ -134,19 +129,20 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	// endregion
 
 	// region Mother
-	Child setupChild(Child model, Mother mother, User agent) {
-		model.setMother(mother);
-		model.setAgent(agent);
-		model.setVisits(setupVisit(model, model.getVisits(), agent));
-		return model;
-	}
-
-	Child setupChild(Child child, Child model, Mother mother, User agent) {
-		setupChild(child, model);
-		child.setMother(mother);
-		child.setVisits(setupVisit(child, model.getVisits(), agent));
-		return child;
-	}
+	// TODO: SetUp Mother
+//	Child setupChild(Child model, Mother mother, User agent) {
+//		model.setMother(mother);
+//		model.setAgent(agent);
+//		model.setVisits(setupVisit(model, model.getVisits(), agent));
+//		return model;
+//	}
+//
+//	Child setupChild(Child child, Child model, Mother mother, User agent) {
+//		setupChild(child, model);
+//		child.setMother(mother);
+//		child.setVisits(setupVisit(child, model.getVisits(), agent));
+//		return child;
+//	}
 	// endregion
 
 	private void setupChild(Child child, Child model) {

@@ -22,15 +22,15 @@ import java.util.Date;
 public class Pregnancy extends BaseID {
 	@Getter
 	@Setter
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "mother_id")
-	@Alias("Mãe")
-	private			Mother				pregnant;
+	@Column(name = "mobile_id")
+	private		long					mobileId;
 
 	@Getter
 	@Setter
-	@Column(name = "mobile_id")
-	private		long					mobileId;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "mother_id")
+	@Alias("Mãe")
+	private			Responsible			pregnant;
 
 	@Getter
 	@Setter

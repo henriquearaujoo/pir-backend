@@ -59,7 +59,7 @@ public class SQuestionDTO {
 		setType(entity.getType());
 		setValueType(entity.getValueType());
 		setAlternatives(entity.getAlternatives().stream().map(alternative -> new SAlternativeDTO(alternative, device, false)).collect(Collectors.toList()));
-		setAnswers(entity.getAnswers().stream().map(answer -> new SAnswerDTO(answer, device, false)).collect(Collectors.toList()));
+		setAnswers(detailed? entity.getAnswers().stream().map(answer -> new SAnswerDTO(answer, device, false)).collect(Collectors.toList()) : null);
 	}
 
 	@JsonIgnore

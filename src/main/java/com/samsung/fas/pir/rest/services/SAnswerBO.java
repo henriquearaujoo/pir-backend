@@ -2,10 +2,8 @@ package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.persistence.dao.*;
-import com.samsung.fas.pir.persistence.enums.EProfileType;
 import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.rest.dto.SAnswerDTO;
-import com.samsung.fas.pir.rest.dto.SurveyDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import lombok.Getter;
 import lombok.Setter;
@@ -55,19 +53,24 @@ public class SAnswerBO extends BaseBO<SAnswer, SAnswerDAO, SAnswerDTO, Long> {
 		if (answer != null) {
 			answer.setDescription(model.getDescription());
 			answer.setAlternative(alternative);
-			answer.setAgent(((Account) details).getProfile().getType().compareTo(EProfileType.AGENT) == 0? ((Account) details).getUser() : answer.getAgent());
+			answer.setAgent(answer.getAgent() == null? ((Account) details).getUser() : answer.getAgent());
 			answer.setQuestion(question);
 			answer.setResponsible(responsible);
 			answer.setChild(child);
-			return null;
+			return new SAnswerDTO(getDao().save(answer), device, true);
 		}
+		model.setAlternative(alternative);
+		model.setAgent(((Account) details).getUser());
+		model.setQuestion(question);
+		model.setResponsible(responsible);
+		model.setChild(child);
 
-		return null;
+		return new SAnswerDTO(getDao().save(model), device, true);
 	}
 
 	@Override
 	public SAnswerDTO update(SAnswerDTO update, Device device, UserDetails details) {
-		return null;
+		return save(update, device, details);
 	}
 
 	@Override

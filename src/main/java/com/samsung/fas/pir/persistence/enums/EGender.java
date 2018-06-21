@@ -6,28 +6,28 @@ import lombok.Setter;
 
 import java.util.Arrays;
 
-public enum EChildGender {
+public enum EGender {
 	FEMALE		("FEMALE"),
 	MALE		("MALE"),
 	UNDEFINED	("UNDEFINED");
 
 	@Getter(value = AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE)
-	private		String	enumaration;
+	private		String 		enumeration;
 
-	EChildGender(String value) {
-		setEnumaration(value);
+	EGender(String value) {
+		setEnumeration(value);
 	}
 
 	public boolean equals(String value) {
-		return getEnumaration().equalsIgnoreCase(value);
+		return getEnumeration().equalsIgnoreCase(value);
 	}
 
 	public String getValue() {
-		return getEnumaration();
+		return getEnumeration();
 	}
 
-	public static EChildGender setValue(String s) {
-		return Arrays.stream(EChildGender.values()).filter(item -> item.getEnumaration().equalsIgnoreCase(s)).findAny().orElse(UNDEFINED);
+	public static EGender setValue(String s) {
+		return Arrays.stream(EGender.values()).filter(item -> item.getEnumeration().equalsIgnoreCase(s)).findAny().orElse(UNDEFINED);
 	}
 }

@@ -2,11 +2,11 @@ package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.graph.annotations.Alias;
 import com.samsung.fas.pir.persistence.enums.ECivilState;
+import com.samsung.fas.pir.persistence.enums.EGender;
 import com.samsung.fas.pir.persistence.enums.EHabitationType;
 import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -21,6 +21,7 @@ import java.util.Date;
 @DynamicInsert
 @Alias("Responsável")
 public class Responsible extends BaseID {
+	// region Properties
 	@Getter
 	@Setter
 	@Column(name = "mobile_id")
@@ -73,8 +74,34 @@ public class Responsible extends BaseID {
 	@Getter
 	@Setter
 	@Column
+	@Alias("Fonte de Renda da Família - Outros")
+	private 	String				familyIncomeOther;
+
+	@Getter
+	@Setter
+	@Column
 	@Alias("Participação na Renda")
 	private 	String				incomeParticipation;
+
+	@Getter
+	@Setter
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	@Alias("Gênero")
+	private 	EGender 			gender;
+
+	@Getter
+	@Setter
+	@Column(nullable = false)
+	@Alias("No. de Filhos")
+	private 	long				childrenCount;
+
+	@Getter
+	@Setter
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	@Alias("Estado Civil")
+	private 	ECivilState 		civilState;
 
 	@Getter
 	@Setter
@@ -85,7 +112,7 @@ public class Responsible extends BaseID {
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	@Alias("Há Hospital Perto")
+	@Alias("Há Unidade Básica Perto da Moradia")
 	private 	boolean				hasHospital;
 
 	@Getter
@@ -115,43 +142,37 @@ public class Responsible extends BaseID {
 	@Getter
 	@Setter
 	@Column(nullable = false)
-	@Alias("No. de Filhos")
-	private 	long				childrenCount;
-
-	@Getter
-	@Setter
-	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
-	@Alias("Estado Civil")
-	private 	ECivilState 		civilState;
+	@Alias("Está Grávida")
+	private 	boolean					pregnant;
+	// endregion
 
 	@Getter
 	@Setter
 	@ManyToOne
-	private 	User				agent;
+	private 	User					agent;
 
 	@Getter
 	@Setter
 	@ManyToOne(optional = false)
 	@JoinColumn
 	@Alias("Comunidade")
-	private 	Community			community;
-
-	@Getter
-	@Setter
-	@OneToOne(mappedBy = "responsible", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Alias("Mãe")
-	private 	Mother				mother;
+	private 	Community				community;
 
 	@Getter
 	@Setter
 	@ManyToMany(mappedBy = "responsible", cascade = CascadeType.ALL)
 	@Alias("Crianças")
-	private 	Collection<Child>	children			= new ArrayList<>();
+	private 	Collection<Child>		children			= new ArrayList<>();
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "responsible", cascade = CascadeType.ALL)
 	@Alias("Filhos")
 	private 	Collection<SAnswer>		answers				= new ArrayList<>();
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "pregnant", cascade = CascadeType.ALL)
+	@Alias("Gestações")
+	private 	Collection<Pregnancy>	pregnancies			= new ArrayList<>();
 }
