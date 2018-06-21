@@ -54,13 +54,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) {
 		web.ignoring()
 		.antMatchers(HttpMethod.OPTIONS)
-		.antMatchers(HttpMethod.POST, "/rest/firebase/authentication/**")
 		.antMatchers(HttpMethod.POST, "/rest/authentication/**")
 		.antMatchers(HttpMethod.POST, "/rest/query/**")
 		.antMatchers(HttpMethod.GET, "/rest/graph/**")
 		.antMatchers(HttpMethod.GET, "/rest/file/**")
-		.antMatchers(HttpMethod.GET, "/rest/firebase/**")
 		.antMatchers("/assets/**", "/webjars/**", "/api-docs/**")
-		.antMatchers("/jsondoc/**", "/jsondoc-ui.html", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs");
+		.antMatchers("/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs");
 	}
 }

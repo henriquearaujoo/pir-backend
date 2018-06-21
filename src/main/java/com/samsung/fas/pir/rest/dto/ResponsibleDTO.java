@@ -157,12 +157,6 @@ public class ResponsibleDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty("sons")
-	@Valid
-	private 	List<ChildDTO>	sons;
-
-	@Getter
-	@Setter
 	@JsonProperty("pregnancies")
 	private 	List<PregnancyDTO> 		pregnancies;
 
@@ -200,13 +194,10 @@ public class ResponsibleDTO {
 		setChildrenCount(responsible.getChildrenCount());
 		setCivilState(responsible.getCivilState().toString());
 		setGender(responsible.getGender().getValue());
-
 		setPregnant(responsible.isPregnant());
-		setPregnancies(detailed /*|| !device.isNormal()*/? responsible.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()) : null);
-		setChildren(detailed /*|| !device.isNormal()*/? responsible.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()) : null);
-
-		setCommunity(new CommunityDTO(responsible.getCommunity(), device, false));
-		setChildren(!device.isNormal()? responsible.getChildren() != null? responsible.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>() : null);
+		setPregnancies(responsible.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()));
+		setChildren(responsible.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()));
+		setCommunity(detailed? new CommunityDTO(responsible.getCommunity(), device, false) : null);
 	}
 
 	@JsonIgnore

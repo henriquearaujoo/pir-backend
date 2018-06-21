@@ -95,6 +95,7 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		return collection.stream().map(item -> update(item, device, details)).collect(Collectors.toList());
 	}
 
+	@SuppressWarnings("Duplicates")
 	Responsible setupResponsible(Responsible model, Community community, User agent) {
 		model.setCommunity(community);
 		model.setAgent(agent);
@@ -145,7 +146,7 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		return responsible;
 	}
 
-	private Collection<Pregnancy> setupPregnancy(Responsible mother, Collection<Pregnancy> collection, User agent) {
+	private List<Pregnancy> setupPregnancy(Responsible mother, List<Pregnancy> collection, User agent) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
@@ -158,11 +159,11 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		}).collect(Collectors.toList());
 	}
 
-	private Collection<Child> setupChild(Responsible responsible, Collection<Child> collection, User agent) {
+	private List<Child> setupChild(Responsible responsible, List<Child> collection, User agent) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
-			Child		child		= uuid != null? getChildDAO().findOne(uuid) : null;
+			Child		child		= uuid != null? getChildDAO().findOne(uuid) :  null;
 			if (child != null) {
 				return getChildBO().setupChild(child, item, responsible, agent);
 			} else {

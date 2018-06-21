@@ -4,9 +4,7 @@ import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.persistence.dao.CityDAO;
 import com.samsung.fas.pir.persistence.dao.CommunityDAO;
 import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
-import com.samsung.fas.pir.persistence.models.City;
-import com.samsung.fas.pir.persistence.models.Community;
-import com.samsung.fas.pir.persistence.models.Responsible;
+import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.CommunityDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
@@ -18,7 +16,9 @@ import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -72,7 +72,7 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 
 	private Community setupCommunity(Community model, City city, UserDetails account) {
 		model.setCity(city);
-		model.setResponsible(setupResponsible(model, model.getResponsible(), account));
+		model.setResponsible(setupResponsible(model, model.getResponsible(), ((Account) account).getUser()));
 		return model;
 	}
 
@@ -101,22 +101,37 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 		community.setRegional(model.getRegional());
 		community.setLatitude(model.getLatitude());
 		community.setLongitude(model.getLongitude());
-		community.setResponsible(setupResponsible(community, model.getResponsible(), account));
+		community.setResponsible(setupResponsible(community, model.getResponsible(), ((Account) account).getUser()));
 		return community;
 	}
 
-	private Collection<Responsible> setupResponsible(Community community, Collection<Responsible> collection, UserDetails account) {
-		Collection<UUID>			modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
+	private List<Responsible> setupResponsible(Community community, List<Responsible> collection, User agent) {
+		List<UUID>			modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
+		setChild(collection);
 		return collection.stream().map(item -> {
 			UUID			uuid			= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
 			Responsible		responsible		= uuid != null? getResponsibleDAO().findOne(uuid) : null;
 			if (responsible != null) {
 				responsible.setCommunity(community);
-				return getResponsibleBO().setupResponsible(responsible, item, community, account != null? ((Account) account).getUser() : null);
+				return getResponsibleBO().setupResponsible(responsible, item, community, agent);
 			} else {
 				item.setCommunity(community);
-				return getResponsibleBO().setupResponsible(item, community, account != null? ((Account) account).getUser() : null);
+				return getResponsibleBO().setupResponsible(item, community, agent);
 			}
 		}).collect(Collectors.toList());
+	}
+
+	private void setChild(List<Responsible> responsibles) {
+		for (int i = 0; i < responsibles.size(); i++) {
+			for (int k = 0; k < responsibles.size(); k++) {
+				if (i != k) {
+					responsibles.get(i).setChildren(merge(responsibles.get(i).getChildren(), responsibles.get(k).getChildren()));
+				}
+			}
+		}
+	}
+
+	private List<Child> merge(List<Child> first, List<Child> second) {
+		return first.stream().map(itemA -> second.stream().filter(itemB -> itemA.getMobileId() == itemB.getMobileId()).findAny().orElse(itemA)).collect(Collectors.toList());
 	}
 }

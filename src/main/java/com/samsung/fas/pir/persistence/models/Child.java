@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "child")
@@ -21,7 +22,7 @@ import java.util.Date;
 public class Child extends BaseID {
 	@Getter
 	@Setter
-	@Transient
+	@Column
 	private		long						mobileId;
 
 	@Getter
@@ -132,17 +133,17 @@ public class Child extends BaseID {
 	@Setter
 	@OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
 	@Alias("Visitas")
-	private 	Collection<Visit>			visits						= new ArrayList<>();
+	private 	List<Visit>			visits					= new ArrayList<>();
 
 	@Getter
 	@Setter
 	@ManyToMany
 	@Alias("Responsável")
-	private 	Collection<Responsible>		responsible					= new ArrayList<>();
+	private 	List<Responsible> 	responsible				= new ArrayList<>();
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
 	@Alias("Formulário - Respostas")
-	private 	Collection<SAnswer>			answers						= new ArrayList<>();
+	private 	List<SAnswer>		answers					= new ArrayList<>();
 }

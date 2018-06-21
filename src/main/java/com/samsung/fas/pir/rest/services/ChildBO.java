@@ -50,17 +50,13 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	public ChildDTO save(ChildDTO create, Device device, UserDetails account) {
 		Child				model		= create.getModel();
 		Child				child		= create.getUuid() != null? getDao().findOne(create.getUuid()) : null;
-//		Mother				mother		= create.getMother() != null? getMotherDAO().findOne(create.getMother().getResponsible().getUuid()).getMother() : null;
 		List<Responsible>	responsible	= create.getResponsible() != null? create.getResponsible().stream().map(item -> getResponsibleDAO().findOne(item.getUuid())).collect(Collectors.toList()) : new ArrayList<>();
-		User				agent		= create.getAgentID() != null? getUserDAO().findOne(create.getAgentID()) : null;
 
 		if (child == null) {
-			if (agent == null)
-				throw new RESTException("agent.missing");
-			model.setAgent(agent);
+			model.setAgent(((Account) account).getUser());
 			model.setResponsible(responsible);
 			responsible.forEach(resp -> resp.getChildren().add(model));
-			model.setVisits(setupVisit(model, model.getVisits(), agent));
+//			model.setVisits(setupVisit(model, model.getVisits(), agent));
 			return new ChildDTO(getDao().save(model), device, true);
 		} else {
 			setupChild(child, model);
@@ -85,7 +81,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 			model.setAgent(agent);
 			model.setResponsible(responsible);
 			responsible.forEach(resp -> resp.getChildren().add(model));
-			model.setVisits(setupVisit(model, model.getVisits(), agent));
+//			model.setVisits(setupVisit(model, model.getVisits(), agent));
 			return new ChildDTO(getDao().save(model), device, true);
 		} else {
 			setupChild(child, model);
@@ -114,16 +110,16 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		if (model.getResponsible().stream().filter(item -> item.getMobileId() - responsible.getMobileId() == 0).findAny().orElse(null) == null) {
 			model.getResponsible().add(responsible);
 		}
-		model.setVisits(setupVisit(model, model.getVisits(), agent));
+//		model.setVisits(setupVisit(model, model.getVisits(), agent));
 		return model;
 	}
 
 	Child setupChild(Child child, Child model, Responsible responsible, User agent) {
 		setupChild(child, model);
-		if (child.getResponsible().stream().filter(item -> item.getUuid().compareTo(responsible.getUuid()) == 0).findAny().orElse(null) == null) {
+		if (child.getResponsible().stream().filter(item -> responsible.getUuid() != null && item.getUuid().compareTo(responsible.getUuid()) == 0).findAny().orElse(null) == null) {
 			child.getResponsible().add(responsible);
 		}
-		child.setVisits(setupVisit(child, model.getVisits(), agent));
+//		child.setVisits(setupVisit(child, model.getVisits(), agent));
 		return child;
 	}
 	// endregion
