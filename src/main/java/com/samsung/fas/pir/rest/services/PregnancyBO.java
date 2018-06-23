@@ -59,15 +59,15 @@ public class PregnancyBO extends BaseBO<Pregnancy, PregnancyDAO, PregnancyDTO, L
 	Pregnancy setupPregnancy(Pregnancy model, Responsible mother, User agent) {
 		model.setAgent(agent);
 		model.setPregnant(mother);
-		model.setRegisteredAt(new Date());
-		model.setVisits(setupVisit(model, model.getVisits(), agent));
+		model.setRegisteredAt(model.getRegisteredAt());
+//		model.setVisits(setupVisit(model, model.getVisits(), agent));
 		return model;
 	}
 
 	Pregnancy setupPregnancy(Pregnancy pregnancy, Pregnancy model, Responsible mother, User agent) {
 		pregnancy.setRegisteredAt(model.getRegisteredAt());
 		pregnancy.setPregnant(mother);
-		pregnancy.setVisits(setupVisit(pregnancy, model.getVisits(), agent));
+//		pregnancy.setVisits(setupVisit(pregnancy, model.getVisits(), agent));
 		return pregnancy;
 	}
 

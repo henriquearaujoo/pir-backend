@@ -95,7 +95,6 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		return collection.stream().map(item -> update(item, device, details)).collect(Collectors.toList());
 	}
 
-	@SuppressWarnings("Duplicates")
 	Responsible setupResponsible(Responsible model, Community community, User agent) {
 		model.setCommunity(community);
 		model.setAgent(agent);

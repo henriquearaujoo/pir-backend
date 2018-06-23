@@ -62,12 +62,30 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 
 	@Override
 	public Collection<CommunityDTO> save(Collection<CommunityDTO> collection, Device device, UserDetails details) {
-		return collection.stream().map(item -> save(item, device, details)).collect(Collectors.toList());
+		List<CommunityDTO> saved = new ArrayList<>();
+		for (CommunityDTO model : collection) {
+			try {
+				saved.add(save(model, device, details));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+//		return collection.stream().map(item -> save(item, device, details)).collect(Collectors.toList());
+		return saved;
 	}
 
 	@Override
 	public Collection<CommunityDTO> update(Collection<CommunityDTO> collection, Device device, UserDetails details) {
-		return collection.stream().map(item -> update(item, device, details)).collect(Collectors.toList());
+		List<CommunityDTO> saved = new ArrayList<>();
+		for (CommunityDTO model : collection) {
+			try {
+				saved.add(update(model, device, details));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+//		return collection.stream().map(item -> update(item, device, details)).collect(Collectors.toList());
+		return saved;
 	}
 
 	private Community setupCommunity(Community model, City city, UserDetails account) {

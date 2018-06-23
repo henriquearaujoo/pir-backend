@@ -163,7 +163,7 @@ public class Responsible extends BaseID {
 	@Setter
 	@ManyToMany(mappedBy = "responsible", cascade = CascadeType.ALL)
 	@Alias("Crianças")
-	private 	List<Child> 			children						= new ArrayList<>();
+	private 	List<Child> 			children			= new ArrayList<>();
 
 	@Getter
 	@Setter

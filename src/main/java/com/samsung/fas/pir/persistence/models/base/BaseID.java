@@ -35,4 +35,13 @@ public abstract class BaseID extends Base {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private 	Date			updatedAt	= new Date();
+
+	@Override
+	public boolean equals(Object obj) {
+		try {
+			return getUuid().compareTo(((BaseID) obj).getUuid()) == 0;
+		} catch (Exception e) {
+			return super.equals(obj);
+		}
+	}
 }

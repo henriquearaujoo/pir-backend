@@ -122,7 +122,7 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 	Visit setupVisit(Visit model, Child child, User agent) {
 		model.setChild(child);
 		model.setChapter(getChapterDAO().findOne(model.getChapter().getUuid()));
-		model.setForm(getFormDAO().findOne(model.getForm().getUuid()));
+		model.setForm(model.getForm().getUuid() != null? getFormDAO().findOne(model.getForm().getUuid()) : null);
 		model.setAgent(agent);
 		if (model.getAnswers() != null) {
 			model.setAnswers(setupAnswers(model, model.getAnswers()));
@@ -131,7 +131,7 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 	}
 
 	Visit setupVisit(Visit visit, Visit model, Child child, User agent) {
-		visit.setForm(getFormDAO().findOne(model.getForm().getUuid()));
+		visit.setForm(model.getForm().getUuid() != null? getFormDAO().findOne(model.getForm().getUuid()) : null);
 		visit.setChapter(getChapterDAO().findOne(model.getChapter().getUuid()));
 		visit.setChild(child);
 		visit.setDuration(model.getDuration());

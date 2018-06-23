@@ -25,13 +25,13 @@ import java.util.stream.Collectors;
 public class VisitDTO {
 	@Getter
 	@Setter
-	@JsonProperty("external_id")
-	private 		long						tempID;
+	@JsonProperty("id")
+	private 		UUID						uuid;
 
 	@Getter
 	@Setter
-	@JsonProperty("id")
-	private 		UUID						uuid;
+	@JsonProperty("external_id")
+	private 		long						tempID;
 
 	@Getter
 	@Setter

@@ -32,7 +32,7 @@ public class CommunityDTO {
 	@Getter
 	@Setter
 	@JsonProperty("external_id")
-	private		Long			tempID;
+	private		long			tempID;
 
 	@Getter
 	@Setter
@@ -184,7 +184,7 @@ public class CommunityDTO {
 	}
 
 	public CommunityDTO(Community community, Device device, boolean detailed) {
-		setTempID(!device.isNormal()? community.getMobileId() : null);
+		setTempID(community.getMobileId());
 		setUuid(community.getUuid());
 		setName(community.getName());
 		setWaterSupply(community.getWaterSupply());
@@ -216,7 +216,7 @@ public class CommunityDTO {
 	@JsonIgnore
 	public Community getModel() {
 		Community model = new Community();
-		model.setMobileId(getTempID() != null? getTempID() : 0L);
+		model.setMobileId(getTempID());
 		model.setUuid(getUuid());
 		model.setName(getName());
 		model.setWaterSupply(getWaterSupply());

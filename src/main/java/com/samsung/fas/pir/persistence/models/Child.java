@@ -125,9 +125,9 @@ public class Child extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn
-	private 	User						agent;
+	private 	User				agent;
 
 	@Getter
 	@Setter

@@ -103,14 +103,13 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		return collection.stream().map(item -> update(item, device, details)).collect(Collectors.toList());
 	}
 
-	// region Responsible
 	Child setupChild(Child model, Responsible responsible, User agent) {
 		model.getResponsible().add(responsible);
 		model.setAgent(agent);
 		if (model.getResponsible().stream().filter(item -> item.getMobileId() - responsible.getMobileId() == 0).findAny().orElse(null) == null) {
 			model.getResponsible().add(responsible);
 		}
-//		model.setVisits(setupVisit(model, model.getVisits(), agent));
+		model.setVisits(setupVisit(model, model.getVisits(), agent));
 		return model;
 	}
 
@@ -119,27 +118,9 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		if (child.getResponsible().stream().filter(item -> responsible.getUuid() != null && item.getUuid().compareTo(responsible.getUuid()) == 0).findAny().orElse(null) == null) {
 			child.getResponsible().add(responsible);
 		}
-//		child.setVisits(setupVisit(child, model.getVisits(), agent));
+		child.setVisits(setupVisit(child, model.getVisits(), agent));
 		return child;
 	}
-	// endregion
-
-	// region Mother
-	// TODO: SetUp Mother
-//	Child setupChild(Child model, Mother mother, User agent) {
-//		model.setMother(mother);
-//		model.setAgent(agent);
-//		model.setVisits(setupVisit(model, model.getVisits(), agent));
-//		return model;
-//	}
-//
-//	Child setupChild(Child child, Child model, Mother mother, User agent) {
-//		setupChild(child, model);
-//		child.setMother(mother);
-//		child.setVisits(setupVisit(child, model.getVisits(), agent));
-//		return child;
-//	}
-	// endregion
 
 	private void setupChild(Child child, Child model) {
 		child.setMobileId(model.getMobileId());
@@ -160,8 +141,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		child.setRelationDifficulties(model.isHasEducationDifficulty());
 	}
 
-	@SuppressWarnings("Duplicates")
-	private Collection<Visit> setupVisit(Child child, Collection<Visit> collection, User agent) {
+	private List<Visit> setupVisit(Child child, List<Visit> collection, User agent) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);

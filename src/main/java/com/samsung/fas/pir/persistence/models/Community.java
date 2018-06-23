@@ -24,7 +24,7 @@ import java.util.List;
 public class Community extends BaseID {
 	@Getter
 	@Setter
-	@Transient
+	@Column
 	private		long						mobileId;
 
 	@Getter

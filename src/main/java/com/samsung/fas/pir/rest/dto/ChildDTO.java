@@ -168,7 +168,7 @@ public class ChildDTO {
 		setVaccinationUpToDate(child.isVaccinationUpToDate());
 		setHasRelationDifficulties(child.isRelationDifficulties());
 		setResponsible(detailed? child.getResponsible().stream().map(responsible -> new ResponsibleDTO(responsible, device, false)).collect(Collectors.toList()) : null);
-		setVisits(!device.isNormal()? child.getVisits() != null? child.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>() : null);
+		setVisits(child.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
 	}
 
 	@JsonIgnore
