@@ -73,7 +73,7 @@ public class AnswerBO extends BaseBO<Answer, AnswerDAO, AnswerDTO, Long> {
 	}
 
 	Answer setupAnswer(Answer model, Visit visit) {
-		model.setAlternative(getAlternativeDAO().findOne(model.getAlternative().getUuid()));
+		model.setAlternative(model.getAlternative().getUuid() != null? getAlternativeDAO().findOne(model.getAlternative().getUuid()) : null);
 		model.setQuestion(getQuestionDAO().findOne(model.getQuestion().getUuid()));
 		model.setVisit(visit);
 		return model;
@@ -81,7 +81,7 @@ public class AnswerBO extends BaseBO<Answer, AnswerDAO, AnswerDTO, Long> {
 
 	Answer setupAnswer(Answer answer, Answer model) {
 		answer.setQuestion(getQuestionDAO().findOne(model.getQuestion().getUuid()));
-		answer.setAlternative(getAlternativeDAO().findOne(model.getAlternative().getUuid()));
+		answer.setAlternative(model.getAlternative().getUuid() != null? getAlternativeDAO().findOne(model.getAlternative().getUuid()) : null);
 		answer.setDescription(model.getDescription());
 		return answer;
 	}

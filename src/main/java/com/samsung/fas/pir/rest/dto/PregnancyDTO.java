@@ -62,7 +62,7 @@ public class PregnancyDTO {
 		setRegisteredAt(entity.getRegisteredAt());
 		setVisits(entity.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
 		setMother(detailed? new ResponsibleDTO(entity.getPregnant(), device, false) : null);
-		setAgent(entity.getAgent() != null? new UserDTO(entity.getAgent(), device, false) : null);
+//		setAgent(entity.getAgent() != null? new UserDTO(entity.getAgent(), device, false) : null);
 	}
 
 	@JsonIgnore

@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class Answer extends BaseID {
 	@Getter
 	@Setter
-	@Transient
+	@Column
 	private 	long			mobileId;
 
 	@Getter
