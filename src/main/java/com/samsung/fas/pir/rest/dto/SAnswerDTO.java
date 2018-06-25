@@ -29,28 +29,50 @@ public class SAnswerDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty("alternative")
+	@JsonProperty("alternative_id")
+	private 	UUID				alternativeUUID;
+
+	@Getter
+	@Setter
+	@JsonProperty("question_id")
+	private 	UUID				questionUUID;
+
+	@Getter
+	@Setter
+	@JsonProperty("child_id")
+	private 	UUID				childUUID;
+
+	@Getter
+	@Setter
+	@JsonProperty("responsible_id")
+	private 	UUID				responsibleUUID;
+
+	// region READ ONLY
+	@Getter
+	@Setter
+	@JsonProperty(value = "alternative", access = JsonProperty.Access.READ_ONLY)
 	private		SAlternativeDTO		alternative;
 
 	@Getter
 	@Setter
-	@JsonProperty("question")
+	@JsonProperty(value = "question", access = JsonProperty.Access.READ_ONLY)
 	private		SQuestionDTO		question;
 
 	@Getter
 	@Setter
-	@JsonProperty("agent")
+	@JsonProperty(value = "agent", access = JsonProperty.Access.READ_ONLY)
 	private 	UserDTO				agent;
 
 	@Getter
 	@Setter
-	@JsonProperty("child")
+	@JsonProperty(value = "child", access = JsonProperty.Access.READ_ONLY)
 	private 	ChildDTO 			child;
 
 	@Getter
 	@Setter
-	@JsonProperty("responsible")
+	@JsonProperty(value = "responsible", access = JsonProperty.Access.READ_ONLY)
 	private 	ResponsibleDTO 		responsible;
+	// endregion
 
 	public SAnswerDTO() {
 		super();
@@ -74,10 +96,10 @@ public class SAnswerDTO {
 		SQuestion		question		= new SQuestion();
 		SAlternative	alternative		= new SAlternative();
 
-		question.setUuid(getQuestion().getId());
-		child.setUuid(getChild().getUuid());
-		responsible.setUuid(getResponsible().getUuid());
-		alternative.setUuid(getAlternative().getId());
+		question.setUuid(getQuestionUUID());
+		child.setUuid(getChildUUID());
+		responsible.setUuid(getResponsibleUUID());
+		alternative.setUuid(getAlternativeUUID());
 		model.setUuid(getId());
 		model.setDescription(getDescription());
 		model.setQuestion(getQuestion() != null? getQuestion().getModel() : null);

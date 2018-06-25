@@ -52,6 +52,7 @@ public class SurveyBO extends BaseBO<Survey, SurveyDAO, SurveyDTO, Long> {
 					question.setDescription(item.getDescription());
 					question.setType(item.getType());
 					question.setValueType(item.getValueType());
+					question.setRequired(item.isRequired());
 					question.getAlternatives().clear();
 					question.getAlternatives().addAll(item.getAlternatives().stream().map(amodel -> {
 						SAlternative	alternative		= amodel.getUuid() != null? getSAlternativeDAO().findOne(amodel.getUuid()) : null;

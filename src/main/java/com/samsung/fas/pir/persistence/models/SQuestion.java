@@ -19,6 +19,11 @@ import java.util.List;
 public class SQuestion extends BaseID {
 	@Getter
 	@Setter
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE", nullable = false)
+	private 	boolean					required;
+
+	@Getter
+	@Setter
 	@Column(columnDefinition = "CITEXT")
 	private		String					description;
 
