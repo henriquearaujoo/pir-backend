@@ -1,11 +1,9 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.persistence.dao.PregnancyDAO;
+import com.samsung.fas.pir.persistence.dao.SAnswerDAO;
 import com.samsung.fas.pir.persistence.dao.VisitDAO;
-import com.samsung.fas.pir.persistence.models.Pregnancy;
-import com.samsung.fas.pir.persistence.models.Responsible;
-import com.samsung.fas.pir.persistence.models.User;
-import com.samsung.fas.pir.persistence.models.Visit;
+import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.PregnancyDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
@@ -17,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -28,12 +27,22 @@ public class PregnancyBO extends BaseBO<Pregnancy, PregnancyDAO, PregnancyDTO, L
 
 	@Getter
 	@Setter
+	private 	SAnswerDAO 		sAnswerDAO;
+
+	@Getter
+	@Setter
 	private		VisitBO			visitBO;
 
-	protected PregnancyBO(PregnancyDAO dao, VisitDAO visitDAO, VisitBO visitBO) {
+	@Getter
+	@Setter
+	private		SAnswerBO		sAnswerBO;
+
+	protected PregnancyBO(PregnancyDAO dao, VisitDAO visitDAO, SAnswerDAO sAnswerDAO, SAnswerBO sAnswerBO, VisitBO visitBO) {
 		super(dao);
 		setVisitDAO(visitDAO);
 		setVisitBO(visitBO);
+		setSAnswerDAO(sAnswerDAO);
+		setSAnswerBO(sAnswerBO);
 	}
 
 	@Override
@@ -61,6 +70,7 @@ public class PregnancyBO extends BaseBO<Pregnancy, PregnancyDAO, PregnancyDTO, L
 		model.setPregnant(mother);
 		model.setRegisteredAt(model.getRegisteredAt());
 		model.setVisits(setupVisit(model, model.getVisits(), agent));
+		model.setAnswers(setupAnswer(model, model.getAnswers(), agent));
 		return model;
 	}
 
@@ -68,7 +78,22 @@ public class PregnancyBO extends BaseBO<Pregnancy, PregnancyDAO, PregnancyDTO, L
 		pregnancy.setRegisteredAt(model.getRegisteredAt());
 		pregnancy.setPregnant(mother);
 		pregnancy.setVisits(setupVisit(pregnancy, model.getVisits(), agent));
+		pregnancy.setAnswers(setupAnswer(pregnancy, model.getAnswers(), agent));
 		return pregnancy;
+	}
+
+	@SuppressWarnings("Duplicates")
+	private List<SAnswer> setupAnswer(Pregnancy pregnancy, List<SAnswer> collection, User agent) {
+		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
+		return collection.stream().map(item -> {
+			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
+			SAnswer		sAnswer		= uuid != null? getSAnswerDAO().findOne(uuid) : null;
+			if (sAnswer != null) {
+				return getSAnswerBO().setupAnswer(sAnswer, item, pregnancy, agent);
+			} else {
+				return getSAnswerBO().setupAnswer(item, pregnancy, agent);
+			}
+		}).collect(Collectors.toList());
 	}
 
 	@SuppressWarnings("Duplicates")

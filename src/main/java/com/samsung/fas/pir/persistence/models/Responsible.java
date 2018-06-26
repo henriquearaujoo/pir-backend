@@ -167,12 +167,6 @@ public class Responsible extends BaseID {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "responsible", cascade = CascadeType.ALL)
-	@Alias("Filhos")
-	private 	List<SAnswer>			answers				= new ArrayList<>();
-
-	@Getter
-	@Setter
 	@OneToMany(mappedBy = "pregnant", cascade = CascadeType.ALL)
 	@Alias("Gestações")
 	private 	List<Pregnancy>			pregnancies			= new ArrayList<>();

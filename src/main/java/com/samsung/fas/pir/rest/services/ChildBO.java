@@ -34,16 +34,26 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 
 	@Getter
 	@Setter
+	private 	SAnswerDAO			sAnswerDAO;
+
+	@Getter
+	@Setter
+	private 	SAnswerBO			sAnswerBO;
+
+	@Getter
+	@Setter
 	private		VisitBO				visitBO;
 	private List<Responsible> responsible;
 
 	@Autowired
-	public ChildBO(ChildDAO dao, ResponsibleDAO responsibleDAO, UserDAO userDAO, VisitDAO visitDAO, VisitBO visitBO) {
+	public ChildBO(ChildDAO dao, ResponsibleDAO responsibleDAO, UserDAO userDAO, VisitDAO visitDAO, SAnswerDAO sAnswerDAO, SAnswerBO sAnswerBO, VisitBO visitBO) {
 		super(dao);
 		setVisitBO(visitBO);
 		setVisitDAO(visitDAO);
 		setResponsibleDAO(responsibleDAO);
 		setUserDAO(userDAO);
+		setSAnswerDAO(sAnswerDAO);
+		setSAnswerBO(sAnswerBO);
 	}
 
 	@Override
@@ -60,7 +70,6 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 			return new ChildDTO(getDao().save(model), device, true);
 		} else {
 			setupChild(child, model);
-//			child.setMother(mother);
 			responsible.forEach(resp -> resp.getChildren().remove(resp.getChildren().stream().filter(item -> item.getUuid().compareTo(child.getUuid()) == 0).findAny().orElse(new Child())));
 			child.setResponsible(responsible);
 			responsible.forEach(resp -> resp.getChildren().add(model));
@@ -110,6 +119,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 			model.getResponsible().add(responsible);
 		}
 		model.setVisits(setupVisit(model, model.getVisits(), agent));
+		model.setAnswers(setupAnswer(model, model.getAnswers(), agent));
 		return model;
 	}
 
@@ -119,6 +129,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 			child.getResponsible().add(responsible);
 		}
 		child.setVisits(setupVisit(child, model.getVisits(), agent));
+		child.setAnswers(setupAnswer(child, model.getAnswers(), agent));
 		return child;
 	}
 
@@ -139,6 +150,20 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		child.setSocialEducationalPrograms(model.isSocialEducationalPrograms());
 		child.setVaccinationUpToDate(model.isVaccinationUpToDate());
 		child.setRelationDifficulties(model.isHasEducationDifficulty());
+	}
+
+
+	private List<SAnswer> setupAnswer(Child child, List<SAnswer> collection, User agent) {
+		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
+		return collection.stream().map(item -> {
+			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
+			SAnswer		sAnswer		= uuid != null? getSAnswerDAO().findOne(uuid) : null;
+			if (sAnswer != null) {
+				return getSAnswerBO().setupAnswer(sAnswer, item, child, agent);
+			} else {
+				return getSAnswerBO().setupAnswer(item, child, agent);
+			}
+		}).collect(Collectors.toList());
 	}
 
 	private List<Visit> setupVisit(Child child, List<Visit> collection, User agent) {

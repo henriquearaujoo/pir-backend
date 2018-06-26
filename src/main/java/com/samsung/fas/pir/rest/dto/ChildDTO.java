@@ -135,6 +135,12 @@ public class ChildDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty("answers")
+	@Valid
+	private		List<SAnswerDTO>			answers;
+
+	@Getter
+	@Setter
 	@JsonProperty("visits")
 	@Valid
 	private		List<VisitDTO>				visits;
@@ -168,6 +174,7 @@ public class ChildDTO {
 		setVaccinationUpToDate(child.isVaccinationUpToDate());
 		setHasRelationDifficulties(child.isRelationDifficulties());
 		setResponsible(detailed? child.getResponsible().stream().map(responsible -> new ResponsibleDTO(responsible, device, false)).collect(Collectors.toList()) : null);
+		setAnswers(child.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
 		setVisits(child.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
 	}
 
@@ -192,6 +199,7 @@ public class ChildDTO {
 		model.setVaccinationUpToDate(isVaccinationUpToDate());
 		model.setRelationDifficulties(isHasRelationDifficulties());
 		model.setResponsible(getResponsible() != null? getResponsible().stream().map(ResponsibleDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
+		model.setAnswers(getAnswers() != null? getAnswers().stream().map(SAnswerDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		model.setVisits(getVisits() != null? getVisits().stream().map(VisitDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 
 		try {

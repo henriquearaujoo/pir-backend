@@ -44,8 +44,8 @@ public class SAnswerDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty("responsible_id")
-	private 	UUID				responsibleUUID;
+	@JsonProperty("pregnancy_id")
+	private 	UUID				pregnancyUUID;
 
 	// region READ ONLY
 	@Getter
@@ -71,7 +71,7 @@ public class SAnswerDTO {
 	@Getter
 	@Setter
 	@JsonProperty(value = "responsible", access = JsonProperty.Access.READ_ONLY)
-	private 	ResponsibleDTO 		responsible;
+	private 	PregnancyDTO 		pregnancy;
 	// endregion
 
 	public SAnswerDTO() {
@@ -83,28 +83,28 @@ public class SAnswerDTO {
 		setDescription(entity.getDescription());
 		setAlternative(entity.getAlternative() != null? new SAlternativeDTO(entity.getAlternative(), device, false) : null);
 		setQuestion(new SQuestionDTO(entity.getQuestion(), device, false));
-		setChild(entity.getChild() != null? new ChildDTO(entity.getChild(), device, false) : null);
-		setResponsible(entity.getResponsible() != null? new ResponsibleDTO(entity.getResponsible(), device, false) : null);
-		setAgent(device.isNormal()? new UserDTO(entity.getAgent(), device, false) : null);
+		setChild(detailed? entity.getChild() != null? new ChildDTO(entity.getChild(), device, false) : null : null);
+		setPregnancy(detailed? entity.getPregnancy() != null? new PregnancyDTO(entity.getPregnancy(), device, false) : null : null);
+		setAgent(detailed? device.isNormal()? new UserDTO(entity.getAgent(), device, false) : null : null);
 	}
 
 	@JsonIgnore
 	public SAnswer getModel() {
 		SAnswer 		model 			= new SAnswer();
 		Child			child			= new Child();
-		Responsible		responsible		= new Responsible();
+		Pregnancy		pregnancy		= new Pregnancy();
 		SQuestion		question		= new SQuestion();
 		SAlternative	alternative		= new SAlternative();
 
 		question.setUuid(getQuestionUUID());
 		child.setUuid(getChildUUID());
-		responsible.setUuid(getResponsibleUUID());
+		pregnancy.setUuid(getPregnancyUUID());
 		alternative.setUuid(getAlternativeUUID());
 		model.setUuid(getId());
 		model.setDescription(getDescription());
 		model.setQuestion(getQuestion() != null? getQuestion().getModel() : null);
 		model.setAlternative(getAlternative() != null? getAlternative().getModel() : null);
-		model.setResponsible(responsible);
+		model.setPregnancy(pregnancy);
 		model.setChild(child);
 		model.setQuestion(question);
 		model.setAlternative(alternative);

@@ -24,33 +24,39 @@ public class PregnancyDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private 	UUID 			uuid;
+	private 	UUID 				uuid;
 
 	@Getter
 	@Setter
 	@JsonProperty("external_id")
-	private		long			tempID;
+	private		long				tempID;
 
 	@Getter
 	@Setter
 	@JsonProperty("registered_at")
-	private 	Date			registeredAt;
+	private 	Date				registeredAt;
 
 	@Getter
 	@Setter
 	@JsonProperty("mother")
-	private		ResponsibleDTO	mother;
+	private		ResponsibleDTO		mother;
 
 	@Getter
 	@Setter
 	@JsonProperty("agent")
-	private 	UserDTO			agent;
+	private 	UserDTO				agent;
+
+	@Getter
+	@Setter
+	@JsonProperty("answers")
+	@Valid
+	private		List<SAnswerDTO>	answers;
 
 	@Getter
 	@Setter
 	@JsonProperty("visits")
 	@Valid
-	private		List<VisitDTO>	visits;
+	private		List<VisitDTO>		visits;
 
 	public PregnancyDTO() {
 		super();
@@ -60,6 +66,7 @@ public class PregnancyDTO {
 		setUuid(entity.getUuid());
 		setTempID(entity.getMobileId());
 		setRegisteredAt(entity.getRegisteredAt());
+		setAnswers(entity.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
 		setVisits(entity.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
 		setMother(detailed? new ResponsibleDTO(entity.getPregnant(), device, false) : null);
 //		setAgent(entity.getAgent() != null? new UserDTO(entity.getAgent(), device, false) : null);
@@ -71,6 +78,7 @@ public class PregnancyDTO {
 		model.setUuid(getUuid());
 		model.setMobileId(getTempID());
 		model.setRegisteredAt(getRegisteredAt());
+		model.setAnswers(getAnswers() != null? getAnswers().stream().map(SAnswerDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		model.setVisits(getVisits() != null? getVisits().stream().map(VisitDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		return model;
 	}

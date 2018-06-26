@@ -48,5 +48,5 @@ public class SAnswer extends BaseID {
 	@Setter
 	@ManyToOne
 	@JoinColumn
-	private 	Responsible 	responsible;
+	private 	Pregnancy 		pregnancy;
 }

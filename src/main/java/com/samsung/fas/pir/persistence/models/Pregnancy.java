@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "pregnancy")
@@ -45,6 +46,12 @@ public class Pregnancy extends BaseID {
 	@JoinColumn
 	@Alias("Agente")
 	private 		User				agent;
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "pregnancy", cascade = CascadeType.ALL)
+	@Alias("Filhos")
+	private 		List<SAnswer> 		answers				= new ArrayList<>();
 
 	@Getter
 	@Setter
