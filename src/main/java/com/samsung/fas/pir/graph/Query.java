@@ -2,14 +2,21 @@ package com.samsung.fas.pir.graph;
 
 import com.querydsl.core.JoinType;
 import com.querydsl.core.group.GroupBy;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.core.types.Ops;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.PathMetadata;
+import com.querydsl.core.types.PathMetadataFactory;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.samsung.fas.pir.graph.annotations.Alias;
 import com.samsung.fas.pir.graph.dto.ColumnDTO;
 import com.samsung.fas.pir.graph.dto.MapDTO;
 import com.samsung.fas.pir.graph.dto.PathDTO;
 import com.samsung.fas.pir.graph.dto.ResponseDTO;
+import com.samsung.fas.pir.persistence.models.Child;
+import com.samsung.fas.pir.persistence.models.QChild;
+import com.samsung.fas.pir.persistence.models.QResponsible;
+import com.samsung.fas.pir.persistence.models.Responsible;
 import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,7 +27,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import javax.persistence.EntityManager;
+import javax.persistence.ManyToMany;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -144,14 +153,23 @@ public class Query {
 
 		if (root.isGroup()) {
 			if (rootPath != null) {
-				query.from(rootPath).getMetadata().addJoin(JoinType.LEFTJOIN, path);
-				query.getMetadata().addJoinCondition(Expressions.stringPath(rootPath, getPropertyName(path.getType(), rootPath.getType().getDeclaredFields()).concat("id")).eq(Expressions.stringPath(path, getPropertyName(rootPath.getType(), path.getType().getDeclaredFields()).concat("id"))));
-				query.from(rootPath).distinct().transform(groupBy(grouper).as(GroupBy.map(Expressions.constant(clazz.getSimpleName()), list(path)))).forEach((k, v) -> v.forEach((key, value) -> {
-					map.merge(k, v, (old, cur) -> {
-						old.merge(key, value, (o, n) -> Stream.concat(o.stream(), n.stream()).distinct().collect(Collectors.toList()));
-						return old;
-					});
-				}));
+				if (!isManyToMany(path.getType(),  rootPath.getType().getDeclaredFields())) {
+					query.from(rootPath).getMetadata().addJoin(JoinType.LEFTJOIN, path);
+					query.getMetadata().addJoinCondition(Expressions.stringPath(rootPath, getPropertyName(path.getType(), rootPath.getType().getDeclaredFields()).concat("id")).eq(Expressions.stringPath(path, getPropertyName(rootPath.getType(), path.getType().getDeclaredFields()).concat("id"))));
+					query.from(rootPath).distinct().transform(groupBy(grouper).as(GroupBy.map(Expressions.constant(clazz.getSimpleName()), list(path)))).forEach((k, v) -> v.forEach((key, value) -> {
+						map.merge(k, v, (old, cur) -> {
+							old.merge(key, value, (o, n) -> Stream.concat(o.stream(), n.stream()).distinct().collect(Collectors.toList()));
+							return old;
+						});
+					}));
+				} else {
+					query.from(rootPath).leftJoin(path).on(rootPath.getCollection(getPropertyName(path.getType(), rootPath.getType().getDeclaredFields()), clazz).any().getNumber("id", Long.class).eq(path.getNumber("id", Long.class))).distinct().transform(groupBy(grouper).as(GroupBy.map(Expressions.constant(clazz.getSimpleName()), list(path)))).forEach((k, v) -> v.forEach((key, value) -> {
+						map.merge(k, v, (old, cur) -> {
+							old.merge(key, value, (o, n) -> Stream.concat(o.stream(), n.stream()).distinct().collect(Collectors.toList()));
+							return old;
+						});
+					}));
+				}
 			} else {
 				query.from(grouper).distinct().transform(groupBy(grouper).as(GroupBy.map(Expressions.constant(clazz.getSimpleName()), list(path)))).forEach((k, v) -> v.forEach((key, value) -> {
 					map.merge(k, v, (old, cur) -> {
@@ -176,9 +194,28 @@ public class Query {
 		for (Field field : fields) {
 			if (field.getType() == type) {
 				return field.getName().toLowerCase().concat(".");
+			} else if ((field.getType() == Collection.class) && (((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0] == type)) {
+				if (field.getAnnotation(ManyToMany.class) != null) {
+					return field.getName().toLowerCase();
+				}
 			}
 		}
 		return "";
+	}
+
+	private boolean isManyToMany(Class<?> type, Field[] fields) {
+		for (Field field : fields) {
+			if (field.getType() == type) {
+//				return field.getName().toLowerCase().concat(".");
+				return false;
+			} else if ((field.getType() == Collection.class) && (((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0] == type)) {
+					if (field.getAnnotation(ManyToMany.class) != null) {
+//						return field.getName().toLowerCase().concat(".");
+						return true;
+					}
+				}
+			}
+		return false;
 	}
 
 	private PathBuilder<Object> path(@Nonnull Class<?> clazz) {
