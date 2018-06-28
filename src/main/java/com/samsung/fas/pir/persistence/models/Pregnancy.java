@@ -4,16 +4,13 @@ import com.samsung.fas.pir.graph.annotations.Alias;
 import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "pregnancy")
@@ -51,7 +48,7 @@ public class Pregnancy extends BaseID {
 	@Setter
 	@OneToMany(mappedBy = "pregnancy", cascade = CascadeType.ALL)
 	@Alias("Filhos")
-	private 		List<SAnswer> 		answers				= new ArrayList<>();
+	private 		Collection<SAnswer>	answers				= new ArrayList<>();
 
 	@Getter
 	@Setter

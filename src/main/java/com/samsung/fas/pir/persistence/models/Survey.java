@@ -9,7 +9,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 @Entity
 @Table(name = "survey")
@@ -25,5 +25,5 @@ public class Survey extends BaseID {
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
-	private 	List<SQuestion>			questions			= new ArrayList<>();
+	private 	Collection<SQuestion> 	questions			= new ArrayList<>();
 }

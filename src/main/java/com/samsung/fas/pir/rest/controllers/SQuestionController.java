@@ -2,12 +2,9 @@ package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.persistence.models.SQuestion;
-import com.samsung.fas.pir.persistence.models.Survey;
 import com.samsung.fas.pir.rest.controllers.base.BController;
 import com.samsung.fas.pir.rest.dto.SQuestionDTO;
-import com.samsung.fas.pir.rest.dto.SurveyDTO;
 import com.samsung.fas.pir.rest.services.SQuestionBO;
-import com.samsung.fas.pir.rest.services.SurveyBO;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

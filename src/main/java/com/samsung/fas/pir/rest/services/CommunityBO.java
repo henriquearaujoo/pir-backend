@@ -16,7 +16,6 @@ import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -49,7 +48,7 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 		Community	model		= create.getModel();
 		Community	community	= model.getUuid() != null? getDao().findOne(model.getUuid()) : null;
 		City 		city		= getCityDAO().findOne(create.getCityUUID());
-		return community != null? new CommunityDTO(getDao().save(setupCommunity(community, model, city, details)), device, true) : new CommunityDTO(getDao().save(setupCommunity(model, city, details)), device, true);
+		return community != null? new CommunityDTO(getDao().save(setupCommunity(community, model, city, device, details)), device, true) : new CommunityDTO(getDao().save(setupCommunity(model, city, device, details)), device, true);
 	}
 
 	@Override
@@ -57,44 +56,46 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 		Community	model		= update.getModel();
 		Community	community	= model.getUuid() != null? getDao().findOne(model.getUuid()) : null;
 		City 		city		= getCityDAO().findOne(update.getCityUUID());
-		return community != null? new CommunityDTO(getDao().save(setupCommunity(community, model, city, details)), device, true) : new CommunityDTO(getDao().save(setupCommunity(model, city, details)), device, true);
+		return community != null? new CommunityDTO(getDao().save(setupCommunity(community, model, city, device, details)), device, true) : new CommunityDTO(getDao().save(setupCommunity(model, city, device, details)), device, true);
 	}
 
 	@Override
 	public Collection<CommunityDTO> save(Collection<CommunityDTO> collection, Device device, UserDetails details) {
-		List<CommunityDTO> saved = new ArrayList<>();
-		for (CommunityDTO model : collection) {
-			try {
-				saved.add(save(model, device, details));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-//		return collection.stream().map(item -> save(item, device, details)).collect(Collectors.toList());
-		return saved;
+		return collection.stream().map(item -> trySave(item, device, details)).collect(Collectors.toList());
 	}
 
 	@Override
 	public Collection<CommunityDTO> update(Collection<CommunityDTO> collection, Device device, UserDetails details) {
-		List<CommunityDTO> saved = new ArrayList<>();
-		for (CommunityDTO model : collection) {
-			try {
-				saved.add(update(model, device, details));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-//		return collection.stream().map(item -> update(item, device, details)).collect(Collectors.toList());
-		return saved;
+		return collection.stream().map(item -> tryUpdate(item, device, details)).collect(Collectors.toList());
 	}
 
-	private Community setupCommunity(Community model, City city, UserDetails account) {
+	private CommunityDTO tryUpdate(CommunityDTO update, Device device, UserDetails details) {
+		try {
+			return update(update, device, details);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private CommunityDTO trySave(CommunityDTO save, Device device, UserDetails details) {
+		try {
+			return save(save, device, details);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private Community setupCommunity(Community model, City city, Device device, UserDetails account) {
 		model.setCity(city);
-		model.setResponsible(setupResponsible(model, model.getResponsible(), ((Account) account).getUser()));
+		if (!device.isNormal()) {
+			model.setResponsible(setupResponsible(model, model.getResponsible(), ((Account) account).getUser()));
+		}
 		return model;
 	}
 
-	private Community setupCommunity(Community community, Community model, City city, UserDetails account) {
+	private Community setupCommunity(Community community, Community model, City city, Device device, UserDetails account) {
 		community.setMobileId(model.getMobileId());
 		community.setName(model.getName());
 		community.setWaterSupply(model.getWaterSupply());
@@ -119,13 +120,15 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 		community.setRegional(model.getRegional());
 		community.setLatitude(model.getLatitude());
 		community.setLongitude(model.getLongitude());
-		community.setResponsible(setupResponsible(community, model.getResponsible(), ((Account) account).getUser()));
+		if (!device.isNormal()) {
+			community.setResponsible(setupResponsible(community, model.getResponsible(), ((Account) account).getUser()));
+		}
 		return community;
 	}
 
-	private List<Responsible> setupResponsible(Community community, List<Responsible> collection, User agent) {
+	private Collection<Responsible> setupResponsible(Community community, Collection<Responsible> collection, User agent) {
 		List<UUID>			modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
-		setChild(collection);
+		setChild((List<Responsible>) collection);
 		return collection.stream().map(item -> {
 			UUID			uuid			= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
 			Responsible		responsible		= uuid != null? getResponsibleDAO().findOne(uuid) : null;
@@ -139,11 +142,11 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 		}).collect(Collectors.toList());
 	}
 
-	private void setChild(List<Responsible> responsibles) {
-		for (int i = 0; i < responsibles.size(); i++) {
-			for (int k = 0; k < responsibles.size(); k++) {
+	private void setChild(List<Responsible> responsible) {
+		for (int i = 0; i < responsible.size(); i++) {
+			for (int k = 0; k < responsible.size(); k++) {
 				if (i != k) {
-					responsibles.get(i).setChildren(merge(responsibles.get(i).getChildren(), responsibles.get(k).getChildren()));
+					responsible.get(i).setChildren(merge((List<Child>) responsible.get(i).getChildren(), (List<Child>) responsible.get(k).getChildren()));
 				}
 			}
 		}

@@ -8,7 +8,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.Collection;
 
 @Entity
 @Table(name = "conslusions")
@@ -21,17 +21,17 @@ public class Conclusion extends BaseID {
 	@MapsId
 	@OneToOne(optional = false)
 	@Alias("Capítulo")
-	private 	Chapter			chapter;
+	private 	Chapter					chapter;
 
 	@Getter
 	@Setter
 	@Column(nullable = false, columnDefinition = "TEXT")
 	@Alias("Descrição")
-	private 	String			description;
+	private 	String					description;
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "conclusion", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Alias("Questões")
-	private 	Set<Question>	questions;
+	private 	Collection<Question>	questions;
 }

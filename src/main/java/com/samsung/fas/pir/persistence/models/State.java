@@ -9,7 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.List;
+import java.util.Collection;
 
 @Entity
 @Table(name = "states")
@@ -19,18 +19,18 @@ public class State extends BaseID {
 	@Setter
 	@Column(name="name", nullable=false, unique=true)
 	@Alias("Estado")
-	private		String		name;
+	private		String			name;
 	
 	@Getter
 	@Setter
 	@Column(name="uf_abbr", columnDefinition = "CITEXT", nullable=false, unique=true)
 	@Alias("Abreviação")
-	private		String		abbreviation;
+	private		String			abbreviation;
 	
 	@Getter
 	@Setter
 	@OneToMany(mappedBy="state", targetEntity=City.class)
 	@Alias("Cidades")
-	private		List<City>	cities;
+	private 	Collection<City> cities;
 	
 }

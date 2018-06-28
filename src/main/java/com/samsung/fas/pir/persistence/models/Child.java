@@ -12,7 +12,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "child")
@@ -127,23 +126,23 @@ public class Child extends BaseID {
 	@Setter
 	@ManyToOne
 	@JoinColumn
-	private 	User				agent;
+	private 	User						agent;
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
 	@Alias("Visitas")
-	private 	List<Visit>			visits					= new ArrayList<>();
+	private 	Collection<Visit>			visits					= new ArrayList<>();
 
 	@Getter
 	@Setter
 	@ManyToMany
 	@Alias("Responsável")
-	private 	List<Responsible> 	responsible				= new ArrayList<>();
+	private 	Collection<Responsible> 	responsible				= new ArrayList<>();
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
 	@Alias("Formulário - Respostas")
-	private 	List<SAnswer>		answers					= new ArrayList<>();
+	private 	Collection<SAnswer>			answers					= new ArrayList<>();
 }

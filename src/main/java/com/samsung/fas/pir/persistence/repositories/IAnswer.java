@@ -3,7 +3,6 @@ package com.samsung.fas.pir.persistence.repositories;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
 import com.samsung.fas.pir.persistence.models.Answer;
-import com.samsung.fas.pir.persistence.models.QAlternative;
 import com.samsung.fas.pir.persistence.models.QAnswer;
 import com.samsung.fas.pir.persistence.repositories.base.IBaseRepository;
 import org.springframework.data.querydsl.binding.QuerydslBindings;

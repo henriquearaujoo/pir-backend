@@ -1,11 +1,8 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.persistence.dao.SAlternativeDAO;
-import com.samsung.fas.pir.persistence.dao.SAnswerDAO;
 import com.samsung.fas.pir.persistence.models.SAlternative;
-import com.samsung.fas.pir.persistence.models.SAnswer;
 import com.samsung.fas.pir.rest.dto.SAlternativeDTO;
-import com.samsung.fas.pir.rest.dto.SAnswerDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;

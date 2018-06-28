@@ -1,7 +1,5 @@
 package com.samsung.fas.pir.configuration.security.auth;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 

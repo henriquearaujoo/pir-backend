@@ -14,8 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -83,7 +81,7 @@ public class PregnancyBO extends BaseBO<Pregnancy, PregnancyDAO, PregnancyDTO, L
 	}
 
 	@SuppressWarnings("Duplicates")
-	private List<SAnswer> setupAnswer(Pregnancy pregnancy, List<SAnswer> collection, User agent) {
+	private Collection<SAnswer> setupAnswer(Pregnancy pregnancy, Collection<SAnswer> collection, User agent) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);

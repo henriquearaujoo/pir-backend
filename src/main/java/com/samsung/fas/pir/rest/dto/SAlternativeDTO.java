@@ -6,15 +6,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.SAlternative;
-import com.samsung.fas.pir.persistence.models.SQuestion;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.mobile.device.Device;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @DTO(SAlternative.class)
 @JsonIgnoreProperties(ignoreUnknown = true)

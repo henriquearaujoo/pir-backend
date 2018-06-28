@@ -1,14 +1,10 @@
 package com.samsung.fas.pir.configuration.security.auth;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.samsung.fas.pir.configuration.properties.JWTProperties;
-import com.samsung.fas.pir.configuration.security.rest.dto.AccountDTO;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
-import com.samsung.fas.pir.configuration.security.rest.dto.ProfileDTO;
-import com.samsung.fas.pir.configuration.security.rest.dto.UserDTO;
+import com.samsung.fas.pir.configuration.security.rest.dto.AccountDTO;
 import com.samsung.fas.pir.persistence.enums.EAudience;
 import com.samsung.fas.pir.persistence.enums.EProfileType;
 import io.jsonwebtoken.Claims;
@@ -19,14 +15,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.*;
+import java.util.Date;
+import java.util.Map;
+import java.util.Objects;
 
 @Component
 public class JWToken {
@@ -64,6 +60,22 @@ public class JWToken {
 	public AccountDTO getAccount(String token) {
 		try {
 			return new Gson().fromJson(new Gson().toJson(Objects.requireNonNull(getClaims(token)).get("acc")), AccountDTO.class);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public Double getLatitude(String token) {
+		try {
+			return (Double) Objects.requireNonNull(getClaims(token)).get("lat");
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public Double getLongitude(String token) {
+		try {
+			return (Double) Objects.requireNonNull(getClaims(token)).get("lng");
 		} catch (Exception e) {
 			return null;
 		}

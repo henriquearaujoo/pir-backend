@@ -4,6 +4,7 @@ import com.samsung.fas.pir.configuration.security.auth.AuthEntryPoint;
 import com.samsung.fas.pir.configuration.security.auth.JWToken;
 import com.samsung.fas.pir.configuration.security.auth.TokenAuthenticationFilter;
 import com.samsung.fas.pir.configuration.security.rest.service.AccountService;
+import com.samsung.fas.pir.persistence.dao.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -23,13 +24,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private	final 	AuthEntryPoint 				entry;
 	private	final 	JWToken						token;
 	private	final 	CookieCsrfTokenRepository	repository;
+	private final 	UserDAO						userDAO;
 
 	@Autowired
-	public SecurityConfiguration(AuthEntryPoint entry, JWToken token, AccountService service, AuthenticationManagerBuilder builder, CookieCsrfTokenRepository repository) throws Exception {
+	public SecurityConfiguration(AuthEntryPoint entry, JWToken token, AccountService service, UserDAO userDAO, AuthenticationManagerBuilder builder, CookieCsrfTokenRepository repository) throws Exception {
 		this.service	= service;
 		this.entry		= entry;
 		this.token		= token;
 		this.repository	= repository;
+		this.userDAO	= userDAO;
 		builder.userDetailsService(this.service);
 	}
 
@@ -38,7 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 		.antMatchers("/rest/**").authenticated()
 		.and()
-		.addFilterBefore(new TokenAuthenticationFilter(token, service), BasicAuthenticationFilter.class)
+		.addFilterBefore(new TokenAuthenticationFilter(token, service, userDAO), BasicAuthenticationFilter.class)
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
 		.exceptionHandling().authenticationEntryPoint(entry)

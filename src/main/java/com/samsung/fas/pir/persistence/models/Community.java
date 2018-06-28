@@ -12,7 +12,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Table(name = "community", uniqueConstraints = {
@@ -181,5 +180,5 @@ public class Community extends BaseID {
 	@Setter
 	@OneToMany(mappedBy = "community", cascade = CascadeType.ALL)
 	@Alias("Responsáveis")
-	private 	List<Responsible> 			responsible			= new ArrayList<>();
+	private 	Collection<Responsible> 	responsible			= new ArrayList<>();
 }

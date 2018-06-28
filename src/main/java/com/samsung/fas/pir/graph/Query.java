@@ -15,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
@@ -57,7 +58,7 @@ public class Query {
 			try {
 				if (key != null) {
 					Class<?>					keyClass		= graph.getDtos().get(key.getClass().getSimpleName() + "DTO");																	// DTO Key Class
-					Object						keyObject		= keyClass != null? keyClass.getDeclaredConstructor(key.getClass(), boolean.class).newInstance(key, false) : null;		// DTO Key Instance
+					Object						keyObject		= keyClass != null? keyClass.getDeclaredConstructor(key.getClass(), Device.class, boolean.class).newInstance(key, null, false) : null;		// DTO Key Instance
 					Map<String, List<Object>>	subMap			= new HashMap<>();																												// DTO Inner Map
 
 					value.forEach((stringKey, valuesList) -> {
@@ -65,7 +66,7 @@ public class Query {
 							ArrayList<Object>	values			= new ArrayList<>();																											// DTO Values
 							for (Object v : valuesList) {
 								Class<?>		valueClass		= graph.getDtos().get(v.getClass().getSimpleName() + "DTO");																	// DTO Value Class
-								Object			valueObject		= valueClass != null? valueClass.getDeclaredConstructor(v.getClass(), boolean.class).newInstance(v, false) : null;		// DTO Value Object
+								Object			valueObject		= valueClass != null? valueClass.getDeclaredConstructor(v.getClass(), Device.class, boolean.class).newInstance(v, null, false) : null;		// DTO Value Object
 								values.add(valueObject);
 							}
 							subMap.put(stringKey, values);

@@ -1,7 +1,6 @@
 package com.samsung.fas.pir.graph;
 
 import com.samsung.fas.pir.graph.dto.PathDTO;
-import com.samsung.fas.pir.graph.dto.MapDTO;
 import io.swagger.annotations.Api;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-import java.util.stream.Collectors;
 
 @Api(value = "Graph", description = "REST Controller for Entity Graph", tags = "GRAPH")
 @RequestMapping(value = "/rest", produces = MediaType.APPLICATION_JSON_VALUE)

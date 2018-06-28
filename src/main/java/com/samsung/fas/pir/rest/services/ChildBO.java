@@ -14,7 +14,10 @@ import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("Duplicates")
@@ -153,7 +156,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	}
 
 
-	private List<SAnswer> setupAnswer(Child child, List<SAnswer> collection, User agent) {
+	private Collection<SAnswer> setupAnswer(Child child, Collection<SAnswer> collection, User agent) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
@@ -166,7 +169,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		}).collect(Collectors.toList());
 	}
 
-	private List<Visit> setupVisit(Child child, List<Visit> collection, User agent) {
+	private Collection<Visit> setupVisit(Child child, Collection<Visit> collection, User agent) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);

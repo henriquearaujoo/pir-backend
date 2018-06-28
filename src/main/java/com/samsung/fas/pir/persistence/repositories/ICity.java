@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 @Repository

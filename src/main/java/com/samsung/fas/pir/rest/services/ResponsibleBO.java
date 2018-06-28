@@ -2,7 +2,10 @@ package com.samsung.fas.pir.rest.services;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
-import com.samsung.fas.pir.persistence.dao.*;
+import com.samsung.fas.pir.persistence.dao.ChildDAO;
+import com.samsung.fas.pir.persistence.dao.CommunityDAO;
+import com.samsung.fas.pir.persistence.dao.PregnancyDAO;
+import com.samsung.fas.pir.persistence.dao.ResponsibleDAO;
 import com.samsung.fas.pir.persistence.enums.EProfileType;
 import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.models.base.Base;
@@ -145,7 +148,7 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		return responsible;
 	}
 
-	private List<Pregnancy> setupPregnancy(Responsible mother, List<Pregnancy> collection, User agent) {
+	private Collection<Pregnancy> setupPregnancy(Responsible mother, Collection<Pregnancy> collection, User agent) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
@@ -158,7 +161,7 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		}).collect(Collectors.toList());
 	}
 
-	private List<Child> setupChild(Responsible responsible, List<Child> collection, User agent) {
+	private Collection<Child> setupChild(Responsible responsible, Collection<Child> collection, User agent) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);

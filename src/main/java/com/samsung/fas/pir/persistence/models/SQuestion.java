@@ -9,7 +9,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 @Entity
 @Table(name = "s_question")
@@ -46,10 +46,10 @@ public class SQuestion extends BaseID {
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-	private 	List<SAlternative>		alternatives			= new ArrayList<>();
+	private 	Collection<SAlternative> alternatives			= new ArrayList<>();
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "question",cascade = CascadeType.REMOVE, orphanRemoval = true)
-	private 	List<SAnswer>			answers					= new ArrayList<>();
+	private 	Collection<SAnswer>		answers					= new ArrayList<>();
 }

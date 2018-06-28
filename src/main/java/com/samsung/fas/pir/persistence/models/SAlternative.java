@@ -9,7 +9,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 @Entity
 @Table(name = "s_alternative")
@@ -36,5 +36,5 @@ public class SAlternative extends BaseID {
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "alternative")
-	private 	List<SAnswer> 			answers			= new ArrayList<>();
+	private 	Collection<SAnswer> 	answers			= new ArrayList<>();
 }

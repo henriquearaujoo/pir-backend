@@ -1,11 +1,8 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.persistence.dao.SQuestionDAO;
-import com.samsung.fas.pir.persistence.dao.SurveyDAO;
 import com.samsung.fas.pir.persistence.models.SQuestion;
-import com.samsung.fas.pir.persistence.models.Survey;
 import com.samsung.fas.pir.rest.dto.SQuestionDTO;
-import com.samsung.fas.pir.rest.dto.SurveyDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;

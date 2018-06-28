@@ -4,7 +4,6 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.exception.RESTException;
 import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.models.Chapter;
-import com.samsung.fas.pir.persistence.models.FileData;
 import com.samsung.fas.pir.rest.dto.ChapterDTO;
 import com.samsung.fas.pir.rest.dto.ChapterDetailedDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
@@ -16,7 +15,6 @@ import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;

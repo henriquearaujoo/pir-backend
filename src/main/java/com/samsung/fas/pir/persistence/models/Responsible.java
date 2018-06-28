@@ -14,7 +14,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "responsible")
@@ -163,11 +162,11 @@ public class Responsible extends BaseID {
 	@Setter
 	@ManyToMany(mappedBy = "responsible", cascade = CascadeType.ALL)
 	@Alias("Crianças")
-	private 	List<Child> 			children			= new ArrayList<>();
+	private 	Collection<Child> 		children			= new ArrayList<>();
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "pregnant", cascade = CascadeType.ALL)
 	@Alias("Gestações")
-	private 	List<Pregnancy>			pregnancies			= new ArrayList<>();
+	private 	Collection<Pregnancy>	pregnancies			= new ArrayList<>();
 }

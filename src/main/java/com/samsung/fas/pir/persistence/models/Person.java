@@ -18,7 +18,6 @@ public class Person extends BaseID {
 	@Getter
 	@Setter
 	@OneToOne(optional = false)
-//	@JoinColumn(name = "id")
 	@MapsId
 	@Alias("Usuário")
 	private 	User			user;

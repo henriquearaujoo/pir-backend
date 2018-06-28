@@ -2,8 +2,6 @@ package com.samsung.fas.pir.persistence.repositories;
 
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
-import com.samsung.fas.pir.persistence.models.Address;
-import com.samsung.fas.pir.persistence.models.QAddress;
 import com.samsung.fas.pir.persistence.models.QSurvey;
 import com.samsung.fas.pir.persistence.models.Survey;
 import com.samsung.fas.pir.persistence.repositories.base.IBaseRepository;
