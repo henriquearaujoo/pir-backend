@@ -201,15 +201,14 @@ public class CommunityDTO {
 		hasReligiousPlace(community.hasReligiousPlace());
 		hasCulturalEvents(community.hasCulturalEvents());
 		hasPatron(community.hasPatron());
-		setCommunityZone(community.getCommunityZone().getValue());
+		setCommunityZone(community.getCommunityZone() != null? community.getCommunityZone().getValue() : ECommunityZone.UNDEFINED.getValue());
 		hasCommunityLeaders(community.hasCommunityLeaders());
 		setCulturalProductions(community.getCulturalProductions());
-		setCommunityZone(community.getCommunityZone().toString());
 		setRegional(community.getRegional());
 		setUc(community.getUc());
 		setLatitude(community.getLatitude());
 		setLongitude(community.getLongitude());
-		setCity(new CityDTO(community.getCity(), false));
+		setCity(community.getCity() != null? new CityDTO(community.getCity(), false) : null);
 		setResponsible(/*!device.isNormal()? */community.getResponsible() != null? community.getResponsible().stream().map(item -> new ResponsibleDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>());
 	}
 

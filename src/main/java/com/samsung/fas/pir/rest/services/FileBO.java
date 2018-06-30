@@ -27,7 +27,7 @@ public class FileBO {
 		this.repository		= repository;
 	}
 
-	public FileDTO save(String name, String contentType, byte[] data) {
+	public FileDTO save(String name, String contentType, boolean song, boolean resource, byte[] data) {
 		try {
 			String				extension		= FilenameUtils.getExtension(name);
 			File 				fileLocation	= getNewFile(extension);

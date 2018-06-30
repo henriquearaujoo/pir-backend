@@ -18,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	private 	JWToken 		token;
@@ -35,8 +36,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		try {
 			String 		atoken 		= token.getToken(request);
 			AccountDTO	account		= atoken != null? token.getAccount(atoken) : null;
-			Double		latitude	= atoken != null? token.getLatitude(atoken) : null;
-			Double		longitude	= atoken != null? token.getLongitude(atoken) : null;
+			Double		latitude	= request.getHeader("lat") != null? Double.valueOf(request.getHeader("lat")) : null;
+			Double		longitude	= request.getHeader("lng") != null? Double.valueOf(request.getHeader("lng")) : null;
 			UserDetails	details		= account != null? service.loadUserByUsername(account.getUsername()) : null;
 			User		user		= account != null? ((Account) details).getUser() : null;
 
@@ -47,7 +48,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
 			chain.doFilter(request, response);
 
-			if (user != null && user.getAccount().getProfile().getType().compareTo(EProfileType.AGENT) == 0) {
+			if (user != null && latitude != null && longitude != null) {
 				user.setLatitude(latitude);
 				user.setLongitude(longitude);
 				userDAO.save(user);

@@ -40,44 +40,44 @@ public class Community extends BaseID {
 
 	@Getter
 	@Setter
-	@Column(nullable = false, columnDefinition = "CITEXT")
+	@Column(columnDefinition = "CITEXT")
 	@Alias("Nome")
 	private 	String						name;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Enumerated(EnumType.STRING)
 	@Alias("Zona")
 	private 	ECommunityZone				communityZone;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Suprimento de Água")
 	private 	String						waterSupply;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Destino do Lixo")
 	private 	String						garbageDestination;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Vias de Acesso")
 	private 	String						access;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Serviços de Saúde")
 	private 	String						healthServices;
 
 	@Getter
 	@Setter
-	@Column(name = "income", nullable = false)
+	@Column(name = "income")
 	@Alias("Fone de Receita")
 	private 	String						mainIncome;
 
@@ -90,70 +90,70 @@ public class Community extends BaseID {
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Possui Jardim de Infância")
 	private 	boolean						hasKindergarten;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Possui Ensino Fundamental")
 	private 	boolean						hasElementarySchool;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Possui Ensino Médio")
 	private 	boolean						hasHighSchool;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Possui Ensino Superior")
 	private 	boolean						hasCollege;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Possui Eletricidade")
 	private 	boolean 					hasElectricity;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Possui Centro Cívico")
 	private 	boolean						hasCommunityCenter;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Possui Centro Religioso")
 	private 	boolean						hasReligiousPlace;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Possui Eventos Culturais")
 	private 	boolean						hasCulturalEvents;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Possui Patrono")
 	private 	boolean						hasPatron;
 
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Possui Líderes Comunitários")
 	private 	boolean						hasCommunityLeaders;
 
@@ -171,7 +171,7 @@ public class Community extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false)
+	@ManyToOne
 	@JoinColumn(name = "city_id")
 	@Alias("Município")
 	private 	City						city;

@@ -37,7 +37,7 @@ public class FileController {
 		Collection<FileDTO> response = new HashSet<>();
 
 		for (MultipartFile file : files) {
-			response.add(service.save(file.getOriginalFilename(), file.getContentType(), file.getBytes()));
+			response.add(service.save(file.getOriginalFilename(), file.getContentType(), false, false, file.getBytes()));
 		}
 
 		return ResponseEntity.ok(response);

@@ -43,7 +43,7 @@ public class PregnancyDTO {
 
 	@Getter
 	@Setter
-	@JsonProperty("agent")
+	@JsonProperty(value = "agent", access = JsonProperty.Access.READ_ONLY)
 	private 	UserDTO				agent;
 
 	@Getter

@@ -36,6 +36,16 @@ public class FileData extends BaseID {
 
 	@Getter
 	@Setter
+	@Column(nullable = false)
+	private 	boolean		resource;
+
+	@Getter
+	@Setter
+	@Column(nullable = false)
+	private 	boolean		song;
+
+	@Getter
+	@Setter
 	@Column(name = "created_at", updatable = false, nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private		Date		createdAt;
