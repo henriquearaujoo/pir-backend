@@ -90,7 +90,7 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 	private Community setupCommunity(Community model, City city, Device device, UserDetails account) {
 		model.setCity(city);
 		if (!device.isNormal()) {
-			model.setResponsible(setupResponsible(model, model.getResponsible(), ((Account) account).getUser()));
+			model.setResponsible(setupResponsible(model, model.getResponsible(), ((Account) account).getUser(), device));
 		}
 		return model;
 	}
@@ -121,12 +121,12 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 		community.setLatitude(model.getLatitude());
 		community.setLongitude(model.getLongitude());
 		if (!device.isNormal()) {
-			community.setResponsible(setupResponsible(community, model.getResponsible(), ((Account) account).getUser()));
+			community.setResponsible(setupResponsible(community, model.getResponsible(), ((Account) account).getUser(), device));
 		}
 		return community;
 	}
 
-	private Collection<Responsible> setupResponsible(Community community, Collection<Responsible> collection, User agent) {
+	private Collection<Responsible> setupResponsible(Community community, Collection<Responsible> collection, User agent, Device device) {
 		List<UUID>			modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		setChild((List<Responsible>) collection);
 		return collection.stream().map(item -> {
@@ -134,7 +134,7 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 			Responsible		responsible		= uuid != null? getResponsibleDAO().findOne(uuid) : null;
 			if (responsible != null) {
 				responsible.setCommunity(community);
-				return getResponsibleBO().setupResponsible(responsible, item, community, agent);
+				return getResponsibleBO().setupResponsible(responsible, item, community, agent, device);
 			} else {
 				item.setCommunity(community);
 				return getResponsibleBO().setupResponsible(item, community, agent);

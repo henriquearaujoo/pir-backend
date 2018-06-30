@@ -85,7 +85,7 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		Responsible		model		= update.getModel();
 		Responsible		responsible	= model.getUuid() != null? getDao().findOne(model.getUuid()) : null;
 		Community		community	= getCommunityDAO().findOne(model.getCommunity().getUuid());
-		return responsible != null? new ResponsibleDTO(getDao().save(setupResponsible(responsible, model, community, ((Account) account).getUser())), device, true) : new ResponsibleDTO(getDao().save(setupResponsible(model, community, ((Account) account).getUser())), device, true);
+		return responsible != null? new ResponsibleDTO(getDao().save(setupResponsible(responsible, model, community, ((Account) account).getUser(), device)), device, true) : new ResponsibleDTO(getDao().save(setupResponsible(model, community, ((Account) account).getUser())), device, true);
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		return model;
 	}
 
-	Responsible setupResponsible(Responsible responsible, Responsible model, Community community, User agent) {
+	Responsible setupResponsible(Responsible responsible, Responsible model, Community community, User agent, Device device) {
 		responsible.setFamilyHasChildren(model.isFamilyHasChildren());
 		responsible.setName(model.getName());
 		responsible.setCommunity(community);
@@ -131,18 +131,21 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		responsible.setObservations(model.getObservations());
 		responsible.setMobileId(model.getMobileId());
 		responsible.setChildrenCount(model.getChildrenCount());
-		responsible.setAgent(agent.getAccount().getProfile().getType().compareTo(EProfileType.AGENT) == 0? agent : responsible.getAgent());
-		responsible.setPregnant(model.isPregnant());
-		responsible.setPregnancies(setupPregnancy(responsible, model.getPregnancies(), agent));
 
-		if (model.getChildren() != null) {
-			List<UUID>	collection	= model.getChildren().stream().map(Base::getUuid).filter(Objects::nonNull).collect(Collectors.toList());
-			responsible.getChildren().forEach(item -> {
-				if (collection.stream().filter(uuid -> item.getUuid().compareTo(uuid) == 0).findAny().orElse(null) == null) {
-					item.setResponsible(null);
-				}
-			});
-			responsible.setChildren(new ArrayList<>(setupChild(responsible, model.getChildren(), agent)));
+		if (!device.isNormal()) {
+			responsible.setAgent(agent.getAccount().getProfile().getType().compareTo(EProfileType.AGENT) == 0 ? agent : responsible.getAgent());
+			responsible.setPregnant(model.isPregnant());
+			responsible.setPregnancies(setupPregnancy(responsible, model.getPregnancies(), agent));
+
+			if (model.getChildren() != null) {
+				List<UUID> collection = model.getChildren().stream().map(Base::getUuid).filter(Objects::nonNull).collect(Collectors.toList());
+				responsible.getChildren().forEach(item -> {
+					if (collection.stream().filter(uuid -> item.getUuid().compareTo(uuid) == 0).findAny().orElse(null) == null) {
+						item.setResponsible(null);
+					}
+				});
+				responsible.setChildren(new ArrayList<>(setupChild(responsible, model.getChildren(), agent)));
+			}
 		}
 
 		return responsible;
