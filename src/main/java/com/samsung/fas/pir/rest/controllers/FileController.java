@@ -43,6 +43,38 @@ public class FileController {
 		return ResponseEntity.ok(response);
 	}
 
+	@RequestMapping(value = "/songs", method = RequestMethod.GET)
+	public ResponseEntity<?> findAllSongs() throws IOException {
+		return ResponseEntity.ok(service.findAllSongs());
+	}
+
+	@RequestMapping(value = "/resources", method = RequestMethod.GET)
+	public ResponseEntity<?> findAllResources() throws IOException {
+		return ResponseEntity.ok(service.findAllResources());
+	}
+
+	@RequestMapping(value = "/upload/songs", method = RequestMethod.POST)
+	public ResponseEntity<?> uploadSongs(@RequestParam("file") MultipartFile[] files) throws IOException {
+		Collection<FileDTO> response = new HashSet<>();
+
+		for (MultipartFile file : files) {
+			response.add(service.save(file.getOriginalFilename(), file.getContentType(), true, false, file.getBytes()));
+		}
+
+		return ResponseEntity.ok(response);
+	}
+
+	@RequestMapping(value = "/upload/resources", method = RequestMethod.POST)
+	public ResponseEntity<?> uploadResources(@RequestParam("file") MultipartFile[] files) throws IOException {
+		Collection<FileDTO> response = new HashSet<>();
+
+		for (MultipartFile file : files) {
+			response.add(service.save(file.getOriginalFilename(), file.getContentType(), false, true, file.getBytes()));
+		}
+
+		return ResponseEntity.ok(response);
+	}
+
 	@RequestMapping(value = "/download/{fileid}", method = RequestMethod.GET)
 	public void download(@PathVariable("fileid") long fileId, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		FileDTO metadata		= service.findOne(fileId);

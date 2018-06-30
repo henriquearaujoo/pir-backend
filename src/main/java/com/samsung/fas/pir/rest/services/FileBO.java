@@ -44,6 +44,8 @@ public class FileBO {
 			fileData.setName(name);
 			fileData.setContent(contentType);
 			fileData.setCreatedAt(new Date());
+			fileData.setSong(song);
+			fileData.setResource(resource);
 			return new FileDTO(repository.save(fileData));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,5 +113,13 @@ public class FileBO {
 
 	public Collection<FileDTO> findAll() {
 		return StreamSupport.stream(repository.findAll().spliterator(), false).map(FileDTO::new).collect(Collectors.toList());
+	}
+
+	public Collection<FileDTO> findAllSongs() {
+		return StreamSupport.stream(repository.findAllBySong(true).spliterator(), false).map(FileDTO::new).collect(Collectors.toList());
+	}
+
+	public Collection<FileDTO> findAllResources() {
+		return StreamSupport.stream(repository.findAllByResource(true).spliterator(), false).map(FileDTO::new).collect(Collectors.toList());
 	}
 }
