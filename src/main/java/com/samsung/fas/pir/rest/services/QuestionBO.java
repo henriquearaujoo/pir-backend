@@ -44,10 +44,7 @@ public class QuestionBO extends BaseBO<Question, QuestionDAO, QuestionDTO, Long>
 	public QuestionDTO save(QuestionDTO create, Device device, UserDetails account) {
 		Question		model			= create.getModel();
 		Conclusion		conclusion		= cdao.findOne(create.getConclusionUUID());
-
 		model.setConclusion(conclusion);
-		conclusion.getQuestions().add(model);
-
 		return new QuestionDTO(getDao().save(model), true);
 	}
 
@@ -55,10 +52,8 @@ public class QuestionBO extends BaseBO<Question, QuestionDAO, QuestionDTO, Long>
 	public QuestionDTO update(QuestionDTO update, Device device, UserDetails account) {
 		Question		model		= update.getModel();
 		Question		question	= getDao().findOne(model.getUuid());
-
 		question.setDescription(model.getDescription());
 		question.setType(model.getType());
-
 		return new QuestionDTO(getDao().save(question), true);
 	}
 

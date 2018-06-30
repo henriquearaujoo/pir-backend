@@ -10,6 +10,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
@@ -102,7 +103,7 @@ public class Chapter extends BaseID {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinColumn(name = "media_chapter_id", referencedColumnName = "id")
 	@Alias("Arquivos")
-	private 	Collection<FileData>	medias;
+	private 	Collection<FileData>	medias			= new ArrayList<>();
 
 	@Getter
 	@Setter
@@ -110,7 +111,7 @@ public class Chapter extends BaseID {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinColumn(name = "thumbnail_chapter_id", referencedColumnName = "id")
 	@Alias("Miniaturas")
-	private 	Collection<FileData>	thumbnails;
+	private 	Collection<FileData>	thumbnails		= new ArrayList<>();
 
 	@Getter
 	@Setter
