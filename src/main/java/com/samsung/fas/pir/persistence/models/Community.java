@@ -171,7 +171,7 @@ public class Community extends BaseID {
 
 	@Getter
 	@Setter
-	@ManyToOne
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "city_id")
 	@Alias("Município")
 	private 	City						city;
