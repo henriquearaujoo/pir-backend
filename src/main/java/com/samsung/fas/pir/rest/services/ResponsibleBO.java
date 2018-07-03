@@ -56,6 +56,18 @@ public class ResponsibleBO extends BaseBO<Responsible, ResponsibleDAO, Responsib
 		setCommunityDAO(communityDAO);
 	}
 
+	public Collection<ResponsibleDTO> findAllMothers(Device device) {
+		return getDao().findAllMothers().stream().map(item -> new ResponsibleDTO(item, device, false)).collect(Collectors.toSet());
+	}
+
+	public Collection<ResponsibleDTO> findAllMothers(Predicate predicate, Device device) {
+		return getDao().findAllMothers(predicate).stream().map(item -> new ResponsibleDTO(item, device, false)).collect(Collectors.toSet());
+	}
+
+	public Page<ResponsibleDTO> findAllMothers(Pageable pageable, Predicate predicate, Device device) {
+		return getDao().findAllMothers(pageable, predicate).map(item -> new ResponsibleDTO((Responsible) item, device, false));
+	}
+
 	public Collection<ResponsibleDTO> findAllResponsible(Device device) {
 		return getDao().findAllResponsible().stream().map(item -> new ResponsibleDTO(item, device, false)).collect(Collectors.toSet());
 	}

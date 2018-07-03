@@ -28,6 +28,21 @@ public class ResponsibleController extends BController<ResponsibleBO, Responsibl
 		super(service);
 	}
 
+	@RequestMapping(method= RequestMethod.GET, path = "/mother")
+	public ResponseEntity<?> findAllMothers(Device device) {
+		return ResponseEntity.ok(getService().findAllMothers(device));
+	}
+
+	@RequestMapping(method= RequestMethod.GET, path = "/mother/search")
+	public ResponseEntity<?> findAllMothers(@QuerydslPredicate(root = Responsible.class) Predicate predicate, Device device) {
+		return ResponseEntity.ok(getService().findAllMothers(predicate, device));
+	}
+
+	@RequestMapping(method= RequestMethod.GET, path = "/mother/search/page")
+	public ResponseEntity<?> findAllMothers(@QuerydslPredicate(root = Responsible.class) Predicate predicate, Pageable pageable, Device device) {
+		return ResponseEntity.ok(getService().findAllMothers(pageable, predicate, device));
+	}
+
 	@RequestMapping(method= RequestMethod.GET, path = "/no-mother")
 	public ResponseEntity<?> findAllResponsbiles(Device device) {
 		return ResponseEntity.ok(getService().findAllResponsible(device));

@@ -66,3 +66,37 @@ CREATE TABLE IF NOT EXISTS cities (
 	name        VARCHAR(255) NOT NULL,
 	state_id_fk BIGINT       NOT NULL CONSTRAINT fk_state		REFERENCES states
 );
+
+CREATE TABLE IF NOT EXISTS community (
+	id bigserial NOT NULL CONSTRAINT community_pkey primary key,
+	uuid uuid default uuid_generate_v4() not null constraint uk_r8w0e0o0gwikrdfcqhyyb7kco unique,
+	created_at timestamp,
+	erased boolean default false,
+	updated_at timestamp,
+	access varchar(255),
+	community_zone varchar(255),
+	cultural_productions varchar(255),
+	garbage_destination varchar(255),
+	has_college boolean,
+	has_community_center boolean,
+	has_community_leaders boolean,
+	has_cultural_events boolean,
+	has_electricity boolean,
+	has_elementary_school boolean,
+	has_high_school boolean,
+	has_kindergarten boolean,
+	has_patron boolean,
+	has_religious_place boolean,
+	health_services varchar(255),
+	latitude double precision,
+	longitude double precision,
+	income varchar(255),
+	mobile_id bigint,
+	name citext,
+	regional varchar(255),
+	uc varchar(255),
+	water_supply varchar(255),
+	city_id serial not null constraint fktdi5gkputkkhn5lbgrm54gvan references cities,
+	constraint community_name unique (name, city_id)
+)
+;

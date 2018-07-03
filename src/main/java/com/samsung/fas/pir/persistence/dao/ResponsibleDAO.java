@@ -38,6 +38,34 @@ public class ResponsibleDAO extends BaseDAO<Responsible, Long, IResponsible, QRe
 		return getRepository().findAllByUuidIn(collection);
 	}
 
+	public Collection<Responsible> findAllMothers() {
+		JPAQuery<Responsible> 	query 				= new JPAQuery<>(manager);
+		QResponsible 			responsible			= QResponsible.responsible;
+		return query.select(responsible).from(responsible).where(responsible.gender.eq(EGender.FEMALE).and(responsible.childrenCount.gt(Expressions.asNumber(0)))).fetch();
+	}
+
+	public Collection<Responsible> findAllMothers(Predicate predicate) {
+		JPAQuery<Responsible> 	query 				= new JPAQuery<>(manager);
+		QResponsible 			responsible			= QResponsible.responsible;
+		return query.select(responsible).from(responsible).where(responsible.gender.eq(EGender.FEMALE).and(responsible.childrenCount.gt(Expressions.asNumber(0))).and(predicate)).fetch();
+	}
+
+	public Page<?> findAllMothers(Pageable pageable) {
+		JPAQuery<Responsible> 	query 		= new JPAQuery<>(manager);
+		QResponsible 			responsible	= QResponsible.responsible;
+		JPAQuery<Responsible>	result		= query.select(responsible).from(responsible).where(responsible.gender.eq(EGender.FEMALE).and(responsible.childrenCount.gt(Expressions.asNumber(0))));
+		Query					page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Responsible.class, "responsible"));
+		return SBPage.getPageList(pageable, page, null);
+	}
+
+	public Page<?> findAllMothers(Pageable pageable, Predicate predicate) {
+		JPAQuery<Responsible> 	query 		= new JPAQuery<>(manager);
+		QResponsible 			responsible	= QResponsible.responsible;
+		JPAQuery<Responsible>	result		= query.select(responsible).from(responsible).where(responsible.gender.eq(EGender.FEMALE).and(responsible.childrenCount.gt(Expressions.asNumber(0))).and(predicate));
+		Query					page		= SBPage.setupPage(result, pageable, new PathBuilder<>(Responsible.class, "responsible"));
+		return SBPage.getPageList(pageable, page, null);
+	}
+
 	public Collection<Responsible> findAllResponsible() {
 		JPAQuery<Responsible> 	query 				= new JPAQuery<>(manager);
 		QResponsible 			responsible			= QResponsible.responsible;
