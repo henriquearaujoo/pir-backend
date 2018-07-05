@@ -81,6 +81,11 @@ public class VisitDTO {
 
 	@Getter
 	@Setter
+	@JsonProperty(value = "chapter")
+	private 		ChapterDTO					chapterDTO;
+
+	@Getter
+	@Setter
 	@JsonProperty(value = "child")
 	private 		ChildDTO					child;
 
@@ -97,7 +102,8 @@ public class VisitDTO {
 		setDuration(visit.getDuration());
 		setTempID(visit.getMobileId());
 		setAnswers(visit.getAnswers() != null? visit.getAnswers().stream().map(answer -> new AnswerDTO(answer, true)).collect(Collectors.toList()) : null);
-		setChapterUUID(visit.getChapter().getUuid());
+//		setChapterUUID(visit.getChapter().getUuid());
+		setChapterDTO(new ChapterDTO(visit.getChapter(), false));
 		setFormUUID(visit.getForm() != null? visit.getForm().getUuid() : null);
 		setChild(detailed && visit.getChild() != null? new ChildDTO(visit.getChild(), device, false) : null);
 		setPregnancy(detailed && visit.getPregnancy() != null? new PregnancyDTO(visit.getPregnancy(), device, false) : null);

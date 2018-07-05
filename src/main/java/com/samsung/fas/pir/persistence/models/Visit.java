@@ -84,7 +84,7 @@ public class Visit extends BaseID {
 	@Getter
 	@Setter
 	@ManyToOne
-	@JoinColumn
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_form"))
 	@Alias("Formulário")
 	private 	Form			form;
 

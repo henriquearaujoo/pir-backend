@@ -177,6 +177,25 @@
 		</dependency>
 		<!-- GSON -->
 
+		<!-- Firebase -->
+		<dependency>
+			<groupId>com.google.firebase</groupId>
+			<artifactId>firebase-admin</artifactId>
+			<version>6.2.0</version>
+		</dependency>
+		<!-- Firebase -->
+
+		<!-- XMPP -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-integration</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-xmpp</artifactId>
+		</dependency>
+		<!-- XMPP -->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

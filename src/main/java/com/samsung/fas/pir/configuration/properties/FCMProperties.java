@@ -13,4 +13,8 @@ public class FCMProperties {
 	@Getter
 	@Setter
 	private		String		serverKey;
+
+	@Getter
+	@Setter
+	private		String		serverFile;
 }

@@ -14,7 +14,6 @@ public abstract class BaseID extends Base {
 	@Setter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(columnDefinition = "serial")
 	private		long			id			= -1;
 
 	@Getter

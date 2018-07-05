@@ -197,7 +197,7 @@ public class ResponsibleDTO {
 		setPregnant(responsible.isPregnant());
 		setPregnancies(responsible.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()));
 		setChildren(responsible.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()));
-		setCommunity(device.isNormal()? new CommunityDTO(responsible.getCommunity(), device, false) : null);
+		setCommunity(device != null && device.isNormal()? new CommunityDTO(responsible.getCommunity(), device, false) : null);
 	}
 
 	@JsonIgnore

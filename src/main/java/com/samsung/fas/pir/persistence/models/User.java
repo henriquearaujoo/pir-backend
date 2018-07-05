@@ -81,6 +81,12 @@ public class User extends BaseID implements Serializable {
 
 	@Getter
 	@Setter
+	@Column
+	@Alias("FCM Token")
+	private 	String					fcmToken;
+
+	@Getter
+	@Setter
 	@OneToMany(mappedBy = "agent")
 	@Alias("Responsáveis")
 	private 	Collection<Responsible>	responsible			= new ArrayList<>();

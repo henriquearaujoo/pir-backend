@@ -38,6 +38,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 			AccountDTO	account		= atoken != null? token.getAccount(atoken) : null;
 			Double		latitude	= request.getHeader("lat") != null? Double.valueOf(request.getHeader("lat")) : null;
 			Double		longitude	= request.getHeader("lng") != null? Double.valueOf(request.getHeader("lng")) : null;
+			String		fcmToken	= request.getHeader("fcm");
 			UserDetails	details		= account != null? service.loadUserByUsername(account.getUsername()) : null;
 			User		user		= account != null? ((Account) details).getUser() : null;
 
@@ -49,6 +50,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 			chain.doFilter(request, response);
 
 			if (user != null && latitude != null && longitude != null) {
+				user.setFcmToken(fcmToken);
 				user.setLatitude(latitude);
 				user.setLongitude(longitude);
 				userDAO.save(user);

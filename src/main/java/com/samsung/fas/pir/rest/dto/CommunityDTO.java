@@ -209,7 +209,7 @@ public class CommunityDTO {
 		setLatitude(community.getLatitude());
 		setLongitude(community.getLongitude());
 		setCity(community.getCity() != null? new CityDTO(community.getCity(), false) : null);
-		setResponsible(!device.isNormal()? community.getResponsible() != null? community.getResponsible().stream().map(item -> new ResponsibleDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>() : null);
+		setResponsible(device != null && !device.isNormal()? community.getResponsible() != null? community.getResponsible().stream().map(item -> new ResponsibleDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>() : null);
 	}
 
 	@JsonIgnore
