@@ -17,7 +17,7 @@
 
 	<int-xmpp:inbound-channel-adapter id="xmppInboundAdapter"
 		channel="xmppInbound" xmpp-connection="xmppConnectionFactoryBean"
-		payload-expression="getExtension('google:mobile:data')"
+		payload-expression="getExtension('google:mobile:data').text"
 		auto-startup="true" />
 	<int:service-activator ref="FCMReceiver" method="get"
 		input-channel="xmppInbound" />
