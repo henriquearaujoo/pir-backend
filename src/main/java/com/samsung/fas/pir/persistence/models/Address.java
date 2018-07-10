@@ -38,7 +38,7 @@ public class Address extends BaseID {
 	@Setter
 	@Column(name="complement")
 	@Alias("Complemento")
-	private		String			complementAdress;
+	private		String			complementAddress;
 
 	@Getter
 	@Setter

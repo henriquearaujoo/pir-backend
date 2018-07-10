@@ -1,25 +1,22 @@
 package com.samsung.fas.pir.rest.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.Greetings;
+import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.mobile.device.Device;
 
 import java.util.UUID;
 
 @DTO(Greetings.class)
-//@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GreetingsDTO {
-	@Getter
-	@Setter
-	@JsonProperty("id")
-	private		UUID 		uuid;
-
+public class GreetingsDTO extends BaseDTO<Greetings> {
 	@Getter
 	@Setter
 	@JsonProperty("chapter_id")
@@ -34,12 +31,7 @@ public class GreetingsDTO {
 	@Getter
 	@Setter
 	@JsonProperty("turnoff_eletronics")
-	private 	boolean		eletronics;
-
-	@Getter
-	@Setter
-	@JsonProperty("turnoff_stove")
-	private 	boolean		stove;
+	private 	boolean		electronics;
 
 	@Getter
 	@Setter
@@ -51,29 +43,17 @@ public class GreetingsDTO {
 	@JsonProperty("goback_lastvisit")
 	private 	boolean		goback;
 
+	@Getter
+	@Setter
+	@JsonProperty("turnoff_stove")
+	private 	boolean		stove;
+
 	public GreetingsDTO() {
 		super();
 	}
 
-	public GreetingsDTO(Greetings greetings, boolean detailed) {
-		setUuid(greetings.getUuid());
+	public GreetingsDTO(Greetings greetings, Device device, boolean detailed) {
+		super(greetings);
 		setChapterUUID(greetings.getChapter().getUuid());
-		setDescription(greetings.getDescription());
-		setEletronics(greetings.isElectronics());
-		setSit(greetings.isSit());
-		setGoback(greetings.isGoback());
-		setStove(greetings.isStove());
-	}
-
-	@JsonIgnore
-	public Greetings getModel() {
-		Greetings e = new Greetings();
-		e.setUuid(getUuid());
-		e.setDescription(getDescription());
-		e.setGoback(isGoback());
-		e.setSit(isSit());
-		e.setElectronics(isEletronics());
-		e.setStove(isStove());
-		return e;
 	}
 }

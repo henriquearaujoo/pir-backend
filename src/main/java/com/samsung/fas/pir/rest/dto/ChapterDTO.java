@@ -2,31 +2,28 @@ package com.samsung.fas.pir.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.Chapter;
+import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import com.samsung.fas.pir.rest.utils.CTools;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.mobile.device.Device;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @DTO(Chapter.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@JsonInclude(JsonInclude.Include.NON_NULL)
-public class ChapterDTO {
-	@Getter
-	@Setter
-	@JsonProperty("id")
-	private 	UUID			uuid;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ChapterDTO extends BaseDTO<Chapter> {
 	@Getter
 	@Setter
 	@JsonProperty("number")
@@ -95,7 +92,7 @@ public class ChapterDTO {
 	@Getter
 	@Setter
 	@JsonProperty("status")
-	private 	boolean			status;
+	private 	boolean			valid;
 
 	@Getter
 	@Setter
@@ -107,13 +104,13 @@ public class ChapterDTO {
 	@Setter
 	@JsonProperty("medias")
 	@Valid
-	private 	Set<FileDTO> 	medias;
+	private 	Set<FileDTO> 	mediasDTO;
 
 	@Getter
 	@Setter
 	@JsonProperty("thumbnail")
 	@Valid
-	private 	Set<FileDTO> 	thumbnails;
+	private 	Set<FileDTO> 	thumbnailsDTO;
 
 	@Getter
 	@Setter
@@ -124,45 +121,21 @@ public class ChapterDTO {
 		super();
 	}
 
-	public ChapterDTO(Chapter chapter, boolean detailed) {
-		setUuid(chapter.getUuid());
-		setChapter(chapter.getChapter());
-		setPeriod(chapter.getPeriod());
-		setVersion(chapter.getVersion());
-		setTitle(chapter.getTitle());
-		setSubtitle(chapter.getSubtitle());
-		setDescription(chapter.getDescription());
-		setContent(chapter.getContent());
-		setPurpose(chapter.getPurpose());
-		setFamilyTasks(chapter.getFamilyTasks());
-		setEstimatedTime(chapter.getEstimatedTime());
+	public ChapterDTO(Chapter chapter, Device device, boolean detailed) {
+		super(chapter);
 		setTimeUntilNext(chapter.getTimeUntilNext()/1000/3600/24);
-		setStatus(chapter.isValid());
-		setResources(chapter.getResources());
 		setUntilComplete(CTools.calculateChapterCompleteness(chapter));
-		Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMedias(item.stream().map(FileDTO::new).collect(Collectors.toSet())));
-		Optional.ofNullable(chapter.getThumbnails()).ifPresent(item -> setThumbnails(item.stream().map(FileDTO::new).collect(Collectors.toSet())));
+		Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMediasDTO(item.stream().map(FileDTO::new).collect(Collectors.toSet())));
+		Optional.ofNullable(chapter.getThumbnails()).ifPresent(item -> setThumbnailsDTO(item.stream().map(FileDTO::new).collect(Collectors.toSet())));
 	}
 
 	@JsonIgnore
+	@Override
 	public Chapter getModel() {
-		Chapter e = new Chapter();
-		e.setUuid(getUuid());
-		e.setVersion(getVersion());
-		e.setPeriod(getPeriod());
-		e.setChapter(getChapter());
-		e.setContent(getContent());
-		e.setDescription(getDescription());
-		e.setEstimatedTime(getEstimatedTime());
-		e.setFamilyTasks(getFamilyTasks());
-		e.setPurpose(getPurpose());
-		e.setTimeUntilNext(getTimeUntilNext() * 1000 * 3600 * 24);
-		e.setTitle(getTitle());
-		e.setValid(isStatus());
-		e.setResources(getResources());
-		e.setSubtitle(getSubtitle());
-		e.setMedias(getMedias() != null? getMedias().stream().map(FileDTO::getModel).collect(Collectors.toSet()) : new ArrayList<>());
-		e.setThumbnails(getThumbnails() != null? getThumbnails().stream().map(FileDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
-		return e;
+		Chapter model = super.getModel();
+		model.setTimeUntilNext(getTimeUntilNext() * 1000 * 3600 * 24);
+		model.setMedias(getMediasDTO() != null? getMediasDTO().stream().map(FileDTO::getModel).collect(Collectors.toSet()) : new ArrayList<>());
+		model.setThumbnails(getThumbnailsDTO() != null? getThumbnailsDTO().stream().map(FileDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
+		return model;
 	}
 }

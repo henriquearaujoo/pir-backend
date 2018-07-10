@@ -29,76 +29,76 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 	}
 
 	// region find all valid
-	public Collection<ChapterDTO> findAllValid() {
-		return getDao().findAllValid().stream().map(item -> new ChapterDTO(item ,false)).collect(Collectors.toList());
+	public Collection<ChapterDTO> findAllValid(Device device) {
+		return getDao().findAllValid().stream().map(item -> new ChapterDTO(item , device, false)).collect(Collectors.toList());
 	}
 
-	public Collection<ChapterDTO> findAllValid(Predicate predicate) {
-		return getDao().findAllValid(predicate).stream().map(item -> new ChapterDTO(item ,false)).collect(Collectors.toList());
+	public Collection<ChapterDTO> findAllValid(Predicate predicate, Device device) {
+		return getDao().findAllValid(predicate).stream().map(item -> new ChapterDTO(item , device, false)).collect(Collectors.toList());
 	}
 
-	public Page<ChapterDTO> findAllValid(Pageable pageable) {
-		return getDao().findAllValid(pageable).map(item -> new ChapterDTO((Chapter) item,false));
+	public Page<ChapterDTO> findAllValid(Pageable pageable, Device device) {
+		return getDao().findAllValid(pageable).map(item -> new ChapterDTO((Chapter) item, device, false));
 	}
 
-	public Page<ChapterDTO> findAllValid(Pageable pageable, Predicate predicate) {
-		return getDao().findAllValid(predicate, pageable).map(item -> new ChapterDTO((Chapter) item,false));
+	public Page<ChapterDTO> findAllValid(Pageable pageable, Predicate predicate, Device device) {
+		return getDao().findAllValid(predicate, pageable).map(item -> new ChapterDTO((Chapter) item, device, false));
 	}
 
-	public Collection<ChapterDetailedDTO> findAllValidDetailed() {
-		return getDao().findAllValid().stream().map(item -> new ChapterDetailedDTO(item ,false)).collect(Collectors.toList());
+	public Collection<ChapterDetailedDTO> findAllValidDetailed(Device device) {
+		return getDao().findAllValid().stream().map(item -> new ChapterDetailedDTO(item, device, false)).collect(Collectors.toList());
 	}
 
-	public Collection<ChapterDetailedDTO> findAllValidDetailed(Predicate predicate) {
-		return getDao().findAllValid(predicate).stream().map(item -> new ChapterDetailedDTO(item ,false)).collect(Collectors.toList());
+	public Collection<ChapterDetailedDTO> findAllValidDetailed(Predicate predicate, Device device) {
+		return getDao().findAllValid(predicate).stream().map(item -> new ChapterDetailedDTO(item, device, false)).collect(Collectors.toList());
 	}
 
-	public Page<ChapterDetailedDTO> findAllValidDetailed(Predicate predicate, Pageable pageable) {
-		return getDao().findAllValid(predicate, pageable).map(item -> new ChapterDetailedDTO((Chapter) item,false));
+	public Page<ChapterDetailedDTO> findAllValidDetailed(Predicate predicate, Pageable pageable, Device device) {
+		return getDao().findAllValid(predicate, pageable).map(item -> new ChapterDetailedDTO((Chapter) item, device, false));
 	}
 	// endregion
 
 	// region find all invalid
-	public Collection<ChapterDTO> findAllInvalid() {
-		return getDao().findAllInvalid().stream().map(item -> new ChapterDTO(item ,false)).collect(Collectors.toList());
+	public Collection<ChapterDTO> findAllInvalid(Device device) {
+		return getDao().findAllInvalid().stream().map(item -> new ChapterDTO(item, device, false)).collect(Collectors.toList());
 	}
 
-	public Page<ChapterDTO> findAllInvalid(Pageable pageable) {
-		return getDao().findAllInvalid(pageable).map(item -> new ChapterDTO((Chapter) item,false));
+	public Page<ChapterDTO> findAllInvalid(Pageable pageable, Device device) {
+		return getDao().findAllInvalid(pageable).map(item -> new ChapterDTO((Chapter) item, device, false));
 	}
 
-	public Page<ChapterDTO> findAllInvalid(Pageable pageable, Predicate predicate) {
-		return getDao().findAllInvalid(predicate, pageable).map(item -> new ChapterDTO((Chapter) item,false));
+	public Page<ChapterDTO> findAllInvalid(Pageable pageable, Predicate predicate, Device device) {
+		return getDao().findAllInvalid(predicate, pageable).map(item -> new ChapterDTO((Chapter) item, device, false));
 	}
 
-	public Collection<ChapterDetailedDTO> findAllInvalidDetailed() {
-		return getDao().findAllInvalid().stream().map(item -> new ChapterDetailedDTO(item ,false)).collect(Collectors.toList());
+	public Collection<ChapterDetailedDTO> findAllInvalidDetailed(Device device) {
+		return getDao().findAllInvalid().stream().map(item -> new ChapterDetailedDTO(item, device, false)).collect(Collectors.toList());
 	}
 
-	public Collection<ChapterDetailedDTO> findAllInvalidDetailed(Predicate predicate) {
-		return getDao().findAllInvalid(predicate).stream().map(item -> new ChapterDetailedDTO(item ,false)).collect(Collectors.toList());
+	public Collection<ChapterDetailedDTO> findAllInvalidDetailed(Predicate predicate, Device device) {
+		return getDao().findAllInvalid(predicate).stream().map(item -> new ChapterDetailedDTO(item, device, false)).collect(Collectors.toList());
 	}
 
-	public Page<ChapterDetailedDTO> findAllInvalidDetailed(Predicate predicate, Pageable pageable) {
-		return getDao().findAllInvalid(predicate, pageable).map(item -> new ChapterDetailedDTO((Chapter) item,false));
+	public Page<ChapterDetailedDTO> findAllInvalidDetailed(Predicate predicate, Pageable pageable, Device device) {
+		return getDao().findAllInvalid(predicate, pageable).map(item -> new ChapterDetailedDTO((Chapter) item, device, false));
 	}
 	// endregion
 
 	// region find all detailed
-	public Collection<ChapterDetailedDTO> findAllDetailed() {
-		return getDao().findAll().stream().map(item -> new ChapterDetailedDTO(item, true)).collect(Collectors.toList());
+	public Collection<ChapterDetailedDTO> findAllDetailed(Device device) {
+		return getDao().findAll().stream().map(item -> new ChapterDetailedDTO(item, device, true)).collect(Collectors.toList());
 	}
 
-	public Collection<ChapterDetailedDTO> findAllDetailed(Predicate predicate) {
-		return getDao().findAll(predicate).stream().sorted(Comparator.comparing(o -> ((Chapter) o).getChapter()).thenComparing(o -> ((Chapter) o).getVersion())).map(item -> new ChapterDetailedDTO(item, true)).collect(Collectors.toList());
+	public Collection<ChapterDetailedDTO> findAllDetailed(Predicate predicate, Device device) {
+		return getDao().findAll(predicate).stream().sorted(Comparator.comparing(o -> ((Chapter) o).getChapter()).thenComparing(o -> ((Chapter) o).getVersion())).map(item -> new ChapterDetailedDTO(item, device, true)).collect(Collectors.toList());
 	}
 
-	public Page<ChapterDetailedDTO> findAllDetailed(Pageable pageable) {
-		return getDao().findAll(pageable).map(item -> new ChapterDetailedDTO(item, true));
+	public Page<ChapterDetailedDTO> findAllDetailed(Pageable pageable, Device device) {
+		return getDao().findAll(pageable).map(item -> new ChapterDetailedDTO(item, device, true));
 	}
 
-	public Page<ChapterDetailedDTO> findAllDetailed(Predicate predicate, Pageable pageable) {
-		return getDao().findAll(predicate, pageable).map(item -> new ChapterDetailedDTO(item, true));
+	public Page<ChapterDetailedDTO> findAllDetailed(Predicate predicate, Pageable pageable, Device device) {
+		return getDao().findAll(predicate, pageable).map(item -> new ChapterDetailedDTO(item, device, true));
 	}
 	// endregion
 
@@ -113,7 +113,7 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 			model.setVersion(versions.get(0).getVersion() + 1);
 		}
 
-		return new ChapterDTO(getDao().save(model), true);
+		return new ChapterDTO(getDao().save(model), device, true);
 	}
 
 	@Override
@@ -147,7 +147,7 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 		chapter.setMedias(model.getMedias().stream().filter(item -> chapter.getMedias().stream().filter(file -> file.getId() - item.getId() == 0).findAny().orElse(null) != null).collect(Collectors.toList()));
 		chapter.getMedias().addAll(model.getMedias().stream().filter(item -> chapter.getMedias().stream().filter(file -> file.getId() - item.getId() == 0).findAny().orElse(null) == null).collect(Collectors.toList()));
 
-		return new ChapterDTO(getDao().save(chapter), true);
+		return new ChapterDTO(getDao().save(chapter), device, true);
 	}
 
 	@Override

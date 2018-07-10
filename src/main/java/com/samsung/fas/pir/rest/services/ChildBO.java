@@ -63,19 +63,19 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	public ChildDTO save(ChildDTO create, Device device, UserDetails account) {
 		Child				model		= create.getModel();
 		Child				child		= create.getUuid() != null? getDao().findOne(create.getUuid()) : null;
-		List<Responsible>	responsible	= create.getResponsible() != null? create.getResponsible().stream().map(item -> getResponsibleDAO().findOne(item.getUuid())).collect(Collectors.toList()) : new ArrayList<>();
+		List<Responsible>	responsible	= create.getResponsibleDTO() != null? create.getResponsibleDTO().stream().map(item -> getResponsibleDAO().findOne(item.getUuid())).collect(Collectors.toList()) : new ArrayList<>();
 
 		if (child == null) {
 			model.setAgent(((Account) account).getUser());
-			model.setResponsible(responsible);
-			responsible.forEach(resp -> resp.getChildren().add(model));
+//			model.setResponsible(responsible);
+//			responsible.forEach(resp -> resp.getChildren().add(model));
 //			model.setVisits(setupVisit(model, model.getVisits(), agent));
 			return new ChildDTO(getDao().save(model), device, true);
 		} else {
 			setupChild(child, model);
-			responsible.forEach(resp -> resp.getChildren().remove(resp.getChildren().stream().filter(item -> item.getUuid().compareTo(child.getUuid()) == 0).findAny().orElse(new Child())));
-			child.setResponsible(responsible);
-			responsible.forEach(resp -> resp.getChildren().add(model));
+//			responsible.forEach(resp -> resp.getChildren().remove(resp.getChildren().stream().filter(item -> item.getUuid().compareTo(child.getUuid()) == 0).findAny().orElse(new Child())));
+//			child.setResponsible(responsible);
+//			responsible.forEach(resp -> resp.getChildren().add(model));
 			return new ChildDTO(getDao().save(child), device, true);
 		}
 	}
@@ -84,23 +84,21 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	public ChildDTO update(ChildDTO update, Device device, UserDetails account) {
 		Child				model		= update.getModel();
 		Child				child		= update.getUuid() != null? getDao().findOne(update.getUuid()) : null;
-		List<Responsible>	responsible	= update.getResponsible() != null? update.getResponsible().stream().map(item -> getResponsibleDAO().findOne(item.getUuid())).collect(Collectors.toList()) : new ArrayList<>();
-		User				agent		= update.getAgentID() != null? getUserDAO().findOne(update.getAgentID()) : null;
+		List<Responsible>	responsible	= update.getResponsibleDTO() != null? update.getResponsibleDTO().stream().map(item -> getResponsibleDAO().findOne(item.getUuid())).collect(Collectors.toList()) : new ArrayList<>();
+		User				agent		= update.getAgentUUID() != null? getUserDAO().findOne(update.getAgentUUID()) : null;
 
 		if (child == null) {
-			if (agent == null)
-				throw new RESTException("agent.missing");
-			model.setAgent(agent);
-			model.setResponsible(responsible);
-			responsible.forEach(resp -> resp.getChildren().add(model));
-//			model.setVisits(setupVisit(model, model.getVisits(), agent));
+//			if (agent == null)
+//				throw new RESTException("agent.missing");
+//			model.setAgent(agent);
+//			model.setResponsible(responsible);
+//			responsible.forEach(resp -> resp.getChildren().add(model));
 			return new ChildDTO(getDao().save(model), device, true);
 		} else {
 			setupChild(child, model);
-//			child.setMother(mother);
-			responsible.forEach(resp -> resp.getChildren().remove(resp.getChildren().stream().filter(item -> item.getUuid().compareTo(child.getUuid()) == 0).findAny().orElse(new Child())));
-			child.setResponsible(responsible);
-			responsible.forEach(resp -> resp.getChildren().add(model));
+//			responsible.forEach(resp -> resp.getChildren().remove(resp.getChildren().stream().filter(item -> item.getUuid().compareTo(child.getUuid()) == 0).findAny().orElse(new Child())));
+//			child.setResponsible(responsible);
+//			responsible.forEach(resp -> resp.getChildren().add(model));
 			return new ChildDTO(getDao().save(child), device, true);
 		}
 	}

@@ -45,7 +45,7 @@ public class AnswerBO extends BaseBO<Answer, AnswerDAO, AnswerDTO, Long> {
 		model.setAlternative(alternative);
 		model.setQuestion(question);
 
-		return new AnswerDTO(getDao().save(model), true);
+		return new AnswerDTO(getDao().save(model), device,true);
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class AnswerBO extends BaseBO<Answer, AnswerDAO, AnswerDTO, Long> {
 		answer.setAlternative(alternative);
 		answer.setDescription(model.getDescription());
 
-		return new AnswerDTO(getDao().save(answer), true);
+		return new AnswerDTO(getDao().save(answer), device,true);
 	}
 
 	@Override

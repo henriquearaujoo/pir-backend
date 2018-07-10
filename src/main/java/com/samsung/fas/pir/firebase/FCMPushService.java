@@ -1,7 +1,6 @@
 package com.samsung.fas.pir.firebase;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.samsung.fas.pir.rest.controllers.ExceptionController;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -9,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 

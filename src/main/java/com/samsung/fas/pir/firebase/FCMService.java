@@ -5,7 +5,6 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
 import com.samsung.fas.pir.configuration.properties.FCMProperties;
-import com.samsung.fas.pir.rest.controllers.ExceptionController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

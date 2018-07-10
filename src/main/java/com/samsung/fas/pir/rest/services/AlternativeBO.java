@@ -47,7 +47,7 @@ public class AlternativeBO extends BaseBO<Alternative, AlternativeDAO, Alternati
 
 		model.setQuestion(question);
 		question.getAlternatives().add(model);
-		return new AlternativeDTO(getDao().save(model), true);
+		return new AlternativeDTO(getDao().save(model), device, true);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class AlternativeBO extends BaseBO<Alternative, AlternativeDAO, Alternati
 		alternative.setDescription(model.getDescription());
 		alternative.setType(model.getType());
 
-		return new AlternativeDTO(getDao().save(alternative), true);
+		return new AlternativeDTO(getDao().save(alternative), device,true);
 	}
 
 	@Override

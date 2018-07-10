@@ -117,23 +117,23 @@ public class Chapter extends BaseID {
 	@Setter
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "chapter")
 	@Alias("Intervenção")
-	private 	Intervention	intervention;
+	private 	Intervention			intervention;
 
 	@Getter
 	@Setter
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "chapter")
 	@Alias("Acolhimento")
-	private 	Greetings		greetings;
+	private 	Greetings				greetings;
 
 	@Getter
 	@Setter
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "chapter")
 	@Alias("Conclusão")
-	private 	Conclusion		conclusion;
+	private 	Conclusion				conclusion;
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "chapter", cascade = CascadeType.MERGE, orphanRemoval = true)
 	@Alias("Visitas")
-	private 	Collection<Visit>	visits;
+	private 	Collection<Visit>		visits;
 }

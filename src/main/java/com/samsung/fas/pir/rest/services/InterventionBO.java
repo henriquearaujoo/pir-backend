@@ -26,9 +26,9 @@ public class InterventionBO extends BaseBO<Intervention, InterventionDAO, Interv
 	@Override
 	public InterventionDTO save(InterventionDTO create, Device device, UserDetails account) {
 		Intervention	model		= create.getModel();
-		Chapter 		chapter		= cdao.findOne(create.getChapterdUUID());
+		Chapter 		chapter		= cdao.findOne(create.getChapterUUID());
 		model.setChapter(chapter);
-		return new InterventionDTO(getDao().save(model), true);
+		return new InterventionDTO(getDao().save(model), device, true);
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class InterventionBO extends BaseBO<Intervention, InterventionDAO, Interv
 
 		intervention.setDescription(model.getDescription());
 		intervention.setActivity(model.getActivity());
-		return new InterventionDTO(getDao().save(intervention), true);
+		return new InterventionDTO(getDao().save(intervention), device, true);
 	}
 
 	@Override

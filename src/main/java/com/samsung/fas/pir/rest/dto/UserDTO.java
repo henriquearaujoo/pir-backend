@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.User;
+import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,12 +24,7 @@ import java.util.stream.Collectors;
 @DTO(User.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserDTO {
-	@Getter
-	@Setter
-	@JsonProperty("id")
-	private		UUID		uuid;
-
+public class UserDTO extends BaseDTO<User> {
 	@Setter
 	@Getter
 	@JsonProperty(value="name")
@@ -67,38 +63,38 @@ public class UserDTO {
 	@Setter
 	@Getter
 	@JsonProperty("profile")
-	private		ProfileDTO	profile;
+	private		ProfileDTO	profileDTO;
 
 	@Setter
 	@Getter
 	@JsonProperty("address")
 	@NotNull(message="user.address.missing")
 	@Valid
-	private 	AddressDTO 	address;
+	private 	AddressDTO 	addressDTO;
 
 	@Getter
 	@Setter
 	@JsonProperty("person")
 	@Valid
-	private 	PersonDTO 	person;
+	private 	PersonDTO 	personDTO;
 
 	@Getter
 	@Setter
 	@JsonProperty("entity")
 	@Valid
-	private 	EntityDTO 	entity;
+	private 	EntityDTO 	entityDTO;
 
 	@ApiModelProperty(readOnly = true, hidden = true)
 	@Getter
 	@Setter
 	@JsonProperty("visits")
-	private 	Collection<VisitDTO>	visits;
+	private 	Collection<VisitDTO>	visitsDTO;
 
 	@ApiModelProperty(value = "For AGENT Only")
 	@Getter
 	@Setter
 	@JsonProperty("latitude")
-	private 	Double					latidute;
+	private 	Double					latitude;
 
 	@ApiModelProperty(value = "For AGENT Only")
 	@Getter
@@ -111,33 +107,24 @@ public class UserDTO {
 	}
 
 	public UserDTO(User user, Device device, boolean detailed) {
-		setUuid(user.getUuid());
-		setName(user.getName());
-		setEmail(user.getEmail());
+		super(user);
 		setPassword(null);
 		setActive(user.getAccount().isEnabled() && user.getAccount().isAccountNonExpired() && user.getAccount().isAccountNonLocked() && user.getAccount().isCredentialsNonExpired());
-		setLatidute(user.getLatitude());
-		setLongitude(user.getLongitude());
-		setProfile(new ProfileDTO(user.getAccount().getProfile(), false));
-		setPerson(detailed && user.getPerson() != null? new PersonDTO(user.getPerson(), false) : null);
-		setEntity(detailed && user.getEntity() != null? new EntityDTO(user.getEntity(), false) : null);
-		setAddress(detailed? user.getAddress() != null? new AddressDTO(user.getAddress(), false) : null : null);
+		setProfileDTO(new ProfileDTO(user.getAccount().getProfile(), false));
+		setPersonDTO(detailed && user.getPerson() != null? new PersonDTO(user.getPerson(), false) : null);
+		setEntityDTO(detailed && user.getEntity() != null? new EntityDTO(user.getEntity(), device, false) : null);
+		setAddressDTO(detailed? user.getAddress() != null? new AddressDTO(user.getAddress(), device, false) : null : null);
 		setLogin(detailed? user.getAccount().getUsername() : null);
-		setVisits(detailed && user.getVisits() != null? user.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()) : null);
+		setVisitsDTO(detailed && user.getVisits() != null? user.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()) : null);
 	}
 
 	@JsonIgnore
 	public User getModel() {
-		User model = new User();
-		model.setUuid(getUuid());
-		model.setName(getName());
-		model.setEmail(getEmail());
-		model.setAddress(getAddress().getModel());
+		User model = super.getModel();
+		model.setAddress(getAddressDTO().getModel());
 		model.getAddress().setUser(model);
-		model.setEntity(getEntity() != null? getEntity().getModel() : null);
-		model.setPerson(getPerson() != null? getPerson().getModel() : null);
-		model.setLatitude(getLatidute());
-		model.setLongitude(getLongitude());
+		model.setEntity(getEntityDTO() != null? getEntityDTO().getModel() : null);
+		model.setPerson(getPersonDTO() != null? getPersonDTO().getModel() : null);
 		return model;
 	}
 }

@@ -7,6 +7,8 @@ import com.samsung.fas.pir.persistence.models.Form;
 import com.samsung.fas.pir.persistence.models.FormQuestion;
 import com.samsung.fas.pir.rest.dto.FormQuestionDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,20 +19,22 @@ import java.util.Optional;
 
 @Service
 public class FormQuestionBO extends BaseBO<FormQuestion, FormQuestionDAO, FormQuestionDTO, Long> {
-	private	final FormDAO fdao;
+	@Getter
+	@Setter
+	private		FormDAO		formDAO;
 
 	@Autowired
-	public FormQuestionBO(FormQuestionDAO dao, @Autowired FormDAO fdao) {
+	public FormQuestionBO(FormQuestionDAO dao, @Autowired FormDAO formDAO) {
 		super(dao);
-		this.fdao = fdao;
+		setFormDAO(formDAO);
 	}
 
 	@Override
 	public FormQuestionDTO save(FormQuestionDTO create, Device device, UserDetails account) {
 		FormQuestion	model		= create.getModel();
-		Form 			form		= fdao.findOne(create.getFormUUID());
+		Form 			form		= getFormDAO().findOne(create.getFormUUID());
 		model.setForm(form);
-		return new FormQuestionDTO(getDao().save(model), true);
+		return new FormQuestionDTO(getDao().save(model), device, true);
 	}
 
 	@Override
@@ -40,7 +44,7 @@ public class FormQuestionBO extends BaseBO<FormQuestion, FormQuestionDAO, FormQu
 		question.setType(model.getType());
 		question.setDescription(model.getDescription());
 		question.setEnabled(model.isEnabled());
-		return new FormQuestionDTO(getDao().save(question), true);
+		return new FormQuestionDTO(getDao().save(question), device, true);
 	}
 
 	@Override

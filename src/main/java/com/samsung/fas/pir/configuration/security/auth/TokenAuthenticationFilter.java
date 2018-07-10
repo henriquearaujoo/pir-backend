@@ -5,7 +5,6 @@ import com.samsung.fas.pir.configuration.security.rest.dto.AccountDTO;
 import com.samsung.fas.pir.configuration.security.rest.service.AccountService;
 import com.samsung.fas.pir.exception.RESTException;
 import com.samsung.fas.pir.persistence.dao.UserDAO;
-import com.samsung.fas.pir.persistence.enums.EProfileType;
 import com.samsung.fas.pir.persistence.models.User;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Optional;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	private 	JWToken 		token;

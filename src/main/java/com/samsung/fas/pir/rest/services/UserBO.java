@@ -55,7 +55,7 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 		User		model		= create.getModel();
 		String		password	= create.getPassword();
 		Profile	 	profile		= pdao.findOne(create.getProfileUUID());
-		City 		city		= cdao.findOne(create.getAddress().getCityUUID());
+		City 		city		= cdao.findOne(create.getAddressDTO().getCityUUID());
 		Account 	account		= new Account();
 
 		if (model.getEntity() != null && model.getPerson() != null)
@@ -92,7 +92,7 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 		User		model		= update.getModel();
 		User		user		= getDao().findOne(model.getUuid());
 		Profile		profile		= pdao.findOne(update.getProfileUUID());
-		City		city		= cdao.findOne(update.getAddress().getCityUUID());
+		City		city		= cdao.findOne(update.getAddressDTO().getCityUUID());
 
 		if (model.getEntity() != null && model.getPerson() != null)
 			throw new RESTException("user.cannotbe.both");
@@ -107,7 +107,7 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 		user.setEmail(model.getEmail());
 		user.setLatitude(model.getLatitude());
 		user.setLongitude(model.getLongitude());
-		user.getAddress().setComplementAdress(model.getAddress().getComplementAdress());
+		user.getAddress().setComplementAddress(model.getAddress().getComplementAddress());
 		user.getAddress().setNeighborhoodAddress(model.getAddress().getNeighborhoodAddress());
 		user.getAddress().setNumberAddress(model.getAddress().getNumberAddress());
 		user.getAddress().setPostalCode(model.getAddress().getPostalCode());

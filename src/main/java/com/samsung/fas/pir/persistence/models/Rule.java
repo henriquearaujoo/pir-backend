@@ -3,7 +3,6 @@ package com.samsung.fas.pir.persistence.models;
 import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -26,25 +25,21 @@ public class Rule extends BaseID {
 	@JoinColumn
 	private		Page			page;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@Column
 	private		boolean			canCreate;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@Column
 	private		boolean			canRead;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@Column
 	private		boolean			canUpdate;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@Column

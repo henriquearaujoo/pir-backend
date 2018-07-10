@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.enums.EGender;
 import com.samsung.fas.pir.persistence.models.Child;
+import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
@@ -25,16 +26,11 @@ import java.util.stream.Collectors;
 @DTO(Child.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ChildDTO {
-	@Getter
-	@Setter
-	@JsonProperty("id")
-	private 	UUID 						uuid;
-
+public class ChildDTO extends BaseDTO<Child> {
 	@Getter
 	@Setter
 	@JsonProperty("external_id")
-	private		long						tempID;
+	private		long						mobileId;
 
 	@Getter
 	@Setter
@@ -46,7 +42,7 @@ public class ChildDTO {
 	@Setter
 	@JsonProperty("birth")
 	@NotBlank(message = "birth.missing")
-	private 	String						birth;
+	private 	String						birthDate;
 
 	@Getter
 	@Setter
@@ -82,7 +78,7 @@ public class ChildDTO {
 	@Getter
 	@Setter
 	@JsonProperty("is_premature_born")
-	private 	boolean						isPrematureBorn;
+	private 	boolean						prematureBorn;
 
 	@Getter
 	@Setter
@@ -105,12 +101,12 @@ public class ChildDTO {
 	@Getter
 	@Setter
 	@JsonProperty("is_mensaly_weighted")
-	private 	boolean						monthlyWeight;
+	private 	boolean						monthlyWeighted;
 
 	@Getter
 	@Setter
 	@JsonProperty("is_in_social_program")
-	private 	boolean						inSocialEducationalPrograms;
+	private 	boolean						socialEducationalPrograms;
 
 	@Getter
 	@Setter
@@ -120,93 +116,54 @@ public class ChildDTO {
 	@Getter
 	@Setter
 	@JsonProperty("has_relation_diff")
-	private 	boolean						hasRelationDifficulties;
+	private 	boolean						relationDifficulties;
 
 	@Getter
 	@Setter
 	@JsonProperty("agent_id")
-	private		UUID						agentID;
-
-	@Getter
-	@Setter
-	@JsonProperty("mother")
-	private		ResponsibleDTO 				mother;
+	private		UUID						agentUUID;
 
 	@Getter
 	@Setter
 	@JsonProperty("answers")
 	@Valid
-	private		List<SAnswerDTO>			answers;
+	private		List<SAnswerDTO>			answersDTO;
 
 	@Getter
 	@Setter
 	@JsonProperty("visits")
 	@Valid
-	private		List<VisitDTO>				visits;
+	private		List<VisitDTO>				visitsDTO;
 
 	@Getter
 	@Setter
 	@JsonProperty("responsible")
-	private 	List<ResponsibleDTO> 		responsible;
+	private 	List<ResponsibleDTO> 		responsibleDTO;
 
 	public ChildDTO() {
 		super();
 	}
 
 	public ChildDTO(Child child, Device device, boolean detailed) {
-		setTempID(child.getMobileId());
-		setUuid(child.getUuid());
-		setName(child.getName());
-		setBirth(new SimpleDateFormat("dd-MM-yyyy").format(child.getBirth()));
-		setFatherName(child.getFatherName());
-		setGender(child.getGender());
-		setHasCivilRegistration(child.isHasCivilRegistration());
-		setCivilRegistrationJustification(child.getCivilRegistrationJustification());
-		setHasEducationDifficulty(child.isHasEducationDifficulty());
-		setEducationDifficultySpecification(child.getEducationDifficultySpecification());
-		setPrematureBorn(child.isPrematureBorn());
-		setBornWeek(child.getBornWeek());
-		setWhoTakeCare(child.getWhoTakeCare());
-		setPlaysWithWho(child.getPlaysWithWho());
-		setMonthlyWeight(child.isMonthlyWeighted());
-		setInSocialEducationalPrograms(child.isSocialEducationalPrograms());
-		setVaccinationUpToDate(child.isVaccinationUpToDate());
-		setHasRelationDifficulties(child.isRelationDifficulties());
-		setResponsible(detailed? child.getResponsible().stream().map(responsible -> new ResponsibleDTO(responsible, device, false)).collect(Collectors.toList()) : null);
-		setAnswers(child.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
-		setVisits(child.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
+		super(child);
+		setBirthDate(new SimpleDateFormat("dd-MM-yyyy").format(child.getBirth()));
+		setResponsibleDTO(detailed? child.getResponsible().stream().map(responsible -> new ResponsibleDTO(responsible, device, false)).collect(Collectors.toList()) : null);
+		setAnswersDTO(child.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
+		setVisitsDTO(child.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
 	}
 
 	@JsonIgnore
+	@Override
 	public Child getModel() {
-		Child model = new Child();
-		model.setMobileId(getTempID());
-		model.setUuid(getUuid());
-		model.setName(getName());
-		model.setFatherName(getFatherName());
-		model.setGender(getGender());
-		model.setHasCivilRegistration(isHasCivilRegistration());
-		model.setCivilRegistrationJustification(getCivilRegistrationJustification());
-		model.setHasEducationDifficulty(isHasEducationDifficulty());
-		model.setEducationDifficultySpecification(getEducationDifficultySpecification());
-		model.setPrematureBorn(isPrematureBorn());
-		model.setBornWeek(getBornWeek());
-		model.setWhoTakeCare(getWhoTakeCare());
-		model.setPlaysWithWho(getPlaysWithWho());
-		model.setMonthlyWeighted(isMonthlyWeight());
-		model.setSocialEducationalPrograms(isInSocialEducationalPrograms());
-		model.setVaccinationUpToDate(isVaccinationUpToDate());
-		model.setRelationDifficulties(isHasRelationDifficulties());
-		model.setResponsible(getResponsible() != null? getResponsible().stream().map(ResponsibleDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
-		model.setAnswers(getAnswers() != null? getAnswers().stream().map(SAnswerDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
-		model.setVisits(getVisits() != null? getVisits().stream().map(VisitDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
-
+		Child model = super.getModel();
+		model.setResponsible(getResponsibleDTO() != null? getResponsibleDTO().stream().map(ResponsibleDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
+		model.setAnswers(getAnswersDTO() != null? getAnswersDTO().stream().map(SAnswerDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
+		model.setVisits(getVisitsDTO() != null? getVisitsDTO().stream().map(VisitDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		try {
-			model.setBirth(new SimpleDateFormat("dd-MM-yyyy").parse(getBirth()));
+			model.setBirth(new SimpleDateFormat("dd-MM-yyyy").parse(getBirthDate()));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
 		return model;
 	}
 

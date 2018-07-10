@@ -18,8 +18,8 @@ public class StateCityBO extends BaseBO<State, StateDAO, StateDTO, Long> {
 		super(dao);
 	}
 
-	public StateDTO findByUF(String uf) {
-		return new StateDTO(getDao().findByUF(uf), true);
+	public StateDTO findByUF(String uf, Device device) {
+		return new StateDTO(getDao().findByUF(uf), device, true);
 	}
 
 	@Override

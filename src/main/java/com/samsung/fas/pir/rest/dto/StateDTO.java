@@ -5,22 +5,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.State;
+import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.mobile.device.Device;
 
 import java.util.Collection;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @DTO(State.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class StateDTO {
-	@Getter
-	@Setter
-	@JsonProperty("id")
-	private		UUID		uuid;
-
+public class StateDTO extends BaseDTO<State> {
 	@Getter
 	@Setter
 	@JsonProperty("name")
@@ -29,7 +25,7 @@ public class StateDTO {
 	@Getter
 	@Setter
 	@JsonProperty("uf")
-	private		String		uf;
+	private		String		abbreviation;
 
 	@Getter
 	@Setter
@@ -40,10 +36,8 @@ public class StateDTO {
 		super();
 	}
 
-	public StateDTO(State state, boolean detailed) {
-		setUuid(state.getUuid());
-		setName(state.getName());
-		setUf(state.getAbbreviation());
-		setCities(detailed && state.getCities() != null? state.getCities().stream().map(item -> new CityDTO(item, false)).collect(Collectors.toSet()) : null);
+	public StateDTO(State state, Device device, boolean detailed) {
+		super(state);
+		setCities(detailed && state.getCities() != null? state.getCities().stream().map(item -> new CityDTO(item, device, false)).collect(Collectors.toSet()) : null);
 	}
 }

@@ -10,7 +10,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -21,7 +20,7 @@ import java.util.Date;
 @DynamicUpdate
 @DynamicInsert
 @Alias("Usuário")
-public class User extends BaseID implements Serializable {
+public class User extends BaseID {
 	@Getter
 	@Setter
 	@Column(nullable=false)

@@ -28,7 +28,7 @@ public class GreetingsBO extends BaseBO<Greetings, GreetingsDAO, GreetingsDTO, L
 		Greetings	model		= create.getModel();
 		Chapter 	chapter		= cdao.findOne(create.getChapterUUID());
 		model.setChapter(chapter);
-		return new GreetingsDTO(getDao().save(model), true);
+		return new GreetingsDTO(getDao().save(model), device, true);
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class GreetingsBO extends BaseBO<Greetings, GreetingsDAO, GreetingsDTO, L
 		greetings.setSit(model.isSit());
 		greetings.setGoback(model.isGoback());
 
-		return new GreetingsDTO(getDao().save(greetings), true);
+		return new GreetingsDTO(getDao().save(greetings), device, true);
 	}
 
 	@Override

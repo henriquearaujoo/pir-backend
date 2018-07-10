@@ -36,7 +36,7 @@ public class RuleBO extends BaseBO<Rule, RuleDAO, RuleDTO, Long> {
 		Page 					page			= rule.getPage();
 		Collection<Authority> 	authorities		= profile.getAuthorities();
 
-		if (model.canCreate()) {
+		if (model.isCanCreate()) {
 			Authority	authority	= authorities.stream().filter(item -> item.getAuthority().equalsIgnoreCase("CREATE::" + page.getTitle().toUpperCase())).findFirst().orElse(null);
 			if (authority != null) {
 				authority.getProfiles().add(profile);
@@ -52,7 +52,7 @@ public class RuleBO extends BaseBO<Rule, RuleDAO, RuleDTO, Long> {
 			profile.getAuthorities().removeIf(item -> item.getAuthority().equalsIgnoreCase("CREATE::" + page.getTitle().toUpperCase()));
 		}
 
-		if (model.canRead()) {
+		if (model.isCanRead()) {
 			Authority	authority	= authorities.stream().filter(item -> item.getAuthority().equalsIgnoreCase("READ::" + page.getTitle().toUpperCase())).findFirst().orElse(null);
 			if (authority != null) {
 				authority.getProfiles().add(profile);
@@ -68,7 +68,7 @@ public class RuleBO extends BaseBO<Rule, RuleDAO, RuleDTO, Long> {
 			profile.getAuthorities().removeIf(item -> item.getAuthority().equalsIgnoreCase("READ::" + page.getTitle().toUpperCase()));
 		}
 
-		if (model.canUpdate()) {
+		if (model.isCanUpdate()) {
 			Authority	authority	= authorities.stream().filter(item -> item.getAuthority().equalsIgnoreCase("UPDATE::" + page.getTitle().toUpperCase())).findFirst().orElse(null);
 			if (authority != null) {
 				authority.getProfiles().add(profile);
@@ -84,7 +84,7 @@ public class RuleBO extends BaseBO<Rule, RuleDAO, RuleDTO, Long> {
 			profile.getAuthorities().removeIf(item -> item.getAuthority().equalsIgnoreCase("UPDATE::" + page.getTitle().toUpperCase()));
 		}
 
-		if (model.canDelete()) {
+		if (model.isCanDelete()) {
 			Authority	authority	= authorities.stream().filter(item -> item.getAuthority().equalsIgnoreCase("DELETE::" + page.getTitle().toUpperCase())).findFirst().orElse(null);
 			if (authority != null) {
 				authority.getProfiles().add(profile);
@@ -102,13 +102,13 @@ public class RuleBO extends BaseBO<Rule, RuleDAO, RuleDTO, Long> {
 
 		rule.setPage(page);
 		rule.setProfile(profile);
-		rule.canCreate(model.canCreate());
-		rule.canRead(model.canRead());
-		rule.canUpdate(model.canUpdate());
-		rule.canDelete(model.canDelete());
+		rule.setCanCreate(model.isCanCreate());
+		rule.setCanRead(model.isCanRead());
+		rule.setCanUpdate(model.isCanUpdate());
+		rule.setCanDelete(model.isCanDelete());
 		rule.getProfile().setWhoUpdated(((Account) account).getUser());
 
-		return new RuleDTO(getDao().save(rule), true);
+		return new RuleDTO(getDao().save(rule), device, true);
 	}
 
 	@Override

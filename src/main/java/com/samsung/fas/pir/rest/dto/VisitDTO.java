@@ -8,6 +8,7 @@ import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.Chapter;
 import com.samsung.fas.pir.persistence.models.Form;
 import com.samsung.fas.pir.persistence.models.Visit;
+import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.mobile.device.Device;
@@ -22,16 +23,16 @@ import java.util.stream.Collectors;
 @DTO(Visit.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class VisitDTO {
-	@Getter
-	@Setter
-	@JsonProperty("id")
-	private 		UUID						uuid;
-
+public class VisitDTO extends BaseDTO<Visit> {
 	@Getter
 	@Setter
 	@JsonProperty("external_id")
-	private 		long						tempID;
+	private 		long						mobileId;
+
+	@Getter
+	@Setter
+	@JsonProperty("done_at")
+	private 		Date						doneAt;
 
 	@Getter
 	@Setter
@@ -47,11 +48,6 @@ public class VisitDTO {
 	@Setter
 	@JsonProperty("agent_rating")
 	private 		short						agentRating;
-
-	@Getter
-	@Setter
-	@JsonProperty("done_at")
-	private 		Date						doneAt;
 
 	@Getter
 	@Setter
@@ -72,12 +68,12 @@ public class VisitDTO {
 	@Setter
 	@JsonProperty(value = "answers")
 	@Valid
-	private 		Collection<AnswerDTO>		answers;
+	private 		Collection<AnswerDTO>		answersDTO;
 
 	@Getter
 	@Setter
 	@JsonProperty(value = "pregnancy")
-	private 		PregnancyDTO				pregnancy;
+	private 		PregnancyDTO				pregnancyDTO;
 
 	@Getter
 	@Setter
@@ -87,48 +83,34 @@ public class VisitDTO {
 	@Getter
 	@Setter
 	@JsonProperty(value = "child")
-	private 		ChildDTO					child;
+	private 		ChildDTO					childDTO;
 
 	public VisitDTO() {
 		super();
 	}
 
 	public VisitDTO(Visit visit, Device device, boolean detailed) {
-		setUuid(visit.getUuid());
-		setNumber(visit.getNumber());
-		setFamilyRating(visit.getFamilyRating());
-		setAgentRating(visit.getAgentRating());
-		setDoneAt(visit.getDoneAt());
-		setDuration(visit.getDuration());
-		setTempID(visit.getMobileId());
-		setAnswers(visit.getAnswers() != null? visit.getAnswers().stream().map(answer -> new AnswerDTO(answer, true)).collect(Collectors.toList()) : null);
-//		setChapterUUID(visit.getChapter().getUuid());
-		setChapterDTO(new ChapterDTO(visit.getChapter(), false));
+		super(visit);
 		setFormUUID(visit.getForm() != null? visit.getForm().getUuid() : null);
-		setChild(detailed && visit.getChild() != null? new ChildDTO(visit.getChild(), device, false) : null);
-		setPregnancy(detailed && visit.getPregnancy() != null? new PregnancyDTO(visit.getPregnancy(), device, false) : null);
+		setAnswersDTO(visit.getAnswers() != null? visit.getAnswers().stream().map(answer -> new AnswerDTO(answer, null, true)).collect(Collectors.toList()) : null);
+		setChapterDTO(new ChapterDTO(visit.getChapter(), device, false));
+		setChildDTO(detailed && visit.getChild() != null? new ChildDTO(visit.getChild(), device, false) : null);
+		setPregnancyDTO(detailed && visit.getPregnancy() != null? new PregnancyDTO(visit.getPregnancy(), device, false) : null);
 	}
 
-	@SuppressWarnings("Duplicates")
 	@JsonIgnore
+	@Override
 	public Visit getModel() {
-		Visit 	model 	= new Visit();
+		Visit 	model 	= super.getModel();
 		Chapter	chapter	= new Chapter();
 		Form	form	= new Form();
 		chapter.setUuid(getChapterUUID());
 		form.setUuid(getFormUUID());
 		model.setChapter(chapter);
 		model.setForm(form);
-		model.setMobileId(getTempID());
-		model.setUuid(getUuid());
-		model.setNumber(getNumber());
-		model.setFamilyRating(getFamilyRating());
-		model.setAgentRating(getAgentRating());
-		model.setDoneAt(getDoneAt());
-		model.setDuration(getDuration());
-		model.setPregnancy(getPregnancy() != null? getPregnancy().getModel() : null);
-		model.setChild(getChild() != null? getChild().getModel() : null);
-		model.setAnswers(getAnswers() != null? getAnswers().stream().map(AnswerDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
+		model.setPregnancy(getPregnancyDTO() != null? getPregnancyDTO().getModel() : null);
+		model.setChild(getChildDTO() != null? getChildDTO().getModel() : null);
+		model.setAnswers(getAnswersDTO() != null? getAnswersDTO().stream().map(AnswerDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		return model;
 	}
 }

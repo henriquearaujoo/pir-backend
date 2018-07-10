@@ -37,10 +37,10 @@ public class ProfileBO extends BaseBO<Profile, ProfileDAO, ProfileDTO, Long> {
 			Rule rule = new Rule();
 			rule.setPage(page);
 			rule.setProfile(model);
-			rule.canCreate(false);
-			rule.canRead(false);
-			rule.canUpdate(false);
-			rule.canDelete(false);
+			rule.setCanCreate(false);
+			rule.setCanRead(false);
+			rule.setCanUpdate(false);
+			rule.setCanDelete(false);
 			rules.add(rule);
 			if (page.getRules() == null)
 				page.setRules(new ArrayList<>());

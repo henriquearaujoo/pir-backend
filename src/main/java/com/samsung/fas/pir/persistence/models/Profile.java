@@ -6,14 +6,11 @@ import com.samsung.fas.pir.persistence.enums.EProfileType;
 import com.samsung.fas.pir.persistence.models.base.BaseID;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Date;
 
 @Entity
 @Table(name = "profile", uniqueConstraints = @UniqueConstraint(columnNames = "title", name = "profile_name"))
@@ -52,20 +49,6 @@ public class Profile extends BaseID {
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name="modified_by")
 	private		User					whoUpdated;
-	
-	@Getter
-	@Setter
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="created_at", updatable=false, nullable=false)
-	private		Date					createdAt;
-	
-	@Getter
-	@Setter
-	@UpdateTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="updated_at", nullable=false)
-	private		Date					updatedAt;
 	
 	@Getter
 	@Setter

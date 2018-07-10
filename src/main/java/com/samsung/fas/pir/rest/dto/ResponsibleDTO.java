@@ -6,16 +6,14 @@ import com.samsung.fas.pir.persistence.enums.ECivilState;
 import com.samsung.fas.pir.persistence.enums.EGender;
 import com.samsung.fas.pir.persistence.enums.EHabitationType;
 import com.samsung.fas.pir.persistence.models.Responsible;
+import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.mobile.device.Device;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,213 +24,162 @@ import java.util.stream.Collectors;
 @DTO(Responsible.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ResponsibleDTO {
+public class ResponsibleDTO extends BaseDTO<Responsible> {
 	// region Properties
 	@Getter
 	@Setter
-	@JsonProperty("id")
-	private		UUID		uuid;
-
-	@Getter
-	@Setter
 	@JsonProperty("external_id")
-	private		long		tempID;
+	private		long				mobileId;
 
 	@Getter
 	@Setter
 	@JsonProperty("agent_id")
-	private 	UUID 		agentUUID;
+	private 	UUID 				agentUUID;
 
 	@Getter
 	@Setter
 	@JsonProperty("name")
 	@NotBlank(message = "name.missing")
-	private 	String		name;
+	private 	String				name;
 
 	@Getter
 	@Setter
 	@JsonProperty("birth")
 	@NotEmpty(message = "date.missing")
 	@JsonFormat(pattern = "dd-MM-yyyy", shape = JsonFormat.Shape.STRING)
-	private 	String 		birth;
+	private 	String 				birthDate;
 
 	@Getter
 	@Setter
 	@JsonProperty("in_social_program")
-	private 	boolean			inSocialProgram;
+	private 	boolean				inSocialProgram;
 
 	@Getter
 	@Setter
 	@JsonProperty("habitation_type")
-	@NotNull(message = "habitation.type.missing")
-	private 	EHabitationType	habitationType;
+	private 	EHabitationType		habitationType;
 
 	@Getter
 	@Setter
 	@JsonProperty("habitation_members_count")
-	@Min(value = 1, message = "invalid.counter")
-	private 	int				habitationMembersCount;
+	private 	int					habitationMembersCount;
 
 	@Getter
 	@Setter
 	@JsonProperty("live_with")
-	@NotBlank(message = "live.with.missing")
-	private 	String			liveWith;
+	private 	String				liveWith;
 
 	@Getter
 	@Setter
 	@JsonProperty("family_income")
-	@NotBlank(message = "family.income.missing")
-	private 	String			familyIncome;
+	private 	String				familyIncome;
+
+	@Getter
+	@Setter
+	@JsonProperty("family_income_other")
+	private 	String				familyIncomeOther;
 
 	@Getter
 	@Setter
 	@JsonProperty("income_participation")
-	@NotBlank(message = "income.participation.missing")
-	private 	String			incomeParticipation;
-
-	@Getter
-	@Setter
-	@JsonProperty("drinking_water_treatment")
-	@NotBlank(message = "drinking.water.missing")
-	private 	String			drinkingWaterTreatment;
-
-	@Accessors(fluent = true)
-	@Getter
-	@Setter
-	@JsonProperty("has_hospital_nearby")
-	private 	boolean			hasHospital;
-
-	@Accessors(fluent = true)
-	@Getter
-	@Setter
-	@JsonProperty("has_sanitation")
-	private 	boolean			hasSanitation;
-
-	@Accessors(fluent = true)
-	@Getter
-	@Setter
-	@JsonProperty("has_water_treatment")
-	private 	boolean			hasWaterTreatment;
-
-	@Accessors(fluent = true)
-	@Getter
-	@Setter
-	@JsonProperty("has_other_children")
-	private 	boolean			hasOtherChildren;
-
-	@Getter
-	@Setter
-	@JsonProperty("observations")
-	private 	String			observations;
-
-	@Getter
-	@Setter
-	@JsonProperty("children_count")
-	@Min(value = 0, message = "invalid.count")
-	private 	long			childrenCount;
-
-	@Getter
-	@Setter
-	@JsonProperty("civil_state")
-	@NotBlank(message = "civil.state.missing")
-	private 	String			civilState;
-
-	@Getter
-	@Setter
-	@JsonProperty("is_pregnant")
-	private		boolean			pregnant;
+	private 	String				incomeParticipation;
 
 	@Getter
 	@Setter
 	@JsonProperty("gender")
-	private		String			gender;
+	private 	EGender 			gender;
+
+	@Getter
+	@Setter
+	@JsonProperty("children_count")
+	private 	long				childrenCount;
+
+	@Getter
+	@Setter
+	@JsonProperty("civil_state")
+	private 	ECivilState			civilState;
+
+	@Getter
+	@Setter
+	@JsonProperty("drinking_water_treatment")
+	private 	String				drinkingWaterTreatment;
+
+	@Getter
+	@Setter
+	@JsonProperty("has_hospital_nearby")
+	private 	boolean				hasHospital;
+
+	@Getter
+	@Setter
+	@JsonProperty("has_sanitation")
+	private 	boolean				hasSanitation;
+
+	@Getter
+	@Setter
+	@JsonProperty("has_water_treatment")
+	private 	boolean				hasWaterTreatment;
+
+	@Getter
+	@Setter
+	@JsonProperty("has_other_children")
+	private 	boolean				familyHasChildren;
+
+	@Getter
+	@Setter
+	@JsonProperty("observations")
+	private 	String				observations;
+
+	@Getter
+	@Setter
+	@JsonProperty("is_pregnant")
+	private		boolean				pregnant;
 	// endregion
+
+	@Getter
+	@Setter
+	@JsonProperty("community_id")
+	private 	UUID				communityUUID;
 
 	@Getter
 	@Setter
 	@JsonProperty("children")
 	@Valid
-	private 	List<ChildDTO>	children;
+	private 	List<ChildDTO>		childrenDTO;
 
 	@Getter
 	@Setter
 	@JsonProperty("pregnancies")
-	private 	List<PregnancyDTO> 		pregnancies;
-
-	@Getter
-	@Setter
-	@JsonProperty("community_id")
-	private 	UUID			communityUUID;
+	private 	List<PregnancyDTO> 	pregnanciesDTO;
 
 	@Getter
 	@Setter
 	@JsonProperty("community")
-	private 	CommunityDTO	community;
+	private 	CommunityDTO		communityDTO;
 
 	public ResponsibleDTO() {
 		super();
 	}
 
 	public ResponsibleDTO(Responsible responsible, Device device, boolean detailed) {
-		setTempID(responsible.getMobileId());
-		setName(responsible.getName());
-		setUuid(responsible.getUuid());
-		setBirth(new SimpleDateFormat("dd-MM-yyyy").format(responsible.getBirth()));
-		setInSocialProgram(responsible.isInSocialProgram());
-		setHabitationMembersCount(responsible.getHabitationMembersCount());
-		setHabitationType(responsible.getHabitationType());
-		setLiveWith(responsible.getLiveWith());
-		setFamilyIncome(responsible.getFamilyIncome());
-		setIncomeParticipation(responsible.getIncomeParticipation());
-		setDrinkingWaterTreatment(responsible.getDrinkingWaterTreatment());
-		hasHospital(responsible.isHasHospital());
-		hasSanitation(responsible.isHasSanitation());
-		hasWaterTreatment(responsible.isHasWaterTreatment());
-		setObservations(responsible.getObservations());
-		hasOtherChildren(responsible.isFamilyHasChildren());
-		setChildrenCount(responsible.getChildrenCount());
-		setCivilState(responsible.getCivilState().toString());
-		setGender(responsible.getGender().getValue());
-		setPregnant(responsible.isPregnant());
-		setPregnancies(responsible.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()));
-		setChildren(responsible.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()));
-		setCommunity(device != null && device.isNormal()? new CommunityDTO(responsible.getCommunity(), device, false) : null);
+		super(responsible);
+		setBirthDate(new SimpleDateFormat("dd-MM-yyyy").format(responsible.getBirth()));
+		setPregnanciesDTO(responsible.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()));
+		setChildrenDTO(responsible.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()));
+		setCommunityDTO(device != null && device.isNormal()? new CommunityDTO(responsible.getCommunity(), device, false) : null);
 	}
 
 	@JsonIgnore
+	@Override
 	public Responsible getModel() {
-		Responsible model = new Responsible();
-		model.setMobileId(getTempID());
-		model.setFamilyHasChildren(hasOtherChildren());
-		model.setName(getName());
-		model.setUuid(getUuid());
-		model.setInSocialProgram(isInSocialProgram());
-		model.setHabitationType(getHabitationType());
-		model.setHabitationMembersCount(getHabitationMembersCount());
-		model.setLiveWith(getLiveWith());
-		model.setFamilyIncome(getFamilyIncome());
-		model.setIncomeParticipation(getIncomeParticipation());
-		model.setDrinkingWaterTreatment(getDrinkingWaterTreatment());
-		model.setHasHospital(hasHospital());
-		model.setHasSanitation(hasSanitation());
-		model.setHasWaterTreatment(hasWaterTreatment());
-		model.setObservations(getObservations());
-		model.setChildrenCount(getChildrenCount());
-		model.setGender(EGender.valueOf(getGender()));
-		model.setCivilState(ECivilState.valueOf(civilState));
-		model.setPregnant(isPregnant());
-		model.setCommunity(getCommunity() != null? getCommunity().getModel() : null);
-		model.setChildren(getChildren() != null? getChildren().stream().map(ChildDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
-		model.setPregnancies(pregnancies != null? pregnancies.stream().map(PregnancyDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
-		model.setChildren(getChildren() != null? getChildren().stream().map(ChildDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
-
+		Responsible model = super.getModel();
+		model.setCommunity(getCommunityDTO() != null? getCommunityDTO().getModel() : null);
+		model.setChildren(getChildrenDTO() != null? getChildrenDTO().stream().map(ChildDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
+		model.setPregnancies(getPregnanciesDTO() != null? getPregnanciesDTO().stream().map(PregnancyDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		try {
-			model.setBirth(new SimpleDateFormat("dd-MM-yyyy").parse(getBirth()));
+			model.setBirth(new SimpleDateFormat("dd-MM-yyyy").parse(getBirthDate()));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
 		return model;
 	}
 }

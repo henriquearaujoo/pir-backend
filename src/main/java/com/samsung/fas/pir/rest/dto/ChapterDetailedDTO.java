@@ -1,27 +1,24 @@
 package com.samsung.fas.pir.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.Chapter;
+import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import com.samsung.fas.pir.rest.utils.CTools;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.mobile.device.Device;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @DTO(Chapter.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@JsonInclude(JsonInclude.Include.NON_NULL)
-public class ChapterDetailedDTO {
-	@Getter
-	@Setter
-	@JsonProperty("id")
-	private 	UUID					uuid;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ChapterDetailedDTO extends BaseDTO<Chapter> {
 	@Getter
 	@Setter
 	@JsonProperty("number")
@@ -80,22 +77,27 @@ public class ChapterDetailedDTO {
 	@Getter
 	@Setter
 	@JsonProperty("status")
-	private 	boolean					status;
+	private 	boolean					valid;
+
+	@Getter
+	@Setter
+	@JsonProperty("period")
+	private 	int						period;
 
 	@Getter
 	@Setter
 	@JsonProperty("greetings")
-	private 	GreetingsDTO			greetings;
+	private 	GreetingsDTO			greetingsDTO;
 
 	@Getter
 	@Setter
 	@JsonProperty("intervention")
-	private 	InterventionDTO			intervention;
+	private 	InterventionDTO			interventionDTO;
 
 	@Getter
 	@Setter
 	@JsonProperty("conclusion")
-	private 	ConclusionDTO			conclusion;
+	private 	ConclusionDTO			conclusionDTO;
 
 	@Getter
 	@Setter
@@ -105,37 +107,25 @@ public class ChapterDetailedDTO {
 	@Getter
 	@Setter
 	@JsonProperty("medias")
-	private 	Collection<FileDTO>		medias;
+	private 	Collection<FileDTO>		mediasDTO;
 
 	@Getter
 	@Setter
 	@JsonProperty("thumbnail")
 	private 	Collection<FileDTO>		thumbnails;
 
-
 	public ChapterDetailedDTO() {
 		super();
 	}
 
-	public ChapterDetailedDTO(Chapter chapter, boolean detailed) {
-		setUuid(chapter.getUuid());
-		setChapter(chapter.getChapter());
-		setVersion(chapter.getVersion());
-		setTitle(chapter.getTitle());
-		setSubtitle(chapter.getSubtitle());
-		setDescription(chapter.getDescription());
-		setContent(chapter.getContent());
-		setPurpose(chapter.getPurpose());
-		setFamilyTasks(chapter.getFamilyTasks());
-		setEstimatedTime(chapter.getEstimatedTime());
+	public ChapterDetailedDTO(Chapter chapter, Device device, boolean detailed) {
+		super(chapter);
 		setTimeUntilNext(chapter.getTimeUntilNext()/1000/3600/24);
-		setStatus(chapter.isValid());
-		setResources(chapter.getResources());
 		setUntilComplete(CTools.calculateChapterCompleteness(chapter));
-		setGreetings(chapter.getGreetings() != null? new GreetingsDTO(chapter.getGreetings(), true) : null);
-		setIntervention(chapter.getIntervention() != null? new InterventionDTO(chapter.getIntervention(), true) : null);
-		setConclusion(chapter.getConclusion() != null? new ConclusionDTO(chapter.getConclusion(), true) : null);
-		Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMedias(item.stream().map(FileDTO::new).collect(Collectors.toSet())));
+		setGreetingsDTO(chapter.getGreetings() != null? new GreetingsDTO(chapter.getGreetings(), device, true) : null);
+		setInterventionDTO(chapter.getIntervention() != null? new InterventionDTO(chapter.getIntervention(), device, true) : null);
+		setConclusionDTO(chapter.getConclusion() != null? new ConclusionDTO(chapter.getConclusion(), true) : null);
+		Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMediasDTO(item.stream().map(FileDTO::new).collect(Collectors.toSet())));
 		Optional.ofNullable(chapter.getThumbnails()).ifPresent(item -> setThumbnails(item.stream().map(FileDTO::new).collect(Collectors.toSet())));
 	}
 }

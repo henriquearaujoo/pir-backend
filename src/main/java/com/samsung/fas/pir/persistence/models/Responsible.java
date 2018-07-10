@@ -29,20 +29,20 @@ public class Responsible extends BaseID {
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Nome")
 	private 	String				name;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Temporal(TemporalType.DATE)
 	@Alias("Nascimento")
 	private 	Date				birth;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Em Programa Social")
 	private 	boolean				inSocialProgram;
 
@@ -55,7 +55,7 @@ public class Responsible extends BaseID {
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("No. de Pessoas")
 	private 	int					habitationMembersCount;
 
@@ -86,20 +86,20 @@ public class Responsible extends BaseID {
 	@Getter
 	@Setter
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@Column
 	@Alias("Gênero")
 	private 	EGender 			gender;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("No. de Filhos")
 	private 	long				childrenCount;
 
 	@Getter
 	@Setter
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@Column
 	@Alias("Estado Civil")
 	private 	ECivilState 		civilState;
 
@@ -111,25 +111,25 @@ public class Responsible extends BaseID {
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Há Unidade Básica Perto da Moradia")
 	private 	boolean				hasHospital;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Há Saneamento Básico ")
 	private 	boolean				hasSanitation;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Há Tratamento de Água")
 	private 	boolean				hasWaterTreatment;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Há outras Crianças")
 	private 	boolean				familyHasChildren;
 
@@ -141,7 +141,7 @@ public class Responsible extends BaseID {
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
+	@Column
 	@Alias("Está Grávida")
 	private 	boolean					pregnant;
 	// endregion

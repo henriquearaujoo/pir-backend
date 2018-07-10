@@ -36,7 +36,7 @@ public class FormBO extends BaseBO<Form, FormDAO, FormDTO, Long> {
 			model.setEnabled(false);
 		}
 
-		return new FormDTO(getDao().save(model), true);
+		return new FormDTO(getDao().save(model), device, true);
 	}
 
 	@Override
@@ -49,13 +49,12 @@ public class FormBO extends BaseBO<Form, FormDAO, FormDTO, Long> {
 			throw new RESTException("invalid.indicator");
 
 		getDao().invalidate(model.getAgeZone());
-
 		form.setFromValue(model.getFromValue());
 		form.setToValue(model.getToValue());
 		form.setAgeZone(model.getAgeZone());
 		form.setEnabled(model.isEnabled());
 
-		return new FormDTO(getDao().save(form), true);
+		return new FormDTO(getDao().save(form), device, true);
 	}
 
 	@Override

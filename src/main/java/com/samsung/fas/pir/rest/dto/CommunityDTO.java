@@ -7,11 +7,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.enums.ECommunityZone;
 import com.samsung.fas.pir.persistence.models.Community;
+import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.mobile.device.Device;
 
 import javax.validation.constraints.NotNull;
@@ -23,16 +23,11 @@ import java.util.stream.Collectors;
 @DTO(Community.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CommunityDTO {
-	@Getter
-	@Setter
-	@JsonProperty("id")
-	private 	UUID 			uuid;
-
+public class CommunityDTO extends BaseDTO<Community> {
 	@Getter
 	@Setter
 	@JsonProperty("external_id")
-	private		long			tempID;
+	private		long			mobileId;
 
 	@Getter
 	@Setter
@@ -47,44 +42,42 @@ public class CommunityDTO {
 	@Getter
 	@Setter
 	@JsonProperty("name")
-	@NotBlank(message = "name.missing")
 	private 	String			name;
 
 	@Getter
 	@Setter
 	@JsonProperty("zone")
-	@NotBlank(message = "zone.missing")
 	private 	String			communityZone;
 
 	@Getter
 	@Setter
 	@JsonProperty("water_supply")
-	@NotBlank(message = "water.supply.missing")
 	private 	String			waterSupply;
 
 	@Getter
 	@Setter
 	@JsonProperty("garbage_destination")
-	@NotBlank(message = "garbage.destination.missing")
 	private 	String			garbageDestination;
 
 	@Getter
 	@Setter
 	@JsonProperty("access_via")
-	@NotBlank(message = "access.via.missing")
 	private 	String			access;
 
 	@Getter
 	@Setter
 	@JsonProperty("health_service")
-	@NotBlank(message = "health.service.missing")
 	private 	String			healthServices;
 
 	@Getter
 	@Setter
 	@JsonProperty("main_income")
-	@NotBlank(message = "income.missing")
 	private 	String			mainIncome;
+
+	@Getter
+	@Setter
+	@JsonProperty("cultural_production")
+	private 	String			culturalProductions;
 
 	@Accessors(fluent = true)
 	@Getter
@@ -140,11 +133,6 @@ public class CommunityDTO {
 	@JsonProperty("has_patron")
 	private 	boolean			hasPatron;
 
-	@Getter
-	@Setter
-	@JsonProperty("cultural_production")
-	private 	String			culturalProductions;
-
 	@Accessors(fluent = true)
 	@Getter
 	@Setter
@@ -164,7 +152,7 @@ public class CommunityDTO {
 	@Getter
 	@Setter
 	@JsonProperty("responsible")
-	private 	List<ResponsibleDTO>		responsible;
+	private 	List<ResponsibleDTO>		responsibleDTO;
 
 	@Getter
 	@Setter
@@ -176,70 +164,26 @@ public class CommunityDTO {
 	@ApiModelProperty(hidden = true, readOnly = true)
 	@Getter
 	@Setter
-	@JsonProperty
-	private 	CityDTO			city;
+	@JsonProperty("city")
+	private 	CityDTO			cityDTO;
 
 	public CommunityDTO() {
 		super();
 	}
 
 	public CommunityDTO(Community community, Device device, boolean detailed) {
-		setTempID(community.getMobileId());
-		setUuid(community.getUuid());
-		setName(community.getName());
-		setWaterSupply(community.getWaterSupply());
-		setGarbageDestination(community.getGarbageDestination());
-		setAccess(community.getAccess());
-		setHealthServices(community.getHealthServices());
-		setMainIncome(community.getMainIncome());
-		hasKindergarten(community.hasKindergarten());
-		hasElementarySchool(community.hasElementarySchool());
-		hasHighSchool(community.hasHighSchool());
-		hasCollege(community.hasCollege());
-		hasElectricity(community.hasElectricity());
-		hasCommunityCenter(community.hasCommunityCenter());
-		hasReligiousPlace(community.hasReligiousPlace());
-		hasCulturalEvents(community.hasCulturalEvents());
-		hasPatron(community.hasPatron());
+		super(community);
 		setCommunityZone(community.getCommunityZone() != null? community.getCommunityZone().getValue() : ECommunityZone.UNDEFINED.getValue());
-		hasCommunityLeaders(community.hasCommunityLeaders());
-		setCulturalProductions(community.getCulturalProductions());
-		setRegional(community.getRegional());
-		setUc(community.getUc());
-		setLatitude(community.getLatitude());
-		setLongitude(community.getLongitude());
-		setCity(community.getCity() != null? new CityDTO(community.getCity(), false) : null);
-		setResponsible(device != null && !device.isNormal()? community.getResponsible() != null? community.getResponsible().stream().map(item -> new ResponsibleDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>() : null);
+		setCityDTO(community.getCity() != null? new CityDTO(community.getCity(), device, false) : null);
+		setResponsibleDTO(device != null && !device.isNormal()? community.getResponsible() != null? community.getResponsible().stream().map(item -> new ResponsibleDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>() : null);
 	}
 
 	@JsonIgnore
+	@Override
 	public Community getModel() {
-		Community model = new Community();
-		model.setMobileId(getTempID());
-		model.setUuid(getUuid());
-		model.setName(getName());
-		model.setWaterSupply(getWaterSupply());
-		model.setGarbageDestination(getGarbageDestination());
-		model.setAccess(getAccess());
-		model.setHealthServices(getHealthServices());
-		model.setMainIncome(getMainIncome());
-		model.hasKindergarten(hasKindergarten());
-		model.hasElementarySchool(hasElementarySchool());
-		model.hasHighSchool(hasHighSchool());
-		model.hasCollege(hasCollege());
-		model.hasElectricity(hasElectricity());
-		model.hasCommunityCenter(hasCommunityCenter());
-		model.hasReligiousPlace(hasReligiousPlace());
-		model.hasCulturalEvents(hasCulturalEvents());
-		model.hasPatron(hasPatron());
-		model.setCulturalProductions(getCulturalProductions());
-		model.hasCommunityLeaders(hasCommunityLeaders());
-		model.setRegional(getRegional());
-		model.setUc(getUc());
+		Community model = super.getModel();
 		model.setCommunityZone(ECommunityZone.setValue(getCommunityZone()));
-		model.setLatitude(getLatitude());
-		model.setLongitude(getLongitude());
-		model.setResponsible(getResponsible() != null? getResponsible().stream().map(ResponsibleDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
+		model.setResponsible(getResponsibleDTO() != null? getResponsibleDTO().stream().map(ResponsibleDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		return model;
 	}
 }

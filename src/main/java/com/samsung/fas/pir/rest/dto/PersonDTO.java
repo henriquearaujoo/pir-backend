@@ -1,10 +1,11 @@
 package com.samsung.fas.pir.rest.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.Person;
+import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
@@ -14,8 +15,8 @@ import javax.validation.constraints.Pattern;
 
 @DTO(Person.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@JsonInclude(JsonInclude.Include.NON_NULL)
-public class PersonDTO {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class PersonDTO extends BaseDTO<Person> {
 	@Getter
 	@Setter
 	@JsonProperty("rg")
@@ -40,17 +41,6 @@ public class PersonDTO {
 	}
 
 	public PersonDTO(Person person, boolean detailed) {
-		setRg(person.getRg());
-		setEmitter(person.getEmitter());
-		setCpf(person.getCpf());
-	}
-
-	@JsonIgnore
-	public Person getModel() {
-		Person model = new Person();
-		model.setCpf(getCpf());
-		model.setEmitter(getEmitter());
-		model.setRg(getRg());
-		return model;
+		super(person);
 	}
 }

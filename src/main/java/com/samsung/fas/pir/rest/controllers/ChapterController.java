@@ -34,98 +34,98 @@ public class ChapterController extends BController<ChapterBO, ChapterDTO> {
 
 //	@Cacheable(cacheNames = "chapter_active")
 	@RequestMapping(method= RequestMethod.GET, path="/active")
-	public ResponseEntity<Collection<ChapterDTO>> getAllValid() {
-		return ResponseEntity.ok(getService().findAllValid());
+	public ResponseEntity<Collection<ChapterDTO>> getAllValid(Device device) {
+		return ResponseEntity.ok(getService().findAllValid(device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_active_detailed")
 	@RequestMapping(method= RequestMethod.GET, path="/active/detailed")
-	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllValidDetailed() {
-		return ResponseEntity.ok(getService().findAllValidDetailed());
+	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllValidDetailed(Device device) {
+		return ResponseEntity.ok(getService().findAllValidDetailed(device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_active_detailed_search")
 	@RequestMapping(method= RequestMethod.GET, path="/active/detailed/search")
-	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllValidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate) {
-		return ResponseEntity.ok(getService().findAllValidDetailed(predicate));
+	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllValidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Device device) {
+		return ResponseEntity.ok(getService().findAllValidDetailed(predicate, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_active_detailed_search_page")
 	@RequestMapping(method= RequestMethod.GET, path="/active/detailed/search/page")
-	public ResponseEntity<Page<ChapterDetailedDTO>> getAllValidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable) {
-		return ResponseEntity.ok(getService().findAllValidDetailed(predicate, pageable));
+	public ResponseEntity<Page<ChapterDetailedDTO>> getAllValidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable, Device device) {
+		return ResponseEntity.ok(getService().findAllValidDetailed(predicate, pageable, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_inactive_detailed")
 	@RequestMapping(method= RequestMethod.GET, path="/inactive/detailed")
-	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllInvalidDetailed() {
-		return ResponseEntity.ok(getService().findAllInvalidDetailed());
+	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllInvalidDetailed(Device device) {
+		return ResponseEntity.ok(getService().findAllInvalidDetailed(device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_inactive_detailed_search")
 	@RequestMapping(method= RequestMethod.GET, path="/inactive/detailed/search")
-	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllInvalidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate) {
-		return ResponseEntity.ok(getService().findAllInvalidDetailed(predicate));
+	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllInvalidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Device device) {
+		return ResponseEntity.ok(getService().findAllInvalidDetailed(predicate, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_inactive_detailed_page_search")
 	@RequestMapping(method= RequestMethod.GET, path="/inactive/detailed/search/page")
-	public ResponseEntity<Page<ChapterDetailedDTO>> getAllInvalidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable) {
-		return ResponseEntity.ok(getService().findAllInvalidDetailed(predicate, pageable));
+	public ResponseEntity<Page<ChapterDetailedDTO>> getAllInvalidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable, Device device) {
+		return ResponseEntity.ok(getService().findAllInvalidDetailed(predicate, pageable, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_active_search")
 	@RequestMapping(method= RequestMethod.GET, path="/active/search")
-	public ResponseEntity<Collection<ChapterDTO>> getAllValid(@QuerydslPredicate(root = Chapter.class) Predicate predicate) {
-		return ResponseEntity.ok(getService().findAllValid(predicate));
+	public ResponseEntity<Collection<ChapterDTO>> getAllValid(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Device device) {
+		return ResponseEntity.ok(getService().findAllValid(predicate, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_active_page_search")
 	@RequestMapping(method= RequestMethod.GET, path="/active/search/page")
-	public ResponseEntity<Page<ChapterDTO>> getAllValid(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable) {
-		return ResponseEntity.ok(getService().findAllValid(pageable, predicate));
+	public ResponseEntity<Page<ChapterDTO>> getAllValid(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable, Device device) {
+		return ResponseEntity.ok(getService().findAllValid(pageable, predicate, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_inactive")
 	@RequestMapping(method= RequestMethod.GET, path="/inactive")
-	public ResponseEntity<Collection<ChapterDTO>> getAllInvalid() {
-		return ResponseEntity.ok(getService().findAllInvalid());
+	public ResponseEntity<Collection<ChapterDTO>> getAllInvalid(Device device) {
+		return ResponseEntity.ok(getService().findAllInvalid(device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_inactive_page")
 	@RequestMapping(method= RequestMethod.GET, path="/inactive/page")
-	public ResponseEntity<Page<ChapterDTO>> getAllInvalid(Pageable pageable) {
-		return ResponseEntity.ok(getService().findAllInvalid(pageable));
+	public ResponseEntity<Page<ChapterDTO>> getAllInvalid(Pageable pageable, Device device) {
+		return ResponseEntity.ok(getService().findAllInvalid(pageable, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_inactive_page_search")
 	@RequestMapping(method= RequestMethod.GET, path="/inactive/search/page")
-	public ResponseEntity<Page<ChapterDTO>> getAllInvalid(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable) {
-		return ResponseEntity.ok(getService().findAllInvalid(pageable, predicate));
+	public ResponseEntity<Page<ChapterDTO>> getAllInvalid(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable, Device device) {
+		return ResponseEntity.ok(getService().findAllInvalid(pageable, predicate, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_active_page")
 	@RequestMapping(method= RequestMethod.GET, path="/active/page")
-	public ResponseEntity<Page<ChapterDTO>> getAllValid(Pageable pageable) {
-		return ResponseEntity.ok(getService().findAllValid(pageable));
+	public ResponseEntity<Page<ChapterDTO>> getAllValid(Pageable pageable, Device device) {
+		return ResponseEntity.ok(getService().findAllValid(pageable, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_detailed_page")
 	@RequestMapping(method= RequestMethod.GET, path="/detailed/page")
-	public ResponseEntity<Page<ChapterDetailedDTO>> getAllDetailed(Pageable pageable) {
-		return ResponseEntity.ok(getService().findAllDetailed(pageable));
+	public ResponseEntity<Page<ChapterDetailedDTO>> getAllDetailed(Pageable pageable, Device device) {
+		return ResponseEntity.ok(getService().findAllDetailed(pageable, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_detailed_search")
 	@RequestMapping(method= RequestMethod.GET, path="/detailed/search")
-	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate) {
-		return ResponseEntity.ok(getService().findAllDetailed(predicate));
+	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Device device) {
+		return ResponseEntity.ok(getService().findAllDetailed(predicate, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_detailed_page")
 	@RequestMapping(method= RequestMethod.GET, path="/detailed/search/page")
-	public ResponseEntity<Page<ChapterDetailedDTO>> getAllDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable) {
-		return ResponseEntity.ok(getService().findAllDetailed(predicate, pageable));
+	public ResponseEntity<Page<ChapterDetailedDTO>> getAllDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable, Device device) {
+		return ResponseEntity.ok(getService().findAllDetailed(predicate, pageable, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_search")

@@ -2,27 +2,25 @@ package com.samsung.fas.pir.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.enums.EFormQuestionType;
 import com.samsung.fas.pir.persistence.models.FormQuestion;
+import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.mobile.device.Device;
 
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @DTO(FormQuestion.class)
-//@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FormQuestionDTO {
-	@Getter
-	@Setter
-	@JsonProperty("id")
-	private		UUID		uuid;
-
+public class FormQuestionDTO extends BaseDTO<FormQuestion> {
 	@Getter
 	@Setter
 	@JsonProperty("form_id")
@@ -48,27 +46,22 @@ public class FormQuestionDTO {
 	@Setter(value = AccessLevel.PRIVATE)
 	@Getter
 	@JsonProperty(value = "form", access = JsonProperty.Access.READ_ONLY)
-	private 	FormDTO		form;
+	private 	FormDTO		formDTO;
 
 	public FormQuestionDTO() {
 		super();
 	}
 
-	public FormQuestionDTO(FormQuestion question, boolean detailed) {
-		setUuid(question.getUuid());
-		setDescription(question.getDescription());
-		setType(question.getType().getValue());
-		setEnabled(question.isEnabled());
-		setForm(detailed? new FormDTO(question.getForm(), false) : null);
+	public FormQuestionDTO(FormQuestion question, Device device, boolean detailed) {
+		super(question);
+		setFormDTO(detailed? new FormDTO(question.getForm(), device, false) : null);
 	}
 
 	@JsonIgnore
+	@Override
 	public FormQuestion getModel() {
-		FormQuestion model = new FormQuestion();
-		model.setUuid(getUuid());
-		model.setDescription(getDescription());
-		model.setType(EFormQuestionType.setValue(getType()));
-		model.setEnabled(isEnabled());
+		FormQuestion model = super.getModel();
+		model.setType(getType() == null? EFormQuestionType.UNDEFINED : EFormQuestionType.setValue(getType()));
 		return model;
 	}
 }

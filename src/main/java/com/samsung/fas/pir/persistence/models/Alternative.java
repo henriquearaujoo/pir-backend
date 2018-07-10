@@ -19,13 +19,13 @@ import java.util.Collection;
 public class Alternative extends BaseID {
 	@Getter
 	@Setter
-	@Column(nullable = false, columnDefinition = "citext")
+	@Column(columnDefinition = "citext")
 	@Alias("Descrição")
 	private 	String					description;
 
 	@Getter
 	@Setter
-	@Column(name = "type", nullable = false)
+	@Column(name = "type")
 	@Alias("Tipo")
 	private 	EAnswerType 			type;
 

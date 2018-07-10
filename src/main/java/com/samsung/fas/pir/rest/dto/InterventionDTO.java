@@ -1,29 +1,26 @@
 package com.samsung.fas.pir.rest.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.Intervention;
+import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.mobile.device.Device;
 
 import java.util.UUID;
 
 @DTO(Intervention.class)
-//@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class InterventionDTO {
-	@Getter
-	@Setter
-	@JsonProperty("id")
-	private		UUID		uuid;
-
+public class InterventionDTO extends BaseDTO<Intervention> {
 	@Getter
 	@Setter
 	@JsonProperty("chapter_id")
-	private		UUID		chapterdUUID;
+	private		UUID		chapterUUID;
 
 	@Getter
 	@Setter
@@ -41,19 +38,8 @@ public class InterventionDTO {
 		super();
 	}
 
-	public InterventionDTO(Intervention intervention, boolean detailed) {
-		setUuid(intervention.getUuid());
-		setDescription(intervention.getDescription());
-		setChapterdUUID(intervention.getChapter().getUuid());
-		setActivity(intervention.getActivity());
-	}
-
-	@JsonIgnore
-	public Intervention getModel() {
-		Intervention model = new Intervention();
-		model.setDescription(getDescription());
-		model.setActivity(getActivity());
-		model.setUuid(getUuid());
-		return model;
+	public InterventionDTO(Intervention intervention, Device device, boolean detailed) {
+		super(intervention);
+		setChapterUUID(intervention.getChapter().getUuid());
 	}
 }
