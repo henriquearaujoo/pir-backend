@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.springframework.mobile.device.Device;
 
 import java.util.Collection;
+import java.util.List;
 
 @DTO(Page.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -29,7 +30,7 @@ public class PageDTO extends BaseDTO<Page> {
 	@Getter
 	@Setter
 	@JsonProperty("rules")
-	private 	Collection<RuleDTO>	rules;
+	private 	List<RuleDTO> 		rulesDTO;
 
 	public PageDTO() {
 		super();

@@ -11,6 +11,7 @@ import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.mobile.device.Device;
 
 import java.util.Date;
 
@@ -55,7 +56,7 @@ public class ProfileDTO extends BaseDTO<Profile> {
 		super();
 	}
 
-	public ProfileDTO(Profile profile, boolean detailed) {
+	public ProfileDTO(Profile profile, Device device, boolean detailed) {
 		super(profile);
 	}
 }

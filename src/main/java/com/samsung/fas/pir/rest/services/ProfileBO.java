@@ -49,7 +49,7 @@ public class ProfileBO extends BaseBO<Profile, ProfileDAO, ProfileDTO, Long> {
 
 		model.setRules(rules);
 
-		return new ProfileDTO(getDao().save(model), true);
+		return new ProfileDTO(getDao().save(model), device, true);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class ProfileBO extends BaseBO<Profile, ProfileDAO, ProfileDTO, Long> {
 		profile.setTitle(model.getTitle());
 		profile.setType(model.getType());
 
-		return new ProfileDTO(getDao().save(profile), true);
+		return new ProfileDTO(getDao().save(profile), device, true);
 	}
 
 	@Override

@@ -110,7 +110,7 @@ public class UserDTO extends BaseDTO<User> {
 		super(user);
 		setPassword(null);
 		setActive(user.getAccount().isEnabled() && user.getAccount().isAccountNonExpired() && user.getAccount().isAccountNonLocked() && user.getAccount().isCredentialsNonExpired());
-		setProfileDTO(new ProfileDTO(user.getAccount().getProfile(), false));
+		setProfileDTO(new ProfileDTO(user.getAccount().getProfile(), device, false));
 		setPersonDTO(detailed && user.getPerson() != null? new PersonDTO(user.getPerson(), false) : null);
 		setEntityDTO(detailed && user.getEntity() != null? new EntityDTO(user.getEntity(), device, false) : null);
 		setAddressDTO(detailed? user.getAddress() != null? new AddressDTO(user.getAddress(), device, false) : null : null);

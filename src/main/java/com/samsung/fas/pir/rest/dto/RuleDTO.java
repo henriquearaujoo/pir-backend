@@ -51,6 +51,6 @@ public class RuleDTO extends BaseDTO<Rule> {
 	public RuleDTO(Rule rule, Device device, boolean detailed) {
 		super(rule);
 		setPageDTO(new PageDTO(rule.getPage(), device, false));
-		setProfileDTO(new ProfileDTO(rule.getProfile(), false));
+		setProfileDTO(new ProfileDTO(rule.getProfile(), device, false));
 	}
 }
