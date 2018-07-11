@@ -14,9 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
-@Table(name = "community", uniqueConstraints = {
-	@UniqueConstraint(name = "community_name", columnNames = {"name", "city_id"})
-})
+@Table(name = "community", uniqueConstraints = {@UniqueConstraint(name = "community_name", columnNames = {"name", "city_id", "uc"})})
 @DynamicUpdate
 @DynamicInsert
 @Alias("Comunidade")
@@ -28,7 +26,7 @@ public class Community extends BaseID {
 
 	@Getter
 	@Setter
-	@Column
+	@Column(columnDefinition = "CITEXT")
 	@Alias("UC")
 	private 	String						uc;
 

@@ -1,6 +1,5 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.configuration.security.persistence.models.Authority;
 import com.samsung.fas.pir.persistence.dao.RuleDAO;
 import com.samsung.fas.pir.persistence.models.Page;
@@ -106,7 +105,6 @@ public class RuleBO extends BaseBO<Rule, RuleDAO, RuleDTO, Long> {
 		rule.setCanRead(model.isCanRead());
 		rule.setCanUpdate(model.isCanUpdate());
 		rule.setCanDelete(model.isCanDelete());
-		rule.getProfile().setWhoUpdated(((Account) account).getUser());
 
 		return new RuleDTO(getDao().save(rule), device, true);
 	}

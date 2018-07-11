@@ -133,6 +133,7 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 			chapter.setValid(false);
 		}
 
+		chapter.setAdditionalForms(model.getAdditionalForms());
 		chapter.setPeriod(model.getPeriod());
 		chapter.setChapter(model.getChapter());
 		chapter.setTitle(model.getTitle());

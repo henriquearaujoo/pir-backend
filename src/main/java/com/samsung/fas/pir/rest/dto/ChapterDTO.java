@@ -16,8 +16,8 @@ import org.springframework.mobile.device.Device;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @DTO(Chapter.class)
@@ -73,6 +73,11 @@ public class ChapterDTO extends BaseDTO<Chapter> {
 
 	@Getter
 	@Setter
+	@JsonProperty("extra_forms")
+	private		String			additionalForms;
+
+	@Getter
+	@Setter
 	@JsonProperty("family_tasks")
 	@NotBlank(message = "tasks.missing")
 	private		String			familyTasks;
@@ -104,13 +109,13 @@ public class ChapterDTO extends BaseDTO<Chapter> {
 	@Setter
 	@JsonProperty("medias")
 	@Valid
-	private 	Set<FileDTO> 	mediasDTO;
+	private 	List<FileDTO> mediasDTO;
 
 	@Getter
 	@Setter
 	@JsonProperty("thumbnail")
 	@Valid
-	private 	Set<FileDTO> 	thumbnailsDTO;
+	private 	List<FileDTO> 	thumbnailsDTO;
 
 	@Getter
 	@Setter
@@ -125,8 +130,8 @@ public class ChapterDTO extends BaseDTO<Chapter> {
 		super(chapter);
 		setTimeUntilNext(chapter.getTimeUntilNext()/1000/3600/24);
 		setUntilComplete(CTools.calculateChapterCompleteness(chapter));
-		Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMediasDTO(item.stream().map(FileDTO::new).collect(Collectors.toSet())));
-		Optional.ofNullable(chapter.getThumbnails()).ifPresent(item -> setThumbnailsDTO(item.stream().map(FileDTO::new).collect(Collectors.toSet())));
+		Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMediasDTO(item.stream().map(FileDTO::new).collect(Collectors.toList())));
+		Optional.ofNullable(chapter.getThumbnails()).ifPresent(item -> setThumbnailsDTO(item.stream().map(FileDTO::new).collect(Collectors.toList())));
 	}
 
 	@JsonIgnore

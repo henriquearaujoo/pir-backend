@@ -25,9 +25,15 @@ public class Conclusion extends BaseID {
 
 	@Getter
 	@Setter
-	@Column(nullable = false, columnDefinition = "TEXT")
+	@Column(columnDefinition = "TEXT")
 	@Alias("Descrição")
 	private 	String					description;
+
+	@Getter
+	@Setter
+	@Column(columnDefinition = "TEXT")
+	@Alias("Descrição")
+	private 	String 					observations;
 
 	@Getter
 	@Setter

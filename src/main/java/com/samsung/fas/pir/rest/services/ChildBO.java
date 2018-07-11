@@ -1,7 +1,6 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
-import com.samsung.fas.pir.exception.RESTException;
 import com.samsung.fas.pir.persistence.dao.*;
 import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.models.base.Base;

@@ -1,6 +1,5 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.persistence.dao.PageDAO;
 import com.samsung.fas.pir.persistence.dao.ProfileDAO;
 import com.samsung.fas.pir.persistence.models.Page;
@@ -48,8 +47,6 @@ public class ProfileBO extends BaseBO<Profile, ProfileDAO, ProfileDTO, Long> {
 			page.getRules().addAll(rules);
 		});
 
-		model.setWhoCreated(((Account) account).getUser());
-		model.setWhoUpdated(((Account) account).getUser());
 		model.setRules(rules);
 
 		return new ProfileDTO(getDao().save(model), true);
@@ -64,7 +61,6 @@ public class ProfileBO extends BaseBO<Profile, ProfileDAO, ProfileDTO, Long> {
 		profile.setDescription(model.getDescription());
 		profile.setTitle(model.getTitle());
 		profile.setType(model.getType());
-		profile.setWhoUpdated(((Account) account).getUser());
 
 		return new ProfileDTO(getDao().save(profile), true);
 	}

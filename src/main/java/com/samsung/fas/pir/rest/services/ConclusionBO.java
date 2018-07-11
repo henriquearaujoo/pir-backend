@@ -40,6 +40,7 @@ public class ConclusionBO extends BaseBO<Conclusion, ConclusionDAO, ConclusionDT
 		Conclusion	conclusion	= getDao().findOne(model.getUuid());
 
 		conclusion.setDescription(model.getDescription());
+		conclusion.setObservations(model.getObservations());
 
 		return new ConclusionDTO(getDao().save(conclusion), true);
 	}

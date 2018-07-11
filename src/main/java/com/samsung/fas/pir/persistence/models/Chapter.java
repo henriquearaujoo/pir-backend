@@ -33,13 +33,13 @@ public class Chapter extends BaseID {
 
 	@Getter
 	@Setter
-	@Column(name = "title", nullable = false, columnDefinition = "TEXT")
+	@Column(name = "title", columnDefinition = "TEXT")
 	@Alias("Título")
 	private 	String			title;
 
 	@Getter
 	@Setter
-	@Column(name = "subtitle", nullable = false, columnDefinition = "TEXT")
+	@Column(name = "subtitle", columnDefinition = "TEXT")
 	@Alias("Subtítulo")
 	private		String			subtitle;
 
@@ -51,25 +51,31 @@ public class Chapter extends BaseID {
 
 	@Getter
 	@Setter
-	@Column(name = "description", nullable = false, columnDefinition = "TEXT")
+	@Column(name = "description", columnDefinition = "TEXT")
 	@Alias("Descrição")
 	private 	String			description;
 
 	@Getter
 	@Setter
-	@Column(name = "content", nullable = false, columnDefinition = "TEXT")
+	@Column(name = "content", columnDefinition = "TEXT")
 	@Alias("Conteúdo")
 	private		String			content;
 
 	@Getter
 	@Setter
-	@Column(name = "purpose", nullable = false, columnDefinition = "TEXT")
+	@Column(name = "additional_forms", columnDefinition = "TEXT")
+	@Alias("Formulários Adicionais")
+	private		String			additionalForms;
+
+	@Getter
+	@Setter
+	@Column(name = "purpose", columnDefinition = "TEXT")
 	@Alias("Propósito")
 	private		String			purpose;
 
 	@Getter
 	@Setter
-	@Column(name = "family_tasks", nullable = false, columnDefinition = "TEXT")
+	@Column(name = "family_tasks", columnDefinition = "TEXT")
 	@Alias("Tarefas para Família")
 	private		String			familyTasks;
 

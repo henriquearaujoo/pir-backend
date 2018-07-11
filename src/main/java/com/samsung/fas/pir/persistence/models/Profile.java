@@ -40,18 +40,6 @@ public class Profile extends BaseID {
 	
 	@Getter
 	@Setter
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name="created_by", updatable=false)
-	private		User					whoCreated;
-	
-	@Getter
-	@Setter
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name="modified_by")
-	private		User					whoUpdated;
-	
-	@Getter
-	@Setter
 	@OneToMany(mappedBy="profile")
 	private 	Collection<Account>		accounts;
 

@@ -23,13 +23,18 @@ public class ConclusionDTO extends BaseDTO<Conclusion> {
 	@Getter
 	@Setter
 	@JsonProperty("chapter_id")
-	private 	UUID 		chapterUUID;
+	private 	UUID 						chapterUUID;
 
 	@Getter
 	@Setter
 	@JsonProperty("description")
 	@NotBlank(message = "chapter.greetings.description.missing")
-	private 	String		description;
+	private 	String						description;
+
+	@Getter
+	@Setter
+	@JsonProperty("observations")
+	private 	String 						observations;
 
 	@Getter
 	@Setter
