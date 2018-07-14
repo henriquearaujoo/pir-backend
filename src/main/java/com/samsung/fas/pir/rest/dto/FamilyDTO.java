@@ -128,10 +128,15 @@ public class FamilyDTO extends BaseDTO<Family> {
 
 	public FamilyDTO(Family family, Device device, boolean detailed) {
 		super(family);
-		setCommunityDTO(device != null && device.isNormal() || detailed? new CommunityDTO(family.getCommunity(), device, false) : null);
-		setPregnantDTO(device != null && !device.isNormal() || detailed? family.getPregnant().stream().map(item -> new PregnantDTO(item, device, false)).collect(Collectors.toList()) : null);
-		setChildrenDTO(device != null && !device.isNormal() || detailed? family.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()) : null);
-		setCommunityDTO(device != null && device.isNormal()? new CommunityDTO(family.getCommunity(), device, false) : null);
+		if (!device.isNormal()) {
+			setCommunityUUID(family.getCommunity().getUuid());
+			setPregnantDTO(family.getPregnant().stream().map(item -> new PregnantDTO(item, device, false)).collect(Collectors.toList()));
+			setChildrenDTO(family.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()));
+		} else {
+			setCommunityDTO(new CommunityDTO(family.getCommunity(), device, false));
+			setPregnantDTO(detailed? family.getPregnant().stream().map(item -> new PregnantDTO(item, device, false)).collect(Collectors.toList()) : null);
+			setChildrenDTO(detailed? family.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()) : null);
+		}
 	}
 
 	@JsonIgnore
