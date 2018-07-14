@@ -67,43 +67,43 @@ public class PregnancyBO extends BaseBO<Pregnancy, PregnancyDAO, PregnancyDTO, L
 //		model.setAgent(agent);
 //		model.setPregnant(mother);
 //		model.setRegisteredAt(model.getRegisteredAt());
-		model.setVisits(setupVisit(model, model.getVisits(), agent));
-		model.setAnswers(setupAnswer(model, model.getAnswers(), agent));
+		model.setVisits(setupVisit(model, model.getVisits()));
+		model.setAnswers(setupAnswer(model, model.getAnswers()));
 		return model;
 	}
 
 	Pregnancy setupPregnancy(Pregnancy pregnancy, Pregnancy model, Family mother, User agent) {
 //		pregnancy.setRegisteredAt(model.getRegisteredAt());
 //		pregnancy.setPregnant(mother);
-		pregnancy.setVisits(setupVisit(pregnancy, model.getVisits(), agent));
-		pregnancy.setAnswers(setupAnswer(pregnancy, model.getAnswers(), agent));
+		pregnancy.setVisits(setupVisit(pregnancy, model.getVisits()));
+		pregnancy.setAnswers(setupAnswer(pregnancy, model.getAnswers()));
 		return pregnancy;
 	}
 
 	@SuppressWarnings("Duplicates")
-	private Collection<SAnswer> setupAnswer(Pregnancy pregnancy, Collection<SAnswer> collection, User agent) {
+	private Collection<SAnswer> setupAnswer(Pregnancy pregnancy, Collection<SAnswer> collection) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
 			SAnswer		sAnswer		= uuid != null? getSAnswerDAO().findOne(uuid) : null;
 			if (sAnswer != null) {
-				return getSAnswerBO().setupAnswer(sAnswer, item, pregnancy, agent);
+				return getSAnswerBO().setupAnswer(sAnswer, item, pregnancy);
 			} else {
-				return getSAnswerBO().setupAnswer(item, pregnancy, agent);
+				return getSAnswerBO().setupAnswer(item, pregnancy);
 			}
 		}).collect(Collectors.toList());
 	}
 
 	@SuppressWarnings("Duplicates")
-	private Collection<Visit> setupVisit(Pregnancy pregnancy, Collection<Visit> collection, User agent) {
+	private Collection<Visit> setupVisit(Pregnancy pregnancy, Collection<Visit> collection) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
 			Visit		visit		= uuid != null? getVisitDAO().findOne(uuid) : null;
 			if (visit != null) {
-				return getVisitBO().setupVisit(visit, item, pregnancy, agent);
+				return getVisitBO().setupVisit(visit, item, pregnancy);
 			} else {
-				return getVisitBO().setupVisit(item, pregnancy, agent);
+				return getVisitBO().setupVisit(item, pregnancy);
 			}
 		}).collect(Collectors.toList());
 	}

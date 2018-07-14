@@ -39,7 +39,7 @@ public class RegionalDTO extends BaseDTO<Regional> {
 
 	public RegionalDTO(Regional regional, Device device, boolean detailed) {
 		super(regional);
-		setUnitiesDTO(regional.getUnities().stream().map(item -> new ConservationUnityDTO(item, device, false)).collect(Collectors.toList()));
+		setUnitiesDTO(detailed? regional.getUnities().stream().map(item -> new ConservationUnityDTO(item, device, false)).collect(Collectors.toList()) : null);
 	}
 
 	@JsonIgnore

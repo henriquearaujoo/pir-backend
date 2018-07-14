@@ -91,18 +91,18 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 	}
 
 	// region Pregnancy
-	Visit setupVisit(Visit model, Pregnancy pregnancy, User agent) {
+	Visit setupVisit(Visit model, Pregnancy pregnancy) {
 		model.setPregnancy(pregnancy);
 		model.setChapter(getChapterDAO().findOne(model.getChapter().getUuid()));
 		model.setForm(model.getForm().getUuid() != null? getFormDAO().findOne(model.getForm().getUuid()) : null);
-		model.setAgent(agent);
+//		model.setAgent(agent);
 		if (model.getAnswers() != null) {
 			model.setAnswers(setupAnswers(model, model.getAnswers()));
 		}
 		return model;
 	}
 
-	Visit setupVisit(Visit visit, Visit model, Pregnancy pregnancy, User agent) {
+	Visit setupVisit(Visit visit, Visit model, Pregnancy pregnancy) {
 		visit.setForm(model.getForm().getUuid() != null? getFormDAO().findOne(model.getForm().getUuid()): null);
 		visit.setChapter(getChapterDAO().findOne(model.getChapter().getUuid()));
 		visit.setPregnancy(pregnancy);
@@ -110,7 +110,6 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 		visit.setNumber(model.getNumber());
 		visit.setDoneAt(model.getDoneAt());
 		visit.setErased(model.isErased());
-		visit.setAgent(agent);
 		if (model.getAnswers() != null) {
 			visit.setAnswers(setupAnswers(visit, model.getAnswers()));
 		}
@@ -119,18 +118,17 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 	// endregion
 
 	// region Child
-	Visit setupVisit(Visit model, Child child, User agent) {
+	Visit setupVisit(Visit model, Child child) {
 		model.setChild(child);
 		model.setChapter(getChapterDAO().findOne(model.getChapter().getUuid()));
 		model.setForm(model.getForm() != null && model.getForm().getUuid() != null? getFormDAO().findOne(model.getForm().getUuid()) : null);
-		model.setAgent(agent);
 		if (model.getAnswers() != null) {
 			model.setAnswers(setupAnswers(model, model.getAnswers()));
 		}
 		return model;
 	}
 
-	Visit setupVisit(Visit visit, Visit model, Child child, User agent) {
+	Visit setupVisit(Visit visit, Visit model, Child child) {
 		visit.setForm(model.getForm().getUuid() != null? getFormDAO().findOne(model.getForm().getUuid()) : null);
 		visit.setChapter(getChapterDAO().findOne(model.getChapter().getUuid()));
 		visit.setChild(child);
@@ -138,7 +136,6 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 		visit.setNumber(model.getNumber());
 		visit.setDoneAt(model.getDoneAt());
 		visit.setErased(model.isErased());
-		visit.setAgent(agent);
 		if (model.getAnswers() != null) {
 			visit.setAnswers(setupAnswers(visit, model.getAnswers()));
 		}

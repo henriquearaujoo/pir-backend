@@ -5,10 +5,13 @@ import com.samsung.fas.pir.persistence.enums.ECivilState;
 import com.samsung.fas.pir.persistence.enums.EGender;
 import com.samsung.fas.pir.persistence.enums.EHabitationType;
 import com.samsung.fas.pir.persistence.models.base.Base;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -28,7 +31,7 @@ public class Family extends Base {
 
 	@Getter
 	@Setter
-	@Column(nullable = false, columnDefinition = "VARCHAR(12)")
+	@Column(nullable = false, columnDefinition = "VARCHAR(9)")
 	@Alias("Matrícula")
 	private 	String					code;
 
@@ -66,8 +69,8 @@ public class Family extends Base {
 	@Getter
 	@Setter
 	@Column
-	@Alias("Tratamento de Água Potável")
-	private 	String					drinkableWaterTreatment;
+	@Alias("Tratamento de Água - Descrição")
+	private 	String					waterTreatmentDescription;
 
 	@Getter
 	@Setter

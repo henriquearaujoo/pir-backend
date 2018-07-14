@@ -76,7 +76,7 @@ public class ExceptionController {
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<?> handleException(DataIntegrityViolationException e) {
 		if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException)
-			return new ResponseEntity<>(((org.hibernate.exception.ConstraintViolationException) e.getCause()).getConstraintName() + ".found", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(((org.hibernate.exception.ConstraintViolationException) e.getCause()).getConstraintName().replaceAll("_", ".") + ".found", HttpStatus.BAD_REQUEST);
 
 		return new ResponseEntity<>("database.violation", HttpStatus.BAD_REQUEST);
 	}

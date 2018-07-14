@@ -8,13 +8,17 @@ import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.enums.ECommunityZone;
 import com.samsung.fas.pir.persistence.models.Community;
 import com.samsung.fas.pir.rest.dto.base.BaseDTO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.springframework.mobile.device.Device;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @DTO(Community.class)
@@ -34,7 +38,7 @@ public class CommunityDTO extends BaseDTO<Community> {
 	@Getter
 	@Setter
 	@JsonProperty("zone")
-	private 	String					communityZone;
+	private 	ECommunityZone			communityZone;
 
 	@Getter
 	@Setter
@@ -127,6 +131,7 @@ public class CommunityDTO extends BaseDTO<Community> {
 	@JsonProperty("longitude")
 	private 	Double					longitude;
 
+	// region Relations
 	@Getter
 	@Setter
 	@JsonProperty("family")
@@ -134,13 +139,16 @@ public class CommunityDTO extends BaseDTO<Community> {
 
 	@Getter
 	@Setter
-	@JsonProperty("unity")
+	@JsonProperty(value = "unity")
+	@NotNull(message = "unity.missing")
 	private 	ConservationUnityDTO	unityDTO;
 
 	@Getter
 	@Setter
-	@JsonProperty("city")
+	@JsonProperty(value = "city")
+	@NotNull(message = "city.missing")
 	private 	CityDTO					cityDTO;
+	// endregion
 
 	public CommunityDTO() {
 		super();
@@ -148,7 +156,6 @@ public class CommunityDTO extends BaseDTO<Community> {
 
 	public CommunityDTO(Community community, Device device, boolean detailed) {
 		super(community);
-		setCommunityZone(community.getCommunityZone() != null? community.getCommunityZone().getValue() : ECommunityZone.UNDEFINED.getValue());
 		setCityDTO(community.getCity() != null? new CityDTO(community.getCity(), device, false) : null);
 		setUnityDTO(community.getUnity() != null? new ConservationUnityDTO(community.getUnity(), device, false) : null);
 		setFamilyDTO(device != null && !device.isNormal()? community.getFamily() != null? community.getFamily().stream().map(item -> new FamilyDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>() : null);
@@ -158,9 +165,8 @@ public class CommunityDTO extends BaseDTO<Community> {
 	@Override
 	public Community getModel() {
 		Community model = super.getModel();
-		model.setCommunityZone(ECommunityZone.setValue(getCommunityZone()));
-		model.setCity(getCityDTO().getModel());
 		model.setUnity(getUnityDTO().getModel());
+		model.setCity(getCityDTO().getModel());
 		model.setFamily(this.getFamilyDTO() != null? this.getFamilyDTO().stream().map(FamilyDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		return model;
 	}

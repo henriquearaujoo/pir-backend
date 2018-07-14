@@ -3,13 +3,14 @@ package com.samsung.fas.pir.rest.dto.base;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.samsung.fas.pir.configuration.MapperHolder;
 import io.swagger.annotations.ApiModel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.UUID;
@@ -17,26 +18,24 @@ import java.util.UUID;
 @ApiModel
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Component
 public abstract class BaseDTO<T> implements IBaseDTO<T> {
 	@JsonIgnore
 	@Getter(value = AccessLevel.PROTECTED)
-	@Setter(value = AccessLevel.PROTECTED)
-	private 		ModelMapper		mapper;
+	@Setter(value = AccessLevel.PRIVATE)
+	private 		ModelMapper			mapper;
 
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private 		UUID 			uuid;
+	private 		UUID 				uuid;
 
 	public BaseDTO() {
-		setMapper(new ModelMapper());
-		getMapper().getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+		setMapper(MapperHolder.getMapper());
 	}
 
 	public BaseDTO(T entity) {
-		setMapper(new ModelMapper());
-		getMapper().getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-		getMapper().getConfiguration().setSkipNullEnabled(true);
+		setMapper(MapperHolder.getMapper());
 		getMapper().map(entity, this);
 	}
 

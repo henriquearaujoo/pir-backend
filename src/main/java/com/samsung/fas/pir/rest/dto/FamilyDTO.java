@@ -7,6 +7,7 @@ import com.samsung.fas.pir.persistence.enums.EGender;
 import com.samsung.fas.pir.persistence.enums.EHabitationType;
 import com.samsung.fas.pir.persistence.models.Family;
 import com.samsung.fas.pir.rest.dto.base.BaseDTO;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
@@ -30,11 +31,6 @@ public class FamilyDTO extends BaseDTO<Family> {
 	@Setter
 	@JsonProperty("external_id")
 	private		long				externalID;
-
-	@Getter
-	@Setter
-	@JsonProperty("community_id")
-	private 	UUID				communityUUID;
 
 	@Getter
 	@Setter
@@ -79,8 +75,8 @@ public class FamilyDTO extends BaseDTO<Family> {
 
 	@Getter
 	@Setter
-	@JsonProperty("drinking_water_treatment")
-	private 	String				drinkableWaterTreatment;
+	@JsonProperty("water_treatment_description")
+	private 	String				waterTreatmentDescription;
 
 	@Getter
 	@Setter
@@ -96,11 +92,6 @@ public class FamilyDTO extends BaseDTO<Family> {
 	@Setter
 	@JsonProperty("has_water_treatment")
 	private 	boolean				waterTreatment;
-
-	@Getter
-	@Setter
-	@JsonProperty("has_other_children")
-	private 	boolean				otherChildren;
 
 	@Getter
 	@Setter
@@ -124,9 +115,10 @@ public class FamilyDTO extends BaseDTO<Family> {
 	@JsonProperty("pregnant")
 	private 	List<PregnantDTO> 	pregnantDTO;
 
+	@ApiModelProperty(readOnly = true)
 	@Getter
 	@Setter
-	@JsonProperty("community")
+	@JsonProperty(value = "community", access = JsonProperty.Access.READ_ONLY)
 	private 	CommunityDTO		communityDTO;
 	// endregion
 
@@ -136,7 +128,7 @@ public class FamilyDTO extends BaseDTO<Family> {
 
 	public FamilyDTO(Family family, Device device, boolean detailed) {
 		super(family);
-//		setCommunityDTO();
+		setCommunityDTO(device != null && device.isNormal() || detailed? new CommunityDTO(family.getCommunity(), device, false) : null);
 		setPregnantDTO(device != null && !device.isNormal() || detailed? family.getPregnant().stream().map(item -> new PregnantDTO(item, device, false)).collect(Collectors.toList()) : null);
 		setChildrenDTO(device != null && !device.isNormal() || detailed? family.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()) : null);
 		setCommunityDTO(device != null && device.isNormal()? new CommunityDTO(family.getCommunity(), device, false) : null);

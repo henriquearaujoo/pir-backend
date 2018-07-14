@@ -10,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.persistence.ForeignKey;
@@ -22,8 +23,7 @@ public abstract class Base {
 	@Getter
 	@Setter
 	@Id
-	@SequenceGenerator(name = "sequence-gen", initialValue = 1000, allocationSize = 1)
-	@GeneratedValue(generator = "sequence-gen")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private		long			id			= 0;
 
 	@Getter
@@ -70,13 +70,13 @@ public abstract class Base {
 
 	@PrePersist
 	public void prePersist() {
-		setCreatedBy(SecurityContextHolder.getContext().getAuthentication() != null? Optional.ofNullable(((Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser()).orElse(null) : null);
+		setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails? ((Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser() : null);
 		setCreatedAt(new Date());
 	}
 
 	@PreUpdate
 	public void preUpdate() {
-		setModifiedBy(SecurityContextHolder.getContext().getAuthentication() != null? Optional.ofNullable(((Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser()).orElse(null) : null);
+		setModifiedBy(SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails? ((Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser() : null);
 		setUpdatedAt(new Date());
 	}
 

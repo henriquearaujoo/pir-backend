@@ -86,13 +86,13 @@ public class SAnswerBO extends BaseBO<SAnswer, SAnswerDAO, SAnswerDTO, Long> {
 
 	// region Pregnancy
 	@SuppressWarnings("Duplicates")
-	SAnswer setupAnswer(SAnswer answer, SAnswer model, Pregnancy pregnancy, User agent) {
+	SAnswer setupAnswer(SAnswer answer, SAnswer model, Pregnancy pregnancy) {
 		SQuestion		question	= getSQuestionDAO().findOne(model.getQuestion().getUuid());
 		SAlternative	alternative	= model.getAlternative().getUuid() != null? getSAlternativeDAO().findOne(model.getAlternative().getUuid()) : null;
 
 		answer.setDescription(model.getDescription());
 		answer.setAlternative(alternative);
-		answer.setAgent(answer.getAgent() == null? agent : answer.getAgent());
+//		answer.setAgent(answer.getAgent() == null? agent : answer.getAgent());
 		answer.setQuestion(question);
 		answer.setPregnancy(pregnancy);
 		answer.setChild(null);
@@ -100,12 +100,12 @@ public class SAnswerBO extends BaseBO<SAnswer, SAnswerDAO, SAnswerDTO, Long> {
 	}
 
 	@SuppressWarnings("Duplicates")
-	SAnswer setupAnswer(SAnswer model, Pregnancy pregnancy, User agent) {
+	SAnswer setupAnswer(SAnswer model, Pregnancy pregnancy) {
 		SQuestion		question	= getSQuestionDAO().findOne(model.getQuestion().getUuid());
 		SAlternative	alternative	= model.getAlternative().getUuid() != null? getSAlternativeDAO().findOne(model.getAlternative().getUuid()) : null;
 
 		model.setAlternative(alternative);
-		model.setAgent(agent);
+//		model.setAgent(agent);
 		model.setQuestion(question);
 		model.setPregnancy(pregnancy);
 		model.setChild(null);
@@ -115,13 +115,13 @@ public class SAnswerBO extends BaseBO<SAnswer, SAnswerDAO, SAnswerDTO, Long> {
 
 	// region Child
 	@SuppressWarnings("Duplicates")
-	SAnswer setupAnswer(SAnswer answer, SAnswer model, Child child, User agent) {
+	SAnswer setupAnswer(SAnswer answer, SAnswer model, Child child) {
 		SQuestion		question	= getSQuestionDAO().findOne(model.getQuestion().getUuid());
 		SAlternative	alternative	= model.getAlternative().getUuid() != null? getSAlternativeDAO().findOne(model.getAlternative().getUuid()) : null;
 
 		answer.setDescription(model.getDescription());
 		answer.setAlternative(alternative);
-		answer.setAgent(answer.getAgent() == null? agent : answer.getAgent());
+//		answer.setAgent(answer.getAgent() == null? agent : answer.getAgent());
 		answer.setQuestion(question);
 		answer.setPregnancy(null);
 		answer.setChild(child);
@@ -129,12 +129,12 @@ public class SAnswerBO extends BaseBO<SAnswer, SAnswerDAO, SAnswerDTO, Long> {
 	}
 
 	@SuppressWarnings("Duplicates")
-	SAnswer setupAnswer(SAnswer model, Child child, User agent) {
+	SAnswer setupAnswer(SAnswer model, Child child) {
 		SQuestion		question	= getSQuestionDAO().findOne(model.getQuestion().getUuid());
 		SAlternative	alternative	= model.getAlternative().getUuid() != null? getSAlternativeDAO().findOne(model.getAlternative().getUuid()) : null;
 
 		model.setAlternative(alternative);
-		model.setAgent(agent);
+//		model.setAgent(agent);
 		model.setQuestion(question);
 		model.setPregnancy(null);
 		model.setChild(child);

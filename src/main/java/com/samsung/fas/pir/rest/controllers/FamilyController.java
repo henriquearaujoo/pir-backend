@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 @Api(value = "Family", description = "REST Controller for Family", tags = "FAMILY")
-@RequestMapping(value = "/rest/family", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/rest/responsible", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
 @ResponseBody
 public class FamilyController extends BController<FamilyBO, FamilyDTO> {

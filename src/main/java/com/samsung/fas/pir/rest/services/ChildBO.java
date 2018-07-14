@@ -111,24 +111,24 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		return collection.stream().map(item -> update(item, device, details)).collect(Collectors.toList());
 	}
 
-	Child setupChild(Child model, Family family, User agent) {
+	Child setupChild(Child model, Family family) {
 //		model.getResponsible().add(responsible);
 //		model.setAgent(agent);
 //		if (model.getResponsible().stream().filter(item -> item.getMobileId() - responsible.getMobileId() == 0).findAny().orElse(null) == null) {
 //			model.getResponsible().add(responsible);
 //		}
-		model.setVisits(setupVisit(model, model.getVisits(), agent));
-		model.setAnswers(setupAnswer(model, model.getAnswers(), agent));
+		model.setVisits(setupVisit(model, model.getVisits()));
+		model.setAnswers(setupAnswer(model, model.getAnswers()));
 		return model;
 	}
 
-	Child setupChild(Child child, Child model, Family family, User agent) {
+	Child setupChild(Child child, Child model, Family family) {
 		setupChild(child, model);
 //		if (child.getResponsible().stream().filter(item -> responsible.getUuid() != null && item.getUuid().compareTo(responsible.getUuid()) == 0).findAny().orElse(null) == null) {
 //			child.getResponsible().add(responsible);
 //		}
-		child.setVisits(setupVisit(child, model.getVisits(), agent));
-		child.setAnswers(setupAnswer(child, model.getAnswers(), agent));
+		child.setVisits(setupVisit(child, model.getVisits()));
+		child.setAnswers(setupAnswer(child, model.getAnswers()));
 		return child;
 	}
 
@@ -152,28 +152,28 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	}
 
 
-	private Collection<SAnswer> setupAnswer(Child child, Collection<SAnswer> collection, User agent) {
+	private Collection<SAnswer> setupAnswer(Child child, Collection<SAnswer> collection) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
 			SAnswer		sAnswer		= uuid != null? getSAnswerDAO().findOne(uuid) : null;
 			if (sAnswer != null) {
-				return getSAnswerBO().setupAnswer(sAnswer, item, child, agent);
+				return getSAnswerBO().setupAnswer(sAnswer, item, child);
 			} else {
-				return getSAnswerBO().setupAnswer(item, child, agent);
+				return getSAnswerBO().setupAnswer(item, child);
 			}
 		}).collect(Collectors.toList());
 	}
 
-	private Collection<Visit> setupVisit(Child child, Collection<Visit> collection, User agent) {
+	private Collection<Visit> setupVisit(Child child, Collection<Visit> collection) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
 			Visit		visit		= uuid != null? getVisitDAO().findOne(uuid) : null;
 			if (visit != null) {
-				return getVisitBO().setupVisit(visit, item, child, agent);
+				return getVisitBO().setupVisit(visit, item, child);
 			} else {
-				return getVisitBO().setupVisit(item, child, agent);
+				return getVisitBO().setupVisit(item, child);
 			}
 		}).collect(Collectors.toList());
 	}
