@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.exception.RESTException;
+import com.samsung.fas.pir.exception.ServiceException;
 import com.samsung.fas.pir.persistence.dao.ChapterDAO;
 import com.samsung.fas.pir.persistence.models.Chapter;
 import com.samsung.fas.pir.rest.dto.ChapterDTO;
@@ -123,7 +123,7 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 
 		// If chapter version differs from persited chapter version
 		if (chapter.getVersion() != model.getVersion())
-			throw new RESTException("chapter.version.differs");
+			throw new ServiceException("chapter.version.differs");
 
 		// Check if the chapter will be active, if true, will invalidate the others
 		if (CTools.calculateChapterCompleteness(chapter) == 100.0f) {

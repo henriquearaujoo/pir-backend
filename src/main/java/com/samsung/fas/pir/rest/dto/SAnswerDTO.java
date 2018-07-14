@@ -65,7 +65,7 @@ public class SAnswerDTO extends BaseDTO<SAnswer> {
 
 	@Getter
 	@Setter
-	@JsonProperty(value = "responsible", access = JsonProperty.Access.READ_ONLY)
+	@JsonProperty(value = "family", access = JsonProperty.Access.READ_ONLY)
 	private 	PregnancyDTO 		pregnancyDTO;
 	// endregion
 

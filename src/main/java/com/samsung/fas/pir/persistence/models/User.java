@@ -2,7 +2,7 @@ package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.graph.annotations.Alias;
-import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -20,7 +20,7 @@ import java.util.Date;
 @DynamicUpdate
 @DynamicInsert
 @Alias("Usuário")
-public class User extends BaseID {
+public class User extends Base {
 	@Getter
 	@Setter
 	@Column(nullable=false)
@@ -84,23 +84,23 @@ public class User extends BaseID {
 	@Alias("FCM Token")
 	private 	String					fcmToken;
 
-	@Getter
-	@Setter
-	@OneToMany(mappedBy = "agent")
-	@Alias("Responsáveis")
-	private 	Collection<Responsible>	responsible			= new ArrayList<>();
+//	@Getter
+//	@Setter
+//	@OneToMany(mappedBy = "agent")
+//	@Alias("Responsáveis")
+//	private 	Collection<Family>		family 				= new ArrayList<>();
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "agent")
+	@OneToMany(mappedBy = "responsibleAgent")
 	@Alias("Agente - Crianças")
 	private 	Collection<Child>		children			= new ArrayList<>();
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "agent")
+	@OneToMany(mappedBy = "responsibleAgent")
 	@Alias("Agente - Mães - Gestações")
-	private 	Collection<Pregnancy>	pregnancies			= new ArrayList<>();
+	private 	Collection<Pregnant> 	pregnant 			= new ArrayList<>();
 
 	@Getter
 	@Setter

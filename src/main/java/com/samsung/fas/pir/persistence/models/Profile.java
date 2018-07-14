@@ -3,7 +3,7 @@ package com.samsung.fas.pir.persistence.models;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.configuration.security.persistence.models.Authority;
 import com.samsung.fas.pir.persistence.enums.EProfileType;
-import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -16,7 +16,7 @@ import java.util.Collection;
 @Table(name = "profile", uniqueConstraints = @UniqueConstraint(columnNames = "title", name = "profile_name"))
 @DynamicUpdate
 @DynamicInsert
-public class Profile extends BaseID {
+public class Profile extends Base {
 	@Getter
 	@Setter
 	@Column(columnDefinition = "CITEXT")

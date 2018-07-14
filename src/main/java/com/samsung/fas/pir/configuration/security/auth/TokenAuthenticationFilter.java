@@ -3,7 +3,7 @@ package com.samsung.fas.pir.configuration.security.auth;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.configuration.security.rest.dto.AccountDTO;
 import com.samsung.fas.pir.configuration.security.rest.service.AccountService;
-import com.samsung.fas.pir.exception.RESTException;
+import com.samsung.fas.pir.exception.ServiceException;
 import com.samsung.fas.pir.persistence.dao.UserDAO;
 import com.samsung.fas.pir.persistence.models.User;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -55,7 +55,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 			}
 
 		} catch (IOException | ServletException | BadCredentialsException e) {
-			throw new RESTException(e.getMessage());
+			throw new ServiceException(e.getMessage());
 		}
 	}
 }

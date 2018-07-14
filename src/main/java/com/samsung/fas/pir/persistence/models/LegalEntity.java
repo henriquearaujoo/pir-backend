@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.graph.annotations.Alias;
-import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -14,7 +14,7 @@ import javax.persistence.*;
 @DynamicUpdate
 @DynamicInsert
 @Alias("Pessoa Jurídica")
-public class LegalEntity extends BaseID {
+public class LegalEntity extends Base {
 	@Getter
 	@Setter
 	@OneToOne(optional = false)

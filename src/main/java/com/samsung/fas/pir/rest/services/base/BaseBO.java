@@ -18,7 +18,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public abstract class BaseBO<T, DAO extends IBaseDAO<T, ID>, DTO, ID extends Serializable> implements IBaseBO<T, DTO, ID> {
-	@Getter(AccessLevel.PROTECTED)
+	@Getter
 	private 	final 	DAO			dao;
 	private 	final 	Class<T>	entity;
 	private 	final 	Class<DTO>	dto;

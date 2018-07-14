@@ -2,7 +2,7 @@ package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.graph.annotations.Alias;
 import com.samsung.fas.pir.persistence.enums.ECommunityZone;
-import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -14,28 +14,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
-@Table(name = "community", uniqueConstraints = {@UniqueConstraint(name = "community_name", columnNames = {"name", "city_id", "uc"})})
+@Table(name = "community", uniqueConstraints = {@UniqueConstraint(name = "community_name", columnNames = {"name", "city_id", "unity_id"})})
 @DynamicUpdate
 @DynamicInsert
 @Alias("Comunidade")
-public class Community extends BaseID {
-	@Getter
-	@Setter
-	@Column
-	private		long						mobileId;
-
-	@Getter
-	@Setter
-	@Column(columnDefinition = "CITEXT")
-	@Alias("UC")
-	private 	String						uc;
-
-	@Getter
-	@Setter
-	@Column
-	@Alias("Regional")
-	private 	String						regional;
-
+public class Community extends Base {
 	@Getter
 	@Setter
 	@Column(columnDefinition = "CITEXT")
@@ -85,75 +68,65 @@ public class Community extends BaseID {
 	@Alias("Produções Culturais")
 	private 	String						culturalProductions;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@Column
 	@Alias("Possui Jardim de Infância")
-	private 	boolean						hasKindergarten;
+	private 	boolean						kindergarten;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@Column
 	@Alias("Possui Ensino Fundamental")
-	private 	boolean						hasElementarySchool;
+	private 	boolean						elementarySchool;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@Column
 	@Alias("Possui Ensino Médio")
-	private 	boolean						hasHighSchool;
+	private 	boolean						highSchool;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@Column
 	@Alias("Possui Ensino Superior")
-	private 	boolean						hasCollege;
+	private 	boolean						college;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@Column
 	@Alias("Possui Eletricidade")
-	private 	boolean 					hasElectricity;
+	private 	boolean 					electricity;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@Column
 	@Alias("Possui Centro Cívico")
-	private 	boolean						hasCommunityCenter;
+	private 	boolean						communityCenter;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@Column
 	@Alias("Possui Centro Religioso")
-	private 	boolean						hasReligiousPlace;
+	private 	boolean						religiousPlace;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@Column
 	@Alias("Possui Eventos Culturais")
-	private 	boolean						hasCulturalEvents;
+	private 	boolean						culturalEvents;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@Column
 	@Alias("Possui Patrono")
-	private 	boolean						hasPatron;
+	private 	boolean						patron;
 
-	@Accessors(fluent = true)
 	@Getter
 	@Setter
 	@Column
 	@Alias("Possui Líderes Comunitários")
-	private 	boolean						hasCommunityLeaders;
+	private 	boolean						communityLeaders;
 
 	@Getter
 	@Setter
@@ -167,16 +140,23 @@ public class Community extends BaseID {
 	@Alias("Longitude")
 	private 	Double						longitude;
 
+	@Alias("UC")
 	@Getter
 	@Setter
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "city_id")
+	@JoinColumn(foreignKey = @ForeignKey(name = "relation_unity"))
+	private 	ConservationUnity			unity;
+
 	@Alias("Município")
+	@Getter
+	@Setter
+	@ManyToOne(optional = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "relation_city"))
 	private 	City						city;
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "community", cascade = CascadeType.ALL)
 	@Alias("Responsáveis")
-	private 	Collection<Responsible> 	responsible			= new ArrayList<>();
+	private 	Collection<Family>			family				= new ArrayList<>();
 }

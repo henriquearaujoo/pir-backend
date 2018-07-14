@@ -1,6 +1,6 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.samsung.fas.pir.exception.RESTException;
+import com.samsung.fas.pir.exception.ServiceException;
 import com.samsung.fas.pir.persistence.dao.FormDAO;
 import com.samsung.fas.pir.persistence.dao.FormQuestionDAO;
 import com.samsung.fas.pir.persistence.models.Form;
@@ -40,7 +40,7 @@ public class FormQuestionBO extends BaseBO<FormQuestion, FormQuestionDAO, FormQu
 	@Override
 	public FormQuestionDTO update(FormQuestionDTO update, Device device, UserDetails account) {
 		FormQuestion	model		= update.getModel();
-		FormQuestion	question	= getDao().findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTException("id.missing")));
+		FormQuestion	question	= getDao().findOne(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new ServiceException("id.missing")));
 		question.setType(model.getType());
 		question.setDescription(model.getDescription());
 		question.setEnabled(model.isEnabled());

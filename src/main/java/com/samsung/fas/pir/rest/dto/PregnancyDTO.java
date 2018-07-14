@@ -34,7 +34,7 @@ public class PregnancyDTO extends BaseDTO<Pregnancy> {
 	@Getter
 	@Setter
 	@JsonProperty("mother")
-	private		ResponsibleDTO		pregnantDTO;
+	private 	PregnantDTO 		pregnantDTO;
 
 	@Getter
 	@Setter
@@ -61,7 +61,7 @@ public class PregnancyDTO extends BaseDTO<Pregnancy> {
 		super(entity);
 		setAnswersDTO(entity.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
 		setVisitsDTO(entity.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
-		setPregnantDTO(detailed? new ResponsibleDTO(entity.getPregnant(), device, false) : null);
+		setPregnantDTO(detailed? new PregnantDTO(entity.getPregnant(), device, false) : null);
 //		setAgent(entity.getAgent() != null? new UserDTO(entity.getAgent(), device, false) : null);
 	}
 

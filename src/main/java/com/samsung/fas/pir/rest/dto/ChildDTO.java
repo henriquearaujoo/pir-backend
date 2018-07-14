@@ -138,7 +138,7 @@ public class ChildDTO extends BaseDTO<Child> {
 	@Getter
 	@Setter
 	@JsonProperty("responsible")
-	private 	List<ResponsibleDTO> 		responsibleDTO;
+	private 	List<FamilyDTO> familyDTO;
 
 	public ChildDTO() {
 		super();
@@ -147,7 +147,7 @@ public class ChildDTO extends BaseDTO<Child> {
 	public ChildDTO(Child child, Device device, boolean detailed) {
 		super(child);
 		setBirthDate(new SimpleDateFormat("dd-MM-yyyy").format(child.getBirth()));
-		setResponsibleDTO(detailed? child.getResponsible().stream().map(responsible -> new ResponsibleDTO(responsible, device, false)).collect(Collectors.toList()) : null);
+//		setFamilyDTO(detailed? child.getResponsible().stream().map(responsible -> new FamilyDTO(responsible, device, false)).collect(Collectors.toList()) : null);
 		setAnswersDTO(child.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
 		setVisitsDTO(child.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
 	}
@@ -156,7 +156,7 @@ public class ChildDTO extends BaseDTO<Child> {
 	@Override
 	public Child getModel() {
 		Child model = super.getModel();
-		model.setResponsible(getResponsibleDTO() != null? getResponsibleDTO().stream().map(ResponsibleDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
+//		model.setResponsible(getFamilyDTO() != null? getFamilyDTO().stream().map(FamilyDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		model.setAnswers(getAnswersDTO() != null? getAnswersDTO().stream().map(SAnswerDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		model.setVisits(getVisitsDTO() != null? getVisitsDTO().stream().map(VisitDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		try {

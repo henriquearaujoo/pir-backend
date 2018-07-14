@@ -1,6 +1,6 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.samsung.fas.pir.exception.RESTException;
+import com.samsung.fas.pir.exception.ServiceException;
 import com.samsung.fas.pir.persistence.dao.FormDAO;
 import com.samsung.fas.pir.persistence.models.Form;
 import com.samsung.fas.pir.rest.dto.FormDTO;
@@ -28,7 +28,7 @@ public class FormBO extends BaseBO<Form, FormDAO, FormDTO, Long> {
 		Collection<Form> 	versions	= new ArrayList<>(getDao().findAll(model.getAgeZone()));
 
 		if (model.getFromValue() > model.getToValue())
-			throw new RESTException("invalid.indicator");
+			throw new ServiceException("invalid.indicator");
 
 		if (versions.size() > 0) {
 			((ArrayList<Form>) versions).sort(Comparator.comparingInt(Form::getVersion).reversed());
@@ -43,10 +43,10 @@ public class FormBO extends BaseBO<Form, FormDAO, FormDTO, Long> {
 	public FormDTO update(FormDTO update, Device device, UserDetails account) {
 		Form				model		= update.getModel();
 		Collection<Form>	forms		= getDao().findAll();
-		Form				form		= forms.stream().filter(item -> item.getUuid().compareTo(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new RESTException("id.missing"))) == 0).findAny().orElseThrow(() -> new RESTException("not.found"));
+		Form				form		= forms.stream().filter(item -> item.getUuid().compareTo(Optional.ofNullable(model.getUuid()).orElseThrow(() -> new ServiceException("id.missing"))) == 0).findAny().orElseThrow(() -> new ServiceException("not.found"));
 
 		if (model.getFromValue() > model.getToValue())
-			throw new RESTException("invalid.indicator");
+			throw new ServiceException("invalid.indicator");
 
 		getDao().invalidate(model.getAgeZone());
 		form.setFromValue(model.getFromValue());

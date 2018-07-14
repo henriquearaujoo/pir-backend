@@ -10,7 +10,7 @@ import com.samsung.fas.pir.graph.dto.ColumnDTO;
 import com.samsung.fas.pir.graph.dto.MapDTO;
 import com.samsung.fas.pir.graph.dto.PathDTO;
 import com.samsung.fas.pir.graph.dto.ResponseDTO;
-import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,7 +54,7 @@ public class Query {
 
 		query(new JPAQuery<>(manager), root, null, grouper, map);
 
-		map = map.entrySet().stream().sorted(Map.Entry.comparingByKey((keyA, keyB) -> (int) (((BaseID) keyA).getId() - ((BaseID) keyB).getId()))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (o, n) -> o, LinkedHashMap::new));
+		map = map.entrySet().stream().sorted(Map.Entry.comparingByKey((keyA, keyB) -> (int) (((Base) keyA).getId() - ((Base) keyB).getId()))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (o, n) -> o, LinkedHashMap::new));
 
 		map.forEach((key, value) -> {
 			try {

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.Conclusion;
-import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,6 +48,6 @@ public class ConclusionDTO extends BaseDTO<Conclusion> {
 	public ConclusionDTO(Conclusion conclusion, boolean detailed) {
 		super(conclusion);
 		setChapterUUID(conclusion.getChapter().getUuid());
-		setQuestionsDTO(conclusion.getQuestions() != null? conclusion.getQuestions().stream().sorted(Comparator.comparing(BaseID::getId)).map(item -> new QuestionDTO(item, false)).collect(Collectors.toList()) : null);
+		setQuestionsDTO(conclusion.getQuestions() != null? conclusion.getQuestions().stream().sorted(Comparator.comparing(Base::getId)).map(item -> new QuestionDTO(item, false)).collect(Collectors.toList()) : null);
 	}
 }

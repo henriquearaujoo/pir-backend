@@ -5,6 +5,7 @@ import com.samsung.fas.pir.rest.dto.FileDTO;
 import com.samsung.fas.pir.rest.services.FileBO;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +18,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Api(value = "FILES", description = "REST Controller for FILES", tags = "FILES")
-@RequestMapping("/rest/file")
+@RequestMapping(value = "/rest/file", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
 public class FileController {
 	private final FileBO service;

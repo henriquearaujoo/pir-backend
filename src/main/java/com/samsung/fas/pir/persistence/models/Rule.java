@@ -1,6 +1,6 @@
 package com.samsung.fas.pir.persistence.models;
 
-import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Table(uniqueConstraints= {@UniqueConstraint(columnNames= {"profile_id", "page_id"}, name = "rule")})
 @DynamicUpdate
 @DynamicInsert
-public class Rule extends BaseID {
+public class Rule extends Base {
 	@Getter
 	@Setter
 	@ManyToOne(optional = false)

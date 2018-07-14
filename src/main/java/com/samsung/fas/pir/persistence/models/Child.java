@@ -2,7 +2,7 @@ package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.graph.annotations.Alias;
 import com.samsung.fas.pir.persistence.enums.EGender;
-import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -14,135 +14,144 @@ import java.util.Collection;
 import java.util.Date;
 
 @Entity
-@Table(name = "child")
+@Table(name = "child", uniqueConstraints = @UniqueConstraint(name = "child_code", columnNames = {"code"}), indexes = @Index(name = "child_index", columnList = "code", unique = true))
 @DynamicUpdate
 @DynamicInsert
 @Alias("Criança")
-public class Child extends BaseID {
+public class Child extends Base {
 	@Getter
 	@Setter
-	@Column
-	private		long						mobileId;
+	@Transient
+	private		long								externalID;
 
 	@Getter
 	@Setter
-	@Column(nullable = false, columnDefinition = "VARCHAR(100)")
+	@Column(nullable = false, columnDefinition = "VARCHAR(12)")
+	@Alias("Matrícula")
+	private 	String								code;
+
+	@Getter
+	@Setter
+	@Column
 	@Alias("Nome")
-	private 	String						name;
+	private 	String								name;
 
 	@Getter
 	@Setter
 	@Temporal(TemporalType.DATE)
-	@Column(nullable = false)
+	@Column
 	@Alias("Data de Nascimento")
-	private 	Date						birth;
-
-	@Getter
-	@Setter
-	@Column(columnDefinition = "VARCHAR(100)")
-	@Alias("Nome do Pai")
-	private 	String						fatherName;
+	private 	Date								birth;
 
 	@Getter
 	@Setter
 	@Enumerated(EnumType.STRING)
 	@Column
 	@Alias("Sexo")
-	private		EGender						gender;
-
-	@Getter
-	@Setter
-	@Column(nullable = false)
-	@Alias("Possui Registro Civil")
-	private 	boolean						hasCivilRegistration;
-
-	@Getter
-	@Setter
-	@Column(columnDefinition = "TEXT")
-	@Alias("Justificativa de Registro Civil")
-	private 	String						civilRegistrationJustification;
-
-	@Getter
-	@Setter
-	@Column(nullable = false)
-	@Alias("Possui Dificuldades Educacionais")
-	private 	boolean						hasEducationDifficulty;
-
-	@Getter
-	@Setter
-	@Column(columnDefinition = "TEXT")
-	@Alias("Descrição das Dificuldades Educacionais")
-	private 	String						educationDifficultySpecification;
-
-	@Getter
-	@Setter
-	@Column(nullable = false)
-	@Alias("Nasceu Prematuramente")
-	private 	boolean						prematureBorn;
+	private		EGender								gender;
 
 	@Getter
 	@Setter
 	@Column
-	@Alias("Semana do Nascimento Prematuro")
-	private 	int							bornWeek;
+	@Alias("Etnia - Raça - Cor")
+	private 	String								ethnicity;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
-	@Alias("Quem Cuida")
-	private 	String						whoTakeCare;
+	@Column
+	@Alias("Nome Completo da Mãe")
+	private 	String								motherFullName;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
-	@Alias("Brinca com Quem")
-	private 	String						playsWithWho;
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Alias("Certidão de Nascimento - Registro")
+	private 	boolean								registration;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
-	@Alias("Medição Mensal de Peso")
-	private 	boolean						monthlyWeighted;
+	@Column(columnDefinition = "VARCHAR(15)")
+	@Alias("Certidão de Nascimento - Registro")
+	private 	String								susNumber;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
-	@Alias("Participa de Programas Educacionais")
-	private 	boolean						socialEducationalPrograms;
+	@Column
+	@Alias("UB Frequentada")
+	private 	String								frequentedUB;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
-	@Alias("Vacinação em Dia")
-	private 	boolean						vaccinationUpToDate;
+	@Column
+	@Alias("Prontuário UB")
+	private 	String								recordUB;
 
 	@Getter
 	@Setter
-	@Column(nullable = false)
-	@Alias("Possui Dificuldade de Relação")
-	private 	boolean						relationDifficulties;
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Alias("Acompanhamento Pré-Natal")
+	private 	boolean								prenatalCare;
 
 	@Getter
 	@Setter
-	@ManyToOne
-	@JoinColumn
-	private 	User						agent;
+	@Column
+	@Alias("Tipo de Parto")
+	private 	String								birthType;
+
+	@Getter
+	@Setter
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Alias("Teve Episiotomia?")
+	private 	boolean								episiotomy;
+
+	@Getter
+	@Setter
+	@Column
+	@Alias("Sangramento")
+	private 	String								bleeding;
+
+	@Getter
+	@Setter
+	@Column(columnDefinition = "TEXT")
+	@Alias("Deficiências")
+	private 	String								deficiencies;
+
+	@Getter
+	@Setter
+	@Column(columnDefinition = "TEXT")
+	@Alias("Intercorrência no Parto")
+	private 	String								intercurrence;
+
+	// region Relations
+	@Getter
+	@Setter
+	@ManyToOne(optional = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "relation_family"))
+	@Alias("Família")
+	private 	Family								family;
+
+	@Getter
+	@Setter
+	@ManyToOne(optional = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "relation_agent"))
+	private 	User								responsibleAgent;
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
 	@Alias("Visitas")
-	private 	Collection<Visit>			visits					= new ArrayList<>();
-
-	@Getter
-	@Setter
-	@ManyToMany
-	@Alias("Responsável")
-	private 	Collection<Responsible> 	responsible				= new ArrayList<>();
+	private 	Collection<Visit>					visits					= new ArrayList<>();
 
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
 	@Alias("Formulário - Respostas")
-	private 	Collection<SAnswer>			answers					= new ArrayList<>();
+	private 	Collection<SAnswer>					answers					= new ArrayList<>();
+
+//	@Getter
+//	@Setter
+//	@ManyToMany(mappedBy = "children", cascade = {CascadeType.PERSIST})
+//	@Alias("Deficiência Congenita")
+//	private 	Collection<CongenitalDeficiency>	deficiencies			= new ArrayList<>();
+	// endregion
 }

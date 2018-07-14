@@ -4,6 +4,7 @@ import com.samsung.fas.pir.rest.services.base.IBaseBO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,22 +42,22 @@ public abstract class BController<BO extends IBaseBO<?, DTO, Long>, DTO> {
 		return ResponseEntity.ok(service.findAll(pageable, device, details));
 	}
 
-	@RequestMapping(method= RequestMethod.POST)
+	@RequestMapping(method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<DTO> save(@RequestBody @Valid DTO dto, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
 		return ResponseEntity.ok(service.save(dto, device, account));
 	}
 
-	@RequestMapping(method= RequestMethod.PUT)
+	@RequestMapping(method= RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<DTO> update(@RequestBody @Valid DTO dto, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
 		return ResponseEntity.ok(service.update(dto, device, account));
 	}
 
-	@RequestMapping(method= RequestMethod.POST, path = "/collection")
+	@RequestMapping(method= RequestMethod.POST, path = "/collection", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Collection<DTO>> save(@RequestBody @Valid Collection<DTO> collection, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
 		return ResponseEntity.ok(service.save(collection, device, account));
 	}
 
-	@RequestMapping(method= RequestMethod.PUT, path = "/collection")
+	@RequestMapping(method= RequestMethod.PUT, path = "/collection", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Collection<DTO>> update(@RequestBody @Valid Collection<DTO> collection, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails account) {
 		return ResponseEntity.ok(service.update(collection, device, account));
 	}

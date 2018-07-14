@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.graph.annotations.Alias;
-import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -16,7 +16,7 @@ import java.util.Collection;
 @DynamicUpdate
 @DynamicInsert
 @Alias("Pergunta")
-public class SQuestion extends BaseID {
+public class SQuestion extends Base {
 	@Getter
 	@Setter
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE", nullable = false)

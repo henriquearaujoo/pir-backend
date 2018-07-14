@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 
 @Repository
 public interface IPregnancy extends IBaseRepository<Pregnancy, Long, QPregnancy> {
-	Pregnancy findByMobileIdAndAgentId(long mobileID, long agentID);
+//	Pregnancy findByExternalID(long mobileID);
 
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QPregnancy root) {

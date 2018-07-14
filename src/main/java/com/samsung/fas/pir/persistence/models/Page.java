@@ -1,6 +1,6 @@
 package com.samsung.fas.pir.persistence.models;
 
-import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -13,7 +13,7 @@ import java.util.Collection;
 @Table(name = "pages", uniqueConstraints = @UniqueConstraint(columnNames = "title_url", name = "title"))
 @DynamicUpdate
 @DynamicInsert
-public class Page extends BaseID {
+public class Page extends Base {
 	@Setter
 	@Getter
 	@Column(name="title_url", nullable=false)

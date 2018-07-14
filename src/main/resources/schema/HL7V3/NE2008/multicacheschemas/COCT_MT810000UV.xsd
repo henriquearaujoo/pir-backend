@@ -72,7 +72,7 @@ StaticMifToXsd.xsl version 2.0</xs:documentation>
    <xs:complexType name="COCT_MT810000UV.Performer">
       <xs:sequence>
          <xs:group ref="InfrastructureRootElements"/>
-         <xs:element name="responsible" type="COCT_MT040008UV.Responsible" nillable="true"
+         <xs:element name="family" type="COCT_MT040008UV.Responsible" nillable="true"
                      minOccurs="1"
                      maxOccurs="1"/>
       </xs:sequence>

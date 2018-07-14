@@ -75,7 +75,7 @@ public class VisitFrontDTO extends BaseDTO<Visit> {
 	@Setter
 	@JsonProperty(value = "responsible")
 	@Valid
-	private 		ResponsibleDTO		responsibleDTO;
+	private FamilyDTO familyDTO;
 
 	@Getter
 	@Setter

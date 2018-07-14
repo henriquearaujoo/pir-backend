@@ -1,6 +1,5 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.persistence.dao.*;
 import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.models.base.Base;
@@ -32,7 +31,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 
 	@Getter
 	@Setter
-	private 	ResponsibleDAO		responsibleDAO;
+	private 	FamilyDAO			familyDAO;
 
 	@Getter
 	@Setter
@@ -45,14 +44,14 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	@Getter
 	@Setter
 	private		VisitBO				visitBO;
-	private List<Responsible> responsible;
+	private List<Family> family;
 
 	@Autowired
-	public ChildBO(ChildDAO dao, ResponsibleDAO responsibleDAO, UserDAO userDAO, VisitDAO visitDAO, SAnswerDAO sAnswerDAO, SAnswerBO sAnswerBO, VisitBO visitBO) {
+	public ChildBO(ChildDAO dao, FamilyDAO familyDAO, UserDAO userDAO, VisitDAO visitDAO, SAnswerDAO sAnswerDAO, SAnswerBO sAnswerBO, VisitBO visitBO) {
 		super(dao);
 		setVisitBO(visitBO);
 		setVisitDAO(visitDAO);
-		setResponsibleDAO(responsibleDAO);
+		setFamilyDAO(familyDAO);
 		setUserDAO(userDAO);
 		setSAnswerDAO(sAnswerDAO);
 		setSAnswerBO(sAnswerBO);
@@ -62,10 +61,10 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	public ChildDTO save(ChildDTO create, Device device, UserDetails account) {
 		Child				model		= create.getModel();
 		Child				child		= create.getUuid() != null? getDao().findOne(create.getUuid()) : null;
-		List<Responsible>	responsible	= create.getResponsibleDTO() != null? create.getResponsibleDTO().stream().map(item -> getResponsibleDAO().findOne(item.getUuid())).collect(Collectors.toList()) : new ArrayList<>();
+		List<Family> family = create.getFamilyDTO() != null? create.getFamilyDTO().stream().map(item -> getFamilyDAO().findOne(item.getUuid())).collect(Collectors.toList()) : new ArrayList<>();
 
 		if (child == null) {
-			model.setAgent(((Account) account).getUser());
+//			model.setAgent(((Account) account).getUser());
 //			model.setResponsible(responsible);
 //			responsible.forEach(resp -> resp.getChildren().add(model));
 //			model.setVisits(setupVisit(model, model.getVisits(), agent));
@@ -83,12 +82,12 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	public ChildDTO update(ChildDTO update, Device device, UserDetails account) {
 		Child				model		= update.getModel();
 		Child				child		= update.getUuid() != null? getDao().findOne(update.getUuid()) : null;
-		List<Responsible>	responsible	= update.getResponsibleDTO() != null? update.getResponsibleDTO().stream().map(item -> getResponsibleDAO().findOne(item.getUuid())).collect(Collectors.toList()) : new ArrayList<>();
+		List<Family> family = update.getFamilyDTO() != null? update.getFamilyDTO().stream().map(item -> getFamilyDAO().findOne(item.getUuid())).collect(Collectors.toList()) : new ArrayList<>();
 		User				agent		= update.getAgentUUID() != null? getUserDAO().findOne(update.getAgentUUID()) : null;
 
 		if (child == null) {
 //			if (agent == null)
-//				throw new RESTException("agent.missing");
+//				throw new ServiceException("agent.missing");
 //			model.setAgent(agent);
 //			model.setResponsible(responsible);
 //			responsible.forEach(resp -> resp.getChildren().add(model));
@@ -112,44 +111,44 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		return collection.stream().map(item -> update(item, device, details)).collect(Collectors.toList());
 	}
 
-	Child setupChild(Child model, Responsible responsible, User agent) {
-		model.getResponsible().add(responsible);
-		model.setAgent(agent);
-		if (model.getResponsible().stream().filter(item -> item.getMobileId() - responsible.getMobileId() == 0).findAny().orElse(null) == null) {
-			model.getResponsible().add(responsible);
-		}
+	Child setupChild(Child model, Family family, User agent) {
+//		model.getResponsible().add(responsible);
+//		model.setAgent(agent);
+//		if (model.getResponsible().stream().filter(item -> item.getMobileId() - responsible.getMobileId() == 0).findAny().orElse(null) == null) {
+//			model.getResponsible().add(responsible);
+//		}
 		model.setVisits(setupVisit(model, model.getVisits(), agent));
 		model.setAnswers(setupAnswer(model, model.getAnswers(), agent));
 		return model;
 	}
 
-	Child setupChild(Child child, Child model, Responsible responsible, User agent) {
+	Child setupChild(Child child, Child model, Family family, User agent) {
 		setupChild(child, model);
-		if (child.getResponsible().stream().filter(item -> responsible.getUuid() != null && item.getUuid().compareTo(responsible.getUuid()) == 0).findAny().orElse(null) == null) {
-			child.getResponsible().add(responsible);
-		}
+//		if (child.getResponsible().stream().filter(item -> responsible.getUuid() != null && item.getUuid().compareTo(responsible.getUuid()) == 0).findAny().orElse(null) == null) {
+//			child.getResponsible().add(responsible);
+//		}
 		child.setVisits(setupVisit(child, model.getVisits(), agent));
 		child.setAnswers(setupAnswer(child, model.getAnswers(), agent));
 		return child;
 	}
 
 	private void setupChild(Child child, Child model) {
-		child.setMobileId(model.getMobileId());
-		child.setName(model.getName());
-		child.setFatherName(model.getFatherName());
-		child.setGender(model.getGender());
-		child.setHasCivilRegistration(model.isHasCivilRegistration());
-		child.setCivilRegistrationJustification(model.getCivilRegistrationJustification());
-		child.setHasEducationDifficulty(model.isHasEducationDifficulty());
-		child.setEducationDifficultySpecification(model.getEducationDifficultySpecification());
-		child.setPrematureBorn(model.isPrematureBorn());
-		child.setBornWeek(model.getBornWeek());
-		child.setWhoTakeCare(model.getWhoTakeCare());
-		child.setPlaysWithWho(model.getPlaysWithWho());
-		child.setMonthlyWeighted(model.isMonthlyWeighted());
-		child.setSocialEducationalPrograms(model.isSocialEducationalPrograms());
-		child.setVaccinationUpToDate(model.isVaccinationUpToDate());
-		child.setRelationDifficulties(model.isHasEducationDifficulty());
+//		child.setMobileId(model.getMobileId());
+//		child.setName(model.getName());
+//		child.setFatherName(model.getFatherName());
+//		child.setGender(model.getGender());
+//		child.setHasCivilRegistration(model.isHasCivilRegistration());
+//		child.setCivilRegistrationJustification(model.getCivilRegistrationJustification());
+//		child.setHasEducationDifficulty(model.isHasEducationDifficulty());
+//		child.setEducationDifficultySpecification(model.getEducationDifficultySpecification());
+//		child.setPrematureBorn(model.isPrematureBorn());
+//		child.setBornWeek(model.getBornWeek());
+//		child.setWhoTakeCare(model.getWhoTakeCare());
+//		child.setPlaysWithWho(model.getPlaysWithWho());
+//		child.setMonthlyWeighted(model.isMonthlyWeighted());
+//		child.setSocialEducationalPrograms(model.isSocialEducationalPrograms());
+//		child.setVaccinationUpToDate(model.isVaccinationUpToDate());
+//		child.setRelationDifficulties(model.isHasEducationDifficulty());
 	}
 
 

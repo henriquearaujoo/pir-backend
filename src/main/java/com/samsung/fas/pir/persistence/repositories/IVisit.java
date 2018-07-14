@@ -13,13 +13,11 @@ import javax.annotation.Nonnull;
 
 @Repository
 public interface IVisit extends IBaseRepository<Visit, Long, QVisit> {
-	Visit findByMobileIdAndAgentId(long mobileID, long agentID);
-
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QVisit root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
 		bindings.bind(root.agent.uuid).as("agent.id").withDefaultBinding();
 //		bindings.bind(root.child.name).as("child.name").withDefaultBinding();
-//		bindings.bind(root.responsible.name).as("responsible.name").withDefaultBinding();
+//		bindings.bind(root.family.name).as("family.name").withDefaultBinding();
 	}
 }

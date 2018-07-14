@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.graph.annotations.Alias;
-import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -15,7 +15,7 @@ import javax.persistence.*;
 @DynamicUpdate
 @DynamicInsert
 @Alias("Resposta Formulário A")
-public class FormAnswerTA extends BaseID {
+public class FormAnswerTA extends Base {
 	@Accessors(fluent = true)
 	@Getter
 	@Setter

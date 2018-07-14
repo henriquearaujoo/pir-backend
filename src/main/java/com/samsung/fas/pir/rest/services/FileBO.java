@@ -1,6 +1,6 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.samsung.fas.pir.exception.RESTException;
+import com.samsung.fas.pir.exception.ServiceException;
 import com.samsung.fas.pir.persistence.enums.EMediaType;
 import com.samsung.fas.pir.persistence.models.FileData;
 import com.samsung.fas.pir.persistence.repositories.IFile;
@@ -49,7 +49,7 @@ public class FileBO {
 			return new FileDTO(repository.save(fileData));
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RESTException("file.error");
+			throw new ServiceException("file.error");
 		}
 	}
 
@@ -60,7 +60,7 @@ public class FileBO {
 
 			case PICTURE360:
 				if(!name.matches("(.*/)*.+\\.(png|jpg|gif|bmp|jpeg|PNG|JPG|GIF|BMP)$"))
-					throw new RESTException("file.format.unsupported");
+					throw new ServiceException("file.format.unsupported");
 				break;
 
 			case VIDEO2D:
@@ -68,7 +68,7 @@ public class FileBO {
 
 			case VIDEO360:
 				if(!name.matches("(.*/)*.+\\.(mp4|MP4)$"))
-					throw new RESTException("file.format.unsupported");
+					throw new ServiceException("file.format.unsupported");
 				break;
 		}
 	}
@@ -83,7 +83,7 @@ public class FileBO {
 		File	file	= new File(dir, name);
 
 		if (!dir.mkdirs() && !file.createNewFile())
-			throw new RESTException("file.internal.error");
+			throw new ServiceException("file.internal.error");
 
 		return file;
 	}
@@ -94,13 +94,13 @@ public class FileBO {
 
 		if(!new File(uploadPath).exists())
 			if (!new File(uploadPath).mkdir())
-				throw new RESTException("file.internal.error");
+				throw new ServiceException("file.internal.error");
 
 		return uploadPath;
 	}
 
 	public FileDTO findOne(long fileId) {
-		return new FileDTO(repository.findById(fileId).orElseThrow(() -> new RESTException("not.found")));
+		return new FileDTO(repository.findById(fileId).orElseThrow(() -> new ServiceException("not.found")));
 	}
 
 	public File getFile(FileDTO file) {

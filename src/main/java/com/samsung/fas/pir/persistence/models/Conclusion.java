@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.graph.annotations.Alias;
-import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -15,7 +15,7 @@ import java.util.Collection;
 @DynamicUpdate
 @DynamicInsert
 @Alias("Conclusão")
-public class Conclusion extends BaseID {
+public class Conclusion extends Base {
 	@Getter
 	@Setter
 	@MapsId

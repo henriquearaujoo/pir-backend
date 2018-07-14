@@ -71,7 +71,7 @@ VALUES (238, 'Manacapuru', 3), (239, 'Manaquirí', 3), (240, 'Manaus', 3), (241,
 (243, 'Massauari', 3), (244, 'Maues', 3), (245, 'Mocambo', 3)
 ON CONFLICT DO NOTHING;
 
-INSERT INTO community VALUES
+/*INSERT INTO community VALUES
 (137, '88db31cb-433e-49ad-9cb4-3b6451122a4c', NULL, false, NULL, 'UNDEFINED', 'UNDEFINED', 'UNDEFINED', 'UNDEFINED', false, false, false, false, false, false, false, false, false, false, 'UNDEFINED', NULL, NULL, 'UNDEFINED', 137, 'Nova Esperança I (Piagaçu)', 'Negro Amazonas', 'RDS Piagaçu-Purus', 'UNDEFINED', 240),
 (138, 'f3f2941b-af35-42e5-ab43-8354c65dd03e', NULL, false, NULL, 'UNDEFINED', 'UNDEFINED', 'UNDEFINED', 'UNDEFINED', false, false, false, false, false, false, false, false, false, false, 'UNDEFINED', NULL, NULL, 'UNDEFINED', 138, 'Nova Jerusalem (Piagaçu)', 'Negro Amazonas', 'RDS Piagaçu-Purus', 'UNDEFINED', 240),
 (139, '15e234e3-6453-49de-b5fd-2249f07befae', NULL, false, NULL, 'UNDEFINED', 'UNDEFINED', 'UNDEFINED', 'UNDEFINED', false, false, false, false, false, false, false, false, false, false, 'UNDEFINED', NULL, NULL, 'UNDEFINED', 139, 'Nova Morada', 'Negro Amazonas', 'RDS Piagaçu-Purus', 'UNDEFINED', 240),
@@ -647,4 +647,4 @@ INSERT INTO community VALUES
 (535, '2645fea2-dfd5-4f0a-8655-e4938f33520c', NULL, false, NULL, 'UNDEFINED', 'UNDEFINED', 'UNDEFINED', 'UNDEFINED', false, false, false, false, false, false, false, false, false, false, 'UNDEFINED', NULL, NULL, 'UNDEFINED', 535, 'Canta Galo', 'Juruá-Jutaí', 'RDS de Uacari', 'UNDEFINED', 240),
 (536, '7658f374-991d-4016-b62d-f5f5a4e1b7c4', NULL, false, NULL, 'UNDEFINED', 'UNDEFINED', 'UNDEFINED', 'UNDEFINED', false, false, false, false, false, false, false, false, false, false, 'UNDEFINED', NULL, NULL, 'UNDEFINED', 536, 'Caroçal', 'Juruá-Jutaí', 'RDS de Uacari', 'UNDEFINED', 240),
 (537, '42503aa4-a7e2-4fd3-b8dd-91fe7329392a', NULL, false, NULL, 'UNDEFINED', 'UNDEFINED', 'UNDEFINED', 'UNDEFINED', false, false, false, false, false, false, false, false, false, false, 'UNDEFINED', NULL, NULL, 'UNDEFINED', 537, 'Idó', 'Juruá-Jutaí', 'RDS de Uacari', 'UNDEFINED', 240)
-ON CONFLICT DO NOTHING;
+ON CONFLICT DO NOTHING;*/

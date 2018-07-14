@@ -2,7 +2,7 @@ package com.samsung.fas.pir.rest.services;
 
 import com.google.common.hash.Hashing;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
-import com.samsung.fas.pir.exception.RESTException;
+import com.samsung.fas.pir.exception.ServiceException;
 import com.samsung.fas.pir.persistence.dao.CityDAO;
 import com.samsung.fas.pir.persistence.dao.ProfileDAO;
 import com.samsung.fas.pir.persistence.dao.UserDAO;
@@ -59,13 +59,13 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 		Account 	account		= new Account();
 
 		if (model.getEntity() != null && model.getPerson() != null)
-			throw new RESTException("user.cannotbe.both");
+			throw new ServiceException("user.cannotbe.both");
 
 		if (model.getEntity() == null && model.getPerson() == null)
-			throw new RESTException("user.data.missing");
+			throw new ServiceException("user.data.missing");
 
 		if (create.getPassword() == null || create.getPassword().trim().isEmpty())
-			throw new RESTException("user.password.empty");
+			throw new ServiceException("user.password.empty");
 
 		account.setUsername(create.getLogin());
 		account.setPassword(encoder.encode(Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString()));
@@ -95,13 +95,13 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 		City		city		= cdao.findOne(update.getAddressDTO().getCityUUID());
 
 		if (model.getEntity() != null && model.getPerson() != null)
-			throw new RESTException("user.cannotbe.both");
+			throw new ServiceException("user.cannotbe.both");
 
 		if (model.getEntity() == null && model.getPerson() == null)
-			throw new RESTException("user.data.missing");
+			throw new ServiceException("user.data.missing");
 
 		if (update.getPassword() != null && update.getPassword().trim().isEmpty())
-			throw new RESTException("user.login.password.empty");
+			throw new ServiceException("user.login.password.empty");
 
 		user.setName(model.getName());
 		user.setEmail(model.getEmail());

@@ -2,7 +2,7 @@ package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.graph.annotations.Alias;
 import com.samsung.fas.pir.persistence.enums.EAnswerType;
-import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -16,7 +16,7 @@ import java.util.Collection;
 @DynamicUpdate
 @DynamicInsert
 @Alias("Questão")
-public class Question extends BaseID {
+public class Question extends Base {
 	@Getter
 	@Setter
 	@Column(name = "description", nullable = false, columnDefinition = "citext")

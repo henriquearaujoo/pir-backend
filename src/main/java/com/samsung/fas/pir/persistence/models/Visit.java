@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.graph.annotations.Alias;
-import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -16,11 +16,11 @@ import java.util.Date;
 @DynamicUpdate
 @DynamicInsert
 @Alias("Visita")
-public class Visit extends BaseID {
+public class Visit extends Base {
 	@Getter
 	@Setter
-	@Column(name = "mobile_id")
-	private 	long			mobileId;
+	@Transient
+	private		long			externalID;
 
 	@Getter
 	@Setter

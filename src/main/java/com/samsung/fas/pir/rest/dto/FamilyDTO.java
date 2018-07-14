@@ -5,7 +5,7 @@ import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.enums.ECivilState;
 import com.samsung.fas.pir.persistence.enums.EGender;
 import com.samsung.fas.pir.persistence.enums.EHabitationType;
-import com.samsung.fas.pir.persistence.models.Responsible;
+import com.samsung.fas.pir.persistence.models.Family;
 import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,42 +17,40 @@ import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@DTO(Responsible.class)
+@DTO(Family.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ResponsibleDTO extends BaseDTO<Responsible> {
-	// region Properties
+public class FamilyDTO extends BaseDTO<Family> {
 	@Getter
 	@Setter
 	@JsonProperty("external_id")
-	private		long				mobileId;
+	private		long				externalID;
 
 	@Getter
 	@Setter
-	@JsonProperty("agent_id")
-	private 	UUID 				agentUUID;
+	@JsonProperty("community_id")
+	private 	UUID				communityUUID;
+
+	@Getter
+	@Setter
+	@JsonProperty(value = "code", access = JsonProperty.Access.READ_ONLY)
+	private 	String				code;
 
 	@Getter
 	@Setter
 	@JsonProperty("name")
 	@NotBlank(message = "name.missing")
-	private 	String				name;
+	private 	String				leaderName;
 
 	@Getter
 	@Setter
 	@JsonProperty("birth")
-	@NotEmpty(message = "date.missing")
-	@JsonFormat(pattern = "dd-MM-yyyy", shape = JsonFormat.Shape.STRING)
-	private 	String 				birthDate;
-
-	@Getter
-	@Setter
-	@JsonProperty("in_social_program")
-	private 	boolean				inSocialProgram;
+	private 	Date 				birth;
 
 	@Getter
 	@Setter
@@ -62,12 +60,7 @@ public class ResponsibleDTO extends BaseDTO<Responsible> {
 	@Getter
 	@Setter
 	@JsonProperty("habitation_members_count")
-	private 	int					habitationMembersCount;
-
-	@Getter
-	@Setter
-	@JsonProperty("live_with")
-	private 	String				liveWith;
+	private 	int					membersCount;
 
 	@Getter
 	@Setter
@@ -81,60 +74,40 @@ public class ResponsibleDTO extends BaseDTO<Responsible> {
 
 	@Getter
 	@Setter
-	@JsonProperty("income_participation")
-	private 	String				incomeParticipation;
-
-	@Getter
-	@Setter
-	@JsonProperty("gender")
-	private 	EGender 			gender;
-
-	@Getter
-	@Setter
 	@JsonProperty("children_count")
 	private 	long				childrenCount;
 
 	@Getter
 	@Setter
-	@JsonProperty("civil_state")
-	private 	ECivilState			civilState;
-
-	@Getter
-	@Setter
 	@JsonProperty("drinking_water_treatment")
-	private 	String				drinkingWaterTreatment;
+	private 	String				drinkableWaterTreatment;
 
 	@Getter
 	@Setter
 	@JsonProperty("has_hospital_nearby")
-	private 	boolean				hasHospital;
+	private 	boolean				nearbyUB;
 
 	@Getter
 	@Setter
 	@JsonProperty("has_sanitation")
-	private 	boolean				hasSanitation;
+	private 	boolean				sanitation;
 
 	@Getter
 	@Setter
 	@JsonProperty("has_water_treatment")
-	private 	boolean				hasWaterTreatment;
+	private 	boolean				waterTreatment;
 
 	@Getter
 	@Setter
 	@JsonProperty("has_other_children")
-	private 	boolean				familyHasChildren;
+	private 	boolean				otherChildren;
 
 	@Getter
 	@Setter
 	@JsonProperty("observations")
 	private 	String				observations;
 
-	@Getter
-	@Setter
-	@JsonProperty("is_pregnant")
-	private		boolean				pregnant;
-	// endregion
-
+	// region DTO Relations
 	@Getter
 	@Setter
 	@JsonProperty("community_id")
@@ -148,38 +121,34 @@ public class ResponsibleDTO extends BaseDTO<Responsible> {
 
 	@Getter
 	@Setter
-	@JsonProperty("pregnancies")
-	private 	List<PregnancyDTO> 	pregnanciesDTO;
+	@JsonProperty("pregnant")
+	private 	List<PregnantDTO> 	pregnantDTO;
 
 	@Getter
 	@Setter
 	@JsonProperty("community")
 	private 	CommunityDTO		communityDTO;
+	// endregion
 
-	public ResponsibleDTO() {
+	public FamilyDTO() {
 		super();
 	}
 
-	public ResponsibleDTO(Responsible responsible, Device device, boolean detailed) {
-		super(responsible);
-		setBirthDate(new SimpleDateFormat("dd-MM-yyyy").format(responsible.getBirth()));
-		setPregnanciesDTO(responsible.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()));
-		setChildrenDTO(responsible.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()));
-		setCommunityDTO(device != null && device.isNormal()? new CommunityDTO(responsible.getCommunity(), device, false) : null);
+	public FamilyDTO(Family family, Device device, boolean detailed) {
+		super(family);
+//		setCommunityDTO();
+		setPregnantDTO(device != null && !device.isNormal() || detailed? family.getPregnant().stream().map(item -> new PregnantDTO(item, device, false)).collect(Collectors.toList()) : null);
+		setChildrenDTO(device != null && !device.isNormal() || detailed? family.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()) : null);
+		setCommunityDTO(device != null && device.isNormal()? new CommunityDTO(family.getCommunity(), device, false) : null);
 	}
 
 	@JsonIgnore
 	@Override
-	public Responsible getModel() {
-		Responsible model = super.getModel();
+	public Family getModel() {
+		Family model = super.getModel();
 		model.setCommunity(getCommunityDTO() != null? getCommunityDTO().getModel() : null);
 		model.setChildren(getChildrenDTO() != null? getChildrenDTO().stream().map(ChildDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
-		model.setPregnancies(getPregnanciesDTO() != null? getPregnanciesDTO().stream().map(PregnancyDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
-		try {
-			model.setBirth(new SimpleDateFormat("dd-MM-yyyy").parse(getBirthDate()));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		model.setPregnant(getPregnantDTO() != null? getPregnantDTO().stream().map(PregnantDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		return model;
 	}
 }

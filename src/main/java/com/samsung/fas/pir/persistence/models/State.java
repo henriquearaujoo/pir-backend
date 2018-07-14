@@ -1,7 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.graph.annotations.Alias;
-import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +14,7 @@ import java.util.Collection;
 @Entity
 @Table(name = "states")
 @Alias("Estado")
-public class State extends BaseID {
+public class State extends Base {
 	@Getter
 	@Setter
 	@Column(name="name", nullable=false, unique=true)

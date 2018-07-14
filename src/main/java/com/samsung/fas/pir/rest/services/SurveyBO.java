@@ -6,7 +6,7 @@ import com.samsung.fas.pir.persistence.dao.SurveyDAO;
 import com.samsung.fas.pir.persistence.models.SAlternative;
 import com.samsung.fas.pir.persistence.models.SQuestion;
 import com.samsung.fas.pir.persistence.models.Survey;
-import com.samsung.fas.pir.persistence.models.base.BaseID;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.SurveyDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import lombok.Getter;
@@ -63,11 +63,11 @@ public class SurveyBO extends BaseBO<Survey, SurveyDAO, SurveyDTO, Long> {
 						}
 						amodel.setQuestion(question);
 						return amodel;
-					}).sorted(Comparator.comparingLong(BaseID::getId)).collect(Collectors.toList()));
+					}).sorted(Comparator.comparingLong(Base::getId)).collect(Collectors.toList()));
 					return question;
 				}
 				return item;
-			}).sorted(Comparator.comparingLong(BaseID::getId)).collect(Collectors.toList()));
+			}).sorted(Comparator.comparingLong(Base::getId)).collect(Collectors.toList()));
 			return new SurveyDTO(getDao().save(survey), device, true);
 		}
 		return new SurveyDTO(getDao().save(model), device, true);

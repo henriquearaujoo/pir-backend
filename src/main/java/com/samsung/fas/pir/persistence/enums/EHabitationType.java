@@ -10,6 +10,7 @@ public enum EHabitationType {
 	OWNED		("OWNED"),
 	LEASED		("LEASED"),
 	CEDED		("CEDED"),
+	SHARED		("SHARED"),
 	UNDEFINED	("UNDEFINED");
 
 	@Getter(value = AccessLevel.PRIVATE)
