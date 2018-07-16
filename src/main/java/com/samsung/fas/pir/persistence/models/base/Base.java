@@ -24,7 +24,7 @@ public abstract class Base {
 	@Setter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private		long			id			= 0;
+	private		Long			id;
 
 	@Getter
 	@Setter
@@ -43,7 +43,7 @@ public abstract class Base {
 	@CreatedDate
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@Column(updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private 	Date			createdAt	= new Date();
 
 	@Getter
@@ -58,7 +58,7 @@ public abstract class Base {
 	@Setter
 	@CreatedBy
 	@ManyToOne
-	@JoinColumn(name = "created_by", foreignKey = @ForeignKey(name = "fk_created_by"))
+	@JoinColumn(name = "created_by", updatable = false, foreignKey = @ForeignKey(name = "fk_created_by"))
 	private 	User 			createdBy	= null;
 
 	@Getter

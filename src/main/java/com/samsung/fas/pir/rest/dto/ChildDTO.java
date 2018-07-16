@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -30,98 +31,98 @@ public class ChildDTO extends BaseDTO<Child> {
 	@Getter
 	@Setter
 	@JsonProperty("external_id")
-	private		long						mobileId;
+	private		long						externalID;
+
+	@Getter
+	@Setter
+	@JsonProperty(value = "code", access = JsonProperty.Access.READ_ONLY)
+	private 	String						code;
 
 	@Getter
 	@Setter
 	@JsonProperty("name")
-	@NotBlank(message = "name.missing")
 	private 	String						name;
 
 	@Getter
 	@Setter
 	@JsonProperty("birth")
-	@NotBlank(message = "birth.missing")
-	private 	String						birthDate;
-
-	@Getter
-	@Setter
-	@JsonProperty("father_name")
-	private 	String						fatherName;
+	private 	Date						birth;
 
 	@Getter
 	@Setter
 	@JsonProperty("gender")
-	@NotNull(message = "gender.missing")
-	private 	EGender 					gender;
+	private		EGender						gender;
 
 	@Getter
 	@Setter
-	@JsonProperty("has_civil_registration")
-	private 	boolean						hasCivilRegistration;
+	@JsonProperty("ethnicity")
+	private 	String						ethnicity;
 
 	@Getter
 	@Setter
-	@JsonProperty("civil_reg_justificative")
-	private 	String 						civilRegistrationJustification;
+	@JsonProperty("mother_name")
+	private 	String						motherFullName;
 
 	@Getter
 	@Setter
-	@JsonProperty("has_education_diff")
-	private 	boolean						hasEducationDifficulty;
+	@JsonProperty("has_registration")
+	private 	boolean						registration;
 
 	@Getter
 	@Setter
-	@JsonProperty("education_diff_specification")
-	private 	String						educationDifficultySpecification;
+	@JsonProperty("sus_number")
+	private 	String						susNumber;
 
 	@Getter
 	@Setter
-	@JsonProperty("is_premature_born")
-	private 	boolean						prematureBorn;
+	@JsonProperty("ub_frequented")
+	private 	String						frequentedUB;
 
 	@Getter
 	@Setter
-	@JsonProperty("born_week")
-	@Min(value = 0, message = "invalid.value")
-	private 	int							bornWeek;
+	@JsonProperty("ub_record")
+	private 	String						recordUB;
 
 	@Getter
 	@Setter
-	@JsonProperty("who_take_care")
-	@NotBlank(message = "whotakecare.missing")
-	private 	String						whoTakeCare;
+	@JsonProperty("had_prenatal_care")
+	private 	boolean						prenatalCare;
 
 	@Getter
 	@Setter
-	@JsonProperty("plays_with_who")
-	@NotBlank(message = "playswithwho.missing")
-	private 	String						playsWithWho;
+	@JsonProperty("birth_type")
+	private 	String						birthType;
 
 	@Getter
 	@Setter
-	@JsonProperty("is_mensaly_weighted")
-	private 	boolean						monthlyWeighted;
+	@JsonProperty("had_episiotomy")
+	private 	boolean						episiotomy;
 
 	@Getter
 	@Setter
-	@JsonProperty("is_in_social_program")
-	private 	boolean						socialEducationalPrograms;
+	@JsonProperty("bleeding")
+	private 	String						bleeding;
 
 	@Getter
 	@Setter
-	@JsonProperty("is_vacination_uptodate")
-	private 	boolean						vaccinationUpToDate;
+	@JsonProperty("deficiencies")
+	private 	String						deficiencies;
 
 	@Getter
 	@Setter
-	@JsonProperty("has_relation_diff")
-	private 	boolean						relationDifficulties;
+	@JsonProperty("intercurrence")
+	private 	String						intercurrence;
 
+	// region Relations
 	@Getter
 	@Setter
 	@JsonProperty("agent_id")
 	private		UUID						agentUUID;
+
+	@Getter
+	@Setter
+	@JsonProperty("family_id")
+	private		UUID						familyUUID;
 
 	@Getter
 	@Setter
@@ -137,8 +138,9 @@ public class ChildDTO extends BaseDTO<Child> {
 
 	@Getter
 	@Setter
-	@JsonProperty("responsible")
-	private 	List<FamilyDTO> familyDTO;
+	@JsonProperty("family")
+	private 	FamilyDTO					familyDTO;
+	// endregion
 
 	public ChildDTO() {
 		super();
@@ -146,8 +148,8 @@ public class ChildDTO extends BaseDTO<Child> {
 
 	public ChildDTO(Child child, Device device, boolean detailed) {
 		super(child);
-		setBirthDate(new SimpleDateFormat("dd-MM-yyyy").format(child.getBirth()));
-//		setFamilyDTO(detailed? child.getResponsible().stream().map(responsible -> new FamilyDTO(responsible, device, false)).collect(Collectors.toList()) : null);
+		setAgentUUID(child.getResponsibleAgent() != null? child.getResponsibleAgent().getUuid() : null);
+		setFamilyDTO(detailed? new FamilyDTO(child.getFamily(), device, false) : null);
 		setAnswersDTO(child.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
 		setVisitsDTO(child.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
 	}
@@ -156,14 +158,8 @@ public class ChildDTO extends BaseDTO<Child> {
 	@Override
 	public Child getModel() {
 		Child model = super.getModel();
-//		model.setResponsible(getFamilyDTO() != null? getFamilyDTO().stream().map(FamilyDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		model.setAnswers(getAnswersDTO() != null? getAnswersDTO().stream().map(SAnswerDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		model.setVisits(getVisitsDTO() != null? getVisitsDTO().stream().map(VisitDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
-		try {
-			model.setBirth(new SimpleDateFormat("dd-MM-yyyy").parse(getBirthDate()));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
 		return model;
 	}
 

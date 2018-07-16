@@ -163,7 +163,6 @@ public class PregnantDTO extends BaseDTO<Pregnant> {
 
 	public PregnantDTO(Pregnant pregnant, Device device, boolean detailed) {
 		super(pregnant);
-		setCommunityDTO(new CommunityDTO(pregnant.getCommunity(), device, false));
 		setFamilyDTO(new FamilyDTO(pregnant.getFamily(), device, false));
 		setPregnanciesDTO(pregnant.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()));
 		setResponsibleAgentDTO(new UserDTO(pregnant.getResponsibleAgent(), device, false));

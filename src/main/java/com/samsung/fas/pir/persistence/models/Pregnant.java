@@ -153,24 +153,6 @@ public class Pregnant extends Base {
 	@Getter
 	@Setter
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "relation_uc"))
-	private 	ConservationUnity			unity;
-
-	@Getter
-	@Setter
-	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "relation_city"))
-	private 	City						city;
-
-	@Getter
-	@Setter
-	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "relation_community"))
-	private 	Community					community;
-
-	@Getter
-	@Setter
-	@ManyToOne(optional = false)
 	@JoinColumn(foreignKey = @ForeignKey(name = "relation_family"))
 	@Alias("Família")
 	private 	Family						family;

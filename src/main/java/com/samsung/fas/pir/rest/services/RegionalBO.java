@@ -78,7 +78,6 @@ public class RegionalBO extends BaseBO<Regional, RegionalDAO, RegionalDTO, Long>
 		}
 	}
 
-	@SuppressWarnings("Duplicates")
 	private Collection<ConservationUnity> setupUnity(Regional regional, Collection<ConservationUnity> collection, User user) {
 		List<UUID> 			modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {

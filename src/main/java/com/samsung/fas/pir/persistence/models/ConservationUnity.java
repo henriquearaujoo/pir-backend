@@ -15,7 +15,10 @@ import java.util.Collection;
 
 @Alias("Unidade de Conservação")
 @Entity
-@Table(name = "conservation_unities", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "regional_id"}, name = "conservation_unity"))
+@Table(name = "conservation_unities", uniqueConstraints = {
+	@UniqueConstraint(columnNames = {"name", "regional_id"}, name = "unity_name"),
+	@UniqueConstraint(columnNames = {"abbreviation"}, name = "unity_abbreviation")
+})
 @DynamicUpdate
 @DynamicInsert
 public class ConservationUnity extends Base {
@@ -51,4 +54,18 @@ public class ConservationUnity extends Base {
 	@JoinColumn(name = "unity_id")
 	private 	Collection<City>		cities				= new ArrayList<>();
 	// endregion
+
+	@PrePersist
+	@Override
+	public void prePersist() {
+		super.prePersist();
+		setAbbreviation(getAbbreviation().toUpperCase());
+	}
+
+	@PreUpdate
+	@Override
+	public void preUpdate() {
+		super.preUpdate();
+		setAbbreviation(getAbbreviation().toUpperCase());
+	}
 }

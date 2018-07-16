@@ -25,36 +25,26 @@ import java.util.stream.Collectors;
 public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)
-	private		ChildDAO		childDAO;
-
-	@Getter(AccessLevel.PRIVATE)
-	@Setter(AccessLevel.PRIVATE)
-	private		CommunityDAO	communityDAO;
-
-	@Getter(AccessLevel.PRIVATE)
-	@Setter(AccessLevel.PRIVATE)
-	private		PregnancyDAO	pregnancyDAO;
-
-	@Getter(AccessLevel.PRIVATE)
-	@Setter(AccessLevel.PRIVATE)
 	private 	ModelMapper		mapper;
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)
-	private		PregnancyBO		pregnancyBO;
+	private		CommunityBO		communityBO;
+
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
+	private		PregnantBO		pregnantBO;
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)
 	private		ChildBO			childBO;
 
 	@Autowired
-	public FamilyBO(FamilyDAO dao, ChildDAO childDAO, PregnancyDAO pregnancyDAO, CommunityDAO communityDAO, ModelMapper mapper, PregnancyBO pregnancyBO, ChildBO childBO) {
+	public FamilyBO(FamilyDAO dao, CommunityBO communityBO, PregnantBO pregnantBO, ChildBO childBO, ModelMapper mapper) {
 		super(dao);
-		setChildDAO(childDAO);
-		setPregnancyDAO(pregnancyDAO);
+		setCommunityBO(communityBO);
+		setPregnantBO(pregnantBO);
 		setChildBO(childBO);
-		setPregnancyBO(pregnancyBO);
-		setCommunityDAO(communityDAO);
 		setMapper(mapper);
 	}
 
@@ -62,16 +52,13 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 	public FamilyDTO save(FamilyDTO create, Device device, UserDetails account) {
 		Family 			model		= create.getModel();
 		Family			family 		= model.getUuid() != null? getDao().findOne(model.getUuid()) : null;
-		Community		community	= getCommunityDAO().findOne(create.getCommunityUUID());
-		return family != null? new FamilyDTO(getDao().save(setupFamily(family, community)), device, true) : new FamilyDTO(getDao().save(setupFamily(model, community)), device, true);
+		Community		community	= getCommunityBO().getDao().findOne(create.getCommunityUUID());
+		return family != null? new FamilyDTO(getDao().save(setupFamily(family, model, community)), device, true) : new FamilyDTO(getDao().save(setupFamily(model, community)), device, true);
 	}
 
 	@Override
 	public FamilyDTO update(FamilyDTO update, Device device, UserDetails account) {
-		Family 			model		= update.getModel();
-		Family			family 		= model.getUuid() != null? getDao().findOne(model.getUuid()) : null;
-		Community		community	= getCommunityDAO().findOne(update.getCommunityUUID());
-		return family != null? new FamilyDTO(getDao().save(setupFamily(family, model, community, device)), device, true) : new FamilyDTO(getDao().save(setupFamily(model, community)), device, true);
+		return save(update, device, account);
 	}
 
 	@Override
@@ -81,18 +68,19 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 
 	@Override
 	public Collection<FamilyDTO> update(Collection<FamilyDTO> collection, Device device, UserDetails details) {
-		return collection.stream().map(item -> update(item, device, details)).collect(Collectors.toList());
+		return collection.stream().map(item -> save(item, device, details)).collect(Collectors.toList());
 	}
 
-	Family setupFamily(Family model, Community community) {
+	private Family setupFamily(Family model, Community community) {
 		model.setCommunity(community);
-		model.setChildren(setupChild(model, model.getChildren()));
 		model.setPregnant(setupPregnant(model, model.getPregnant()));
+		model.setChildren(setupChild(model, model.getChildren()));
 		return model;
 	}
 
-	Family setupFamily(Family family, Family model, Community community, Device device) {
+	private Family setupFamily(Family family, Family model, Community community) {
 		getMapper().map(model, family);
+		family.setCommunity(community);
 		family.setPregnant(setupPregnant(family, model.getPregnant()));
 		family.setChildren(setupChild(family, model.getChildren()));
 		return family;
@@ -102,13 +90,11 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
-			Pregnancy	pregnancy	= uuid != null? getPregnancyDAO().findOne(uuid) : null;
-			if (pregnancy != null) {
-//				return getPregnancyBO().setupPregnancy(pregnancy, item, mother, agent);
-				return new Pregnant();
+			Pregnant	pregnant	= uuid != null? getPregnantBO().getDao().findOne(uuid) : null;
+			if (pregnant != null) {
+				return getPregnantBO().setupPregnant(pregnant, item, mother);
 			} else {
-//				return getPregnancyBO().setupPregnancy(item, mother, agent);
-				return new Pregnant();
+				return getPregnantBO().setupPregnant(item, mother);
 			}
 		}).collect(Collectors.toList());
 	}
@@ -117,7 +103,7 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
-			Child		child		= uuid != null? getChildDAO().findOne(uuid) :  null;
+			Child		child		= uuid != null? getChildBO().getDao().findOne(uuid) :  null;
 			if (child != null) {
 				return getChildBO().setupChild(child, item, family);
 			} else {

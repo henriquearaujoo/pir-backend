@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 @Api(value = "Regional", description = "REST Controller for Regional", tags = "REGIONAL")
-@RequestMapping(value = "/rest/regional", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-@Controller
+@RequestMapping(value = "/rest/regional", produces = MediaType.APPLICATION_JSON_VALUE)
+@RestController
 public class RegionalController extends BController<RegionalBO, RegionalDTO> {
 	@Autowired
 	public RegionalController(RegionalBO service) {

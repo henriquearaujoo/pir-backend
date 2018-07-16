@@ -63,7 +63,7 @@ public class PregnancyBO extends BaseBO<Pregnancy, PregnancyDAO, PregnancyDTO, L
 		return null;
 	}
 
-	Pregnancy setupPregnancy(Pregnancy model, Family mother, User agent) {
+	Pregnancy setupPregnancy(Pregnancy model, Pregnant pregnant) {
 //		model.setAgent(agent);
 //		model.setPregnant(mother);
 //		model.setRegisteredAt(model.getRegisteredAt());
@@ -72,7 +72,7 @@ public class PregnancyBO extends BaseBO<Pregnancy, PregnancyDAO, PregnancyDTO, L
 		return model;
 	}
 
-	Pregnancy setupPregnancy(Pregnancy pregnancy, Pregnancy model, Family mother, User agent) {
+	Pregnancy setupPregnancy(Pregnancy pregnancy, Pregnancy model, Pregnant pregnant) {
 //		pregnancy.setRegisteredAt(model.getRegisteredAt());
 //		pregnancy.setPregnant(mother);
 		pregnancy.setVisits(setupVisit(pregnancy, model.getVisits()));

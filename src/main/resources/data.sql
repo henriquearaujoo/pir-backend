@@ -33,7 +33,10 @@ VALUES
 	('Registro de Capítulos', 'capitulos/registro'),
 	('Relatório', 'relatorios'),
 	('Construtor de Formulários', 'formularios/construtor'),
-	('Registro de Formulários', 'formularios/construtor/registro')
+	('Registro de Formulários', 'formularios/construtor/registro'),
+	('Regionais', 'regionais'),
+	('Regionais - Registro', 'regionais/registro'),
+	('Regionais - Detalhes', 'regionais/detalhes')
 ON CONFLICT DO NOTHING;
 
 /* User */

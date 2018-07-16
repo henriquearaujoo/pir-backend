@@ -49,10 +49,7 @@ public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, L
 
 	@Override
 	public CommunityDTO update(CommunityDTO update, Device device, UserDetails details) {
-		Community				model		= update.getModel();
-		Community				community	= model.getUuid() != null? getDao().findOne(model.getUuid()) : null;
-		ConservationUnity 		unity		= getUnityBO().getDao().findOne(model.getUnity().getUuid());
-		return community != null? new CommunityDTO(getDao().save(setupCommunity(community, model, unity, device, details)), device, true) : new CommunityDTO(getDao().save(setupCommunity(model, unity, device, details)), device, true);
+		return save(update, device, details);
 	}
 
 	@Override

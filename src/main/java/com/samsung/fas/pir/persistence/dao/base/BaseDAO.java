@@ -37,56 +37,56 @@ public abstract class BaseDAO<T, ID extends Serializable, TR extends IBaseReposi
 
 	@Override
 	public T findOne(ID id) {
-		return repository.findById(Optional.ofNullable(id).orElseThrow(() -> new ServiceException(className + ".id.missing"))).orElseThrow(() -> new ServiceException(className + ".not.found"));
+		return getRepository().findById(Optional.ofNullable(id).orElseThrow(() -> new ServiceException(className + ".id.missing"))).orElseThrow(() -> new ServiceException(className + ".not.found"));
 	}
 
 	@Override
 	public T findOne(UUID uuid) {
-		return repository.findByUuid(Optional.ofNullable(uuid).orElseThrow(() -> new ServiceException(className + ".id.missing"))).orElseThrow(() -> new ServiceException(className + ".not.found"));
+		return getRepository().findByUuid(Optional.ofNullable(uuid).orElseThrow(() -> new ServiceException(className + ".id.missing"))).orElseThrow(() -> new ServiceException(className + ".not.found"));
 	}
 
 	@Override
 	public Collection<T> findAll() {
-		return StreamSupport.stream(repository.findAll(new Sort(Sort.Direction.ASC, "id")).spliterator(), false).collect(Collectors.toList());
+		return StreamSupport.stream(getRepository().findAll(new Sort(Sort.Direction.ASC, "id")).spliterator(), false).collect(Collectors.toList());
 	}
 
 	@Override
 	public Collection<T> findAll(Predicate predicate) {
-		return StreamSupport.stream(repository.findAll(predicate).spliterator(), false).sorted(Comparator.comparingLong(item -> ((Base) item).getId())).collect(Collectors.toList());
+		return StreamSupport.stream(getRepository().findAll(predicate).spliterator(), false).sorted(Comparator.comparingLong(item -> ((Base) item).getId())).collect(Collectors.toList());
 	}
 
 	@Override
 	public Page<T> findAll(Predicate predicate, Pageable pageable) {
-		return repository.findAll(predicate, pageable);
+		return getRepository().findAll(predicate, pageable);
 	}
 
 	@Override
 	public Page<T> findAll(Pageable pageable) {
-		return repository.findAll(pageable);
+		return getRepository().findAll(pageable);
 	}
 
 	@Override
 	public T save(T model) {
-		return repository.save(model);
+		return getRepository().save(model);
 	}
 
 	@Override
 	public Collection<T> save(Iterable<T> models) {
-		return StreamSupport.stream(repository.saveAll(models).spliterator(), false).collect(Collectors.toList());
+		return StreamSupport.stream(getRepository().saveAll(models).spliterator(), false).collect(Collectors.toList());
 	}
 
 	@Override
 	public void delete(ID id) {
-		repository.deleteById(id);
+		getRepository().deleteById(id);
 	}
 
 	@Override
 	public ID delete(UUID id) {
-		return repository.deleteByUuid(id).orElseThrow(() -> new ServiceException("cannot.delete"));
+		return getRepository().deleteByUuid(id).orElseThrow(() -> new ServiceException("cannot.delete"));
 	}
 
 	@Override
 	public void delete(T entity) {
-		repository.delete(entity);
+		getRepository().delete(entity);
 	}
 }

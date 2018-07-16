@@ -5,9 +5,12 @@ import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.ChildDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -23,82 +26,46 @@ import java.util.stream.Collectors;
 public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	@Getter
 	@Setter
-	private		VisitDAO			visitDAO;
+	private 	FamilyBO		familyBO;
 
 	@Getter
 	@Setter
-	private 	UserDAO 			userDAO;
+	private 	UserBO 			userBO;
 
 	@Getter
 	@Setter
-	private 	FamilyDAO			familyDAO;
+	private 	SAnswerBO		sAnswerBO;
 
 	@Getter
 	@Setter
-	private 	SAnswerDAO			sAnswerDAO;
+	private		VisitBO			visitBO;
 
-	@Getter
-	@Setter
-	private 	SAnswerBO			sAnswerBO;
-
-	@Getter
-	@Setter
-	private		VisitBO				visitBO;
-	private List<Family> family;
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
+	private 	ModelMapper		mapper;
 
 	@Autowired
-	public ChildBO(ChildDAO dao, FamilyDAO familyDAO, UserDAO userDAO, VisitDAO visitDAO, SAnswerDAO sAnswerDAO, SAnswerBO sAnswerBO, VisitBO visitBO) {
+	public ChildBO(ChildDAO dao, @Lazy FamilyBO familyBO, UserBO userBO, VisitBO visitBO, SAnswerBO sAnswerBO, ModelMapper mapper) {
 		super(dao);
 		setVisitBO(visitBO);
-		setVisitDAO(visitDAO);
-		setFamilyDAO(familyDAO);
-		setUserDAO(userDAO);
-		setSAnswerDAO(sAnswerDAO);
+		setVisitBO(visitBO);
+		setFamilyBO(familyBO);
+		setUserBO(userBO);
 		setSAnswerBO(sAnswerBO);
+		setMapper(mapper);
 	}
 
 	@Override
 	public ChildDTO save(ChildDTO create, Device device, UserDetails account) {
 		Child				model		= create.getModel();
 		Child				child		= create.getUuid() != null? getDao().findOne(create.getUuid()) : null;
-		List<Family> family = create.getFamilyDTO() != null? create.getFamilyDTO().stream().map(item -> getFamilyDAO().findOne(item.getUuid())).collect(Collectors.toList()) : new ArrayList<>();
-
-		if (child == null) {
-//			model.setAgent(((Account) account).getUser());
-//			model.setResponsible(responsible);
-//			responsible.forEach(resp -> resp.getChildren().add(model));
-//			model.setVisits(setupVisit(model, model.getVisits(), agent));
-			return new ChildDTO(getDao().save(model), device, true);
-		} else {
-			setupChild(child, model);
-//			responsible.forEach(resp -> resp.getChildren().remove(resp.getChildren().stream().filter(item -> item.getUuid().compareTo(child.getUuid()) == 0).findAny().orElse(new Child())));
-//			child.setResponsible(responsible);
-//			responsible.forEach(resp -> resp.getChildren().add(model));
-			return new ChildDTO(getDao().save(child), device, true);
-		}
+		Family				family		= create.getFamilyUUID() != null? getFamilyBO().getDao().findOne(create.getFamilyUUID()) : null;
+		return child == null? new ChildDTO(getDao().save(setupChild(model, family)), device, true) : new ChildDTO(getDao().save(setupChild(child, model, family)), device, true);
 	}
 
 	@Override
 	public ChildDTO update(ChildDTO update, Device device, UserDetails account) {
-		Child				model		= update.getModel();
-		Child				child		= update.getUuid() != null? getDao().findOne(update.getUuid()) : null;
-		List<Family> family = update.getFamilyDTO() != null? update.getFamilyDTO().stream().map(item -> getFamilyDAO().findOne(item.getUuid())).collect(Collectors.toList()) : new ArrayList<>();
-		User				agent		= update.getAgentUUID() != null? getUserDAO().findOne(update.getAgentUUID()) : null;
-
-		if (child == null) {
-//			if (agent == null)
-//				throw new ServiceException("agent.missing");
-//			model.setAgent(agent);
-//			model.setResponsible(responsible);
-//			responsible.forEach(resp -> resp.getChildren().add(model));
-			return new ChildDTO(getDao().save(model), device, true);
-		} else {
-			setupChild(child, model);
-//			responsible.forEach(resp -> resp.getChildren().remove(resp.getChildren().stream().filter(item -> item.getUuid().compareTo(child.getUuid()) == 0).findAny().orElse(new Child())));
-//			child.setResponsible(responsible);
-//			responsible.forEach(resp -> resp.getChildren().add(model));
-			return new ChildDTO(getDao().save(child), device, true);
-		}
+		return save(update, device, account);
 	}
 
 	@Override
@@ -112,43 +79,21 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	}
 
 	Child setupChild(Child model, Family family) {
-//		model.getResponsible().add(responsible);
-//		model.setAgent(agent);
-//		if (model.getResponsible().stream().filter(item -> item.getMobileId() - responsible.getMobileId() == 0).findAny().orElse(null) == null) {
-//			model.getResponsible().add(responsible);
-//		}
+		model.setCode(getDao().getSequentialCode(family.getCommunity().getUnity().getAbbreviation().toUpperCase().concat("C")));
+		model.setFamily(family);
+		model.setResponsibleAgent(null);
 		model.setVisits(setupVisit(model, model.getVisits()));
 		model.setAnswers(setupAnswer(model, model.getAnswers()));
 		return model;
 	}
 
 	Child setupChild(Child child, Child model, Family family) {
-		setupChild(child, model);
-//		if (child.getResponsible().stream().filter(item -> responsible.getUuid() != null && item.getUuid().compareTo(responsible.getUuid()) == 0).findAny().orElse(null) == null) {
-//			child.getResponsible().add(responsible);
-//		}
+		getMapper().map(model, child);
+		child.setFamily(family);
+		child.setResponsibleAgent(null);
 		child.setVisits(setupVisit(child, model.getVisits()));
 		child.setAnswers(setupAnswer(child, model.getAnswers()));
 		return child;
-	}
-
-	private void setupChild(Child child, Child model) {
-//		child.setMobileId(model.getMobileId());
-//		child.setName(model.getName());
-//		child.setFatherName(model.getFatherName());
-//		child.setGender(model.getGender());
-//		child.setHasCivilRegistration(model.isHasCivilRegistration());
-//		child.setCivilRegistrationJustification(model.getCivilRegistrationJustification());
-//		child.setHasEducationDifficulty(model.isHasEducationDifficulty());
-//		child.setEducationDifficultySpecification(model.getEducationDifficultySpecification());
-//		child.setPrematureBorn(model.isPrematureBorn());
-//		child.setBornWeek(model.getBornWeek());
-//		child.setWhoTakeCare(model.getWhoTakeCare());
-//		child.setPlaysWithWho(model.getPlaysWithWho());
-//		child.setMonthlyWeighted(model.isMonthlyWeighted());
-//		child.setSocialEducationalPrograms(model.isSocialEducationalPrograms());
-//		child.setVaccinationUpToDate(model.isVaccinationUpToDate());
-//		child.setRelationDifficulties(model.isHasEducationDifficulty());
 	}
 
 
@@ -156,7 +101,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
-			SAnswer		sAnswer		= uuid != null? getSAnswerDAO().findOne(uuid) : null;
+			SAnswer		sAnswer		= uuid != null? getSAnswerBO().getDao().findOne(uuid) : null;
 			if (sAnswer != null) {
 				return getSAnswerBO().setupAnswer(sAnswer, item, child);
 			} else {
@@ -169,7 +114,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
-			Visit		visit		= uuid != null? getVisitDAO().findOne(uuid) : null;
+			Visit		visit		= uuid != null? getVisitBO().getDao().findOne(uuid) : null;
 			if (visit != null) {
 				return getVisitBO().setupVisit(visit, item, child);
 			} else {
