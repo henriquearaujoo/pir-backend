@@ -12,6 +12,7 @@ import com.samsung.fas.pir.rest.dto.VisitFrontDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import lombok.Getter;
 import lombok.Setter;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,27 +29,27 @@ import java.util.stream.Collectors;
 public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 	@Getter
 	@Setter
-	private		ChapterDAO		chapterDAO;
+	private		ChapterBO		chapterBO;
 
 	@Getter
 	@Setter
-	private		FormDAO			formDAO;
-
-	@Getter
-	@Setter
-	private		AnswerDAO		answerDAO;
+	private		FormBO			formBO;
 
 	@Getter
 	@Setter
 	private 	AnswerBO		answerBO;
 
+	@Getter
+	@Setter
+	private 	ModelMapper 	mapper;
+
 	@Autowired
-	protected VisitBO(VisitDAO dao, ChapterDAO chapterDAO, FormDAO formDAO, AnswerDAO answerDAO, AnswerBO answerBO) {
+	protected VisitBO(VisitDAO dao, ChapterBO chapterBO, FormBO formBO, AnswerBO answerBO, ModelMapper mapper) {
 		super(dao);
-		setChapterDAO(chapterDAO);
-		setFormDAO(formDAO);
-		setAnswerDAO(answerDAO);
+		setChapterBO(chapterBO);
+		setFormBO(formBO);
 		setAnswerBO(answerBO);
+		setMapper(mapper);
 	}
 
 	public VisitFrontDTO findOneDetailed(UUID uuid, Device device, UserDetails details) {
@@ -93,26 +95,18 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 	// region Pregnancy
 	Visit setupVisit(Visit model, Pregnancy pregnancy) {
 		model.setPregnancy(pregnancy);
-		model.setChapter(getChapterDAO().findOne(model.getChapter().getUuid()));
-		model.setForm(model.getForm().getUuid() != null? getFormDAO().findOne(model.getForm().getUuid()) : null);
-//		model.setAgent(agent);
-		if (model.getAnswers() != null) {
-			model.setAnswers(setupAnswers(model, model.getAnswers()));
-		}
+		model.setChapter(getChapterBO().getDao().findOne(model.getChapter().getUuid()));
+		model.setForm(model.getForm().getUuid() != null? getFormBO().getDao().findOne(model.getForm().getUuid()) : null);
+		model.setAnswers(model.getAnswers() != null? setupAnswers(model, model.getAnswers()) : new ArrayList<>());
 		return model;
 	}
 
 	Visit setupVisit(Visit visit, Visit model, Pregnancy pregnancy) {
-		visit.setForm(model.getForm().getUuid() != null? getFormDAO().findOne(model.getForm().getUuid()): null);
-		visit.setChapter(getChapterDAO().findOne(model.getChapter().getUuid()));
+		getMapper().map(model, visit);
 		visit.setPregnancy(pregnancy);
-		visit.setDuration(model.getDuration());
-		visit.setNumber(model.getNumber());
-		visit.setDoneAt(model.getDoneAt());
-		visit.setErased(model.isErased());
-		if (model.getAnswers() != null) {
-			visit.setAnswers(setupAnswers(visit, model.getAnswers()));
-		}
+		visit.setChapter(getChapterBO().getDao().findOne(model.getChapter().getUuid()));
+		visit.setForm(model.getForm().getUuid() != null? getFormBO().getDao().findOne(model.getForm().getUuid()): null);
+		visit.setAnswers(setupAnswers(visit, model.getAnswers()));
 		return visit;
 	}
 	// endregion
@@ -120,25 +114,18 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 	// region Child
 	Visit setupVisit(Visit model, Child child) {
 		model.setChild(child);
-		model.setChapter(getChapterDAO().findOne(model.getChapter().getUuid()));
-		model.setForm(model.getForm() != null && model.getForm().getUuid() != null? getFormDAO().findOne(model.getForm().getUuid()) : null);
-		if (model.getAnswers() != null) {
-			model.setAnswers(setupAnswers(model, model.getAnswers()));
-		}
+		model.setChapter(getChapterBO().getDao().findOne(model.getChapter().getUuid()));
+		model.setForm(model.getForm() != null && model.getForm().getUuid() != null? getFormBO().getDao().findOne(model.getForm().getUuid()) : null);
+		model.setAnswers(setupAnswers(model, model.getAnswers()));
 		return model;
 	}
 
 	Visit setupVisit(Visit visit, Visit model, Child child) {
-		visit.setForm(model.getForm().getUuid() != null? getFormDAO().findOne(model.getForm().getUuid()) : null);
-		visit.setChapter(getChapterDAO().findOne(model.getChapter().getUuid()));
+		getMapper().map(model, visit);
 		visit.setChild(child);
-		visit.setDuration(model.getDuration());
-		visit.setNumber(model.getNumber());
-		visit.setDoneAt(model.getDoneAt());
-		visit.setErased(model.isErased());
-		if (model.getAnswers() != null) {
-			visit.setAnswers(setupAnswers(visit, model.getAnswers()));
-		}
+		visit.setChapter(getChapterBO().getDao().findOne(model.getChapter().getUuid()));
+		visit.setForm(model.getForm().getUuid() != null? getFormBO().getDao().findOne(model.getForm().getUuid()) : null);
+		visit.setAnswers(setupAnswers(visit, model.getAnswers()));
 		return visit;
 	}
 	// endregion
@@ -147,7 +134,7 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
-			Answer		answer		= uuid != null? getAnswerDAO().findOne(uuid) : null;
+			Answer		answer		= uuid != null? getAnswerBO().getDao().findOne(uuid) : null;
 			if (answer != null) {
 				return getAnswerBO().setupAnswer(answer, item);
 			} else {

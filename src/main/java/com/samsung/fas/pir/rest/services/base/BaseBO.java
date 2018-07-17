@@ -84,7 +84,7 @@ public abstract class BaseBO<T, DAO extends IBaseDAO<T, ID>, DTO, ID extends Ser
 				return dto.getConstructor(entity, boolean.class).newInstance(item, detailed);
 			} catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException ex) {
 				ex.printStackTrace();
-				throw new RuntimeException(dto.getName() + ": No constructor matches (T, Boolean) or (T, Device, Boolean");
+				throw new RuntimeException(dto.getName() + ": No constructor matches (T, Boolean) or (T, Device, Boolean)");
 			}
 		}
 	}

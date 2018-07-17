@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -85,12 +86,6 @@ public class Pregnant extends Base {
 
 	@Getter
 	@Setter
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
-	@Alias("Gravidez Planejada")
-	private 	boolean						planned;
-
-	@Getter
-	@Setter
 	@Column(columnDefinition = "TEXT")
 	@Alias("Família - Casos")
 	private 	String						illnessFamilyRegister;
@@ -159,13 +154,13 @@ public class Pregnant extends Base {
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false)
+	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "relation_agent"))
 	private 	User						responsibleAgent;
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "pregnant")
-	private 	Collection<Pregnancy>		pregnancies;
+	@OneToMany(mappedBy = "pregnant", cascade = CascadeType.ALL)
+	private 	Collection<Pregnancy>		pregnancies					= new ArrayList<>();
 	// endregion
 }

@@ -45,11 +45,6 @@ public class FamilyDTO extends BaseDTO<Family> {
 
 	@Getter
 	@Setter
-	@JsonProperty("birth")
-	private 	Date 				birth;
-
-	@Getter
-	@Setter
 	@JsonProperty("habitation_type")
 	private 	EHabitationType		habitationType;
 

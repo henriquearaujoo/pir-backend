@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.enums.EGender;
 import com.samsung.fas.pir.persistence.models.Child;
+import com.samsung.fas.pir.persistence.models.User;
 import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -126,6 +127,12 @@ public class ChildDTO extends BaseDTO<Child> {
 
 	@Getter
 	@Setter
+	@JsonProperty("agent")
+	@Valid
+	private 	UserDTO 					agent;
+
+	@Getter
+	@Setter
 	@JsonProperty("answers")
 	@Valid
 	private		List<SAnswerDTO>			answersDTO;
@@ -148,10 +155,17 @@ public class ChildDTO extends BaseDTO<Child> {
 
 	public ChildDTO(Child child, Device device, boolean detailed) {
 		super(child);
-		setAgentUUID(child.getResponsibleAgent() != null? child.getResponsibleAgent().getUuid() : null);
-		setFamilyDTO(detailed? new FamilyDTO(child.getFamily(), device, false) : null);
-		setAnswersDTO(child.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
-		setVisitsDTO(child.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
+		if (!device.isNormal()) {
+			setAgentUUID(child.getResponsibleAgent() != null? child.getResponsibleAgent().getUuid() : null);
+			setFamilyUUID(child.getFamily() != null? child.getFamily().getUuid() : null);
+			setAnswersDTO(child.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
+			setVisitsDTO(child.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
+		} else {
+			setFamilyDTO(detailed? new FamilyDTO(child.getFamily(), device, false) : null);
+			setAgent(child.getResponsibleAgent() != null? new UserDTO(child.getResponsibleAgent(), device, false) : null);
+			setAnswersDTO(child.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
+			setVisitsDTO(child.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
+		}
 	}
 
 	@JsonIgnore

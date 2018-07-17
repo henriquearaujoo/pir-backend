@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.rest.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,6 +15,7 @@ import org.springframework.mobile.device.Device;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @DTO(Pregnant.class)
@@ -77,11 +79,6 @@ public class PregnantDTO extends BaseDTO<Pregnant> {
 
 	@Getter
 	@Setter
-	@JsonProperty("planned")
-	private 	boolean						planned;
-
-	@Getter
-	@Setter
 	@JsonProperty("illness_family_register")
 	private 	String						illnessFamilyRegister;
 
@@ -138,8 +135,13 @@ public class PregnantDTO extends BaseDTO<Pregnant> {
 	// region DTO Relations
 	@Getter
 	@Setter
-	@JsonProperty("community")
-	private 	CommunityDTO				communityDTO;
+	@JsonProperty("agent_id")
+	private		UUID						agentUUID;
+
+	@Getter
+	@Setter
+	@JsonProperty("family_id")
+	private		UUID						familyUUID;
 
 	@Getter
 	@Setter
@@ -163,8 +165,22 @@ public class PregnantDTO extends BaseDTO<Pregnant> {
 
 	public PregnantDTO(Pregnant pregnant, Device device, boolean detailed) {
 		super(pregnant);
-		setFamilyDTO(new FamilyDTO(pregnant.getFamily(), device, false));
-		setPregnanciesDTO(pregnant.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()));
-		setResponsibleAgentDTO(new UserDTO(pregnant.getResponsibleAgent(), device, false));
+		if (!device.isNormal()) {
+			setFamilyUUID(pregnant.getFamily() != null? pregnant.getFamily().getUuid() : null);
+			setAgentUUID(pregnant.getResponsibleAgent() != null? pregnant.getResponsibleAgent().getUuid() : null);
+			setPregnanciesDTO(pregnant.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()));
+		} else {
+			setFamilyDTO(detailed? pregnant.getFamily() != null? new FamilyDTO(pregnant.getFamily(), device, false) : null : null);
+			setResponsibleAgentDTO(pregnant.getResponsibleAgent() != null? new UserDTO(pregnant.getResponsibleAgent(), device, false) : null);
+			setPregnanciesDTO(pregnant.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()));
+		}
+	}
+
+	@JsonIgnore
+	@Override
+	public Pregnant getModel() {
+		Pregnant model = super.getModel();
+		model.setPregnancies(getPregnanciesDTO() != null? getPregnanciesDTO().stream().map(PregnancyDTO::getModel).collect(Collectors.toList()) : null);
+		return model;
 	}
 }

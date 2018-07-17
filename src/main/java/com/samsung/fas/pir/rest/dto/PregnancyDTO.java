@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @DTO(Pregnancy.class)
@@ -24,7 +25,7 @@ public class PregnancyDTO extends BaseDTO<Pregnancy> {
 	@Getter
 	@Setter
 	@JsonProperty("external_id")
-	private		long				mobileId;
+	private		long				externalID;
 
 	@Getter
 	@Setter
@@ -33,13 +34,34 @@ public class PregnancyDTO extends BaseDTO<Pregnancy> {
 
 	@Getter
 	@Setter
-	@JsonProperty("mother")
-	private 	PregnantDTO 		pregnantDTO;
+	@JsonProperty("weight_before")
+	private 	double				weightBeforePregnancy;
 
 	@Getter
 	@Setter
-	@JsonProperty(value = "agent", access = JsonProperty.Access.READ_ONLY)
-	private 	UserDTO				agentDTO;
+	@JsonProperty("is_planned")
+	private 	boolean				planned;
+
+	@Getter
+	@Setter
+	@JsonProperty("complications")
+	private 	String				complications;
+
+	@Getter
+	@Setter
+	@JsonProperty("vaccines")
+	private 	String				vaccines;
+
+	// region Relations
+	@Getter
+	@Setter
+	@JsonProperty("pregnant_id")
+	private		UUID				pregnantUUID;
+
+	@Getter
+	@Setter
+	@JsonProperty("family")
+	private 	PregnantDTO			pregnantDTO;
 
 	@Getter
 	@Setter
@@ -52,17 +74,23 @@ public class PregnancyDTO extends BaseDTO<Pregnancy> {
 	@JsonProperty("visits")
 	@Valid
 	private		List<VisitDTO>		visitsDTO;
+	// endregion
 
 	public PregnancyDTO() {
 		super();
 	}
 
-	public PregnancyDTO(Pregnancy entity, Device device, boolean detailed) {
-		super(entity);
-		setAnswersDTO(entity.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
-		setVisitsDTO(entity.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
-		setPregnantDTO(detailed? new PregnantDTO(entity.getPregnant(), device, false) : null);
-//		setAgent(entity.getAgent() != null? new UserDTO(entity.getAgent(), device, false) : null);
+	public PregnancyDTO(Pregnancy pregnancy, Device device, boolean detailed) {
+		super(pregnancy);
+		if (!device.isNormal()) {
+			setPregnantUUID(pregnancy.getPregnant() != null? pregnancy.getPregnant().getUuid() : null);
+			setAnswersDTO(pregnancy.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
+			setVisitsDTO(pregnancy.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
+		} else {
+			setPregnantDTO(pregnancy.getPregnant() != null? new PregnantDTO(pregnancy.getPregnant(), device, false) : null);
+			setAnswersDTO(pregnancy.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
+			setVisitsDTO(pregnancy.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
+		}
 	}
 
 	@JsonIgnore

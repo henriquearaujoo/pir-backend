@@ -13,6 +13,8 @@ import javax.annotation.Nonnull;
 
 @Repository
 public interface IPregnant extends IBaseRepository<Pregnant, Long, QPregnant> {
+	long countAllByCodeStartingWith(String prefix);
+
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QPregnant root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

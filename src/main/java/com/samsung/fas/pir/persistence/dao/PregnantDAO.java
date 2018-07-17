@@ -16,4 +16,8 @@ public class PregnantDAO extends BaseDAO<Pregnant, Long, IPregnant, QPregnant> {
 	public PregnantDAO(IPregnant repository) {
 		super(repository);
 	}
+
+	public String getSequentialCode(String prefix) {
+		return prefix.concat(String.format("%06d", getRepository().countAllByCodeStartingWith(prefix) + 1L));
+	}
 }

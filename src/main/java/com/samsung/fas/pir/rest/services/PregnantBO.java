@@ -32,7 +32,7 @@ public class PregnantBO extends BaseBO<Pregnant, PregnantDAO, PregnantDTO, Long>
 	private 	PregnancyBO		pregnancyBO;
 
 	@Autowired
-	protected PregnantBO(PregnantDAO dao, ModelMapper mapper) {
+	protected PregnantBO(PregnantDAO dao, PregnancyBO pregnancyBO, ModelMapper mapper) {
 		super(dao);
 		setMapper(mapper);
 		setPregnancyBO(pregnancyBO);
@@ -59,14 +59,15 @@ public class PregnantBO extends BaseBO<Pregnant, PregnantDAO, PregnantDTO, Long>
 	}
 
 	Pregnant setupPregnant(Pregnant model, Family family) {
+		model.setCode(getDao().getSequentialCode(family.getCommunity().getUnity().getAbbreviation().toUpperCase().concat("G")));
 		model.setFamily(family);
-		model.setPregnancies(null);
+		model.setPregnancies(setupPregnancy(model, model.getPregnancies()));
 		return model;
 	}
 
 	Pregnant setupPregnant(Pregnant pregnant, Pregnant model, Family family) {
 		getMapper().map(model, pregnant);
-		model.setPregnancies(null);
+		pregnant.setPregnancies(setupPregnancy(pregnant, model.getPregnancies()));
 		return model;
 	}
 

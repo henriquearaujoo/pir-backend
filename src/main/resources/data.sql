@@ -1,7 +1,7 @@
 INSERT INTO pages (title_url, url_path)
 VALUES
 	('Lista de Capítulos', 'capitulos'),
-	('Registro de Capítulos', 'capitulos/dashboard'),
+	('Registro de Capítulos', 'capitulos/registro'),
 	('Lista de Usuários', 'usuarios'),
 	('Registro de Usuários', 'usuarios/registro'),
 	('Detalhes do Usuário', 'usuarios/detalhes'),

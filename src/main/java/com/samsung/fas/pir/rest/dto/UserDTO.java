@@ -115,7 +115,7 @@ public class UserDTO extends BaseDTO<User> {
 		setEntityDTO(detailed && user.getEntity() != null? new EntityDTO(user.getEntity(), device, false) : null);
 		setAddressDTO(detailed? user.getAddress() != null? new AddressDTO(user.getAddress(), device, false) : null : null);
 		setLogin(detailed? user.getAccount().getUsername() : null);
-		setVisitsDTO(detailed && user.getVisits() != null? user.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()) : null);
+//		setVisitsDTO(detailed && user.getVisits() != null? user.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()) : null);
 	}
 
 	@JsonIgnore

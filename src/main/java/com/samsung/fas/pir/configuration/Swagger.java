@@ -23,7 +23,6 @@ public class Swagger {
 		return new Docket(DocumentationType.SWAGGER_2)
 			   	.select()
 			   	.apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
-				.apis(RequestHandlerSelectors.withClassAnnotation(Controller.class))
 			   	.paths(PathSelectors.ant("/rest/**"))
 			   	.build()
 			   	.pathMapping("/")
