@@ -158,7 +158,12 @@ public class CommunityDTO extends BaseDTO<Community> {
 		super(community);
 		setCityDTO(community.getCity() != null? new CityDTO(community.getCity(), device, false) : null);
 		setUnityDTO(community.getUnity() != null? new ConservationUnityDTO(community.getUnity(), device, false) : null);
-		setFamilyDTO(device != null && !device.isNormal()? community.getFamily() != null? community.getFamily().stream().map(item -> new FamilyDTO(item, device, false)).collect(Collectors.toList()) : new ArrayList<>() : null);
+		setFamilyDTO(!device.isNormal()? community.getFamily().stream().map(item -> new FamilyDTO(item, device, false)).collect(Collectors.toList()) : null);
+		if (getUnityDTO() != null) {
+			getUnityDTO().setCitiesDTO(null);
+			getUnityDTO().setRegionalDTO(new RegionalDTO(community.getUnity().getRegional(), device, false));
+			getUnityDTO().getRegionalDTO().setUnitiesDTO(null);
+		}
 	}
 
 	@JsonIgnore

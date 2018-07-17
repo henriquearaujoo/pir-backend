@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.graph.annotations.Alias;
+import com.samsung.fas.pir.persistence.enums.ECivilState;
 import com.samsung.fas.pir.persistence.models.base.Base;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,7 @@ import java.util.Date;
 public class Pregnant extends Base {
 	@Getter
 	@Setter
-	@Transient
+	@Column
 	private		long						externalID;
 
 	@Getter
@@ -45,20 +46,8 @@ public class Pregnant extends Base {
 	@Getter
 	@Setter
 	@Column
-	@Alias("Etnia - Raça - Cor")
-	private 	String						ethnicity;
-
-	@Getter
-	@Setter
-	@Column
 	@Alias("Estado Civil")
-	private 	String						civilState;
-
-	@Getter
-	@Setter
-	@Column
-	@Alias("Altura")
-	private 	double						height;
+	private 	ECivilState					civilState;
 
 	@Getter
 	@Setter
@@ -71,78 +60,6 @@ public class Pregnant extends Base {
 	@Column
 	@Alias("Responsável - Telefone")
 	private 	String						phoneOwner;
-
-	@Getter
-	@Setter
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
-	@Alias("Trabalha Fora de Casa")
-	private 	boolean						workOutside;
-
-	@Getter
-	@Setter
-	@Column
-	@Alias("Escolaridade")
-	private 	String 						scholarity;
-
-	@Getter
-	@Setter
-	@Column(columnDefinition = "TEXT")
-	@Alias("Família - Casos")
-	private 	String						illnessFamilyRegister;
-
-	@Getter
-	@Setter
-	@Column
-	@Alias("No. de Gestações Prévias")
-	private 	int							previousPregnanciesCount;
-
-	@Getter
-	@Setter
-	@Column
-	@Alias("No. de Abortos")
-	private 	int							abortionCount;
-
-	@Getter
-	@Setter
-	@Column
-	@Alias("No. de Partos Normais")
-	private 	int							normalBirthCount;
-
-	@Getter
-	@Setter
-	@Column
-	@Alias("No. de Partos (Cesárea/Outros)")
-	private 	int							cesareanBirthCount;
-
-	@Getter
-	@Setter
-	@Column
-	@Alias("No. de Nascidos Vivos")
-	private 	int							bornAliveCount;
-
-	@Getter
-	@Setter
-	@Column
-	@Alias("No. de Crianças que Vivem")
-	private 	int							childAliveCount;
-
-	@Getter
-	@Setter
-	@Column
-	@Alias("No. de Crianças que Morrem na 1a Semana")
-	private 	int							deadFirstWeekCount;
-
-	@Getter
-	@Setter
-	@Column
-	@Alias("No. de Crianças que Morrem depois da 1a Semana")
-	private 	int							deadAfterFirstWeekCount;
-
-	@Getter
-	@Setter
-	@Column
-	@Alias("No. de Crianças Nascidas Mortas")
-	private 	int							bornDeadCount;
 
 	// region Relations
 	@Getter

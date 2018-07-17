@@ -56,63 +56,13 @@ public class ChildDTO extends BaseDTO<Child> {
 
 	@Getter
 	@Setter
-	@JsonProperty("ethnicity")
-	private 	String						ethnicity;
-
-	@Getter
-	@Setter
 	@JsonProperty("mother_name")
 	private 	String						motherFullName;
 
 	@Getter
 	@Setter
-	@JsonProperty("has_registration")
-	private 	boolean						registration;
-
-	@Getter
-	@Setter
-	@JsonProperty("sus_number")
-	private 	String						susNumber;
-
-	@Getter
-	@Setter
-	@JsonProperty("ub_frequented")
-	private 	String						frequentedUB;
-
-	@Getter
-	@Setter
-	@JsonProperty("ub_record")
-	private 	String						recordUB;
-
-	@Getter
-	@Setter
-	@JsonProperty("had_prenatal_care")
-	private 	boolean						prenatalCare;
-
-	@Getter
-	@Setter
-	@JsonProperty("birth_type")
-	private 	String						birthType;
-
-	@Getter
-	@Setter
-	@JsonProperty("had_episiotomy")
-	private 	boolean						episiotomy;
-
-	@Getter
-	@Setter
-	@JsonProperty("bleeding")
-	private 	String						bleeding;
-
-	@Getter
-	@Setter
-	@JsonProperty("deficiencies")
-	private 	String						deficiencies;
-
-	@Getter
-	@Setter
-	@JsonProperty("intercurrence")
-	private 	String						intercurrence;
+	@JsonProperty("father_name")
+	private 	String						fatherFullName;
 
 	// region Relations
 	@Getter

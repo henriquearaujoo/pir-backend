@@ -48,10 +48,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 			chain.doFilter(request, response);
 
 			if (user != null && latitude != null && longitude != null) {
-				user.setFcmToken(fcmToken);
-				user.setLatitude(latitude);
-				user.setLongitude(longitude);
-				userDAO.save(user);
+//				user.setFcmToken(fcmToken);
+//				user.setLatitude(latitude);
+//				user.setLongitude(longitude);
+//				userDAO.save(user);
 			}
 
 		} catch (IOException | ServletException | BadCredentialsException e) {

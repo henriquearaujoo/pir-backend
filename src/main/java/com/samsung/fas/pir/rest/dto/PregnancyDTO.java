@@ -32,26 +32,6 @@ public class PregnancyDTO extends BaseDTO<Pregnancy> {
 	@JsonProperty("registered_at")
 	private 	Date				registeredAt;
 
-	@Getter
-	@Setter
-	@JsonProperty("weight_before")
-	private 	double				weightBeforePregnancy;
-
-	@Getter
-	@Setter
-	@JsonProperty("is_planned")
-	private 	boolean				planned;
-
-	@Getter
-	@Setter
-	@JsonProperty("complications")
-	private 	String				complications;
-
-	@Getter
-	@Setter
-	@JsonProperty("vaccines")
-	private 	String				vaccines;
-
 	// region Relations
 	@Getter
 	@Setter

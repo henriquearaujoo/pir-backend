@@ -21,7 +21,7 @@ import java.util.Date;
 public class Child extends Base {
 	@Getter
 	@Setter
-	@Transient
+	@Column
 	private		long								externalID;
 
 	@Getter
@@ -53,74 +53,14 @@ public class Child extends Base {
 	@Getter
 	@Setter
 	@Column
-	@Alias("Etnia - Raça - Cor")
-	private 	String								ethnicity;
-
-	@Getter
-	@Setter
-	@Column
 	@Alias("Nome Completo da Mãe")
 	private 	String								motherFullName;
 
 	@Getter
 	@Setter
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
-	@Alias("Certidão de Nascimento - Registro")
-	private 	boolean								registration;
-
-	@Getter
-	@Setter
-	@Column(columnDefinition = "VARCHAR(15)")
-	@Alias("Certidão de Nascimento - Registro")
-	private 	String								susNumber;
-
-	@Getter
-	@Setter
 	@Column
-	@Alias("UB Frequentada")
-	private 	String								frequentedUB;
-
-	@Getter
-	@Setter
-	@Column
-	@Alias("Prontuário UB")
-	private 	String								recordUB;
-
-	@Getter
-	@Setter
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
-	@Alias("Acompanhamento Pré-Natal")
-	private 	boolean								prenatalCare;
-
-	@Getter
-	@Setter
-	@Column
-	@Alias("Tipo de Parto")
-	private 	String								birthType;
-
-	@Getter
-	@Setter
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
-	@Alias("Teve Episiotomia?")
-	private 	boolean								episiotomy;
-
-	@Getter
-	@Setter
-	@Column
-	@Alias("Sangramento")
-	private 	String								bleeding;
-
-	@Getter
-	@Setter
-	@Column(columnDefinition = "TEXT")
-	@Alias("Deficiências")
-	private 	String								deficiencies;
-
-	@Getter
-	@Setter
-	@Column(columnDefinition = "TEXT")
-	@Alias("Intercorrência no Parto")
-	private 	String								intercurrence;
+	@Alias("Nome Completo do Pai")
+	private 	String								fatherFullName;
 
 	// region Relations
 	@Getter
@@ -147,11 +87,4 @@ public class Child extends Base {
 	@OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
 	@Alias("Formulário - Respostas")
 	private 	Collection<SAnswer>					answers					= new ArrayList<>();
-
-//	@Getter
-//	@Setter
-//	@ManyToMany(mappedBy = "children", cascade = {CascadeType.PERSIST})
-//	@Alias("Deficiência Congenita")
-//	private 	Collection<CongenitalDeficiency>	deficiencies			= new ArrayList<>();
-	// endregion
 }

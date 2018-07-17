@@ -105,8 +105,8 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 
 		user.setName(model.getName());
 		user.setEmail(model.getEmail());
-		user.setLatitude(model.getLatitude());
-		user.setLongitude(model.getLongitude());
+//		user.setLatitude(model.getLatitude());
+//		user.setLongitude(model.getLongitude());
 		user.getAddress().setComplementAddress(model.getAddress().getComplementAddress());
 		user.getAddress().setNeighborhoodAddress(model.getAddress().getNeighborhoodAddress());
 		user.getAddress().setNumberAddress(model.getAddress().getNumberAddress());

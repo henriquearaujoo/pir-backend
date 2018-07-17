@@ -44,18 +44,8 @@ public class PregnantDTO extends BaseDTO<Pregnant> {
 
 	@Getter
 	@Setter
-	@JsonProperty("ethnicity")
-	private 	String						ethnicity;
-
-	@Getter
-	@Setter
 	@JsonProperty("civil_state")
 	private 	ECivilState 				civilState;
-
-	@Getter
-	@Setter
-	@JsonProperty("height")
-	private 	double						height;
 
 	@Getter
 	@Setter
@@ -66,71 +56,6 @@ public class PregnantDTO extends BaseDTO<Pregnant> {
 	@Setter
 	@JsonProperty("phone_owner")
 	private 	String						phoneResponsible;
-
-	@Getter
-	@Setter
-	@JsonProperty("work_outside")
-	private 	boolean						workOutside;
-
-	@Getter
-	@Setter
-	@JsonProperty("scholarity")
-	private 	String 						scholarity;
-
-	@Getter
-	@Setter
-	@JsonProperty("illness_family_register")
-	private 	String						illnessFamilyRegister;
-
-	@Getter
-	@Setter
-	@JsonProperty("previous_pregnancies_count")
-	private 	int							previousPregnanciesCount;
-
-	@Getter
-	@Setter
-	@JsonProperty("abortion_count")
-	private 	int							abortionCount;
-
-	@Getter
-	@Setter
-	@JsonProperty("birth_count")
-	private 	int							birthCount;
-
-	@Getter
-	@Setter
-	@JsonProperty("normal_birth_count")
-	private 	int							normalBirthCount;
-
-	@Getter
-	@Setter
-	@JsonProperty("cesarean_birth_count")
-	private 	int							cesareanBirthCount;
-
-	@Getter
-	@Setter
-	@JsonProperty("born_alive_count")
-	private 	int							bornAliveCount;
-
-	@Getter
-	@Setter
-	@JsonProperty("child_alive_count")
-	private 	int							childAliveCount;
-
-	@Getter
-	@Setter
-	@JsonProperty("dead_first_week_count")
-	private 	int							deadFirstWeekCount;
-
-	@Getter
-	@Setter
-	@JsonProperty("dead_after_first_week_count")
-	private 	int							deadAfterFirstWeekCount;
-
-	@Getter
-	@Setter
-	@JsonProperty("born_dead_count")
-	private 	int							bornDeadCount;
 
 	// region DTO Relations
 	@Getter
