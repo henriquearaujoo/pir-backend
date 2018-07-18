@@ -22,5 +22,6 @@ public interface ICommunity extends IBaseRepository<Community, Long, QCommunity>
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QCommunity root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+		bindings.bind(root.uuid).as("id").withDefaultBinding();
 	}
 }

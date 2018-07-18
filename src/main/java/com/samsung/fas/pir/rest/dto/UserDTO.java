@@ -84,24 +84,6 @@ public class UserDTO extends BaseDTO<User> {
 	@Valid
 	private 	EntityDTO 	entityDTO;
 
-	@ApiModelProperty(readOnly = true, hidden = true)
-	@Getter
-	@Setter
-	@JsonProperty("visits")
-	private 	Collection<VisitDTO>	visitsDTO;
-
-	@ApiModelProperty(value = "For AGENT Only")
-	@Getter
-	@Setter
-	@JsonProperty("latitude")
-	private 	Double					latitude;
-
-	@ApiModelProperty(value = "For AGENT Only")
-	@Getter
-	@Setter
-	@JsonProperty("longitude")
-	private 	Double					longitude;
-
 	public UserDTO() {
 		super();
 	}
@@ -111,11 +93,10 @@ public class UserDTO extends BaseDTO<User> {
 		setPassword(null);
 		setActive(user.getAccount().isEnabled() && user.getAccount().isAccountNonExpired() && user.getAccount().isAccountNonLocked() && user.getAccount().isCredentialsNonExpired());
 		setProfileDTO(new ProfileDTO(user.getAccount().getProfile(), device, false));
-		setPersonDTO(detailed && user.getPerson() != null? new PersonDTO(user.getPerson(), false) : null);
+		setPersonDTO(detailed && user.getPerson() != null? new PersonDTO(user.getPerson(), device, false) : null);
 		setEntityDTO(detailed && user.getEntity() != null? new EntityDTO(user.getEntity(), device, false) : null);
 		setAddressDTO(detailed? user.getAddress() != null? new AddressDTO(user.getAddress(), device, false) : null : null);
 		setLogin(detailed? user.getAccount().getUsername() : null);
-//		setVisitsDTO(detailed && user.getVisits() != null? user.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()) : null);
 	}
 
 	@JsonIgnore

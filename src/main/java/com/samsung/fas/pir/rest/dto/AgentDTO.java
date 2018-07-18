@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.rest.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,9 +10,9 @@ import com.samsung.fas.pir.persistence.models.Agent;
 import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.mobile.device.Device;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @DTO(Agent.class)
@@ -22,12 +23,6 @@ public class AgentDTO extends BaseDTO<Agent> {
 	@Setter
 	@JsonProperty(value = "code", access = JsonProperty.Access.READ_ONLY)
 	private 	String					code;
-
-	@Getter
-	@Setter
-	@JsonProperty("cpf")
-	@CPF(message = "agent.invalid.cpf")
-	private		String					cpf;
 
 	@Getter
 	@Setter
@@ -59,11 +54,40 @@ public class AgentDTO extends BaseDTO<Agent> {
 	@JsonProperty("longitude")
 	private 	Double					longitude;
 
+	// region Relations
+	@Getter
+	@Setter
+	@JsonProperty(value = "person", access = JsonProperty.Access.READ_ONLY)
+	private 	PersonDTO				personDTO;
+
+	@Getter
+	@Setter
+	@JsonProperty(value = "unity")
+	@NotNull(message = "unity.missing")
+	private 	ConservationUnityDTO	unityDTO;
+
+	@Getter
+	@Setter
+	@JsonProperty(value = "city")
+	@NotNull(message = "city.missing")
+	private 	CityDTO					cityDTO;
+	// endregion
+
 	public AgentDTO() {
 		super();
 	}
 
 	public AgentDTO(Agent agent, Device device, boolean detailed) {
 		super(agent);
+		setPersonDTO(new PersonDTO(agent.getPerson(), device, false));
+	}
+
+	@JsonIgnore
+	@Override
+	public Agent getModel() {
+		Agent	agent	= super.getModel();
+		agent.setUnity(getUnityDTO().getModel());
+		agent.setCity(getCityDTO().getModel());
+		return agent;
 	}
 }

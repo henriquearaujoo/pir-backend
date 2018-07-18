@@ -63,11 +63,12 @@ public class SurveyBO extends BaseBO<Survey, SurveyDAO, SurveyDTO, Long> {
 						}
 						amodel.setQuestion(question);
 						return amodel;
-					}).sorted(Comparator.comparingLong(Base::getId)).collect(Collectors.toList()));
+					}).collect(Collectors.toList()));
 					return question;
 				}
+				item.setSurvey(survey);
 				return item;
-			}).sorted(Comparator.comparingLong(Base::getId)).collect(Collectors.toList()));
+			}).collect(Collectors.toList()));
 			return new SurveyDTO(getDao().save(survey), device, true);
 		}
 		return new SurveyDTO(getDao().save(model), device, true);

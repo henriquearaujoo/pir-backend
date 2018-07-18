@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 
 @Entity
-@Table(name = "agents", uniqueConstraints = {@UniqueConstraint(name = "agent_cpf", columnNames = {"cpf"})})
+@Table(name = "agents")
 @DynamicUpdate
 @DynamicInsert
 @Alias("Agente")
@@ -24,12 +24,6 @@ public class Agent extends Base {
 	@Column(nullable = false, length = 12)
 	@Alias("Matrícula")
 	private 	String					code;
-
-	@Getter
-	@Setter
-	@Column(nullable = false, length = 11)
-	@Alias("CPF")
-	private		String					cpf;
 
 	@Getter
 	@Setter
@@ -77,8 +71,8 @@ public class Agent extends Base {
 	@Setter
 	@OneToOne(optional = false)
 	@MapsId
-	@Alias("Usuário")
-	private 	User					user;
+	@Alias("Usuário - PF")
+	private 	Person					person;
 
 	@Getter
 	@Setter

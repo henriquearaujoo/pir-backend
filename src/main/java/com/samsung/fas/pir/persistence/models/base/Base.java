@@ -6,17 +6,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
 import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.persistence.ForeignKey;
 import java.util.Date;
-import java.util.Optional;
 import java.util.UUID;
 
 @MappedSuperclass
@@ -25,6 +21,7 @@ public abstract class Base {
 	@Setter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@OrderColumn
 	private		Long			id;
 
 	@Getter
@@ -41,7 +38,6 @@ public abstract class Base {
 
 	@Getter
 	@Setter
-	@CreatedDate
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -49,7 +45,6 @@ public abstract class Base {
 
 	@Getter
 	@Setter
-	@LastModifiedDate
 	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -59,14 +54,14 @@ public abstract class Base {
 	@Setter
 	@CreatedBy
 	@ManyToOne
-	@JoinColumn(name = "created_by", updatable = false, foreignKey = @ForeignKey(name = "fk_created_by"))
+	@JoinColumn(updatable = false, foreignKey = @ForeignKey(name = "fk_created_by"))
 	private 	User 			createdBy	= null;
 
 	@Getter
 	@Setter
 	@LastModifiedBy
 	@ManyToOne
-	@JoinColumn(name = "modified_by", foreignKey = @ForeignKey(name = "fk_modified_by"))
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_modified_by"))
 	private 	User 			modifiedBy	= null;
 
 	@PrePersist

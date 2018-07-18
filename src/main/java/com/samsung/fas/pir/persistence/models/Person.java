@@ -6,15 +6,23 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.GeneratorType;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "person", uniqueConstraints = @UniqueConstraint(columnNames = "cpf", name = "cpf"))
+@Table(name = "person", uniqueConstraints = {@UniqueConstraint(name = "cpf", columnNames = {"cpf"})}, indexes = @Index(name = "cpf", columnList = "cpf"))
 @DynamicUpdate
 @DynamicInsert
 @Alias("Pessoa Física")
 public class Person extends Base {
+	@Getter
+	@Setter
+	@Column(name="cpf", length=11)
+	@Alias("CPF")
+	private		String			cpf;
+
+	// region Relations
 	@Getter
 	@Setter
 	@OneToOne(optional = false)
@@ -24,19 +32,8 @@ public class Person extends Base {
 
 	@Getter
 	@Setter
-	@Column(name="rg", length=32)
-	@Alias("RG")
-	private		String			rg;
-	
-	@Getter
-	@Setter
-	@Column(name="rg_emitter")
-	@Alias("Emissor RG")
-	private		String			emitter;
-	
-	@Getter
-	@Setter
-	@Column(name="cpf", length=11)
-	@Alias("CPF")
-	private		String			cpf;
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
+	@Alias("PF")
+	private 	Agent			agent;
+	// endregion
 }

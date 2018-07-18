@@ -16,5 +16,6 @@ public interface ISQuestion extends IBaseRepository<SQuestion, Long, QSQuestion>
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QSQuestion root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+		bindings.bind(root.uuid).as("id").withDefaultBinding();
 	}
 }

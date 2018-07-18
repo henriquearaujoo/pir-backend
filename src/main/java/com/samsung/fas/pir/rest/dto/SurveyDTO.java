@@ -7,12 +7,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.SQuestion;
 import com.samsung.fas.pir.persistence.models.Survey;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.mobile.device.Device;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +38,7 @@ public class SurveyDTO extends BaseDTO<Survey> {
 
 	public SurveyDTO(Survey entity, Device device, boolean detailed) {
 		super(entity);
-		setQuestionsDTO(entity.getQuestions().stream().map(item -> new SQuestionDTO(item, device, false)).collect(Collectors.toList()));
+		setQuestionsDTO(entity.getQuestions().stream().sorted(Comparator.comparingLong(Base::getId)).map(item -> new SQuestionDTO(item, device, false)).collect(Collectors.toList()));
 	}
 
 	@JsonIgnore

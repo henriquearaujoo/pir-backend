@@ -23,7 +23,7 @@ public interface IUser extends IBaseRepository<User, Long, QUser> {
 		bindings.bind(root.account.enabled).as("status").withDefaultBinding();
 		bindings.bind(root.account.profile.uuid).as("profile").withDefaultBinding();
 		bindings.bind(root.address.city.name).as("city").withDefaultBinding();
-		bindings.bind(root.registerDate).as("date").all((path, values) -> Optional.ofNullable(path.between(values)));
+//		bindings.bind(root.registerDate).as("date").all((path, values) -> Optional.ofNullable(path.between(values)));
 //		bindings.excluding(
 //				root.account.password,
 //				root.account.profile.whoCreated,

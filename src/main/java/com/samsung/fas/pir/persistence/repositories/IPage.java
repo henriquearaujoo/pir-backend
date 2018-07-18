@@ -16,5 +16,6 @@ public interface IPage extends IBaseRepository<Page, Long, QPage> {
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QPage root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+		bindings.bind(root.uuid).as("id").withDefaultBinding();
 	}
 }

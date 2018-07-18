@@ -16,5 +16,6 @@ public interface ISAlternative extends IBaseRepository<SAlternative, Long, QSAlt
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QSAlternative root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+		bindings.bind(root.uuid).as("id").withDefaultBinding();
 	}
 }

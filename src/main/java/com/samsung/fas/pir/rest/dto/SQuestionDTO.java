@@ -7,12 +7,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.SAlternative;
 import com.samsung.fas.pir.persistence.models.SQuestion;
+import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.mobile.device.Device;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,8 +58,8 @@ public class SQuestionDTO extends BaseDTO<SQuestion> {
 
 	public SQuestionDTO(SQuestion entity, Device device, boolean detailed) {
 		super(entity);
-		setAlternativesDTO(entity.getAlternatives().stream().map(alternative -> new SAlternativeDTO(alternative, device, false)).collect(Collectors.toList()));
-		setAnswersDTO(detailed? entity.getAnswers().stream().map(answer -> new SAnswerDTO(answer, device, false)).collect(Collectors.toList()) : null);
+		setAlternativesDTO(entity.getAlternatives().stream().sorted(Comparator.comparingLong(Base::getId)).map(alternative -> new SAlternativeDTO(alternative, device, false)).collect(Collectors.toList()));
+		setAnswersDTO(detailed? entity.getAnswers().stream().sorted(Comparator.comparingLong(Base::getId)).map(answer -> new SAnswerDTO(answer, device, false)).collect(Collectors.toList()) : null);
 	}
 
 	@JsonIgnore

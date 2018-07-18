@@ -13,10 +13,9 @@ import javax.annotation.Nonnull;
 
 @Repository
 public interface IPregnancy extends IBaseRepository<Pregnancy, Long, QPregnancy> {
-//	Pregnancy findByExternalID(long mobileID);
-
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QPregnancy root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+		bindings.bind(root.uuid).as("id").withDefaultBinding();
 	}
 }

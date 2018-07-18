@@ -10,7 +10,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CPF;
+import org.springframework.mobile.device.Device;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
 @DTO(Person.class)
@@ -19,28 +21,24 @@ import javax.validation.constraints.Pattern;
 public class PersonDTO extends BaseDTO<Person> {
 	@Getter
 	@Setter
-	@JsonProperty("rg")
-	@NotBlank(message="user.rg.missing")
-	private		String			rg;
-
-	@Getter
-	@Setter
-	@JsonProperty("emitter")
-	@NotBlank(message="user.emitter.missing")
-	private		String			emitter;
-
-	@Getter
-	@Setter
 	@JsonProperty("cpf")
 	@CPF(message = "user.cpf.invalid")
 	@Pattern(regexp="^([0-9]*)$", message = "user.cpf.invalid.chars")
 	private		String			cpf;
 
+	// region Relations
+	@Getter
+	@Setter
+	@JsonProperty("agent")
+	@Valid
+	private 	AgentDTO		agentDTO;
+	// endregion
+
 	public PersonDTO() {
 		super();
 	}
 
-	public PersonDTO(Person person, boolean detailed) {
+	public PersonDTO(Person person, Device device, boolean detailed) {
 		super(person);
 	}
 }

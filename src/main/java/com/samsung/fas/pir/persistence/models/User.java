@@ -25,6 +25,7 @@ public class User extends Base {
 	@Getter
 	@Setter
 	@Alias("Email")
+	@Column(columnDefinition = "CITEXT")
 	private		String					email;
 
 	@Getter
@@ -36,18 +37,12 @@ public class User extends Base {
 	@Getter
 	@Setter
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
-	@Alias("PF")
-	private 	Agent					agent;
-
-	@Getter
-	@Setter
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
 	@Alias("PJ")
 	private 	LegalEntity				entity;
 
 	@Getter
 	@Setter
-	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "user", orphanRemoval = true)
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
 	@Alias("Endereço")
 	private		Address					address;
 

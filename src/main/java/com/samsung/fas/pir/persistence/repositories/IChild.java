@@ -21,5 +21,6 @@ public interface IChild extends IBaseRepository<Child, Long, QChild> {
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QChild root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+		bindings.bind(root.uuid).as("id").withDefaultBinding();
 	}
 }

@@ -27,6 +27,7 @@ public interface IForm extends IBaseRepository<Form, Long, QForm> {
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QForm root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+		bindings.bind(root.uuid).as("id").withDefaultBinding();
 		bindings.bind(root.ageZone).as("age_zone").withDefaultBinding();
 	}
 }

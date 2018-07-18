@@ -18,5 +18,6 @@ public interface IPregnant extends IBaseRepository<Pregnant, Long, QPregnant> {
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QPregnant root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+		bindings.bind(root.uuid).as("id").withDefaultBinding();
 	}
 }

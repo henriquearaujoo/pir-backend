@@ -20,5 +20,6 @@ public interface IFamily extends IBaseRepository<Family, Long, QFamily> {
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QFamily root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+		bindings.bind(root.uuid).as("id").withDefaultBinding();
 	}
 }

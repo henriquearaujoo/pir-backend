@@ -14,6 +14,7 @@ import com.samsung.fas.pir.rest.services.base.BaseBO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,35 +28,36 @@ import java.util.Collection;
 public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)
-	private		CityDAO			cdao;
+	private		ConservationUnityBO		unityBO;
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)
-	private		ProfileDAO		pdao;
+	private		ProfileBO				profileBO;
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)
-	private 	UserDAO			userDAO;
+	private		PasswordEncoder			encoder;
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)
-	private		PasswordEncoder	encoder;
+	private 	ModelMapper 			mapper;
 
 	@Autowired
-	public UserBO(UserDAO dao, CityDAO cityDAO, ProfileDAO profileDAO, UserDAO userDAO, PasswordEncoder encoder) {
+	public UserBO(UserDAO dao, ConservationUnityBO unityBO, ProfileBO profileBO, PasswordEncoder encoder, ModelMapper mapper) {
 		super(dao);
-		setCdao(cityDAO);
-		setPdao(profileDAO);
-		setUserDAO(userDAO);
+		setUnityBO(unityBO);
+		setProfileBO(profileBO);
 		setEncoder(encoder);
+		setMapper(mapper);
 	}
 
 	@Override
 	public UserDTO save(UserDTO create, Device device, UserDetails principal) {
 		User		model		= create.getModel();
 		String		password	= create.getPassword();
-		Profile	 	profile		= pdao.findOne(create.getProfileUUID());
-		City 		city		= cdao.findOne(create.getAddressDTO().getCityUUID());
+		Profile	 	profile		= getProfileBO().getDao().findOne(create.getProfileUUID());
+
+		City 		city		= getUnityBO().getCityDAO().findOne(create.getAddressDTO().getCityUUID());
 		Account 	account		= new Account();
 
 		if (model.getEntity() != null && model.getPerson() != null)
@@ -78,10 +80,16 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 		model.getAddress().setCity(city);
 		model.setAccount(account);
 
-		if (model.getPerson() != null)
+		if (model.getPerson() != null) {
 			model.getPerson().setUser(model);
-		else
+			if (model.getPerson().getAgent() != null) {
+				model.getPerson().getAgent().setPerson(model.getPerson());
+				model.getPerson().getAgent().setUnity(getUnityBO().getDao().findOne(model.getPerson().getAgent().getUnity().getUuid()));
+				model.getPerson().getAgent().setCity(getUnityBO().getCityDAO().findOne(model.getPerson().getAgent().getCity().getUuid()));
+			}
+		} else {
 			model.getEntity().setUser(model);
+		}
 
 		return new UserDTO(getDao().save(model), device, true);
 	}
@@ -91,8 +99,8 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 	public UserDTO update(UserDTO update, Device device, UserDetails principal) {
 		User		model		= update.getModel();
 		User		user		= getDao().findOne(model.getUuid());
-		Profile		profile		= pdao.findOne(update.getProfileUUID());
-		City		city		= cdao.findOne(update.getAddressDTO().getCityUUID());
+		Profile		profile		= getProfileBO().getDao().findOne(update.getProfileUUID());
+		City		city		= getUnityBO().getCityDAO().findOne(update.getAddressDTO().getCityUUID());
 
 		if (model.getEntity() != null && model.getPerson() != null)
 			throw new ServiceException("user.cannotbe.both");
@@ -105,8 +113,6 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 
 		user.setName(model.getName());
 		user.setEmail(model.getEmail());
-//		user.setLatitude(model.getLatitude());
-//		user.setLongitude(model.getLongitude());
 		user.getAddress().setComplementAddress(model.getAddress().getComplementAddress());
 		user.getAddress().setNeighborhoodAddress(model.getAddress().getNeighborhoodAddress());
 		user.getAddress().setNumberAddress(model.getAddress().getNumberAddress());
@@ -130,6 +136,13 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 			model.getPerson().setId(user.getId());
 			user.setPerson(model.getPerson());
 			user.getPerson().setUser(user);
+			user.getPerson().setAgent(model.getPerson().getAgent());
+			if (model.getPerson().getAgent() != null) {
+				getMapper().map(model.getPerson().getAgent(), user.getPerson().getAgent());
+				user.getPerson().getAgent().setPerson(user.getPerson());
+				user.getPerson().getAgent().setUnity(getUnityBO().getDao().findOne(model.getPerson().getAgent().getUnity().getUuid()));
+				user.getPerson().getAgent().setCity(getUnityBO().getCityDAO().findOne(model.getPerson().getAgent().getCity().getUuid()));
+			}
 			user.setEntity(null);
 		}
 

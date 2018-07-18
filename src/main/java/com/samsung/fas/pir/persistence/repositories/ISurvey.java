@@ -16,5 +16,6 @@ public interface ISurvey extends IBaseRepository<Survey, Long, QSurvey> {
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QSurvey root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+		bindings.bind(root.uuid).as("id").withDefaultBinding();
 	}
 }

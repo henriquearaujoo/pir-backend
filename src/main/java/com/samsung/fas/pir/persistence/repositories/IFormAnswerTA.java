@@ -16,5 +16,6 @@ public interface IFormAnswerTA extends IBaseRepository<FormAnswerTA, Long, QForm
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QFormAnswerTA root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+		bindings.bind(root.uuid).as("id").withDefaultBinding();
 	}
 }
