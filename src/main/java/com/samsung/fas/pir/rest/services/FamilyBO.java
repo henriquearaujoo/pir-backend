@@ -72,6 +72,7 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 	}
 
 	private Family setupFamily(Family model, Community community) {
+		model.setCode(getDao().getSequentialCode(community.getUnity().getAbbreviation().toUpperCase().concat("F")));
 		model.setCommunity(community);
 		model.setPregnant(setupPregnant(model, model.getPregnant()));
 		model.setChildren(setupChild(model, model.getChildren()));

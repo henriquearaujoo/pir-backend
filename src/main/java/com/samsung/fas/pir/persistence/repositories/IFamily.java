@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @Repository
 public interface IFamily extends IBaseRepository<Family, Long, QFamily> {
-	Collection<Family> findAllByUuidIn(Collection<UUID> collection);
+	long countAllByCodeStartingWith(String prefix);
 
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QFamily root) {

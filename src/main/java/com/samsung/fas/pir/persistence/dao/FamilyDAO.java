@@ -39,18 +39,7 @@ public class FamilyDAO extends BaseDAO<Family, Long, IFamily, QFamily> {
 		setManager(manager);
 	}
 
-	public Collection<Family> findAllIn(Collection<UUID> collection) {
-		return getRepository().findAllByUuidIn(collection);
-	}
-
-	@Override
-	public Family save(Family model) {
-		model.setCode(model.getCommunity().getUnity().getAbbreviation().toUpperCase().concat("F" + String.format("%06d", ((BigInteger) getManager().createNativeQuery("select count(*) from family where family.code like ?1").setParameter(1,  model.getCommunity().getUnity().getAbbreviation().toUpperCase().concat("F").concat("%")).getSingleResult()).longValue() + 1L)));
-		return super.save(model);
-	}
-
-	@Override
-	public Collection<Family> save(Iterable<Family> models) {
-		return super.save(StreamSupport.stream(models.spliterator(), false).peek(item -> item.setCode(item.getCommunity().getUnity().getAbbreviation().toUpperCase().concat("F" + String.format("%06d", ((BigInteger) getManager().createNativeQuery("select count(*) from family where family.code like ?1").setParameter(1,  item.getCommunity().getUnity().getAbbreviation().toUpperCase().concat("F").concat("%")).getSingleResult()).longValue() + ((List) models).indexOf(item) + 1L)))).collect(Collectors.toList()));
+	public String getSequentialCode(String prefix) {
+		return prefix.concat(String.format("%06d", getRepository().countAllByCodeStartingWith(prefix) + 1L));
 	}
 }

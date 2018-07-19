@@ -19,13 +19,14 @@ CREATE TABLE IF NOT EXISTS "user" (
 );
 
 CREATE TABLE IF NOT EXISTS profile (
-	id          BIGSERIAL                       NOT NULL	CONSTRAINT profile_pkey			PRIMARY KEY,
+	id          BIGSERIAL                       NOT NULL	CONSTRAINT profile_pkey	PRIMARY KEY,
 	status      BOOLEAN,
 	created_at  TIMESTAMP                       NOT NULL,
 	description VARCHAR(255),
 	title       VARCHAR(255)                    NOT NULL,
 	type        CITEXT													NOT NULL,
 	updated_at  TIMESTAMP                       NOT NULL,
+	created_by  BIGINT                          CONSTRAINT fk_user_created	REFERENCES "user",
 	uuid        UUID DEFAULT uuid_generate_v4() NOT NULL
 );
 

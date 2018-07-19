@@ -26,7 +26,7 @@ public class Child extends Base {
 
 	@Getter
 	@Setter
-	@Column(nullable = false, columnDefinition = "VARCHAR(12)")
+	@Column(nullable = false, columnDefinition = "VARCHAR(10)")
 	@Alias("Matrícula")
 	private 	String								code;
 

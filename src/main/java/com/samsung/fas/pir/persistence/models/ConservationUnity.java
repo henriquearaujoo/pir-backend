@@ -31,7 +31,7 @@ public class ConservationUnity extends Base {
 	@Alias("Nome")
 	@Getter
 	@Setter
-	@Column(columnDefinition = "VARCHAR(2)")
+	@Column(columnDefinition = "VARCHAR(3)")
 	private		String					abbreviation;
 
 	// region Relations
@@ -44,13 +44,13 @@ public class ConservationUnity extends Base {
 	@Alias("Comunidades")
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "unity")
+	@OneToMany(mappedBy = "unity", cascade = CascadeType.MERGE)
 	private 	Collection<Community>	communities			= new ArrayList<>();
 
 	@Alias("Cidades")
 	@Getter
 	@Setter
-	@OneToMany(cascade = {CascadeType.MERGE})
+	@OneToMany(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "unity_id")
 	private 	Collection<City>		cities				= new ArrayList<>();
 	// endregion
@@ -67,5 +67,10 @@ public class ConservationUnity extends Base {
 	public void preUpdate() {
 		super.preUpdate();
 		setAbbreviation(getAbbreviation().toUpperCase());
+		getCommunities().forEach(community -> community.getFamily().forEach(family -> {
+			family.setCode(family.getCode().replaceAll(family.getCode().substring(0, 2), getAbbreviation()));
+			family.getPregnant().forEach(pregnant -> pregnant.setCode(pregnant.getCode().replaceAll(pregnant.getCode().substring(0, 2), getAbbreviation())));
+			family.getChildren().forEach(child -> child.setCode(child.getCode().replaceAll(child.getCode().substring(0, 2), getAbbreviation())));
+		}));
 	}
 }

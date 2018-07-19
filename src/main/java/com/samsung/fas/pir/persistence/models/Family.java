@@ -31,7 +31,7 @@ public class Family extends Base {
 
 	@Getter
 	@Setter
-	@Column(nullable = false, columnDefinition = "VARCHAR(9)")
+	@Column(nullable = false, columnDefinition = "VARCHAR(10)")
 	@Alias("Matrícula")
 	private 	String					code;
 
