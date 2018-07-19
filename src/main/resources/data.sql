@@ -40,8 +40,8 @@ VALUES
 ON CONFLICT DO NOTHING;
 
 /* User */
-INSERT INTO "user" (email, name, register_date)
-VALUES ('example@example.com', 'Administrator', current_date)
+INSERT INTO "user" (email, name)
+VALUES ('example@example.com', 'Administrator')
 ON CONFLICT DO NOTHING;
 
 /* Profile */

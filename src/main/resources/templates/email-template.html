@@ -3,36 +3,58 @@
 <head>
 	<title>Recuperação de Senha</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta name="viewport" content="width=device-width, height= initial-scale=1.0"/>
 	<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-	<!-- use the font -->
 	<style>
-		body {
-			font-family: 'Roboto', sans-serif;
-			font-size: 48px;
+		.container-email {
+			width: 50%;
+		}
+
+		.email-top {
+			height: 30%;
+			background: #00426D;
+			text-align: center;
+			padding: 12px;
+		}
+
+		.email-content {
+			height: 20%;
+			background: #FBFBFB;
+			font-size: 16px;
+			padding: 5%;
+			color: #777;
+		}
+
+		.email-footer {
+			background: #0075BD;
+			height: 30%;
+			padding: 42px;
+			text-align: center;
+		}
+
+		section.config-ip {
+			text-align: right;
+			color: white;
+			margin-right: 50px;
+			margin-bottom: 50px;
 		}
 	</style>
 </head>
 <body style="margin: 0; padding: 0;">
-<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
-	<tr>
-		<td align="center" bgcolor="#78ab46" style="padding: 40px 0 30px 0;">
-			<!--<img src="cid:logo.png" alt="http://memorynotfound.com" style="display: block;" />-->
-		</td>
-	</tr>
-	<tr>
-		<td bgcolor="#eaeaea" style="padding: 40px 30px 40px 30px;">
-			<p>Olá ${name},</p>
-			<p>Clique <a href=${link}><b>aqui</b></a> para recuperar sua senha.</p>
-			<p>O prazo para recuperar a senha termina amanhã às <b>23:59</b>.</p>
-		</td>
-	</tr>
-	<tr>
-		<td bgcolor="#777777" style="padding: 30px 30px 30px 30px;">
-			<p>${signature}</p>
-			<p>${location}</p>
-		</td>
-	</tr>
-</table>
+<div class="content">
+	<div class="container-email">
+		<div class="email-top">
+			<img src="pir.png">
+		</div>
+		<div class="email-content">
+			<span>Olá ${name},</span> <br/>
+			<span>Clique <a href=${link}><b>aqui</b></a> para recuperar sua senha.</span><br/>
+			<span>O prazo para recuperar a senha termina amanhã às <b>23:59</b>.</span>
+		</div>
+		<div class="email-footer">
+			<img src="seda.png">
+		</div>
+	</div>
+</div>
 </body>
 </html>

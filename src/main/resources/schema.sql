@@ -15,7 +15,6 @@ CREATE TABLE IF NOT EXISTS "user" (
 	id            BIGSERIAL                       NOT NULL	CONSTRAINT user_pkey	PRIMARY KEY,
 	email         VARCHAR(255)                    NOT NULL	CONSTRAINT email			UNIQUE,
 	name          VARCHAR(255)                    NOT NULL,
-	register_date TIMESTAMP                       NOT NULL,
 	uuid          UUID DEFAULT uuid_generate_v4() NOT NULL	CONSTRAINT uuid				UNIQUE
 );
 

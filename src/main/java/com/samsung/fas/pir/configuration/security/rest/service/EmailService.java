@@ -3,6 +3,7 @@ package com.samsung.fas.pir.configuration.security.rest.service;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -29,13 +30,15 @@ public class EmailService {
 	@Async
 	public void sendSimpleMessage(String to, String from, String subject, Map<String, Object> content) throws MessagingException, IOException, TemplateException {
 		MimeMessage			message		= emailSender.createMimeMessage();
-		MimeMessageHelper helper		= new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+		MimeMessageHelper 	helper		= new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
 
 		configuration.setClassForTemplateLoading(this.getClass(), "/templates/");
 		helper.setTo(to);
-		helper.setText(FreeMarkerTemplateUtils.processTemplateIntoString(configuration.getTemplate("email-template.html"), content), true);
-		helper.setSubject(subject);
 		helper.setFrom(from);
+		helper.setSubject(subject);
+		helper.addAttachment("seda.png", new ClassPathResource("/templates/seda.png"));
+		helper.addAttachment("pir.png", new ClassPathResource("/templates/pir.png"));
+		helper.setText(FreeMarkerTemplateUtils.processTemplateIntoString(configuration.getTemplate("email-template.html"), content), true);
 
 		emailSender.send(message);
 	}
