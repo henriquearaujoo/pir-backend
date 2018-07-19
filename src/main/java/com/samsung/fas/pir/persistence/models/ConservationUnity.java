@@ -50,8 +50,7 @@ public class ConservationUnity extends Base {
 	@Alias("Cidades")
 	@Getter
 	@Setter
-	@OneToMany(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "unity_id")
+	@ManyToMany(cascade = CascadeType.ALL)
 	private 	Collection<City>		cities				= new ArrayList<>();
 	// endregion
 
