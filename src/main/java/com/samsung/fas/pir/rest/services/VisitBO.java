@@ -1,11 +1,11 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.persistence.dao.AnswerDAO;
-import com.samsung.fas.pir.persistence.dao.ChapterDAO;
-import com.samsung.fas.pir.persistence.dao.FormDAO;
 import com.samsung.fas.pir.persistence.dao.VisitDAO;
-import com.samsung.fas.pir.persistence.models.*;
+import com.samsung.fas.pir.persistence.models.Answer;
+import com.samsung.fas.pir.persistence.models.Child;
+import com.samsung.fas.pir.persistence.models.Pregnancy;
+import com.samsung.fas.pir.persistence.models.Visit;
 import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.VisitDTO;
 import com.samsung.fas.pir.rest.dto.VisitFrontDTO;

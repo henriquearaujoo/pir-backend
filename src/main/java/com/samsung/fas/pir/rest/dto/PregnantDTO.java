@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.enums.ECivilState;
-import com.samsung.fas.pir.persistence.models.Family;
 import com.samsung.fas.pir.persistence.models.Pregnant;
 import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
@@ -55,7 +54,7 @@ public class PregnantDTO extends BaseDTO<Pregnant> {
 	@Getter
 	@Setter
 	@JsonProperty("phone_owner")
-	private 	String						phoneResponsible;
+	private 	boolean						phoneResponsible;
 
 	// region DTO Relations
 	@Getter
@@ -81,7 +80,7 @@ public class PregnantDTO extends BaseDTO<Pregnant> {
 	@Getter
 	@Setter
 	@JsonProperty("agent")
-	private 	UserDTO						responsibleAgentDTO;
+	private 	AgentDTO						responsibleAgentDTO;
 	// endregion
 
 	public PregnantDTO() {
@@ -92,11 +91,11 @@ public class PregnantDTO extends BaseDTO<Pregnant> {
 		super(pregnant);
 		if (!device.isNormal()) {
 			setFamilyUUID(pregnant.getFamily() != null? pregnant.getFamily().getUuid() : null);
-			setAgentUUID(pregnant.getResponsibleAgent() != null? pregnant.getResponsibleAgent().getUuid() : null);
+			setAgentUUID(pregnant.getAgent() != null? pregnant.getAgent().getUuid() : null);
 			setPregnanciesDTO(pregnant.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()));
 		} else {
 			setFamilyDTO(detailed? pregnant.getFamily() != null? new FamilyDTO(pregnant.getFamily(), device, false) : null : null);
-			setResponsibleAgentDTO(pregnant.getResponsibleAgent() != null? new UserDTO(pregnant.getResponsibleAgent(), device, false) : null);
+			setResponsibleAgentDTO(pregnant.getAgent() != null? new AgentDTO(pregnant.getAgent(), device, false) : null);
 			setPregnanciesDTO(pregnant.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()));
 		}
 	}

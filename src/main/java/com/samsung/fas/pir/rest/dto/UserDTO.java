@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.models.User;
 import com.samsung.fas.pir.rest.dto.base.BaseDTO;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,11 +18,10 @@ import org.springframework.mobile.device.Device;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Collection;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @DTO(User.class)
+@ApiModel
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO extends BaseDTO<User> {
@@ -60,9 +60,10 @@ public class UserDTO extends BaseDTO<User> {
 	@NotNull(message="profile.id.missing")
 	private		UUID		profileUUID;
 
+	@ApiModelProperty(readOnly = true)
 	@Setter
 	@Getter
-	@JsonProperty("profile")
+	@JsonProperty(value = "profile", access = JsonProperty.Access.READ_ONLY)
 	private		ProfileDTO	profileDTO;
 
 	@Setter
@@ -74,15 +75,15 @@ public class UserDTO extends BaseDTO<User> {
 
 	@Getter
 	@Setter
-	@JsonProperty("person")
-	@Valid
-	private 	PersonDTO 	personDTO;
-
-	@Getter
-	@Setter
 	@JsonProperty("entity")
 	@Valid
 	private 	EntityDTO 	entityDTO;
+
+	@Getter
+	@Setter
+	@JsonProperty("person")
+	@Valid
+	private 	PersonDTO 	personDTO;
 
 	public UserDTO() {
 		super();
@@ -100,6 +101,7 @@ public class UserDTO extends BaseDTO<User> {
 	}
 
 	@JsonIgnore
+	@Override
 	public User getModel() {
 		User model = super.getModel();
 		model.setAddress(getAddressDTO().getModel());

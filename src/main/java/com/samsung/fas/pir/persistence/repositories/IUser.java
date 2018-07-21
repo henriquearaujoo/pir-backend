@@ -10,7 +10,6 @@ import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
-import java.util.Optional;
 
 @Repository
 public interface IUser extends IBaseRepository<User, Long, QUser> {

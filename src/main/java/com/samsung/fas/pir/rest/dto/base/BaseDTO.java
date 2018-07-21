@@ -3,7 +3,7 @@ package com.samsung.fas.pir.rest.dto.base;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.samsung.fas.pir.configuration.MapperHolder;
+import com.samsung.fas.pir.configuration.Mapper;
 import io.swagger.annotations.ApiModel;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,10 +15,8 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.ParameterizedType;
 import java.util.UUID;
 
-@ApiModel
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Component
 public abstract class BaseDTO<T> implements IBaseDTO<T> {
 	@JsonIgnore
 	@Getter(value = AccessLevel.PROTECTED)
@@ -31,11 +29,11 @@ public abstract class BaseDTO<T> implements IBaseDTO<T> {
 	private 		UUID 				uuid;
 
 	public BaseDTO() {
-		setMapper(MapperHolder.getMapper());
+		setMapper(Mapper.getMapper());
 	}
 
 	public BaseDTO(T entity) {
-		setMapper(MapperHolder.getMapper());
+		setMapper(Mapper.getMapper());
 		getMapper().map(entity, this);
 	}
 

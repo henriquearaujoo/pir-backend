@@ -1,7 +1,10 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.samsung.fas.pir.persistence.dao.*;
-import com.samsung.fas.pir.persistence.models.*;
+import com.samsung.fas.pir.persistence.dao.ChildDAO;
+import com.samsung.fas.pir.persistence.models.Child;
+import com.samsung.fas.pir.persistence.models.Family;
+import com.samsung.fas.pir.persistence.models.SAnswer;
+import com.samsung.fas.pir.persistence.models.Visit;
 import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.ChildDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
@@ -15,9 +18,7 @@ import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -81,7 +82,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	Child setupChild(Child model, Family family) {
 		model.setCode(getDao().getSequentialCode(family.getCommunity().getUnity().getAbbreviation().toUpperCase().concat("C")));
 		model.setFamily(family);
-		model.setResponsibleAgent(null);
+		model.setAgent(null);
 		model.setVisits(setupVisit(model, model.getVisits()));
 		model.setAnswers(setupAnswer(model, model.getAnswers()));
 		return model;
@@ -90,12 +91,11 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	Child setupChild(Child child, Child model, Family family) {
 		getMapper().map(model, child);
 		child.setFamily(family);
-		child.setResponsibleAgent(null);
+		child.setAgent(null);
 		child.setVisits(setupVisit(child, model.getVisits()));
 		child.setAnswers(setupAnswer(child, model.getAnswers()));
 		return child;
 	}
-
 
 	private Collection<SAnswer> setupAnswer(Child child, Collection<SAnswer> collection) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());

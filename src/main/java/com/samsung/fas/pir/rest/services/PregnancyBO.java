@@ -1,9 +1,10 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.persistence.dao.PregnancyDAO;
-import com.samsung.fas.pir.persistence.dao.SAnswerDAO;
-import com.samsung.fas.pir.persistence.dao.VisitDAO;
-import com.samsung.fas.pir.persistence.models.*;
+import com.samsung.fas.pir.persistence.models.Pregnancy;
+import com.samsung.fas.pir.persistence.models.Pregnant;
+import com.samsung.fas.pir.persistence.models.SAnswer;
+import com.samsung.fas.pir.persistence.models.Visit;
 import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.PregnancyDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;

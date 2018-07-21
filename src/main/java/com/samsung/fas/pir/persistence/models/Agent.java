@@ -90,13 +90,19 @@ public class Agent extends Base {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "responsibleAgent")
+	@OneToMany(mappedBy = "agent")
 	@Alias("Agente - Crianças")
 	private 	Collection<Child>		children			= new ArrayList<>();
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "responsibleAgent")
+	@OneToMany(mappedBy = "agent")
+	@Alias("Agente - Crianças")
+	private 	Collection<Family>		families			= new ArrayList<>();
+
+	@Getter
+	@Setter
+	@OneToMany(mappedBy = "agent")
 	@Alias("Agente - Mães - Gestações")
 	private 	Collection<Pregnant> 	pregnant 			= new ArrayList<>();
 

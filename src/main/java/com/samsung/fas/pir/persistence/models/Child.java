@@ -74,7 +74,7 @@ public class Child extends Base {
 	@Setter
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "relation_agent"))
-	private 	User								responsibleAgent;
+	private 	User								agent;
 
 	@Getter
 	@Setter

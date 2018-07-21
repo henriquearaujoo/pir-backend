@@ -2,7 +2,6 @@ package com.samsung.fas.pir.rest.services.base;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.persistence.dao.base.IBaseDAO;
-import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

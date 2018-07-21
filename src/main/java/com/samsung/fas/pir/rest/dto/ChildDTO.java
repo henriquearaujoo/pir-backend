@@ -7,18 +7,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
 import com.samsung.fas.pir.persistence.enums.EGender;
 import com.samsung.fas.pir.persistence.models.Child;
-import com.samsung.fas.pir.persistence.models.User;
 import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.mobile.device.Device;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -106,13 +100,13 @@ public class ChildDTO extends BaseDTO<Child> {
 	public ChildDTO(Child child, Device device, boolean detailed) {
 		super(child);
 		if (!device.isNormal()) {
-			setAgentUUID(child.getResponsibleAgent() != null? child.getResponsibleAgent().getUuid() : null);
+			setAgentUUID(child.getAgent() != null? child.getAgent().getUuid() : null);
 			setFamilyUUID(child.getFamily() != null? child.getFamily().getUuid() : null);
 			setAnswersDTO(child.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
 			setVisitsDTO(child.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
 		} else {
 			setFamilyDTO(detailed? new FamilyDTO(child.getFamily(), device, false) : null);
-			setAgent(child.getResponsibleAgent() != null? new UserDTO(child.getResponsibleAgent(), device, false) : null);
+			setAgent(child.getAgent() != null? new UserDTO(child.getAgent(), device, false) : null);
 			setAnswersDTO(child.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
 			setVisitsDTO(child.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
 		}

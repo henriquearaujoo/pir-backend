@@ -1,7 +1,6 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.persistence.dao.PregnantDAO;
-import com.samsung.fas.pir.persistence.models.Community;
 import com.samsung.fas.pir.persistence.models.Family;
 import com.samsung.fas.pir.persistence.models.Pregnancy;
 import com.samsung.fas.pir.persistence.models.Pregnant;

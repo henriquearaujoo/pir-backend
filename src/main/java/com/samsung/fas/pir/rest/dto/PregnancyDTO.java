@@ -40,7 +40,7 @@ public class PregnancyDTO extends BaseDTO<Pregnancy> {
 
 	@Getter
 	@Setter
-	@JsonProperty("family")
+	@JsonProperty("pregnant")
 	private 	PregnantDTO			pregnantDTO;
 
 	@Getter

@@ -1,10 +1,9 @@
 package com.samsung.fas.pir.rest.services;
 
-import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.exception.ServiceException;
 import com.samsung.fas.pir.persistence.dao.CommunityDAO;
-import com.samsung.fas.pir.persistence.models.*;
-import com.samsung.fas.pir.persistence.models.base.Base;
+import com.samsung.fas.pir.persistence.models.Community;
+import com.samsung.fas.pir.persistence.models.ConservationUnity;
 import com.samsung.fas.pir.rest.dto.CommunityDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import lombok.AccessLevel;
@@ -16,11 +15,7 @@ import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class CommunityBO extends BaseBO<Community, CommunityDAO, CommunityDTO, Long> {

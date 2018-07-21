@@ -6,7 +6,6 @@ import com.samsung.fas.pir.persistence.dao.SurveyDAO;
 import com.samsung.fas.pir.persistence.models.SAlternative;
 import com.samsung.fas.pir.persistence.models.SQuestion;
 import com.samsung.fas.pir.persistence.models.Survey;
-import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.SurveyDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import lombok.Getter;
@@ -17,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.stream.Collectors;
 
 @Service

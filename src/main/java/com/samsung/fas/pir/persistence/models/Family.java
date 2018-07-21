@@ -1,22 +1,16 @@
 package com.samsung.fas.pir.persistence.models;
 
 import com.samsung.fas.pir.graph.annotations.Alias;
-import com.samsung.fas.pir.persistence.enums.ECivilState;
-import com.samsung.fas.pir.persistence.enums.EGender;
 import com.samsung.fas.pir.persistence.enums.EHabitationType;
 import com.samsung.fas.pir.persistence.models.base.Base;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 @Entity
 @Table(name = "family", uniqueConstraints = @UniqueConstraint(name = "family_code", columnNames = {"code"}), indexes = @Index(name = "family_index", columnList = "code", unique = true))
@@ -103,6 +97,13 @@ public class Family extends Base {
 	@JoinColumn(foreignKey = @ForeignKey(name = "relation_community"))
 	@Alias("Comunidade")
 	private 	Community				community;
+
+	@Getter
+	@Setter
+	@ManyToOne(optional = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "relation_agent"))
+	@Alias("Agente")
+	private 	Agent					agent;
 
 	@Getter
 	@Setter

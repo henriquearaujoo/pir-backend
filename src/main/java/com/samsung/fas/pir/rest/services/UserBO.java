@@ -3,8 +3,6 @@ package com.samsung.fas.pir.rest.services;
 import com.google.common.hash.Hashing;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.exception.ServiceException;
-import com.samsung.fas.pir.persistence.dao.CityDAO;
-import com.samsung.fas.pir.persistence.dao.ProfileDAO;
 import com.samsung.fas.pir.persistence.dao.UserDAO;
 import com.samsung.fas.pir.persistence.models.City;
 import com.samsung.fas.pir.persistence.models.Profile;

@@ -4,7 +4,6 @@ import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -31,7 +30,6 @@ public class Swagger {
 					.securityReferences(authorization())
 					.forPaths(PathSelectors.ant("/rest/**"))
 					.forPaths(Predicates.not(PathSelectors.ant("/rest/authentication/**")))
-					.forPaths(Predicates.not(PathSelectors.ant("/rest/firebase/**")))
 					.build()))
 			   .apiInfo(new ApiInfo(
 					   "PIR REST Documentation",

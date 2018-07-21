@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.rest.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,7 +9,6 @@ import com.samsung.fas.pir.persistence.models.Person;
 import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.mobile.device.Device;
 
@@ -40,5 +40,14 @@ public class PersonDTO extends BaseDTO<Person> {
 
 	public PersonDTO(Person person, Device device, boolean detailed) {
 		super(person);
+		setAgentDTO(person.getAgent() != null? new AgentDTO(person.getAgent(), device, false) : null);
+	}
+
+	@JsonIgnore
+	@Override
+	public Person getModel() {
+		Person model = super.getModel();
+		model.setAgent(getAgentDTO() != null? getAgentDTO().getModel() : null);
+		return model;
 	}
 }

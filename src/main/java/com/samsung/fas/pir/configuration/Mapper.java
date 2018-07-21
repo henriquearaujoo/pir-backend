@@ -1,14 +1,26 @@
 package com.samsung.fas.pir.configuration;
 
-import com.samsung.fas.pir.persistence.models.base.Base;
+import lombok.Getter;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class Mapper {
+	@Getter
+	private		static		ModelMapper		mapper;
+
+	@Autowired
+	private void setMapper(ModelMapper mapper) {
+		synchronized (this) {
+			if (mapper != null) {
+				Mapper.mapper = mapper;
+			}
+		}
+	}
+
 	@Bean
 	public ModelMapper modelMapper() {
 		ModelMapper		mapper		= new ModelMapper();

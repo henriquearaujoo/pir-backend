@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.mobile.device.Device;
 
-import java.util.Collection;
 import java.util.List;
 
 @DTO(Page.class)
