@@ -13,4 +13,8 @@ public class AgentDAO extends BaseDAO<Agent, Long, IAgent, QAgent> {
 	public AgentDAO(IAgent repository) {
 		super(repository);
 	}
+
+	public String getSequentialCode(String prefix) {
+		return prefix.concat(String.format("%06d", getRepository().countAllByCodeStartingWith(prefix) + 1L));
+	}
 }

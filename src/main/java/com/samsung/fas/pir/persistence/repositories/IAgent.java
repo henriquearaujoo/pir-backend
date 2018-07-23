@@ -13,6 +13,8 @@ import javax.annotation.Nonnull;
 
 @Repository
 public interface IAgent extends IBaseRepository<Agent, Long, QAgent> {
+	long countAllByCodeStartingWith(String prefix);
+
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QAgent root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

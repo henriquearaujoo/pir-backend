@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 @Api(value = "Pregnancy", description = "REST Controller for Pregnancies", tags = "PREGNANCIES")
-@RequestMapping(value = "/rest/mothers/pregnancies", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/rest/pregnancies", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
 public class PregnancyController extends BController<PregnancyBO, PregnancyDTO> {
 	@Autowired

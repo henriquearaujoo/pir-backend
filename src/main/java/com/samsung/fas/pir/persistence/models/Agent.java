@@ -77,14 +77,14 @@ public class Agent extends Base {
 	@Getter
 	@Setter
 	@ManyToOne(optional = false)
-	@MapsId
+	@JoinColumn(foreignKey = @ForeignKey(name = "relation_unity"))
 	@Alias("UC")
 	private 	ConservationUnity		unity;
 
 	@Getter
 	@Setter
 	@ManyToOne(optional = false)
-	@MapsId
+	@JoinColumn(foreignKey = @ForeignKey(name = "relation_city"))
 	@Alias("UC")
 	private 	City					city;
 

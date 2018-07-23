@@ -3,6 +3,7 @@ package com.samsung.fas.pir.rest.services;
 import com.google.common.hash.Hashing;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.exception.ServiceException;
+import com.samsung.fas.pir.persistence.dao.AgentDAO;
 import com.samsung.fas.pir.persistence.dao.UserDAO;
 import com.samsung.fas.pir.persistence.models.City;
 import com.samsung.fas.pir.persistence.models.Profile;
@@ -34,6 +35,10 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)
+	private 	AgentDAO 				agentDAO;
+
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
 	private		PasswordEncoder			encoder;
 
 	@Getter(AccessLevel.PRIVATE)
@@ -41,12 +46,13 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 	private 	ModelMapper 			mapper;
 
 	@Autowired
-	public UserBO(UserDAO dao, ConservationUnityBO unityBO, ProfileBO profileBO, PasswordEncoder encoder, ModelMapper mapper) {
+	public UserBO(UserDAO dao, AgentDAO agentDAO, ConservationUnityBO unityBO, ProfileBO profileBO, PasswordEncoder encoder, ModelMapper mapper) {
 		super(dao);
 		setUnityBO(unityBO);
 		setProfileBO(profileBO);
 		setEncoder(encoder);
 		setMapper(mapper);
+		setAgentDAO(agentDAO);
 	}
 
 	@Override
@@ -54,12 +60,11 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 		User		model		= create.getModel();
 		String		password	= create.getPassword();
 		Profile	 	profile		= getProfileBO().getDao().findOne(create.getProfileUUID());
-
 		City 		city		= getUnityBO().getCityDAO().findOne(create.getAddressDTO().getCityUUID());
 		Account 	account		= new Account();
 
 		if (model.getEntity() != null && model.getPerson() != null)
-			throw new ServiceException("user.cannotbe.both");
+			throw new ServiceException("user.cannot.be.both");
 
 		if (model.getEntity() == null && model.getPerson() == null)
 			throw new ServiceException("user.data.missing");
@@ -82,8 +87,9 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 			model.getPerson().setUser(model);
 			if (model.getPerson().getAgent() != null) {
 				model.getPerson().getAgent().setPerson(model.getPerson());
+				model.getPerson().getAgent().setCode(getAgentDAO().getSequentialCode(model.getPerson().getAgent().getUnity().getAbbreviation().concat("A")));
+				model.getPerson().getAgent().setCity(getUnityBO().getCityDAO().findOne(create.getPersonDTO().getAgentDTO().getCityDTO().getUuid()));
 				model.getPerson().getAgent().setUnity(getUnityBO().getDao().findOne(model.getPerson().getAgent().getUnity().getUuid()));
-				model.getPerson().getAgent().setCity(getUnityBO().getCityDAO().findOne(model.getPerson().getAgent().getCity().getUuid()));
 			}
 		} else {
 			model.getEntity().setUser(model);
@@ -101,7 +107,7 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 		City		city		= getUnityBO().getCityDAO().findOne(update.getAddressDTO().getCityUUID());
 
 		if (model.getEntity() != null && model.getPerson() != null)
-			throw new ServiceException("user.cannotbe.both");
+			throw new ServiceException("user.cannot.be.both");
 
 		if (model.getEntity() == null && model.getPerson() == null)
 			throw new ServiceException("user.data.missing");
@@ -138,8 +144,8 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 			if (model.getPerson().getAgent() != null) {
 				getMapper().map(model.getPerson().getAgent(), user.getPerson().getAgent());
 				user.getPerson().getAgent().setPerson(user.getPerson());
-				user.getPerson().getAgent().setUnity(getUnityBO().getDao().findOne(model.getPerson().getAgent().getUnity().getUuid()));
-				user.getPerson().getAgent().setCity(getUnityBO().getCityDAO().findOne(model.getPerson().getAgent().getCity().getUuid()));
+				model.getPerson().getAgent().setCity(getUnityBO().getCityDAO().findOne(update.getPersonDTO().getAgentDTO().getCityDTO().getUuid()));
+				model.getPerson().getAgent().setUnity(getUnityBO().getDao().findOne(model.getPerson().getAgent().getUnity().getUuid()));
 			}
 			user.setEntity(null);
 		}
