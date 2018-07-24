@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.UUID;
 
 @Service
 public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
@@ -138,14 +139,21 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 			user.setPerson(null);
 		} else {
 			model.getPerson().setId(user.getId());
-			user.setPerson(model.getPerson());
 			user.getPerson().setUser(user);
-			user.getPerson().setAgent(model.getPerson().getAgent());
-			if (model.getPerson().getAgent() != null) {
-				getMapper().map(model.getPerson().getAgent(), user.getPerson().getAgent());
-				user.getPerson().getAgent().setPerson(user.getPerson());
+			if (user.getPerson() == null) {
+				user.setPerson(model.getPerson());
+			}
+			if (user.getPerson().getAgent() == null) {
+				model.getPerson().getAgent().setPerson(model.getPerson());
+				model.getPerson().getAgent().setCode(getAgentDAO().getSequentialCode(model.getPerson().getAgent().getUnity().getAbbreviation().concat("A")));
 				model.getPerson().getAgent().setCity(getUnityBO().getCityDAO().findOne(update.getPersonDTO().getAgentDTO().getCityDTO().getUuid()));
 				model.getPerson().getAgent().setUnity(getUnityBO().getDao().findOne(model.getPerson().getAgent().getUnity().getUuid()));
+				user.getPerson().setAgent(model.getPerson().getAgent());
+			} else {
+				getMapper().map(model.getPerson().getAgent(), user.getPerson().getAgent());
+				user.getPerson().getAgent().setPerson(user.getPerson());
+				user.getPerson().getAgent().setCity(getUnityBO().getCityDAO().findOne(update.getPersonDTO().getAgentDTO().getCityDTO().getUuid()));
+				user.getPerson().getAgent().setUnity(getUnityBO().getDao().findOne(model.getPerson().getAgent().getUnity().getUuid()));
 			}
 			user.setEntity(null);
 		}
@@ -161,5 +169,14 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 	@Override
 	public Collection<UserDTO> update(Collection<UserDTO> update, Device device, UserDetails details) {
 		return null;
+	}
+
+	public UserDTO enable(UUID id, Device device) {
+		User		user		= getDao().findOne(id);
+		user.getAccount().setEnabled(!user.getAccount().isEnabled());
+		user.getAccount().setAccountNonLocked(!user.getAccount().isAccountNonLocked());
+		user.getAccount().setAccountNonExpired(!user.getAccount().isAccountNonExpired());
+		user.getAccount().setCredentialsNonExpired(!user.getAccount().isCredentialsNonExpired());
+		return new UserDTO(getDao().save(user), device, true);
 	}
 }

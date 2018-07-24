@@ -79,7 +79,12 @@ public class AgentDTO extends BaseDTO<Agent> {
 
 	public AgentDTO(Agent agent, Device device, boolean detailed) {
 		super(agent);
+		setCityDTO(new CityDTO(agent.getCity(), device, false));
 		setPersonDTO(detailed? new PersonDTO(agent.getPerson(), device, false) : null);
+		setUnityDTO(new ConservationUnityDTO(agent.getUnity(), device, true));
+		getUnityDTO().setCommunitiesDTO(null);
+		getUnityDTO().setCitiesDTO(null);
+		getUnityDTO().getRegionalDTO().setUnitiesDTO(null);
 	}
 
 	@JsonIgnore

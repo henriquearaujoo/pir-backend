@@ -35,6 +35,7 @@ public class Agent extends Base {
 	@Getter
 	@Setter
 	@Column
+	@Temporal(TemporalType.DATE)
 	@Alias("Data de Nascimento")
 	private 	Date 					birth;
 

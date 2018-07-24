@@ -15,12 +15,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @Api(value = "Users", description = "REST Controller for Users", tags = "USERS")
 @RequestMapping(value = "/rest/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -29,6 +31,11 @@ public class UserController extends BController<UserBO, UserDTO> {
 	@Autowired
 	public UserController(UserBO service) {
 		super(service);
+	}
+
+	@RequestMapping(method= RequestMethod.PUT, value="/enable/{id}")
+	public ResponseEntity<UserDTO> enable(@PathVariable("id") UUID id, Device device) {
+		return ResponseEntity.ok(getService().enable(id, device));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, value="/search")
