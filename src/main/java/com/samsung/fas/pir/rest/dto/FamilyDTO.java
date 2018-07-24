@@ -38,7 +38,7 @@ public class FamilyDTO extends BaseDTO<Family> {
 	@Setter
 	@JsonProperty("name")
 	@NotBlank(message = "name.missing")
-	private 	String				leaderName;
+	private 	String				name;
 
 	@Getter
 	@Setter

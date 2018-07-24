@@ -33,7 +33,7 @@ public class Family extends Base {
 	@Setter
 	@Column
 	@Alias("Líder da Família")
-	private 	String					leaderName;
+	private 	String					name;
 
 	@Getter
 	@Setter
