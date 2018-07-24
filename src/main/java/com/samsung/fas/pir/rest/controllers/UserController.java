@@ -38,6 +38,21 @@ public class UserController extends BController<UserBO, UserDTO> {
 		return ResponseEntity.ok(getService().enable(id, device));
 	}
 
+	@RequestMapping(method= RequestMethod.GET, value="/agents")
+	public ResponseEntity<Collection<UserDTO>> searchAgents(Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAllAgents(device, details));
+	}
+
+	@RequestMapping(method= RequestMethod.GET, value="/agents/search")
+	public ResponseEntity<Collection<UserDTO>> searchAgents(@QuerydslPredicate(root = User.class) Predicate predicate, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAllAgents(predicate, device, details));
+	}
+
+	@RequestMapping(method= RequestMethod.GET, value="/agents/search/page")
+	public ResponseEntity<Page<UserDTO>> searchAgents(@QuerydslPredicate(root = User.class) Predicate predicate, Pageable pageable, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAllAgents(predicate, pageable, device, details));
+	}
+
 	@RequestMapping(method= RequestMethod.GET, value="/search")
 	public ResponseEntity<Collection<UserDTO>> search(@QuerydslPredicate(root = User.class) Predicate predicate, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
 		return ResponseEntity.ok(getService().findAll(predicate, device, details));

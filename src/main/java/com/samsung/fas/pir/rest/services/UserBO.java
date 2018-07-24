@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.google.common.hash.Hashing;
+import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.exception.ServiceException;
 import com.samsung.fas.pir.persistence.dao.AgentDAO;
@@ -15,6 +16,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
@@ -34,7 +38,7 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 	@Setter(AccessLevel.PRIVATE)
 	private		ProfileBO				profileBO;
 
-	@Getter(AccessLevel.PRIVATE)
+	@Getter(AccessLevel.PUBLIC)
 	@Setter(AccessLevel.PRIVATE)
 	private 	AgentDAO 				agentDAO;
 
@@ -54,6 +58,22 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 		setEncoder(encoder);
 		setMapper(mapper);
 		setAgentDAO(agentDAO);
+	}
+
+	public Collection<UserDTO> findAllAgents(Device device, UserDetails details) {
+		return getDao().findAllAgents().stream().map(item -> new UserDTO(item, device, false)).collect(Collectors.toList());
+	}
+
+	public Collection<UserDTO> findAllAgents(Predicate predicate, Device device, UserDetails details) {
+		return getDao().findAllAgents(predicate).stream().map(item -> new UserDTO(item, device, false)).collect(Collectors.toList());
+	}
+
+	public Page<UserDTO> findAllAgents(Pageable pageable, Device device, UserDetails details) {
+		return getDao().findAllAgents(pageable).map(item -> new UserDTO((User) item, device, false));
+	}
+
+	public Page<UserDTO> findAllAgents(Predicate predicate, Pageable pageable, Device device, UserDetails details) {
+		return getDao().findAllAgents(predicate, pageable).map(item -> new UserDTO((User) item, device, false));
 	}
 
 	@Override

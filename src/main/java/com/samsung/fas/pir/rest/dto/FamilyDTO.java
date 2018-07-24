@@ -98,6 +98,11 @@ public class FamilyDTO extends BaseDTO<Family> {
 
 	@Getter
 	@Setter
+	@JsonProperty("agent_id")
+	private 	UUID				agentUUID;
+
+	@Getter
+	@Setter
 	@JsonProperty("children")
 	@Valid
 	private 	List<ChildDTO>		childrenDTO;
@@ -106,6 +111,12 @@ public class FamilyDTO extends BaseDTO<Family> {
 	@Setter
 	@JsonProperty("pregnant")
 	private 	List<PregnantDTO> 	pregnantDTO;
+
+	@ApiModelProperty(readOnly = true)
+	@Getter
+	@Setter
+	@JsonProperty(value = "agent", access = JsonProperty.Access.READ_ONLY)
+	private 	UserDTO				agentDTO;
 
 	@ApiModelProperty(readOnly = true)
 	@Getter
@@ -126,6 +137,7 @@ public class FamilyDTO extends BaseDTO<Family> {
 			setChildrenDTO(family.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()));
 		} else {
 			setCommunityDTO(new CommunityDTO(family.getCommunity(), device, false));
+			setAgentDTO(new UserDTO(family.getAgent().getPerson().getUser(), device, false));
 			setPregnantDTO(detailed? family.getPregnant().stream().map(item -> new PregnantDTO(item, device, false)).collect(Collectors.toList()) : null);
 			setChildrenDTO(detailed? family.getChildren().stream().map(item -> new ChildDTO(item, device, false)).collect(Collectors.toList()) : null);
 		}

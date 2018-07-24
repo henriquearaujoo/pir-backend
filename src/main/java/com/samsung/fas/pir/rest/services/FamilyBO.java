@@ -1,10 +1,7 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.persistence.dao.FamilyDAO;
-import com.samsung.fas.pir.persistence.models.Child;
-import com.samsung.fas.pir.persistence.models.Community;
-import com.samsung.fas.pir.persistence.models.Family;
-import com.samsung.fas.pir.persistence.models.Pregnant;
+import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.FamilyDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
@@ -39,12 +36,17 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 	@Setter(AccessLevel.PRIVATE)
 	private		ChildBO			childBO;
 
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
+	private		UserBO			userBO;
+
 	@Autowired
-	public FamilyBO(FamilyDAO dao, CommunityBO communityBO, PregnantBO pregnantBO, ChildBO childBO, ModelMapper mapper) {
+	public FamilyBO(FamilyDAO dao, CommunityBO communityBO, UserBO userBO, PregnantBO pregnantBO, ChildBO childBO, ModelMapper mapper) {
 		super(dao);
 		setCommunityBO(communityBO);
 		setPregnantBO(pregnantBO);
 		setChildBO(childBO);
+		setUserBO(userBO);
 		setMapper(mapper);
 	}
 
@@ -52,8 +54,9 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 	public FamilyDTO save(FamilyDTO create, Device device, UserDetails account) {
 		Family 			model		= create.getModel();
 		Family			family 		= model.getUuid() != null? getDao().findOne(model.getUuid()) : null;
+		Agent			agent		= getUserBO().getAgentDAO().findOne(create.getAgentUUID());
 		Community		community	= getCommunityBO().getDao().findOne(create.getCommunityUUID());
-		return family != null? new FamilyDTO(getDao().save(setupFamily(family, model, community)), device, true) : new FamilyDTO(getDao().save(setupFamily(model, community)), device, true);
+		return family != null? new FamilyDTO(getDao().save(setupFamily(family, model, agent, community)), device, true) : new FamilyDTO(getDao().save(setupFamily(model, agent, community)), device, true);
 	}
 
 	@Override
@@ -71,17 +74,19 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 		return collection.stream().map(item -> save(item, device, details)).collect(Collectors.toList());
 	}
 
-	private Family setupFamily(Family model, Community community) {
+	private Family setupFamily(Family model, Agent agent, Community community) {
 		model.setCode(getDao().getSequentialCode(community.getUnity().getAbbreviation().toUpperCase().concat("F")));
 		model.setCommunity(community);
+		model.setAgent(agent);
 		model.setPregnant(setupPregnant(model, model.getPregnant()));
 		model.setChildren(setupChild(model, model.getChildren()));
 		return model;
 	}
 
-	private Family setupFamily(Family family, Family model, Community community) {
+	private Family setupFamily(Family family, Family model, Agent agent, Community community) {
 		getMapper().map(model, family);
 		family.setCommunity(community);
+		family.setAgent(agent);
 		family.setPregnant(setupPregnant(family, model.getPregnant()));
 		family.setChildren(setupChild(family, model.getChildren()));
 		return family;
