@@ -46,7 +46,7 @@ public class Query {
 		setGraph(graph);
 	}
 
-	public ResponseDTO query(@Nonnull PathDTO root) {
+	public ResponseDTO query(@Nonnull PathDTO root, Device device) {
 		PathBuilder<?> 							grouper		= path(graph.getEntities().get(root.getEntity()));
 		Map<Object, Map<String, List<Object>>>	map			= new LinkedHashMap<>();
 		Map<Object, Map<String, List<Object>>>	responseMap	= new LinkedHashMap<>();
@@ -59,16 +59,16 @@ public class Query {
 		map.forEach((key, value) -> {
 			try {
 				if (key != null) {
-					Class<?>					keyClass		= graph.getDtos().get(key.getClass().getSimpleName() + "DTO");																	// DTO Key Class
-					Object						keyObject		= keyClass != null? keyClass.getDeclaredConstructor(key.getClass(), Device.class, boolean.class).newInstance(key, null, false) : null;		// DTO Key Instance
-					Map<String, List<Object>>	subMap			= new HashMap<>();																												// DTO Inner Map
+					Class<?>					keyClass		= graph.getDtos().get(key.getClass().getSimpleName() + "DTO");
+					Object						keyObject		= keyClass != null? keyClass.getDeclaredConstructor(key.getClass(), Device.class, boolean.class).newInstance(key, device, false) : null;
+					Map<String, List<Object>>	subMap			= new HashMap<>();
 
 					value.forEach((stringKey, valuesList) -> {
 						try {
-							ArrayList<Object>	values			= new ArrayList<>();																											// DTO Values
+							ArrayList<Object>	values			= new ArrayList<>();
 							for (Object v : valuesList) {
-								Class<?>		valueClass		= graph.getDtos().get(v.getClass().getSimpleName() + "DTO");																	// DTO Value Class
-								Object			valueObject		= valueClass != null? valueClass.getDeclaredConstructor(v.getClass(), Device.class, boolean.class).newInstance(v, null, false) : null;		// DTO Value Object
+								Class<?>		valueClass		= graph.getDtos().get(v.getClass().getSimpleName() + "DTO");
+								Object			valueObject		= valueClass != null? valueClass.getDeclaredConstructor(v.getClass(), Device.class, boolean.class).newInstance(v, device, false) : null;
 								values.add(valueObject);
 							}
 							subMap.put(stringKey, values);

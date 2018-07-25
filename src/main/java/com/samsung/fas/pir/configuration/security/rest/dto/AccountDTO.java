@@ -25,9 +25,17 @@ public class AccountDTO {
 	@JsonProperty("profile")
 	private 	ProfileDTO 	profile;
 
+	@Getter
+	@Setter
+	@JsonProperty("agent")
+	private		AgentDTO	agent;
+
 	public AccountDTO(Account account) {
 		setUsername(account.getUsername());
 		setUser(new UserDTO(account.getUser()));
 		setProfile(new ProfileDTO(account.getProfile()));
+		if (account.getUser().getPerson() != null) {
+			setAgent(new AgentDTO(account.getUser().getPerson().getAgent()));
+		}
 	}
 }
