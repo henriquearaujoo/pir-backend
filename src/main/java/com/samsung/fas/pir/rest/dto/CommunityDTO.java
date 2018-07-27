@@ -153,13 +153,17 @@ public class CommunityDTO extends BaseDTO<Community> {
 
 	public CommunityDTO(Community community, Device device, boolean detailed) {
 		super(community);
-		setCityDTO(community.getCity() != null? new CityDTO(community.getCity(), device, false) : null);
-		setUnityDTO(community.getUnity() != null? new ConservationUnityDTO(community.getUnity(), device, false) : null);
-		setFamilyDTO(!device.isNormal()? community.getFamily().stream().map(item -> new FamilyDTO(item, device, false)).collect(Collectors.toList()) : null);
-		if (getUnityDTO() != null) {
-			getUnityDTO().setCitiesDTO(null);
-			getUnityDTO().setRegionalDTO(new RegionalDTO(community.getUnity().getRegional(), device, false));
-			getUnityDTO().getRegionalDTO().setUnitiesDTO(null);
+		if (!device.isNormal()) {
+			setCityDTO(community.getCity() != null ? new CityDTO(community.getCity(), device, false) : null);
+		} else {
+			setCityDTO(community.getCity() != null ? new CityDTO(community.getCity(), device, false) : null);
+			setUnityDTO(community.getUnity() != null ? new ConservationUnityDTO(community.getUnity(), device, false) : null);
+			setFamilyDTO(!device.isNormal() ? community.getFamily().stream().map(item -> new FamilyDTO(item, device, false)).collect(Collectors.toList()) : null);
+			if (getUnityDTO() != null) {
+				getUnityDTO().setCitiesDTO(null);
+				getUnityDTO().setRegionalDTO(new RegionalDTO(community.getUnity().getRegional(), device, false));
+				getUnityDTO().getRegionalDTO().setUnitiesDTO(null);
+			}
 		}
 	}
 

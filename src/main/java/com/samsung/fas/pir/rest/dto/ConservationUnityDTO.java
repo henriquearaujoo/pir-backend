@@ -58,8 +58,8 @@ public class ConservationUnityDTO extends BaseDTO<ConservationUnity> {
 	public ConservationUnityDTO(ConservationUnity unity, Device device, boolean detailed) {
 		super(unity);
 		setCitiesDTO(unity.getCities().stream().map(item -> new CityDTO(item, device, false)).collect(Collectors.toList()));
+		setCommunitiesDTO(!device.isNormal()? unity.getCommunities().stream().map(item -> new CommunityDTO(item, device, false)).collect(Collectors.toList()) : null);
 		setRegionalDTO(detailed? new RegionalDTO(unity.getRegional(), device, false) : null);
-		setCommunitiesDTO(detailed? unity.getCommunities().stream().map(item -> new CommunityDTO(item, device, false)).collect(Collectors.toList()) : null);
 	}
 
 	@JsonIgnore
