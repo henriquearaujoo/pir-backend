@@ -18,17 +18,17 @@ public class ProfileDTO {
 	@Getter
 	@Setter
 	@JsonProperty("id")
-	private		UUID		uuid;
+	private		UUID				uuid;
 
 	@Getter
 	@Setter
 	@JsonProperty("title")
-	private		String		title;
+	private		String				title;
 
 	@Getter
 	@Setter
 	@JsonProperty("description")
-	private		String		description;
+	private		String				description;
 
 	@Getter
 	@Setter

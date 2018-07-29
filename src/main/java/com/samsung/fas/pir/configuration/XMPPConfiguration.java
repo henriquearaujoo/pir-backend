@@ -10,8 +10,8 @@ import org.springframework.integration.xmpp.config.XmppConnectionFactoryBean;
 
 import javax.net.ssl.SSLSocketFactory;
 
-@Configuration
-@ImportResource("classpath:integration.xml")
+//@Configuration
+//@ImportResource("classpath:integration.xml")
 public class XMPPConfiguration {
 	@Bean
 	public XmppConnectionFactoryBean xmppConnectionFactoryBean() {

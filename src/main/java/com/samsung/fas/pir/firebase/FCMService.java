@@ -18,7 +18,7 @@ import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-@Service
+//@Service
 class FCMService {
 	private	static		Logger		Log		= LoggerFactory.getLogger(FCMService.class);
 

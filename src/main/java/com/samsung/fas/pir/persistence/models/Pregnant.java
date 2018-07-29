@@ -59,7 +59,7 @@ public class Pregnant extends Base {
 	@Setter
 	@Column
 	@Alias("Responsável - Telefone")
-	private 	String						phoneOwner;
+	private 	boolean						phoneOwner;
 
 	// region Relations
 	@Getter

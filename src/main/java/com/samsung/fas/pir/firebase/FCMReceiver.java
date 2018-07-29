@@ -4,7 +4,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class FCMReceiver {
 	public void get(Message<String> message) {
 		MessageHeaders headers = message.getHeaders();
