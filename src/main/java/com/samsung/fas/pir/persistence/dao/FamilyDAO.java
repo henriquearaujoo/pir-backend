@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import java.util.Collection;
+import java.util.UUID;
 
 @Service
 public class FamilyDAO extends BaseDAO<Family, Long, IFamily, QFamily> {
@@ -26,5 +28,9 @@ public class FamilyDAO extends BaseDAO<Family, Long, IFamily, QFamily> {
 
 	public String getSequentialCode(String prefix) {
 		return prefix.concat(String.format("%06d", getRepository().countAllByCodeStartingWith(prefix) + 1L));
+	}
+
+	public Collection<Family> findAllByAgent(UUID uuid) {
+		return getRepository().findAllByAgentUuid(uuid);
 	}
 }

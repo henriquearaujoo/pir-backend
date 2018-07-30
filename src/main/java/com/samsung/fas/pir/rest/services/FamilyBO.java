@@ -50,6 +50,10 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 		setMapper(mapper);
 	}
 
+	public Collection<FamilyDTO> findAllByAgent(UUID uuid, Device device, UserDetails details) {
+		return getDao().findAllByAgent(uuid).stream().map(item -> new FamilyDTO(item, device, false)).collect(Collectors.toList());
+	}
+
 	@Override
 	public FamilyDTO save(FamilyDTO create, Device device, UserDetails account) {
 		Family 			model		= create.getModel();

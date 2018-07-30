@@ -92,11 +92,9 @@ public class PregnantDTO extends BaseDTO<Pregnant> {
 		super(pregnant);
 		if (!device.isNormal()) {
 			setFamilyUUID(pregnant.getFamily() != null? pregnant.getFamily().getUuid() : null);
-			setAgentUUID(pregnant.getAgent() != null? pregnant.getAgent().getUuid() : null);
 			setPregnanciesDTO(pregnant.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()));
 		} else {
-			setFamilyDTO(detailed? pregnant.getFamily() != null? new FamilyDTO(pregnant.getFamily(), device, false) : null : null);
-			setResponsibleAgentDTO(pregnant.getAgent() != null? new AgentDTO(pregnant.getAgent(), device, false) : null);
+			setFamilyDTO(detailed? new FamilyDTO(pregnant.getFamily(), device, false) : null);
 			setPregnanciesDTO(pregnant.getPregnancies().stream().map(item -> new PregnancyDTO(item, device, false)).collect(Collectors.toList()));
 		}
 	}

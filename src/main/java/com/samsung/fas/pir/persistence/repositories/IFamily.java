@@ -10,9 +10,12 @@ import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.UUID;
 
 @Repository
 public interface IFamily extends IBaseRepository<Family, Long, QFamily> {
+	Collection<Family> findAllByAgentUuid(UUID uuid);
 	long countAllByCodeStartingWith(String prefix);
 
 	@Override

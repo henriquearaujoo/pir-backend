@@ -14,10 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.UUID;
 
 @Api(value = "Family", description = "REST Controller for Family", tags = "FAMILY")
 @RequestMapping(value = "/rest/family", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -26,6 +29,11 @@ public class FamilyController extends BController<FamilyBO, FamilyDTO> {
 	@Autowired
 	public FamilyController(FamilyBO service) {
 		super(service);
+	}
+
+	@RequestMapping(method= RequestMethod.GET, path = "/agent/{id}")
+	public ResponseEntity<?> search(@PathVariable("id") UUID id, Device device, @ApiIgnore @AuthenticationPrincipal UserDetails details) {
+		return ResponseEntity.ok(getService().findAllByAgent(id, device, details));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, path = "/search")
