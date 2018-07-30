@@ -4,7 +4,6 @@ import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.persistence.models.Chapter;
 import com.samsung.fas.pir.rest.controllers.base.BController;
 import com.samsung.fas.pir.rest.dto.ChapterDTO;
-import com.samsung.fas.pir.rest.dto.ChapterDetailedDTO;
 import com.samsung.fas.pir.rest.services.ChapterBO;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,37 +39,37 @@ public class ChapterController extends BController<ChapterBO, ChapterDTO> {
 
 //	@Cacheable(cacheNames = "chapter_active_detailed")
 	@RequestMapping(method= RequestMethod.GET, path="/active/detailed")
-	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllValidDetailed(Device device) {
+	public ResponseEntity<Collection<ChapterDTO>> getAllValidDetailed(Device device) {
 		return ResponseEntity.ok(getService().findAllValidDetailed(device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_active_detailed_search")
 	@RequestMapping(method= RequestMethod.GET, path="/active/detailed/search")
-	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllValidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Device device) {
+	public ResponseEntity<Collection<ChapterDTO>> getAllValidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Device device) {
 		return ResponseEntity.ok(getService().findAllValidDetailed(predicate, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_active_detailed_search_page")
 	@RequestMapping(method= RequestMethod.GET, path="/active/detailed/search/page")
-	public ResponseEntity<Page<ChapterDetailedDTO>> getAllValidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable, Device device) {
+	public ResponseEntity<Page<ChapterDTO>> getAllValidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable, Device device) {
 		return ResponseEntity.ok(getService().findAllValidDetailed(predicate, pageable, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_inactive_detailed")
 	@RequestMapping(method= RequestMethod.GET, path="/inactive/detailed")
-	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllInvalidDetailed(Device device) {
+	public ResponseEntity<Collection<ChapterDTO>> getAllInvalidDetailed(Device device) {
 		return ResponseEntity.ok(getService().findAllInvalidDetailed(device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_inactive_detailed_search")
 	@RequestMapping(method= RequestMethod.GET, path="/inactive/detailed/search")
-	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllInvalidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Device device) {
+	public ResponseEntity<Collection<ChapterDTO>> getAllInvalidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Device device) {
 		return ResponseEntity.ok(getService().findAllInvalidDetailed(predicate, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_inactive_detailed_page_search")
 	@RequestMapping(method= RequestMethod.GET, path="/inactive/detailed/search/page")
-	public ResponseEntity<Page<ChapterDetailedDTO>> getAllInvalidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable, Device device) {
+	public ResponseEntity<Page<ChapterDTO>> getAllInvalidDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable, Device device) {
 		return ResponseEntity.ok(getService().findAllInvalidDetailed(predicate, pageable, device));
 	}
 
@@ -112,19 +111,19 @@ public class ChapterController extends BController<ChapterBO, ChapterDTO> {
 
 //	@Cacheable(cacheNames = "chapter_detailed_page")
 	@RequestMapping(method= RequestMethod.GET, path="/detailed/page")
-	public ResponseEntity<Page<ChapterDetailedDTO>> getAllDetailed(Pageable pageable, Device device) {
+	public ResponseEntity<Page<ChapterDTO>> getAllDetailed(Pageable pageable, Device device) {
 		return ResponseEntity.ok(getService().findAllDetailed(pageable, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_detailed_search")
 	@RequestMapping(method= RequestMethod.GET, path="/detailed/search")
-	public ResponseEntity<Collection<ChapterDetailedDTO>> getAllDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Device device) {
+	public ResponseEntity<Collection<ChapterDTO>> getAllDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Device device) {
 		return ResponseEntity.ok(getService().findAllDetailed(predicate, device));
 	}
 
 //	@Cacheable(cacheNames = "chapter_detailed_page")
 	@RequestMapping(method= RequestMethod.GET, path="/detailed/search/page")
-	public ResponseEntity<Page<ChapterDetailedDTO>> getAllDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable, Device device) {
+	public ResponseEntity<Page<ChapterDTO>> getAllDetailed(@QuerydslPredicate(root = Chapter.class) Predicate predicate, Pageable pageable, Device device) {
 		return ResponseEntity.ok(getService().findAllDetailed(predicate, pageable, device));
 	}
 

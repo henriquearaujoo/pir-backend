@@ -31,7 +31,7 @@ public class ConclusionBO extends BaseBO<Conclusion, ConclusionDAO, ConclusionDT
 		model.setChapter(chapter);
 		chapter.setConclusion(model);
 
-		return new ConclusionDTO(getDao().save(model), true);
+		return new ConclusionDTO(getDao().save(model), device, true);
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class ConclusionBO extends BaseBO<Conclusion, ConclusionDAO, ConclusionDT
 		conclusion.setDescription(model.getDescription());
 		conclusion.setObservations(model.getObservations());
 
-		return new ConclusionDTO(getDao().save(conclusion), true);
+		return new ConclusionDTO(getDao().save(conclusion), device, true);
 	}
 
 	@Override

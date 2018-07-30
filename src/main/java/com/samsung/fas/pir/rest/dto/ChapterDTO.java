@@ -16,6 +16,7 @@ import org.springframework.mobile.device.Device;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,100 +28,92 @@ public class ChapterDTO extends BaseDTO<Chapter> {
 	@Getter
 	@Setter
 	@JsonProperty("number")
-	@Min(value = 1, message = "number.greater")
-	private		int				chapter;
+	private		int						chapter;
 
 	@Getter
 	@Setter
 	@JsonProperty("version")
-	@Min(value = 0, message = "version.greater")
-	private 	int				version;
+	private 	int						version;
 
 	@Getter
 	@Setter
 	@JsonProperty("title")
-	@NotBlank(message = "title.missing")
-	private 	String			title;
+	private 	String					title;
 
 	@Getter
 	@Setter
 	@JsonProperty("subtitle")
-	@NotBlank(message = "subtitle.missing")
-	private 	String			subtitle;
+	private 	String					subtitle;
 
 	@Getter
 	@Setter
 	@JsonProperty("resources")
-	private 	String			resources;
+	private 	String					resources;
 
 	@Getter
 	@Setter
 	@JsonProperty("description")
-	@NotBlank(message = "description.missing")
-	private 	String			description;
+	private 	String					description;
 
 	@Getter
 	@Setter
 	@JsonProperty("content")
-	@NotBlank(message = "content.missing")
-	private		String			content;
+	private		String					content;
 
 	@Getter
 	@Setter
 	@JsonProperty("goal")
-	@NotBlank(message = "goal.missing")
-	private		String			purpose;
-
-	@Getter
-	@Setter
-	@JsonProperty("extra_forms")
-	private		String			additionalForms;
+	private		String					purpose;
 
 	@Getter
 	@Setter
 	@JsonProperty("family_tasks")
-	@NotBlank(message = "tasks.missing")
-	private		String			familyTasks;
+	private		String					familyTasks;
 
 	@Getter
 	@Setter
 	@JsonProperty("estimated_time")
-	@Min(value = 1, message = "estimated.time.greater")
-	private 	long			estimatedTime;
+	private 	long					estimatedTime;
 
 	@Getter
 	@Setter
 	@JsonProperty("time_next_visit")
-	@Min(value = 1, message = "time.next.greater")
-	private 	long 			timeUntilNext;
+	private 	long 					timeUntilNext;
 
 	@Getter
 	@Setter
 	@JsonProperty("status")
-	private 	boolean			valid;
+	private 	boolean					valid;
 
 	@Getter
 	@Setter
 	@JsonProperty("period")
-	@Min(value = 0, message = "invalid.period")
-	private 	int				period;
+	private 	int						period;
 
 	@Getter
 	@Setter
-	@JsonProperty("medias")
-	@Valid
-	private 	List<FileDTO> mediasDTO;
+	@JsonProperty("greetings")
+	private 	GreetingsDTO			greetingsDTO;
 
 	@Getter
 	@Setter
-	@JsonProperty("thumbnail")
-	@Valid
-	private 	List<FileDTO> 	thumbnailsDTO;
+	@JsonProperty("intervention")
+	private 	InterventionDTO			interventionDTO;
+
+	@Getter
+	@Setter
+	@JsonProperty("conclusion")
+	private 	ConclusionDTO			conclusionDTO;
 
 	@Getter
 	@Setter
 	@JsonProperty("percentage")
-	private 	float 			untilComplete		= 25.0f;
+	private 	float 					untilComplete;
+
+	@Getter
+	@Setter
+	@JsonProperty("medias")
+	private Collection<FileDTO> 		mediasDTO;
 
 	public ChapterDTO() {
 		super();
@@ -128,10 +121,16 @@ public class ChapterDTO extends BaseDTO<Chapter> {
 
 	public ChapterDTO(Chapter chapter, Device device, boolean detailed) {
 		super(chapter);
-		setTimeUntilNext(chapter.getTimeUntilNext()/1000/3600/24);
-		setUntilComplete(CTools.calculateChapterCompleteness(chapter));
-		Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMediasDTO(item.stream().map(FileDTO::new).collect(Collectors.toList())));
-		Optional.ofNullable(chapter.getThumbnails()).ifPresent(item -> setThumbnailsDTO(item.stream().map(FileDTO::new).collect(Collectors.toList())));
+		if (!device.isNormal()) {
+			setGreetingsDTO(chapter.getGreetings() != null? new GreetingsDTO(chapter.getGreetings(), device, true) : null);
+			setInterventionDTO(chapter.getIntervention() != null? new InterventionDTO(chapter.getIntervention(), device, true) : null);
+			setConclusionDTO(chapter.getConclusion() != null? new ConclusionDTO(chapter.getConclusion(), device, true) : null);
+			Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMediasDTO(item.stream().map(FileDTO::new).collect(Collectors.toSet())));
+		} else {
+			setTimeUntilNext(chapter.getTimeUntilNext() / 1000 / 3600 / 24);
+			setUntilComplete(CTools.calculateChapterCompleteness(chapter));
+			Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMediasDTO(item.stream().map(FileDTO::new).collect(Collectors.toList())));
+		}
 	}
 
 	@JsonIgnore
@@ -140,7 +139,6 @@ public class ChapterDTO extends BaseDTO<Chapter> {
 		Chapter model = super.getModel();
 		model.setTimeUntilNext(getTimeUntilNext() * 1000 * 3600 * 24);
 		model.setMedias(getMediasDTO() != null? getMediasDTO().stream().map(FileDTO::getModel).collect(Collectors.toSet()) : new ArrayList<>());
-		model.setThumbnails(getThumbnailsDTO() != null? getThumbnailsDTO().stream().map(FileDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		return model;
 	}
 }

@@ -1,5 +1,7 @@
 package com.samsung.fas.pir.persistence.enums;
 
+import jdk.nashorn.internal.objects.annotations.Getter;
+import jdk.nashorn.internal.objects.annotations.Setter;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,26 +11,26 @@ import java.util.Arrays;
 public enum EAnswerType {
 	OBJECTIVE		("OBJECTIVE"),
 	SUBJECTIVE		("SUBJECTIVE"),
-	DISSERTATIVE	("DISSERTATIVE"),
+	DISSERTATION	("DISSERTATION"),
 	UNDEFINED		("UNDEFINED");
 
 	@Getter(value = AccessLevel.PRIVATE)
 	@Setter(value = AccessLevel.PRIVATE)
-	private		String		enumaration;
+	private		String		enumeration;
 
 	EAnswerType(String value) {
-		setEnumaration(value);
+		setEnumeration(value);
 	}
 
 	public boolean equals(String value) {
-		return getEnumaration().equalsIgnoreCase(value);
+		return getEnumeration().equalsIgnoreCase(value);
 	}
 
 	public String getValue() {
-		return getEnumaration();
+		return getEnumeration();
 	}
 
 	public static EAnswerType setValue(String s) {
-		return Arrays.stream(EAnswerType.values()).filter(item -> item.getEnumaration().equalsIgnoreCase(s)).findAny().orElse(UNDEFINED);
+		return Arrays.stream(EAnswerType.values()).filter(item -> item.getEnumeration().equalsIgnoreCase(s)).findAny().orElse(UNDEFINED);
 	}
 }

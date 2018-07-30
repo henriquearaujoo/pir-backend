@@ -10,6 +10,7 @@ import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.mobile.device.Device;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -45,7 +46,7 @@ public class ConclusionDTO extends BaseDTO<Conclusion> {
 		super();
 	}
 
-	public ConclusionDTO(Conclusion conclusion, boolean detailed) {
+	public ConclusionDTO(Conclusion conclusion, Device device, boolean detailed) {
 		super(conclusion);
 		setChapterUUID(conclusion.getChapter().getUuid());
 		setQuestionsDTO(conclusion.getQuestions() != null? conclusion.getQuestions().stream().sorted(Comparator.comparing(Base::getId)).map(item -> new QuestionDTO(item, false)).collect(Collectors.toList()) : null);
