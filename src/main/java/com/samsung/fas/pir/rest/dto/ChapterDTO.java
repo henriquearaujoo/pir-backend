@@ -57,6 +57,11 @@ public class ChapterDTO extends BaseDTO<Chapter> {
 
 	@Getter
 	@Setter
+	@JsonProperty("extra_forms")
+	private		String					additionalForms;
+
+	@Getter
+	@Setter
 	@JsonProperty("content")
 	private		String					content;
 

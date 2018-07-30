@@ -1,7 +1,5 @@
 package com.samsung.fas.pir.persistence.enums;
 
-import jdk.nashorn.internal.objects.annotations.Getter;
-import jdk.nashorn.internal.objects.annotations.Setter;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +9,7 @@ import java.util.Arrays;
 public enum EAnswerType {
 	OBJECTIVE		("OBJECTIVE"),
 	SUBJECTIVE		("SUBJECTIVE"),
-	DISSERTATION	("DISSERTATION"),
+	DISSERTATIVE	("DISSERTATIVE"),
 	UNDEFINED		("UNDEFINED");
 
 	@Getter(value = AccessLevel.PRIVATE)
