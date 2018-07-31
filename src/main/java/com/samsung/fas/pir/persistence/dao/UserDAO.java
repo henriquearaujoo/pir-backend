@@ -36,19 +36,19 @@ public class UserDAO extends BaseDAO<User, Long, IUser, QUser> {
 	public Collection<User> findAllAgents() {
 		JPAQuery<User>		query 		= new JPAQuery<>(manager);
 		QUser 				users		= new QUser("users");
-		return query.select(users).from(users).where(users.person.agent.isNotNull()).fetch();
+		return query.select(users).from(users).where(users.person.agent.id.isNotNull()).fetch();
 	}
 
 	public Collection<User> findAllAgents(Predicate predicate) {
 		JPAQuery<User>		query 		= new JPAQuery<>(manager);
 		QUser 				users		= new QUser("users");
-		return query.select(users).from(users).where(users.person.agent.isNotNull().and(predicate)).fetch();
+		return query.select(users).from(users).where(users.person.agent.id.isNotNull().and(predicate)).fetch();
 	}
 
 	public Page<?> findAllAgents(Pageable pageable) {
 		JPAQuery<User>				query 		= new JPAQuery<>(manager);
 		QUser 						users		= new QUser("users");
-		JPAQuery<User>				result		= query.select(users).from(users).where(users.person.agent.isNotNull());
+		JPAQuery<User>				result		= query.select(users).from(users).where(users.person.agent.id.isNotNull());
 		Query						page		= SBPage.setupPage(result, pageable, new PathBuilder<>(User.class, users.getMetadata().getName()));
 		Function<User, String>		getUser		= User::getName;
 		return SBPage.getPageList(pageable, page, getUser);
@@ -57,7 +57,7 @@ public class UserDAO extends BaseDAO<User, Long, IUser, QUser> {
 	public Page<?> findAllAgents(Predicate predicate, Pageable pageable) {
 		JPAQuery<User>				query 		= new JPAQuery<>(manager);
 		QUser 						users		= new QUser("users");
-		JPAQuery<User>				result		= query.select(users).from(users).where(users.person.agent.isNotNull().and(predicate));
+		JPAQuery<User>				result		= query.select(users).from(users).where(users.person.agent.id.isNotNull().and(predicate));
 		Query						page		= SBPage.setupPage(result, pageable, new PathBuilder<>(User.class, users.getMetadata().getName()));
 		Function<User, String>		getUser		= User::getName;
 		return SBPage.getPageList(pageable, page, getUser);
