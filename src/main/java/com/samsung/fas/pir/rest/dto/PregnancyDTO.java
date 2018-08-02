@@ -67,7 +67,7 @@ public class PregnancyDTO extends BaseDTO<Pregnancy> {
 			setAnswersDTO(pregnancy.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
 			setVisitsDTO(pregnancy.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
 		} else {
-			setPregnantDTO(pregnancy.getPregnant() != null? new PregnantDTO(pregnancy.getPregnant(), device, false) : null);
+			setPregnantDTO(detailed && pregnancy.getPregnant() != null? new PregnantDTO(pregnancy.getPregnant(), device, false) : null);
 			setAnswersDTO(pregnancy.getAnswers().stream().map(item -> new SAnswerDTO(item, device, false)).collect(Collectors.toList()));
 			setVisitsDTO(pregnancy.getVisits().stream().map(item -> new VisitDTO(item, device, false)).collect(Collectors.toList()));
 		}

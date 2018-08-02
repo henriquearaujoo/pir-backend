@@ -81,7 +81,7 @@ public class PregnantDTO extends BaseDTO<Pregnant> {
 	@Getter
 	@Setter
 	@JsonProperty("agent")
-	private 	AgentDTO						responsibleAgentDTO;
+	private 	AgentDTO					responsibleAgentDTO;
 	// endregion
 
 	public PregnantDTO() {

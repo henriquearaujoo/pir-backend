@@ -49,7 +49,7 @@ public class PregnantBO extends BaseBO<Pregnant, PregnantDAO, PregnantDTO, Long>
 		Pregnant		model		= create.getModel();
 		Pregnant		pregnant	= model.getUuid() != null? getDao().findOne(model.getUuid()) : null;
 		Family			family		= getFamilyBO().getDao().findOne(create.getFamilyUUID());
-		return new PregnantDTO(getDao().save(pregnant != null? setupPregnant(pregnant, model, family) : setupPregnant(model, family)), device, true);
+		return new PregnantDTO(getDao().save(pregnant != null? setupPregnant(pregnant, model, family, device) : setupPregnant(model, family, device)), device, true);
 	}
 
 	@Override
@@ -67,16 +67,21 @@ public class PregnantBO extends BaseBO<Pregnant, PregnantDAO, PregnantDTO, Long>
 		return null;
 	}
 
-	Pregnant setupPregnant(Pregnant model, Family family) {
+	Pregnant setupPregnant(Pregnant model, Family family, Device device) {
 		model.setCode(getDao().getSequentialCode(family.getCommunity().getUnity().getAbbreviation().toUpperCase().concat("G")));
 		model.setFamily(family);
-		model.setPregnancies(setupPregnancy(model, model.getPregnancies()));
+		if (!device.isNormal()) {
+			model.setPregnancies(setupPregnancy(model, model.getPregnancies()));
+		}
 		return model;
 	}
 
-	Pregnant setupPregnant(Pregnant pregnant, Pregnant model, Family family) {
+	Pregnant setupPregnant(Pregnant pregnant, Pregnant model, Family family, Device device) {
 		getMapper().map(model, pregnant);
-		pregnant.setPregnancies(setupPregnancy(pregnant, model.getPregnancies()));
+		pregnant.setFamily(family);
+		if (!device.isNormal()) {
+			pregnant.setPregnancies(setupPregnancy(pregnant, model.getPregnancies()));
+		}
 		return pregnant;
 	}
 

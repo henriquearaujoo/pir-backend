@@ -96,6 +96,7 @@ public class VisitDTO extends BaseDTO<Visit> {
 		setChapterDTO(new ChapterDTO(visit.getChapter(), device, false));
 		setChildDTO(detailed && visit.getChild() != null? new ChildDTO(visit.getChild(), device, false) : null);
 		setPregnancyDTO(detailed && visit.getPregnancy() != null? new PregnancyDTO(visit.getPregnancy(), device, false) : null);
+		setChapterUUID(visit.getChapter().getUuid());
 	}
 
 	@JsonIgnore
