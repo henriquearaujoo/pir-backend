@@ -102,7 +102,17 @@ public class PregnantDTO extends BaseDTO<Pregnant> {
 	@JsonIgnore
 	@Override
 	public Pregnant getModel() {
-		Pregnant model = super.getModel();
+		Pregnant model = new Pregnant();
+
+		model.setUuid(getUuid());
+		model.setExternalID(getExternalID());
+		model.setCode(getCode());
+		model.setName(getName());
+		model.setBirth(getBirth());
+		model.setCivilState(getCivilState());
+		model.setPhoneNumber(getPhoneNumber());
+		model.setPhoneOwner(isPhoneResponsible());
+
 		model.setPregnancies(getPregnanciesDTO() != null? getPregnanciesDTO().stream().map(PregnancyDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		return model;
 	}

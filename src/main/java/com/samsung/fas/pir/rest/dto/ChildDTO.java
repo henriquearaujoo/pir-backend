@@ -115,7 +115,17 @@ public class ChildDTO extends BaseDTO<Child> {
 	@JsonIgnore
 	@Override
 	public Child getModel() {
-		Child model = super.getModel();
+		Child model = new Child();
+
+		model.setUuid(getUuid());
+		model.setExternalID(getExternalID());
+		model.setCode(getCode());
+		model.setName(getName());
+		model.setBirth(getBirth());
+		model.setGender(getGender());
+		model.setMotherFullName(getMotherFullName());
+		model.setFatherFullName(getFatherFullName());
+
 		model.setAnswers(getAnswersDTO() != null? getAnswersDTO().stream().map(SAnswerDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		model.setVisits(getVisitsDTO() != null? getVisitsDTO().stream().map(VisitDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		return model;

@@ -92,7 +92,7 @@ public class VisitDTO extends BaseDTO<Visit> {
 	public VisitDTO(Visit visit, Device device, boolean detailed) {
 		super(visit);
 		setFormUUID(visit.getForm() != null? visit.getForm().getUuid() : null);
-		setAnswersDTO(visit.getAnswers() != null? visit.getAnswers().stream().map(answer -> new AnswerDTO(answer, null, true)).collect(Collectors.toList()) : null);
+		setAnswersDTO(visit.getAnswers() != null? visit.getAnswers().stream().map(answer -> new AnswerDTO(answer, device, true)).collect(Collectors.toList()) : null);
 		setChapterDTO(new ChapterDTO(visit.getChapter(), device, false));
 		setChildDTO(detailed && visit.getChild() != null? new ChildDTO(visit.getChild(), device, false) : null);
 		setPregnancyDTO(detailed && visit.getPregnancy() != null? new PregnancyDTO(visit.getPregnancy(), device, false) : null);
@@ -102,9 +102,18 @@ public class VisitDTO extends BaseDTO<Visit> {
 	@JsonIgnore
 	@Override
 	public Visit getModel() {
-		Visit 	model 	= super.getModel();
+		Visit 	model 	= new Visit();
 		Chapter	chapter	= new Chapter();
 		Form	form	= new Form();
+
+		model.setUuid(getUuid());
+		model.setExternalID(getMobileId());
+		model.setDoneAt(getDoneAt());
+		model.setNumber(getNumber());
+		model.setFamilyRating(getFamilyRating());
+		model.setAgentRating(getAgentRating());
+		model.setDuration(getDuration());
+
 		chapter.setUuid(getChapterUUID());
 		form.setUuid(getFormUUID());
 		model.setChapter(chapter);

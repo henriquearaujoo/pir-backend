@@ -62,11 +62,6 @@ public class FamilyDTO extends BaseDTO<Family> {
 
 	@Getter
 	@Setter
-	@JsonProperty("children_count")
-	private 	long				childrenCount;
-
-	@Getter
-	@Setter
 	@JsonProperty("water_treatment_description")
 	private 	String				waterTreatmentDescription;
 
@@ -146,7 +141,20 @@ public class FamilyDTO extends BaseDTO<Family> {
 	@JsonIgnore
 	@Override
 	public Family getModel() {
-		Family model = super.getModel();
+		Family model = new Family();
+
+		model.setUuid(getUuid());
+		model.setExternalID(getExternalID());
+		model.setCode(getCode());
+		model.setName(getName());
+		model.setHabitationType(getHabitationType());
+		model.setMembersCount(getMembersCount());
+		model.setFamilyIncome(getFamilyIncome());
+		model.setFamilyIncomeOther(getFamilyIncomeOther());
+		model.setWaterTreatmentDescription(getWaterTreatmentDescription());
+		model.setWaterTreatment(isWaterTreatment());
+		model.setObservations(getObservations());
+
 		model.setCommunity(getCommunityDTO() != null? getCommunityDTO().getModel() : null);
 		model.setChildren(getChildrenDTO() != null? getChildrenDTO().stream().map(ChildDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
 		model.setPregnant(getPregnantDTO() != null? getPregnantDTO().stream().map(PregnantDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());

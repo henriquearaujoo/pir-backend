@@ -32,12 +32,12 @@ public class AnswerDTO extends BaseDTO<Answer> {
 
 	@Getter
 	@Setter
-	@JsonProperty(value = "question_id", access = JsonProperty.Access.WRITE_ONLY)
+	@JsonProperty(value = "question_id")
 	private 	UUID				questionUUID;
 
 	@Getter
 	@Setter
-	@JsonProperty(value = "alternative_id", access = JsonProperty.Access.WRITE_ONLY)
+	@JsonProperty(value = "alternative_id")
 	private 	UUID				alternativeUUID;
 
 	@ApiModelProperty(readOnly = true, hidden = true)
@@ -58,20 +58,30 @@ public class AnswerDTO extends BaseDTO<Answer> {
 
 	public AnswerDTO(Answer answer, Device device, boolean detailed) {
 		super(answer);
-		setQuestionDTO(answer.getQuestion() != null? new QuestionDTO(answer.getQuestion(), false) : null);
-		setAlternativeDTO(answer.getAlternative() != null? new AlternativeDTO(answer.getAlternative(), device, false) : null);
+		if (device.isNormal()) {
+			setQuestionDTO(answer.getQuestion() != null ? new QuestionDTO(answer.getQuestion(), false) : null);
+			setAlternativeDTO(answer.getAlternative() != null ? new AlternativeDTO(answer.getAlternative(), device, false) : null);
+		} else {
+			setQuestionUUID(answer.getQuestion().getUuid());
+			setAlternativeUUID(answer.getAlternative().getUuid());
+		}
 	}
 
 	@JsonIgnore
 	@Override
 	public Answer getModel() {
-		Answer 			answer 			= super.getModel();
+		Answer 			model 			= new Answer();
 		Alternative		alternative		= new Alternative();
 		Question		question		= new Question();
+
+		model.setUuid(getUuid());
+		model.setMobileId(getMobileId());
+		model.setDescription(getDescription());
+
 		alternative.setUuid(getAlternativeUUID());
 		question.setUuid(getQuestionUUID());
-		answer.setAlternative(alternative);
-		answer.setQuestion(question);
-		return answer;
+		model.setAlternative(alternative);
+		model.setQuestion(question);
+		return model;
 	}
 }
