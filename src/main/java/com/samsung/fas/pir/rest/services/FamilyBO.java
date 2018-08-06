@@ -83,7 +83,7 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 		model.setCommunity(community);
 		model.setAgent(agent);
 		model.setPregnant(setupPregnant(model, model.getPregnant(), device));
-		model.setChildren(setupChild(model, model.getChildren()));
+		model.setChildren(setupChild(model, model.getChildren(), agent));
 		return model;
 	}
 
@@ -92,7 +92,7 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 		family.setCommunity(community);
 		family.setAgent(agent);
 		family.setPregnant(setupPregnant(family, model.getPregnant(), device));
-		family.setChildren(setupChild(family, model.getChildren()));
+		family.setChildren(setupChild(family, model.getChildren(), agent));
 		return family;
 	}
 
@@ -109,15 +109,15 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 		}).collect(Collectors.toList());
 	}
 
-	private Collection<Child> setupChild(Family family, Collection<Child> collection) {
+	private Collection<Child> setupChild(Family family, Collection<Child> collection, Agent agent) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
 			Child		child		= uuid != null? getChildBO().getDao().findOne(uuid) :  null;
 			if (child != null) {
-				return getChildBO().setupChild(child, item, family);
+				return getChildBO().setupChild(child, item, family, agent);
 			} else {
-				return getChildBO().setupChild(item, family);
+				return getChildBO().setupChild(item, family, agent);
 			}
 		}).collect(Collectors.toList());
 	}

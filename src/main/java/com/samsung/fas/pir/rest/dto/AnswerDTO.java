@@ -63,7 +63,7 @@ public class AnswerDTO extends BaseDTO<Answer> {
 			setAlternativeDTO(answer.getAlternative() != null ? new AlternativeDTO(answer.getAlternative(), device, false) : null);
 		} else {
 			setQuestionUUID(answer.getQuestion().getUuid());
-			setAlternativeUUID(answer.getAlternative().getUuid());
+			setAlternativeUUID(answer.getAlternative() != null? answer.getAlternative().getUuid() : null);
 		}
 	}
 

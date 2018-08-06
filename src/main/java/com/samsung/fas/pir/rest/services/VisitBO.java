@@ -2,10 +2,7 @@ package com.samsung.fas.pir.rest.services;
 
 import com.querydsl.core.types.Predicate;
 import com.samsung.fas.pir.persistence.dao.VisitDAO;
-import com.samsung.fas.pir.persistence.models.Answer;
-import com.samsung.fas.pir.persistence.models.Child;
-import com.samsung.fas.pir.persistence.models.Pregnancy;
-import com.samsung.fas.pir.persistence.models.Visit;
+import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.VisitDTO;
 import com.samsung.fas.pir.rest.dto.VisitFrontDTO;
@@ -112,16 +109,18 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 	// endregion
 
 	// region Child
-	Visit setupVisit(Visit model, Child child) {
+	Visit setupVisit(Visit model, Child child, Agent agent) {
 		model.setChild(child);
+		model.setAgent(agent.getPerson().getUser());
 		model.setChapter(getChapterBO().getDao().findOne(model.getChapter().getUuid()));
 		model.setForm(model.getForm() != null && model.getForm().getUuid() != null? getFormBO().getDao().findOne(model.getForm().getUuid()) : null);
 		model.setAnswers(setupAnswers(model, model.getAnswers()));
 		return model;
 	}
 
-	Visit setupVisit(Visit visit, Visit model, Child child) {
+	Visit setupVisit(Visit visit, Visit model, Child child, Agent agent) {
 		getMapper().map(model, visit);
+		visit.setAgent(agent.getPerson().getUser());
 		visit.setChild(child);
 		visit.setChapter(getChapterBO().getDao().findOne(model.getChapter().getUuid()));
 		visit.setForm(model.getForm().getUuid() != null? getFormBO().getDao().findOne(model.getForm().getUuid()) : null);

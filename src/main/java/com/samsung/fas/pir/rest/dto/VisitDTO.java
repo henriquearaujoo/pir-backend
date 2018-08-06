@@ -27,7 +27,7 @@ public class VisitDTO extends BaseDTO<Visit> {
 	@Getter
 	@Setter
 	@JsonProperty("external_id")
-	private 		long						mobileId;
+	private 		long						externalID;
 
 	@Getter
 	@Setter
@@ -107,7 +107,7 @@ public class VisitDTO extends BaseDTO<Visit> {
 		Form	form	= new Form();
 
 		model.setUuid(getUuid());
-		model.setExternalID(getMobileId());
+		model.setExternalID(getExternalID());
 		model.setDoneAt(getDoneAt());
 		model.setNumber(getNumber());
 		model.setFamilyRating(getFamilyRating());

@@ -19,7 +19,6 @@ import java.util.Date;
 public class Visit extends Base {
 	@Getter
 	@Setter
-	@Transient
 	private		long			externalID;
 
 	@Getter

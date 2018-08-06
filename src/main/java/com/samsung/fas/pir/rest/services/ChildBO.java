@@ -1,10 +1,7 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.persistence.dao.ChildDAO;
-import com.samsung.fas.pir.persistence.models.Child;
-import com.samsung.fas.pir.persistence.models.Family;
-import com.samsung.fas.pir.persistence.models.SAnswer;
-import com.samsung.fas.pir.persistence.models.Visit;
+import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.ChildDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
@@ -61,7 +58,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		Child				model		= create.getModel();
 		Child				child		= create.getUuid() != null? getDao().findOne(create.getUuid()) : null;
 		Family				family		= create.getFamilyUUID() != null? getFamilyBO().getDao().findOne(create.getFamilyUUID()) : null;
-		return child == null? new ChildDTO(getDao().save(setupChild(model, family)), device, true) : new ChildDTO(getDao().save(setupChild(child, model, family)), device, true);
+		return child == null? new ChildDTO(getDao().save(setupChild(model, family, null)), device, true) : new ChildDTO(getDao().save(setupChild(child, model, family, null)), device, true);
 	}
 
 	@Override
@@ -79,20 +76,20 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		return collection.stream().map(item -> update(item, device, details)).collect(Collectors.toList());
 	}
 
-	Child setupChild(Child model, Family family) {
+	Child setupChild(Child model, Family family, Agent agent) {
 		model.setCode(getDao().getSequentialCode(family.getCommunity().getUnity().getAbbreviation().toUpperCase().concat("C")));
 		model.setFamily(family);
 		model.setAgent(null);
-		model.setVisits(setupVisit(model, model.getVisits()));
+		model.setVisits(setupVisit(model, model.getVisits(), agent));
 		model.setAnswers(setupAnswer(model, model.getAnswers()));
 		return model;
 	}
 
-	Child setupChild(Child child, Child model, Family family) {
+	Child setupChild(Child child, Child model, Family family, Agent agent) {
 		getMapper().map(model, child);
 		child.setFamily(family);
 		child.setAgent(null);
-		child.setVisits(setupVisit(child, model.getVisits()));
+		child.setVisits(setupVisit(child, model.getVisits(), agent));
 		child.setAnswers(setupAnswer(child, model.getAnswers()));
 		return child;
 	}
@@ -110,15 +107,15 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		}).collect(Collectors.toList());
 	}
 
-	private Collection<Visit> setupVisit(Child child, Collection<Visit> collection) {
+	private Collection<Visit> setupVisit(Child child, Collection<Visit> collection, Agent agent) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
 			Visit		visit		= uuid != null? getVisitBO().getDao().findOne(uuid) : null;
 			if (visit != null) {
-				return getVisitBO().setupVisit(visit, item, child);
+				return getVisitBO().setupVisit(visit, item, child, agent);
 			} else {
-				return getVisitBO().setupVisit(item, child);
+				return getVisitBO().setupVisit(item, child, agent);
 			}
 		}).collect(Collectors.toList());
 	}

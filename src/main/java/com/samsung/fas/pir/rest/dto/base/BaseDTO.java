@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.ParameterizedType;
@@ -30,21 +29,11 @@ public abstract class BaseDTO<T> implements IBaseDTO<T> {
 	private 		UUID 				uuid;
 
 	public BaseDTO() {
-		setMapper(new ModelMapper());
-		getMapper().getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-		getMapper().getConfiguration().setSkipNullEnabled(true);
-		getMapper().getConfiguration().setAmbiguityIgnored(true);
-		getMapper().getConfiguration().setFullTypeMatchingRequired(true);
-		getMapper().getConfiguration().setFieldMatchingEnabled(true);
+		setMapper(Mapper.getMapper());
 	}
 
 	public BaseDTO(T entity) {
-		setMapper(new ModelMapper());
-		getMapper().getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-		getMapper().getConfiguration().setSkipNullEnabled(true);
-		getMapper().getConfiguration().setAmbiguityIgnored(true);
-		getMapper().getConfiguration().setFullTypeMatchingRequired(true);
-		getMapper().getConfiguration().setFieldMatchingEnabled(true);
+		setMapper(Mapper.getMapper());
 		getMapper().map(entity, this);
 	}
 

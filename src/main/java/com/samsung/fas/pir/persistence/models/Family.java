@@ -20,7 +20,6 @@ import java.util.Collection;
 public class Family extends Base {
 	@Getter
 	@Setter
-	@Transient
 	private		long					externalID;
 
 	@Getter
