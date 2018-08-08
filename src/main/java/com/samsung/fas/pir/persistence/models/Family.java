@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
-@Table(name = "family", uniqueConstraints = @UniqueConstraint(name = "family_code", columnNames = {"code"}), indexes = @Index(name = "family_index", columnList = "code", unique = true))
+@Table(name = "family")
 @DynamicUpdate
 @DynamicInsert
 @Alias("Família")
@@ -24,7 +24,7 @@ public class Family extends Base {
 
 	@Getter
 	@Setter
-	@Column(nullable = false, columnDefinition = "VARCHAR(10)")
+	@Column(columnDefinition = "VARCHAR(10)")
 	@Alias("Matrícula")
 	private 	String					code;
 
@@ -100,7 +100,7 @@ public class Family extends Base {
 	@Getter
 	@Setter
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "relation_agent"))
+	@JoinColumn(name = "agent_person_user_id", foreignKey = @ForeignKey(name = "relation_agent"))
 	@Alias("Agente")
 	private 	Agent					agent;
 

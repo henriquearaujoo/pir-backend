@@ -71,7 +71,7 @@ public class Agent extends Base {
 	@Getter
 	@Setter
 	@OneToOne(optional = false)
-	@MapsId
+	@JoinColumn(name = "person_user", foreignKey = @ForeignKey(name = "fk_person"))
 	@Alias("Usuário - PF")
 	private 	Person					person;
 

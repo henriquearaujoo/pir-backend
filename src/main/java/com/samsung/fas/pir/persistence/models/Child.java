@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 
 @Entity
-@Table(name = "child", uniqueConstraints = @UniqueConstraint(name = "child_code", columnNames = {"code"}), indexes = @Index(name = "child_index", columnList = "code", unique = true))
+@Table(name = "child")
 @DynamicUpdate
 @DynamicInsert
 @Alias("Criança")
@@ -26,7 +26,7 @@ public class Child extends Base {
 
 	@Getter
 	@Setter
-	@Column(nullable = false, columnDefinition = "VARCHAR(10)")
+	@Column(columnDefinition = "VARCHAR(10)")
 	@Alias("Matrícula")
 	private 	String								code;
 
