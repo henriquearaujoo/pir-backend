@@ -12,6 +12,7 @@ public enum ECivilState {
 	DIVORCED	("DIVORCED"),
 	SEPARATED	("SEPARATED"),
 	WIDOWED		("WIDOWED"),
+	STABLE		("STABLE"),
 	UNDEFINED	("UNDEFINED");
 
 	@Getter(value = AccessLevel.PRIVATE)

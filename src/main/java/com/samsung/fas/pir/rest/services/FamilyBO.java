@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 	private		UserBO			userBO;
 
 	@Autowired
-	public FamilyBO(FamilyDAO dao, CommunityBO communityBO, UserBO userBO, PregnantBO pregnantBO, ChildBO childBO, ModelMapper mapper) {
+	public FamilyBO(FamilyDAO dao, CommunityBO communityBO, UserBO userBO, PregnantBO pregnantBO, ChildBO childBO, @Lazy ModelMapper mapper) {
 		super(dao);
 		setCommunityBO(communityBO);
 		setPregnantBO(pregnantBO);

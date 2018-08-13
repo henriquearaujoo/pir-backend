@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class PregnancyBO extends BaseBO<Pregnancy, PregnancyDAO, PregnancyDTO, L
 	private 	ModelMapper 	mapper;
 
 	@Autowired
-	protected PregnancyBO(PregnancyDAO dao, SAnswerBO sAnswerBO, VisitBO visitBO, ModelMapper mapper) {
+	protected PregnancyBO(PregnancyDAO dao, SAnswerBO sAnswerBO, VisitBO visitBO, @Lazy ModelMapper mapper) {
 		super(dao);
 		setVisitBO(visitBO);
 		setSAnswerBO(sAnswerBO);

@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mobile.device.Device;
@@ -51,7 +52,7 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 	private 	ModelMapper 			mapper;
 
 	@Autowired
-	public UserBO(UserDAO dao, AgentDAO agentDAO, ConservationUnityBO unityBO, ProfileBO profileBO, PasswordEncoder encoder, ModelMapper mapper) {
+	public UserBO(UserDAO dao, AgentDAO agentDAO, ConservationUnityBO unityBO, ProfileBO profileBO, PasswordEncoder encoder, @Lazy ModelMapper mapper) {
 		super(dao);
 		setUnityBO(unityBO);
 		setProfileBO(profileBO);

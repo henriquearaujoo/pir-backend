@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.graph.annotations.DTO;
+import com.samsung.fas.pir.persistence.enums.ECivilState;
+import com.samsung.fas.pir.persistence.enums.EGender;
 import com.samsung.fas.pir.persistence.enums.EHabitationType;
 import com.samsung.fas.pir.persistence.models.Family;
 import com.samsung.fas.pir.rest.dto.base.BaseDTO;
@@ -16,6 +18,7 @@ import org.springframework.mobile.device.Device;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -37,8 +40,22 @@ public class FamilyDTO extends BaseDTO<Family> {
 	@Getter
 	@Setter
 	@JsonProperty("name")
-	@NotBlank(message = "name.missing")
 	private 	String				name;
+
+	@Getter
+	@Setter
+	@JsonProperty("birth")
+	private		Date				birth;
+
+	@Getter
+	@Setter
+	@JsonProperty("gender")
+	private		EGender				gender;
+
+	@Getter
+	@Setter
+	@JsonProperty("civil_state")
+	private 	ECivilState			civilState;
 
 	@Getter
 	@Setter
@@ -47,18 +64,23 @@ public class FamilyDTO extends BaseDTO<Family> {
 
 	@Getter
 	@Setter
-	@JsonProperty("habitation_members_count")
-	private 	int					membersCount;
+	@JsonProperty("members_count")
+	private 	short				membersCount;
+
+	@Getter
+	@Setter
+	@JsonProperty("children_count")
+	private 	short				childrenCount;
 
 	@Getter
 	@Setter
 	@JsonProperty("family_income")
-	private 	String				familyIncome;
+	private 	String				income;
 
 	@Getter
 	@Setter
 	@JsonProperty("family_income_other")
-	private 	String				familyIncomeOther;
+	private 	String				incomeOther;
 
 	@Getter
 	@Setter
@@ -74,6 +96,12 @@ public class FamilyDTO extends BaseDTO<Family> {
 	@Setter
 	@JsonProperty("has_sanitation")
 	private 	boolean				sanitation;
+
+	@Getter
+	@Setter
+	@JsonProperty("in_social_program")
+	private 	boolean				socialProgram;
+
 
 	@Getter
 	@Setter
@@ -147,10 +175,15 @@ public class FamilyDTO extends BaseDTO<Family> {
 		model.setExternalID(getExternalID());
 		model.setCode(getCode());
 		model.setName(getName());
+		model.setBirth(getBirth());
 		model.setHabitationType(getHabitationType());
 		model.setMembersCount(getMembersCount());
-		model.setFamilyIncome(getFamilyIncome());
-		model.setFamilyIncomeOther(getFamilyIncomeOther());
+		model.setChildrenCount(getChildrenCount());
+		model.setGender(getGender());
+		model.setCivilState(getCivilState());
+		model.setSocialProgram(isSocialProgram());
+		model.setIncome(getIncome());
+		model.setIncomeOther(getIncomeOther());
 		model.setWaterTreatmentDescription(getWaterTreatmentDescription());
 		model.setWaterTreatment(isWaterTreatment());
 		model.setObservations(getObservations());

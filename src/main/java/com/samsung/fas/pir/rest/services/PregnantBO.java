@@ -37,7 +37,7 @@ public class PregnantBO extends BaseBO<Pregnant, PregnantDAO, PregnantDTO, Long>
 	private 	PregnancyBO		pregnancyBO;
 
 	@Autowired
-	protected PregnantBO(PregnantDAO dao, @Lazy FamilyBO familyBO, PregnancyBO pregnancyBO, ModelMapper mapper) {
+	protected PregnantBO(PregnantDAO dao, @Lazy FamilyBO familyBO, PregnancyBO pregnancyBO, @Lazy ModelMapper mapper) {
 		super(dao);
 		setMapper(mapper);
 		setFamilyBO(familyBO);

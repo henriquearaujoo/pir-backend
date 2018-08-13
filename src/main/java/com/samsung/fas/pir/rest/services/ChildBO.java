@@ -43,7 +43,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	private 	ModelMapper		mapper;
 
 	@Autowired
-	public ChildBO(ChildDAO dao, @Lazy FamilyBO familyBO, UserBO userBO, VisitBO visitBO, SAnswerBO sAnswerBO, ModelMapper mapper) {
+	public ChildBO(ChildDAO dao, @Lazy FamilyBO familyBO, UserBO userBO, VisitBO visitBO, SAnswerBO sAnswerBO, @Lazy ModelMapper mapper) {
 		super(dao);
 		setVisitBO(visitBO);
 		setVisitBO(visitBO);

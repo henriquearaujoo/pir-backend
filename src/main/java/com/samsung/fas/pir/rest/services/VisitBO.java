@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mobile.device.Device;
@@ -41,7 +42,7 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 	private 	ModelMapper 	mapper;
 
 	@Autowired
-	protected VisitBO(VisitDAO dao, ChapterBO chapterBO, FormBO formBO, AnswerBO answerBO, ModelMapper mapper) {
+	protected VisitBO(VisitDAO dao, ChapterBO chapterBO, FormBO formBO, AnswerBO answerBO, @Lazy ModelMapper mapper) {
 		super(dao);
 		setChapterBO(chapterBO);
 		setFormBO(formBO);
