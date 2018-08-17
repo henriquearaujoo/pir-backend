@@ -4,6 +4,7 @@ import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.configuration.security.rest.dto.AccountDTO;
 import com.samsung.fas.pir.configuration.security.rest.service.AccountService;
 import com.samsung.fas.pir.exception.ServiceException;
+import com.samsung.fas.pir.persistence.dao.AgentDAO;
 import com.samsung.fas.pir.persistence.dao.UserDAO;
 import com.samsung.fas.pir.persistence.models.User;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,12 +22,12 @@ import java.io.IOException;
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	private 	JWToken 		token;
 	private 	AccountService	service;
-	private 	UserDAO			userDAO;
+	private 	AgentDAO		agentDAO;
 
-	public TokenAuthenticationFilter(JWToken token, AccountService service, UserDAO userDAO) {
+	public TokenAuthenticationFilter(JWToken token, AccountService service, AgentDAO agentDAO) {
 		this.token 		= token;
 		this.service 	= service;
-		this.userDAO	= userDAO;
+		this.agentDAO	= agentDAO;
 	}
 
 	@Override
@@ -34,9 +35,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		try {
 			String 		atoken 		= token.getToken(request);
 			AccountDTO	account		= atoken != null? token.getAccount(atoken) : null;
-			Double		latitude	= request.getHeader("lat") != null? Double.valueOf(request.getHeader("lat")) : null;
-			Double		longitude	= request.getHeader("lng") != null? Double.valueOf(request.getHeader("lng")) : null;
-			String		fcmToken	= request.getHeader("fcm");
+			Double		latitude	= request.getHeader("Latitude") != null? Double.valueOf(request.getHeader("Latitude")) : null;
+			Double		longitude	= request.getHeader("Longitude") != null? Double.valueOf(request.getHeader("Longitude")) : null;
+//			String		fcmToken	= request.getHeader("fcm");
 			UserDetails	details		= account != null? service.loadUserByUsername(account.getUsername()) : null;
 			User		user		= account != null? ((Account) details).getUser() : null;
 
@@ -47,11 +48,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
 			chain.doFilter(request, response);
 
-			if (user != null && latitude != null && longitude != null) {
+			if (user != null && user.getPerson() != null && user.getPerson().getAgent() != null && latitude != null && longitude != null) {
 //				user.setFcmToken(fcmToken);
-//				user.setLatitude(latitude);
-//				user.setLongitude(longitude);
-//				userDAO.save(user);
+				user.getPerson().getAgent().setLatitude(latitude);
+				user.getPerson().getAgent().setLongitude(longitude);
+				agentDAO.save(user.getPerson().getAgent());
 			}
 
 		} catch (IOException | ServletException | BadCredentialsException e) {

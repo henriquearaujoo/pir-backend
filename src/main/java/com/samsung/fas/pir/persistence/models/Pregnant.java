@@ -51,7 +51,19 @@ public class Pregnant extends Base {
 
 	@Getter
 	@Setter
-	@Column(columnDefinition = "VARCHAR(20)")
+	@Column
+	@Alias("Raça/Cor/Etinia")
+	private 	String						ethnicity;
+
+	@Getter
+	@Setter
+	@Column
+	@Alias("Escolaridade")
+	private 	String						scholarity;
+
+	@Getter
+	@Setter
+	@Column
 	@Alias("Contato - Telefone")
 	private 	String						phoneNumber;
 

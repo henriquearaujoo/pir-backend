@@ -49,6 +49,16 @@ public class PregnantDTO extends BaseDTO<Pregnant> {
 
 	@Getter
 	@Setter
+	@JsonProperty("ethnicity")
+	private 	String						ethnicity;
+
+	@Getter
+	@Setter
+	@JsonProperty("scholarity")
+	private 	String						scholarity;
+
+	@Getter
+	@Setter
 	@JsonProperty("phone_number")
 	private 	String						phoneNumber;
 
@@ -110,6 +120,8 @@ public class PregnantDTO extends BaseDTO<Pregnant> {
 		model.setName(getName());
 		model.setBirth(getBirth());
 		model.setCivilState(getCivilState());
+		model.setScholarity(getScholarity());
+		model.setEthnicity(getEthnicity());
 		model.setPhoneNumber(getPhoneNumber());
 		model.setPhoneOwner(isPhoneResponsible());
 

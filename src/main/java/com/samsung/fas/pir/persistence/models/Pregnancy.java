@@ -26,6 +26,21 @@ public class Pregnancy extends Base {
 	@Getter
 	@Setter
 	@Column
+	private 	Short						height;
+
+	@Getter
+	@Setter
+	@Column
+	private 	Float						weight;
+
+	@Getter
+	@Setter
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private 	Boolean						planned;
+
+	@Getter
+	@Setter
+	@Column
 	private 	Date						registeredAt;
 
 	// region Relations

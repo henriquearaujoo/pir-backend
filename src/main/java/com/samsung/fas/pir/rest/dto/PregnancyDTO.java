@@ -29,6 +29,21 @@ public class PregnancyDTO extends BaseDTO<Pregnancy> {
 
 	@Getter
 	@Setter
+	@JsonProperty("height")
+	private		Short				height;
+
+	@Getter
+	@Setter
+	@JsonProperty("weight")
+	private		Float				weight;
+
+	@Getter
+	@Setter
+	@JsonProperty("planned")
+	private		boolean				planned;
+
+	@Getter
+	@Setter
 	@JsonProperty("registered_at")
 	private 	Date				registeredAt;
 
@@ -80,6 +95,9 @@ public class PregnancyDTO extends BaseDTO<Pregnancy> {
 
 		model.setUuid(getUuid());
 		model.setExternalID(getExternalID());
+		model.setHeight(getHeight());
+		model.setWeight(getWeight());
+		model.setPlanned(isPlanned());
 		model.setRegisteredAt(getRegisteredAt());
 
 		model.setAnswers(getAnswersDTO() != null? getAnswersDTO().stream().map(SAnswerDTO::getModel).collect(Collectors.toList()) : new ArrayList<>());
