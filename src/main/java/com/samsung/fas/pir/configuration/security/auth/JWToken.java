@@ -45,7 +45,7 @@ public class JWToken {
 		builder.setAudience(device.isMobile() || device.isTablet()? EAudience.MOBILE.getValue() : EAudience.WEB.getValue());
 		builder.setIssuer(getProperties().getAppName());
 		builder.setIssuedAt(new Date());
-		builder.setExpiration(new Date(new Date().getTime() + getProperties().getExpiresIn() * 1000 * 3600 * 24));
+		builder.setExpiration(new Date(new Date().getTime() + (device.isTablet()? getProperties().getMobileExpiresIn() * 1000 * 3600 * 24 : getProperties().getExpiresIn() * 1000 * 3600 * 24)));
 		builder.signWith(SignatureAlgorithm.HS512, getProperties().getSecret());
 		return builder.compact();
 	}
@@ -83,13 +83,11 @@ public class JWToken {
 
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		Account 		account 	= (Account) userDetails;
-		AccountDTO 		accountDTO 	= getAccount(token);
-		EAudience		audience	= EAudience.setValue(Objects.requireNonNull(getClaims(token)).getAudience());
 		Date 			created 	= issuedAt(token);
 		Date			expiration	= expiresAt(token);
 		Date			now			= new Date();
-		return (accountDTO != null && accountDTO.getUsername().equals(account.getUsername()) && (now.before(expiration) && now.after(created) && created.before(expiration) ||
-		account.getProfile().getType().compareTo(EProfileType.AGENT) == 0 && audience.compareTo(EAudience.MOBILE) == 0));
+
+		return (account.getUser() != null && now.before(expiration) && now.after(created)) || (account.getUser() != null && account.getUser().getPerson() != null && account.getUser().getPerson().getAgent() != null);
 	}
 
 	private Claims getClaims(String token) {
