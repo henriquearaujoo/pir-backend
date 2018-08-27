@@ -1,12 +1,9 @@
 package com.samsung.fas.pir.rest.controllers;
 
 import com.querydsl.core.types.Predicate;
-import com.samsung.fas.pir.persistence.models.Pregnancy;
 import com.samsung.fas.pir.persistence.models.Pregnant;
 import com.samsung.fas.pir.rest.controllers.base.BController;
-import com.samsung.fas.pir.rest.dto.PregnancyDTO;
 import com.samsung.fas.pir.rest.dto.PregnantDTO;
-import com.samsung.fas.pir.rest.services.PregnancyBO;
 import com.samsung.fas.pir.rest.services.PregnantBO;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;

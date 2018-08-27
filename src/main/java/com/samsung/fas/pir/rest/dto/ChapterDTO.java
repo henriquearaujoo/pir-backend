@@ -10,14 +10,10 @@ import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import com.samsung.fas.pir.rest.utils.CTools;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.mobile.device.Device;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 

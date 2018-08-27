@@ -38,6 +38,6 @@ public class StateDTO extends BaseDTO<State> {
 
 	public StateDTO(State state, Device device, boolean detailed) {
 		super(state);
-		setCities(detailed && state.getCities() != null? state.getCities().stream().map(item -> new CityDTO(item, device, false)).collect(Collectors.toSet()) : null);
+		setCities(detailed && state.getCities() != null? state.getCities().stream().map(item -> new CityDTO(item, device, false)).sorted((c1, c2) -> c1.getName().compareToIgnoreCase(c2.getName())).collect(Collectors.toList()) : null);
 	}
 }

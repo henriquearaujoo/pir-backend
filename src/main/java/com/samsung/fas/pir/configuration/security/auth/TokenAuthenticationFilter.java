@@ -5,7 +5,6 @@ import com.samsung.fas.pir.configuration.security.rest.dto.AccountDTO;
 import com.samsung.fas.pir.configuration.security.rest.service.AccountService;
 import com.samsung.fas.pir.exception.ServiceException;
 import com.samsung.fas.pir.persistence.dao.AgentDAO;
-import com.samsung.fas.pir.persistence.dao.UserDAO;
 import com.samsung.fas.pir.persistence.models.User;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;

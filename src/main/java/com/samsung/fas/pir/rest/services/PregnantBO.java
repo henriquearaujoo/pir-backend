@@ -5,7 +5,6 @@ import com.samsung.fas.pir.persistence.models.Family;
 import com.samsung.fas.pir.persistence.models.Pregnancy;
 import com.samsung.fas.pir.persistence.models.Pregnant;
 import com.samsung.fas.pir.persistence.models.base.Base;
-import com.samsung.fas.pir.rest.dto.FamilyDTO;
 import com.samsung.fas.pir.rest.dto.PregnantDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import lombok.AccessLevel;

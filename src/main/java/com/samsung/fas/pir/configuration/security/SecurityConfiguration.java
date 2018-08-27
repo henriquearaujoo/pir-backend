@@ -5,7 +5,6 @@ import com.samsung.fas.pir.configuration.security.auth.JWToken;
 import com.samsung.fas.pir.configuration.security.auth.TokenAuthenticationFilter;
 import com.samsung.fas.pir.configuration.security.rest.service.AccountService;
 import com.samsung.fas.pir.persistence.dao.AgentDAO;
-import com.samsung.fas.pir.persistence.dao.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -40,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.antMatchers("/rest/**").fullyAuthenticated()
+		.antMatchers("/rest/**").permitAll()
 		.and()
 		.addFilterBefore(new TokenAuthenticationFilter(token, service, agentDAO), BasicAuthenticationFilter.class)
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

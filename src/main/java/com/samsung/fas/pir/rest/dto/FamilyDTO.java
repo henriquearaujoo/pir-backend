@@ -13,7 +13,6 @@ import com.samsung.fas.pir.rest.dto.base.BaseDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.mobile.device.Device;
 
 import javax.validation.Valid;

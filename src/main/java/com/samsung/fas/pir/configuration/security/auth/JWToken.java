@@ -6,7 +6,6 @@ import com.samsung.fas.pir.configuration.properties.JWTProperties;
 import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.configuration.security.rest.dto.AccountDTO;
 import com.samsung.fas.pir.persistence.enums.EAudience;
-import com.samsung.fas.pir.persistence.enums.EProfileType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;

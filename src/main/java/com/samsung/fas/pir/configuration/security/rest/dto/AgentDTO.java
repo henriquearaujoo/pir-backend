@@ -1,6 +1,8 @@
 package com.samsung.fas.pir.configuration.security.rest.dto;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.samsung.fas.pir.persistence.models.Agent;
 import lombok.Getter;
 import lombok.Setter;

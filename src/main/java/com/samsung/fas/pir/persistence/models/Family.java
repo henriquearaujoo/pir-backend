@@ -81,13 +81,13 @@ public class Family extends Base {
 	@Setter
 	@Column
 	@Alias("No. de Membros")
-	private 	short					membersCount;
+	private 	Short					membersCount;
 
 	@Getter
 	@Setter
 	@Column
 	@Alias("No. de Crianças")
-	private 	short					childrenCount;
+	private 	Short					childrenCount;
 
 	@Getter
 	@Setter
@@ -99,26 +99,26 @@ public class Family extends Base {
 	@Setter
 	@Column
 	@Alias("Participa de Programa Social")
-	private 	boolean					socialProgram;
+	private 	Boolean					socialProgram;
 
 
 	@Getter
 	@Setter
 	@Column
 	@Alias("Há Unidade Básica Perto da Moradia")
-	private 	boolean					nearbyUB;
+	private 	Boolean					nearbyUB;
 
 	@Getter
 	@Setter
 	@Column
 	@Alias("Há Saneamento Básico ")
-	private 	boolean					sanitation;
+	private 	Boolean					sanitation;
 
 	@Getter
 	@Setter
 	@Column
 	@Alias("Tratamento de Água")
-	private 	boolean					waterTreatment;
+	private 	Boolean					waterTreatment;
 
 	@Getter
 	@Setter

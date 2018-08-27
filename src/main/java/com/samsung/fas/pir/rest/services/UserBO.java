@@ -161,20 +161,31 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 		} else {
 			model.getPerson().setId(user.getId());
 			user.getPerson().setUser(user);
+
 			if (user.getPerson() == null) {
 				user.setPerson(model.getPerson());
 			}
-			if (user.getPerson().getAgent() == null) {
-				model.getPerson().getAgent().setPerson(model.getPerson());
-				model.getPerson().getAgent().setCode(getAgentDAO().getSequentialCode(model.getPerson().getAgent().getUnity().getAbbreviation().concat("A")));
-				model.getPerson().getAgent().setCity(getUnityBO().getCityDAO().findOne(update.getPersonDTO().getAgentDTO().getCityDTO().getUuid()));
-				model.getPerson().getAgent().setUnity(getUnityBO().getDao().findOne(model.getPerson().getAgent().getUnity().getUuid()));
-				user.getPerson().setAgent(model.getPerson().getAgent());
+
+			if (model.getPerson().getAgent() != null) {
+				if (user.getPerson().getAgent() == null) {
+					model.getPerson().getAgent().setPerson(model.getPerson());
+					model.getPerson().getAgent().setCode(getAgentDAO().getSequentialCode(model.getPerson().getAgent().getUnity().getAbbreviation().concat("A")));
+					model.getPerson().getAgent().setCity(getUnityBO().getCityDAO().findOne(update.getPersonDTO().getAgentDTO().getCityDTO().getUuid()));
+					model.getPerson().getAgent().setUnity(getUnityBO().getDao().findOne(model.getPerson().getAgent().getUnity().getUuid()));
+					user.getPerson().setAgent(model.getPerson().getAgent());
+				} else {
+					getMapper().map(model.getPerson().getAgent(), user.getPerson().getAgent());
+					user.getPerson().getAgent().setPerson(user.getPerson());
+					user.getPerson().getAgent().setCity(getUnityBO().getCityDAO().findOne(update.getPersonDTO().getAgentDTO().getCityDTO().getUuid()));
+					user.getPerson().getAgent().setUnity(getUnityBO().getDao().findOne(model.getPerson().getAgent().getUnity().getUuid()));
+				}
 			} else {
-				getMapper().map(model.getPerson().getAgent(), user.getPerson().getAgent());
-				user.getPerson().getAgent().setPerson(user.getPerson());
-				user.getPerson().getAgent().setCity(getUnityBO().getCityDAO().findOne(update.getPersonDTO().getAgentDTO().getCityDTO().getUuid()));
-				user.getPerson().getAgent().setUnity(getUnityBO().getDao().findOne(model.getPerson().getAgent().getUnity().getUuid()));
+				if (user.getPerson() == null) {
+					user.setEntity(null);
+					user.setPerson(model.getPerson());
+				} else {
+					getMapper().map(model.getPerson(), user.getPerson());
+				}
 			}
 			user.setEntity(null);
 		}
