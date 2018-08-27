@@ -39,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.antMatchers("/rest/**").permitAll()
+		.antMatchers("/rest/**").fullyAuthenticated()
 		.and()
 		.addFilterBefore(new TokenAuthenticationFilter(token, service, agentDAO), BasicAuthenticationFilter.class)
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
