@@ -64,22 +64,6 @@ public class JWToken {
 		}
 	}
 
-	public Double getLatitude(String token) {
-		try {
-			return (Double) Objects.requireNonNull(getClaims(token)).get("lat");
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	public Double getLongitude(String token) {
-		try {
-			return (Double) Objects.requireNonNull(getClaims(token)).get("lng");
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		Account 		account 	= (Account) userDetails;
 		Date 			created 	= issuedAt(token);

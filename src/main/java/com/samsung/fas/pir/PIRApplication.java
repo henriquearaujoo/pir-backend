@@ -1,6 +1,5 @@
 package com.samsung.fas.pir;
 
-import com.samsung.fas.pir.configuration.properties.FCMProperties;
 import com.samsung.fas.pir.configuration.properties.JWTProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,7 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableAsync
 @EnableScheduling
 @EnableCaching
-@EnableConfigurationProperties(value = {FCMProperties.class, JWTProperties.class})
+@EnableConfigurationProperties(value = {JWTProperties.class})
 @SpringBootApplication
 public class PIRApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
