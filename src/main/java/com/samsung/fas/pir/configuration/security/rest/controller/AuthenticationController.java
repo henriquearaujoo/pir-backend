@@ -7,6 +7,7 @@ import com.samsung.fas.pir.configuration.security.rest.dto.AuthenticationDTO;
 import com.samsung.fas.pir.configuration.security.rest.dto.ResetPasswordDTO;
 import com.samsung.fas.pir.configuration.security.rest.service.AccountService;
 import io.swagger.annotations.Api;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 
 @Api(value = "Authentication", description = "REST Controller for Authentication", tags = "AUTHENTICATION")
 @RequestMapping(value = "/rest/authentication", produces = MediaType.APPLICATION_JSON_VALUE)

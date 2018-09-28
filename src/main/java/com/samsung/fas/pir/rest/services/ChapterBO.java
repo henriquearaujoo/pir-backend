@@ -145,7 +145,7 @@ public class ChapterBO extends BaseBO<Chapter, ChapterDAO, ChapterDTO, Long> {
 		chapter.setEstimatedTime(model.getEstimatedTime());
 		chapter.setTimeUntilNext(model.getTimeUntilNext());
 		chapter.setMedias(model.getMedias().stream().filter(item -> chapter.getMedias().stream().filter(file -> file.getId() - item.getId() == 0).findAny().orElse(null) != null).collect(Collectors.toList()));
-//		chapter.getMedias().addAll(model.getMedias().stream().filter(item -> chapter.getMedias().stream().filter(file -> file.getId() - item.getId() == 0).findAny().orElse(null) == null).collect(Collectors.toList()));
+		chapter.getMedias().addAll(model.getMedias().stream().filter(item -> chapter.getMedias().stream().filter(file -> file.getId() - item.getId() == 0).findAny().orElse(null) == null).collect(Collectors.toList()));
 
 		return new ChapterDTO(getDao().save(chapter), device, true);
 	}

@@ -34,8 +34,8 @@ public class StateController extends BController<StateCityBO, StateDTO> {
 	}
 
 	@RequestMapping(method= RequestMethod.GET, value="/find-uf/{uf}")
-	public ResponseEntity<Collection<StateDTO>> findUF(@PathVariable("uf") String uf, @ApiIgnore @AuthenticationPrincipal UserDetails details, Device device) {
-		return ResponseEntity.ok(Collections.singletonList(getService().findByUF(uf.toUpperCase(), device)));
+	public ResponseEntity<StateDTO> findUF(@PathVariable("uf") String uf, @ApiIgnore @AuthenticationPrincipal UserDetails details, Device device) {
+		return ResponseEntity.ok(getService().findByUF(uf.toUpperCase(), device));
 	}
 
 	@RequestMapping(method= RequestMethod.GET, value="/search")

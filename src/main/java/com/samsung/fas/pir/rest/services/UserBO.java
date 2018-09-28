@@ -94,7 +94,7 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 		if (create.getPassword() == null || create.getPassword().trim().isEmpty())
 			throw new ServiceException("user.password.empty");
 
-		account.setUsername(create.getLogin());
+		account.setUsername(create.getLogin().toLowerCase().replaceAll("\\s", "").replaceAll("\\t", ""));
 		account.setPassword(encoder.encode(Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString()));
 		account.setEnabled(create.isActive());
 		account.setCredentialsNonExpired(create.isActive());
@@ -145,7 +145,7 @@ public class UserBO extends BaseBO<User, UserDAO, UserDTO, Long> {
 		user.getAddress().setPostalCode(model.getAddress().getPostalCode());
 		user.getAddress().setStreetAddress(model.getAddress().getStreetAddress());
 		user.getAddress().setCity(city);
-		user.getAccount().setUsername(update.getLogin());
+		user.getAccount().setUsername(update.getLogin().toLowerCase().replaceAll("\\s", "").replaceAll("\\t", ""));
 		user.getAccount().setProfile(profile);
 		user.getAccount().setEnabled(update.isActive());
 		user.getAccount().setAccountNonLocked(update.isActive());

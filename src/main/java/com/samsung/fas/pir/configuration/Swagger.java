@@ -34,7 +34,7 @@ public class Swagger {
 			   .apiInfo(new ApiInfo(
 					   "PIR REST Documentation",
 					   "Documentation for PIR REST Services",
-					   "DEVELOPMENT 0.0.11",
+					   "ACCEPTANCE",
 					   "Terms of Service: TODO",
 					   new Contact("Instituto ITN", "http://www.institutoitn.com.br", "contato@institutoitn.com.br"),
 					   "TO DEFINE",

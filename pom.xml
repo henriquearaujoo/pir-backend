@@ -5,7 +5,7 @@
 
 	<groupId>com.samsung.fas.pir</groupId>
 	<artifactId>pir</artifactId>
-	<version>0.0.11-SNAPSHOT</version>
+	<version>0.0.14-ACCEPTANCE</version>
 	<packaging>war</packaging>
 
 	<name>PIR</name>
@@ -51,8 +51,9 @@
 		<!-- Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok-maven-plugin</artifactId>
-			<version>1.16.20.0</version>
+			<artifactId>lombok</artifactId>
+			<version>1.18.2</version>
+			<scope>provided</scope>
 		</dependency>
 		<!-- Lombok -->
 
@@ -184,6 +185,12 @@
 			<version>2.1.0</version>
 		</dependency>
 		<!-- Model Mapper -->
+
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.0</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

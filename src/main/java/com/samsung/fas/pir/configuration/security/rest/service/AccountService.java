@@ -67,8 +67,8 @@ public class AccountService implements UserDetailsService {
 		precover.setUntil(Date.from(new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plusDays(1).atZone(ZoneId.systemDefault()).toInstant()));
 
 		content.put("name", account.getUser().getName());
-//		content.put("link", "http://fas-xquiz.dyndns-ip.com:10510/pir/login/reset-password?reset=" + token);
-		content.put("link", "http://10.10.2.239:8080/pir/#/login/reset-password?reset=" + token);
+		content.put("link", "http://fas-xquiz.dyndns-ip.com:10510/pir/#/login/reset-password?reset=" + token);
+//		content.put("link", "http://10.10.2.239:8080/pir/#/login/reset-password?reset=" + token);
 		content.put("signature", "Fundação Amazônia Sustentável");
 		content.put("location", "Amazonas, Brazil");
 
