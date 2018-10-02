@@ -1,10 +1,7 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.persistence.dao.PregnancyDAO;
-import com.samsung.fas.pir.persistence.models.Pregnancy;
-import com.samsung.fas.pir.persistence.models.Pregnant;
-import com.samsung.fas.pir.persistence.models.SAnswer;
-import com.samsung.fas.pir.persistence.models.Visit;
+import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.models.base.Base;
 import com.samsung.fas.pir.rest.dto.PregnancyDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
@@ -63,17 +60,17 @@ public class PregnancyBO extends BaseBO<Pregnancy, PregnancyDAO, PregnancyDTO, L
 		return null;
 	}
 
-	Pregnancy setupPregnancy(Pregnancy model, Pregnant pregnant) {
+	Pregnancy setupPregnancy(Pregnancy model, Pregnant pregnant, Agent agent) {
 		model.setPregnant(pregnant);
-		model.setVisits(setupVisit(model, model.getVisits()));
+		model.setVisits(setupVisit(model, model.getVisits(), agent));
 		model.setAnswers(setupAnswer(model, model.getAnswers()));
 		return model;
 	}
 
-	Pregnancy setupPregnancy(Pregnancy pregnancy, Pregnancy model, Pregnant pregnant) {
+	Pregnancy setupPregnancy(Pregnancy pregnancy, Pregnancy model, Pregnant pregnant, Agent agent) {
 		getMapper().map(model, pregnancy);
 		pregnancy.setPregnant(pregnant);
-		pregnancy.setVisits(setupVisit(pregnancy, model.getVisits()));
+		pregnancy.setVisits(setupVisit(pregnancy, model.getVisits(), agent));
 		pregnancy.setAnswers(setupAnswer(pregnancy, model.getAnswers()));
 		return pregnancy;
 	}
@@ -93,15 +90,15 @@ public class PregnancyBO extends BaseBO<Pregnancy, PregnancyDAO, PregnancyDTO, L
 	}
 
 	@SuppressWarnings("Duplicates")
-	private Collection<Visit> setupVisit(Pregnancy pregnancy, Collection<Visit> collection) {
+	private Collection<Visit> setupVisit(Pregnancy pregnancy, Collection<Visit> collection, Agent agent) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
 			Visit		visit		= uuid != null? getVisitBO().getDao().findOne(uuid) : null;
 			if (visit != null) {
-				return getVisitBO().setupVisit(visit, item, pregnancy);
+				return getVisitBO().setupVisit(visit, item, pregnancy, agent);
 			} else {
-				return getVisitBO().setupVisit(item, pregnancy);
+				return getVisitBO().setupVisit(item, pregnancy, agent);
 			}
 		}).collect(Collectors.toList());
 	}

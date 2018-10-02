@@ -1,6 +1,7 @@
 package com.samsung.fas.pir.rest.services;
 
 import com.samsung.fas.pir.persistence.dao.PregnantDAO;
+import com.samsung.fas.pir.persistence.models.Agent;
 import com.samsung.fas.pir.persistence.models.Family;
 import com.samsung.fas.pir.persistence.models.Pregnancy;
 import com.samsung.fas.pir.persistence.models.Pregnant;
@@ -48,7 +49,7 @@ public class PregnantBO extends BaseBO<Pregnant, PregnantDAO, PregnantDTO, Long>
 		Pregnant		model		= create.getModel();
 		Pregnant		pregnant	= model.getUuid() != null? getDao().findOne(model.getUuid()) : null;
 		Family			family		= getFamilyBO().getDao().findOne(create.getFamilyUUID());
-		return new PregnantDTO(getDao().save(pregnant != null? setupPregnant(pregnant, model, family, device) : setupPregnant(model, family, device)), device, true);
+		return new PregnantDTO(getDao().save(pregnant != null? setupPregnant(pregnant, model, family, null, device) : setupPregnant(model, family, null, device)), device, true);
 	}
 
 	@Override
@@ -66,33 +67,33 @@ public class PregnantBO extends BaseBO<Pregnant, PregnantDAO, PregnantDTO, Long>
 		return null;
 	}
 
-	Pregnant setupPregnant(Pregnant model, Family family, Device device) {
+	Pregnant setupPregnant(Pregnant model, Family family, Agent agent, Device device) {
 		model.setCode(getDao().getSequentialCode(family.getCommunity().getUnity().getAbbreviation().toUpperCase().concat("G")));
 		model.setFamily(family);
 		if (!device.isNormal()) {
-			model.setPregnancies(setupPregnancy(model, model.getPregnancies()));
+			model.setPregnancies(setupPregnancy(model, model.getPregnancies(), agent));
 		}
 		return model;
 	}
 
-	Pregnant setupPregnant(Pregnant pregnant, Pregnant model, Family family, Device device) {
+	Pregnant setupPregnant(Pregnant pregnant, Pregnant model, Family family, Agent agent, Device device) {
 		getMapper().map(model, pregnant);
 		pregnant.setFamily(family);
 		if (!device.isNormal()) {
-			pregnant.setPregnancies(setupPregnancy(pregnant, model.getPregnancies()));
+			pregnant.setPregnancies(setupPregnancy(pregnant, model.getPregnancies(), agent));
 		}
 		return pregnant;
 	}
 
-	private Collection<Pregnancy> setupPregnancy(Pregnant pregnant, Collection<Pregnancy> collection) {
+	private Collection<Pregnancy> setupPregnancy(Pregnant pregnant, Collection<Pregnancy> collection, Agent agent) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
 			Pregnancy	pregnancy	= uuid != null? getPregnancyBO().getDao().findOne(uuid) : null;
 			if (pregnancy != null) {
-				return getPregnancyBO().setupPregnancy(pregnancy, item, pregnant);
+				return getPregnancyBO().setupPregnancy(pregnancy, item, pregnant, agent);
 			} else {
-				return getPregnancyBO().setupPregnancy(item, pregnant);
+				return getPregnancyBO().setupPregnancy(item, pregnant, agent);
 			}
 		}).collect(Collectors.toList());
 	}

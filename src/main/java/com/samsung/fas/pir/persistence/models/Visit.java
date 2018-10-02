@@ -54,7 +54,7 @@ public class Visit extends Base {
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false)
+	@ManyToOne
 	@JoinColumn
 	@Alias("Agente")
 	private 	User			agent;

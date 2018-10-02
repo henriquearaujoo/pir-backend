@@ -91,16 +91,18 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 	}
 
 	// region Pregnancy
-	Visit setupVisit(Visit model, Pregnancy pregnancy) {
+	Visit setupVisit(Visit model, Pregnancy pregnancy, Agent agent) {
 		model.setPregnancy(pregnancy);
+		model.setAgent(agent.getPerson().getUser());
 		model.setChapter(getChapterBO().getDao().findOne(model.getChapter().getUuid()));
 		model.setForm(model.getForm().getUuid() != null? getFormBO().getDao().findOne(model.getForm().getUuid()) : null);
 		model.setAnswers(model.getAnswers() != null? setupAnswers(model, model.getAnswers()) : new ArrayList<>());
 		return model;
 	}
 
-	Visit setupVisit(Visit visit, Visit model, Pregnancy pregnancy) {
+	Visit setupVisit(Visit visit, Visit model, Pregnancy pregnancy, Agent agent) {
 		getMapper().map(model, visit);
+		visit.setAgent(agent.getPerson().getUser());
 		visit.setPregnancy(pregnancy);
 		visit.setChapter(getChapterBO().getDao().findOne(model.getChapter().getUuid()));
 		visit.setForm(model.getForm().getUuid() != null? getFormBO().getDao().findOne(model.getForm().getUuid()): null);

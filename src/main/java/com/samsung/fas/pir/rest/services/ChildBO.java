@@ -1,5 +1,6 @@
 package com.samsung.fas.pir.rest.services;
 
+import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.persistence.dao.ChildDAO;
 import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.models.base.Base;
@@ -58,7 +59,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		Child				model		= create.getModel();
 		Child				child		= create.getUuid() != null? getDao().findOne(create.getUuid()) : null;
 		Family				family		= create.getFamilyUUID() != null? getFamilyBO().getDao().findOne(create.getFamilyUUID()) : null;
-		return child == null? new ChildDTO(getDao().save(setupChild(model, family, null)), device, true) : new ChildDTO(getDao().save(setupChild(child, model, family, null)), device, true);
+		return child == null? new ChildDTO(getDao().save(setupChild(model, family, !device.isNormal()? ((Account) account).getUser().getPerson().getAgent() : null)), device, true) : new ChildDTO(getDao().save(setupChild(child, model, family, !device.isNormal()? ((Account) account).getUser().getPerson().getAgent() : null)), device, true);
 	}
 
 	@Override
@@ -79,7 +80,9 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	Child setupChild(Child model, Family family, Agent agent) {
 		model.setCode(getDao().getSequentialCode(family.getCommunity().getUnity().getAbbreviation().toUpperCase().concat("C")));
 		model.setFamily(family);
-		model.setAgent(null);
+		if (agent != null) {
+			model.setAgent(agent.getPerson().getUser());
+		}
 		model.setVisits(setupVisit(model, model.getVisits(), agent));
 		model.setAnswers(setupAnswer(model, model.getAnswers()));
 		return model;
@@ -88,7 +91,9 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 	Child setupChild(Child child, Child model, Family family, Agent agent) {
 		getMapper().map(model, child);
 		child.setFamily(family);
-		child.setAgent(null);
+		if (agent != null) {
+			child.setAgent(agent.getPerson().getUser());
+		}
 		child.setVisits(setupVisit(child, model.getVisits(), agent));
 		child.setAnswers(setupAnswer(child, model.getAnswers()));
 		return child;
