@@ -16,6 +16,7 @@ import java.util.UUID;
 @Repository
 public interface IChild extends IBaseRepository<Child, Long, QChild> {
 	Collection<Child> findAllByUuidIn(Collection<UUID> collection);
+	Child findByAgentUuidAndExternalID(UUID uuid, long externalID);
 	long countAllByCodeStartingWith(String prefix);
 
 	@Override

@@ -18,13 +18,19 @@ public class Answer extends Base {
 	@Getter
 	@Setter
 	@Column
-	private 	long			mobileId;
+	private 	long			externalID;
 
 	@Getter
 	@Setter
 	@Column
 	@Alias("Descrição")
 	private 	String			description;
+
+	@Getter
+	@Setter
+	@ManyToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "relation_agent"))
+	private 	Agent			agent;
 
 	@Getter
 	@Setter

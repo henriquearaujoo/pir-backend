@@ -12,16 +12,16 @@ import java.util.UUID;
 
 @Service
 public class ChildDAO extends BaseDAO<Child, Long, IChild, QChild> {
-	public Collection<Child> findAllIn(Collection<UUID> collection) {
-		return getRepository().findAllByUuidIn(collection);
+	@Autowired
+	public ChildDAO(IChild repository) {
+		super(repository);
+	}
+
+	public Child findOneByAgentAndExternalID(UUID uuid, long externalID) {
+		return getRepository().findByAgentUuidAndExternalID(uuid, externalID);
 	}
 
 	public String getSequentialCode(String prefix) {
 		return prefix.concat(String.format("%06d", getRepository().countAllByCodeStartingWith(prefix) + 1L));
-	}
-
-	@Autowired
-	public ChildDAO(IChild repository) {
-		super(repository);
 	}
 }

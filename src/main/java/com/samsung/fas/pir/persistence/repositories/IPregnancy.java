@@ -10,9 +10,12 @@ import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
+import java.util.UUID;
 
 @Repository
 public interface IPregnancy extends IBaseRepository<Pregnancy, Long, QPregnancy> {
+	Pregnancy findByAgentUuidAndExternalID(UUID uuid, long externalID);
+
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QPregnancy root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

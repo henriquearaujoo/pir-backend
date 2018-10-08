@@ -96,7 +96,7 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 		model.setAgent(agent.getPerson().getUser());
 		model.setChapter(getChapterBO().getDao().findOne(model.getChapter().getUuid()));
 		model.setForm(model.getForm().getUuid() != null? getFormBO().getDao().findOne(model.getForm().getUuid()) : null);
-		model.setAnswers(model.getAnswers() != null? setupAnswers(model, model.getAnswers()) : new ArrayList<>());
+		model.setAnswers(model.getAnswers() != null? setupAnswers(model, model.getAnswers(), agent) : new ArrayList<>());
 		return model;
 	}
 
@@ -106,7 +106,7 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 		visit.setPregnancy(pregnancy);
 		visit.setChapter(getChapterBO().getDao().findOne(model.getChapter().getUuid()));
 		visit.setForm(model.getForm().getUuid() != null? getFormBO().getDao().findOne(model.getForm().getUuid()): null);
-		visit.setAnswers(setupAnswers(visit, model.getAnswers()));
+		visit.setAnswers(setupAnswers(visit, model.getAnswers(), agent));
 		return visit;
 	}
 	// endregion
@@ -117,7 +117,7 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 		model.setAgent(agent.getPerson().getUser());
 		model.setChapter(getChapterBO().getDao().findOne(model.getChapter().getUuid()));
 		model.setForm(model.getForm() != null && model.getForm().getUuid() != null? getFormBO().getDao().findOne(model.getForm().getUuid()) : null);
-		model.setAnswers(setupAnswers(model, model.getAnswers()));
+		model.setAnswers(setupAnswers(model, model.getAnswers(), agent));
 		return model;
 	}
 
@@ -127,20 +127,20 @@ public class VisitBO extends BaseBO<Visit, VisitDAO, VisitDTO, Long> {
 		visit.setChild(child);
 		visit.setChapter(getChapterBO().getDao().findOne(model.getChapter().getUuid()));
 		visit.setForm(model.getForm().getUuid() != null? getFormBO().getDao().findOne(model.getForm().getUuid()) : null);
-		visit.setAnswers(setupAnswers(visit, model.getAnswers()));
+		visit.setAnswers(setupAnswers(visit, model.getAnswers(), agent));
 		return visit;
 	}
 	// endregion
 
-	private Collection<Answer> setupAnswers(Visit visit, Collection<Answer> collection) {
+	private Collection<Answer> setupAnswers(Visit visit, Collection<Answer> collection, Agent agent) {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
-			Answer		answer		= uuid != null? getAnswerBO().getDao().findOne(uuid) : null;
+			Answer		answer		= uuid != null? getAnswerBO().getDao().findOne(uuid) : getAnswerBO().getDao().findOneByAgentAndExternalID(agent.getUuid(), item.getExternalID());
 			if (answer != null) {
-				return getAnswerBO().setupAnswer(answer, item);
+				return getAnswerBO().setupAnswer(answer, item, agent);
 			} else {
-				return getAnswerBO().setupAnswer(item, visit);
+				return getAnswerBO().setupAnswer(item, visit, agent);
 			}
 		}).collect(Collectors.toList());
 	}

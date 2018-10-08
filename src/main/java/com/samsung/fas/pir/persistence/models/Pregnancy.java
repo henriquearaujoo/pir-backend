@@ -53,6 +53,12 @@ public class Pregnancy extends Base {
 
 	@Getter
 	@Setter
+	@ManyToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "relation_agent"))
+	private 	Agent						agent;
+
+	@Getter
+	@Setter
 	@OneToMany(mappedBy = "pregnancy", cascade = CascadeType.ALL)
 	@Alias("Filhos")
 	private 		Collection<SAnswer>		answers				= new ArrayList<>();

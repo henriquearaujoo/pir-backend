@@ -23,7 +23,7 @@ public class AnswerDTO extends BaseDTO<Answer> {
 	@Getter
 	@Setter
 	@JsonProperty("external_id")
-	private		long				mobileId;
+	private		long				externalID;
 
 	@Getter
 	@Setter
@@ -75,7 +75,7 @@ public class AnswerDTO extends BaseDTO<Answer> {
 		Question		question		= new Question();
 
 		model.setUuid(getUuid());
-		model.setMobileId(getMobileId());
+		model.setExternalID(getExternalID());
 		model.setDescription(getDescription());
 
 		alternative.setUuid(getAlternativeUUID());

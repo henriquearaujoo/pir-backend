@@ -10,9 +10,11 @@ import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
+import java.util.UUID;
 
 @Repository
 public interface IPregnant extends IBaseRepository<Pregnant, Long, QPregnant> {
+	Pregnant findByAgentUuidAndExternalID(UUID uuid, long externalID);
 	long countAllByCodeStartingWith(String prefix);
 
 	@Override

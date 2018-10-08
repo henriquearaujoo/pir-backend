@@ -19,73 +19,73 @@ import java.util.Date;
 public class Visit extends Base {
 	@Getter
 	@Setter
-	private		long			externalID;
+	private		long					externalID;
 
 	@Getter
 	@Setter
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false, nullable = false)
 	@Alias("Realizada Em")
-	private 	Date			doneAt;
+	private 	Date					doneAt;
 
 	@Getter
 	@Setter
 	@Column
 	@Alias("Número")
-	private 	int				number;
+	private 	int						number;
 
 	@Getter
 	@Setter
 	@Column
 	@Alias("Avaliação da Família")
-	private 	short			familyRating;
+	private 	short					familyRating;
 
 	@Getter
 	@Setter
 	@Column
 	@Alias("Avaliação do Agente")
-	private 	short			agentRating;
+	private 	short					agentRating;
 
 	@Getter
 	@Setter
 	@Column
 	@Alias("Duração")
-	private 	long			duration;
+	private 	long					duration;
 
 	@Getter
 	@Setter
 	@ManyToOne
 	@JoinColumn
 	@Alias("Agente")
-	private 	User			agent;
+	private 	User					agent;
 
 	@Getter
 	@Setter
 	@ManyToOne
 	@JoinColumn
 	@Alias("Mãe - Gravidez")
-	private 	Pregnancy		pregnancy;
+	private 	Pregnancy				pregnancy;
 
 	@Getter
 	@Setter
 	@ManyToOne
 	@JoinColumn
 	@Alias("Criança")
-	private 	Child			child;
+	private 	Child					child;
 
 	@Getter
 	@Setter
 	@ManyToOne(optional = false)
 	@JoinColumn
 	@Alias("Capítulo")
-	private 	Chapter			chapter;
+	private 	Chapter					chapter;
 
 	@Getter
 	@Setter
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_form"))
 	@Alias("Formulário")
-	private 	Form			form;
+	private 	Form					form;
 
 	@Getter
 	@Setter

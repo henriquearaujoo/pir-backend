@@ -7,6 +7,8 @@ import com.samsung.fas.pir.persistence.repositories.IPregnant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class PregnantDAO extends BaseDAO<Pregnant, Long, IPregnant, QPregnant> {
 	@Autowired
@@ -16,5 +18,9 @@ public class PregnantDAO extends BaseDAO<Pregnant, Long, IPregnant, QPregnant> {
 
 	public String getSequentialCode(String prefix) {
 		return prefix.concat(String.format("%06d", getRepository().countAllByCodeStartingWith(prefix) + 1L));
+	}
+
+	public Pregnant findOneByAgentAndExternalID(UUID uuid, long externalID) {
+		return getRepository().findByAgentUuidAndExternalID(uuid, externalID);
 	}
 }

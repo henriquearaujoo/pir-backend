@@ -57,9 +57,9 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 
 	@Override
 	public FamilyDTO save(FamilyDTO create, Device device, UserDetails account) {
-		Family 			model		= create.getModel();
-		Family			family 		= model.getUuid() != null? getDao().findOne(model.getUuid()) : null;
 		Agent			agent		= getUserBO().getAgentDAO().findOne(create.getAgentUUID());
+		Family 			model		= create.getModel();
+		Family			family 		= model.getUuid() != null? getDao().findOne(model.getUuid()) : getDao().findOneByAgentAndExternalID(agent.getUuid(), model.getExternalID());
 		Community		community	= getCommunityBO().getDao().findOne(create.getCommunityUUID());
 		return family != null? new FamilyDTO(getDao().save(setupFamily(family, model, agent, community, device)), device, true) : new FamilyDTO(getDao().save(setupFamily(model, agent, community, device)), device, true);
 	}
@@ -101,7 +101,7 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
-			Pregnant	pregnant	= uuid != null? getPregnantBO().getDao().findOne(uuid) : null;
+			Pregnant	pregnant	= uuid != null? getPregnantBO().getDao().findOne(uuid) : getPregnantBO().getDao().findOneByAgentAndExternalID(agent.getUuid(), item.getExternalID());
 			if (pregnant != null) {
 				return getPregnantBO().setupPregnant(pregnant, item, mother, agent, device);
 			} else {
@@ -114,7 +114,7 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
-			Child		child		= uuid != null? getChildBO().getDao().findOne(uuid) :  null;
+			Child		child		= uuid != null? getChildBO().getDao().findOne(uuid) :  getChildBO().getDao().findOneByAgentAndExternalID(agent.getUuid(), item.getExternalID());
 			if (child != null) {
 				return getChildBO().setupChild(child, item, family, agent);
 			} else {

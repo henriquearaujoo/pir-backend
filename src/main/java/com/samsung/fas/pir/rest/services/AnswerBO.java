@@ -3,10 +3,7 @@ package com.samsung.fas.pir.rest.services;
 import com.samsung.fas.pir.persistence.dao.AlternativeDAO;
 import com.samsung.fas.pir.persistence.dao.AnswerDAO;
 import com.samsung.fas.pir.persistence.dao.QuestionDAO;
-import com.samsung.fas.pir.persistence.models.Alternative;
-import com.samsung.fas.pir.persistence.models.Answer;
-import com.samsung.fas.pir.persistence.models.Question;
-import com.samsung.fas.pir.persistence.models.Visit;
+import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.rest.dto.AnswerDTO;
 import com.samsung.fas.pir.rest.services.base.BaseBO;
 import lombok.AccessLevel;
@@ -72,16 +69,18 @@ public class AnswerBO extends BaseBO<Answer, AnswerDAO, AnswerDTO, Long> {
 		return null;
 	}
 
-	Answer setupAnswer(Answer model, Visit visit) {
+	Answer setupAnswer(Answer model, Visit visit, Agent agent) {
 		model.setAlternative(model.getAlternative() != null && model.getAlternative().getUuid() != null? getAlternativeDAO().findOne(model.getAlternative().getUuid()) : null);
 		model.setQuestion(getQuestionDAO().findOne(model.getQuestion().getUuid()));
+		model.setAgent(agent);
 		model.setVisit(visit);
 		return model;
 	}
 
-	Answer setupAnswer(Answer answer, Answer model) {
+	Answer setupAnswer(Answer answer, Answer model, Agent agent) {
 		answer.setQuestion(getQuestionDAO().findOne(model.getQuestion().getUuid()));
 		answer.setAlternative(model.getAlternative().getUuid() != null? getAlternativeDAO().findOne(model.getAlternative().getUuid()) : null);
+		answer.setAgent(agent);
 		answer.setDescription(model.getDescription());
 		return answer;
 	}

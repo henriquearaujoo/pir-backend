@@ -30,6 +30,10 @@ public class FamilyDAO extends BaseDAO<Family, Long, IFamily, QFamily> {
 		return prefix.concat(String.format("%06d", getRepository().countAllByCodeStartingWith(prefix) + 1L));
 	}
 
+	public Family findOneByAgentAndExternalID(UUID uuid, long externalID) {
+		return getRepository().findByAgentUuidAndExternalID(uuid, externalID);
+	}
+
 	public Collection<Family> findAllByAgent(UUID uuid) {
 		return getRepository().findAllByAgentUuid(uuid);
 	}

@@ -10,9 +10,12 @@ import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
+import java.util.UUID;
 
 @Repository
 public interface IVisit extends IBaseRepository<Visit, Long, QVisit> {
+	Visit findByAgentUuidAndExternalID(UUID uuid, long externalID);
+
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QVisit root) {
 		bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);

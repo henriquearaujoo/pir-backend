@@ -116,7 +116,7 @@ public class ChildBO extends BaseBO<Child, ChildDAO, ChildDTO, Long> {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
-			Visit		visit		= uuid != null? getVisitBO().getDao().findOne(uuid) : null;
+			Visit		visit		= uuid != null? getVisitBO().getDao().findOne(uuid) : getVisitBO().getDao().findOneByAgentAndExternalID(agent.getUuid(), item.getExternalID());
 			if (visit != null) {
 				return getVisitBO().setupVisit(visit, item, child, agent);
 			} else {
