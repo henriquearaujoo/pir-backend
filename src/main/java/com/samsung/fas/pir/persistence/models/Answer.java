@@ -41,7 +41,7 @@ public class Answer extends Base {
 
 	@Getter
 	@Setter
-	@ManyToOne(optional = false)
+	@ManyToOne
 	@JoinColumn
 	@Alias("Questão")
 	private 	Question		question;
