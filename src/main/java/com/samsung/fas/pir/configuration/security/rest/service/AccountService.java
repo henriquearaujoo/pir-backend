@@ -58,8 +58,8 @@ public class AccountService implements UserDetailsService {
 			throw new UsernameNotFoundException("login.email.notfound");
 
 		// Genarate token
-		token		= UUID.randomUUID().toString() + RandomStringUtils.random(20, true, true);
-		token		= encoder.encode(token).replaceAll("[.$/]", "").substring(4);
+		token		= UUID.randomUUID().toString();
+		token		= token.replaceAll("-", "").toLowerCase();
 		precover	= precover == null? new PasswordRecover() : precover;
 
 		precover.setEmail(email);

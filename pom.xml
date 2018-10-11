@@ -5,7 +5,7 @@
 
 	<groupId>com.samsung.fas.pir</groupId>
 	<artifactId>pir</artifactId>
-	<version>0.0.14-ACCEPTANCE</version>
+	<version>0.0.15-ACCEPTANCE</version>
 	<packaging>war</packaging>
 
 	<name>PIR</name>

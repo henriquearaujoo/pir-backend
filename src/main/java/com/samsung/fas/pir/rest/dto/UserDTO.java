@@ -18,6 +18,7 @@ import org.springframework.mobile.device.Device;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 import java.util.UUID;
 
 @DTO(User.class)
@@ -92,12 +93,12 @@ public class UserDTO extends BaseDTO<User> {
 	public UserDTO(User user, Device device, boolean detailed) {
 		super(user);
 		setPassword(null);
-		setActive(user.getAccount().isEnabled() && user.getAccount().isAccountNonExpired() && user.getAccount().isAccountNonLocked() && user.getAccount().isCredentialsNonExpired());
-		setProfileDTO(new ProfileDTO(user.getAccount().getProfile(), device, false));
+		setActive(user.getAccount() != null && user.getAccount().isEnabled() && user.getAccount().isAccountNonExpired() && user.getAccount().isAccountNonLocked() && user.getAccount().isCredentialsNonExpired());
+		setProfileDTO(user.getAccount() != null? new ProfileDTO(user.getAccount().getProfile(), device, false) : null);
 		setPersonDTO(user.getPerson() != null? new PersonDTO(user.getPerson(), device, false) : null);
 		setEntityDTO(user.getEntity() != null? new EntityDTO(user.getEntity(), device, false) : null);
-		setAddressDTO(detailed? user.getAddress() != null? new AddressDTO(user.getAddress(), device, false) : null : null);
-		setLogin(detailed? user.getAccount().getUsername() : null);
+		setAddressDTO(detailed && user.getAddress() != null ? new AddressDTO(user.getAddress(), device, false) : null);
+		setLogin(user.getAccount() != null? user.getAccount().getUsername() : null);
 	}
 
 	@JsonIgnore

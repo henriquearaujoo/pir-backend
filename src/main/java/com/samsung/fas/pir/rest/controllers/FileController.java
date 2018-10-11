@@ -29,7 +29,7 @@ public class FileController {
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ResponseEntity<?> findAll() throws IOException {
+	public ResponseEntity<?> findAll() {
 		return ResponseEntity.ok(service.findAll());
 	}
 
