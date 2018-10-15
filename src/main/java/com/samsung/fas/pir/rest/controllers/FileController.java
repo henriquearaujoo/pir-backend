@@ -89,7 +89,7 @@ public class FileController {
 	}
 
 	@RequestMapping(value = "/delete/{fileid}", method = RequestMethod.DELETE)
-	public void delete(@PathVariable("fileid") long fileId, HttpServletRequest request, HttpServletResponse response) {
+	public void delete(@PathVariable("fileid") long fileId) {
 		service.delete(fileId);
 	}
 }

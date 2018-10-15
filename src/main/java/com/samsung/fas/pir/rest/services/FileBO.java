@@ -30,7 +30,7 @@ public class FileBO {
 	public FileDTO save(String name, String contentType, boolean song, boolean resource, byte[] data) {
 		try {
 			String				extension		= FilenameUtils.getExtension(name);
-			File 				fileLocation	= getNewFile(extension);
+			File 				fileLocation	= getNewFile();
 			FileOutputStream 	fos				= new FileOutputStream(fileLocation);
 			FileData 			fileData		= new FileData();
 
@@ -73,12 +73,8 @@ public class FileBO {
 		}
 	}
 
-	private File getNewFile(String ext) throws IOException {
-		if(ext == null || ext.trim().isEmpty()) {
-			ext = ".dat";
-		}
-
-		String	name	= String.format("%s.%s", java.util.UUID.randomUUID(), ext);
+	private File getNewFile() throws IOException {
+		String	name	= String.format("%s", java.util.UUID.randomUUID());
 		File	dir		= new File(getUploadDir());
 		File	file	= new File(dir, name);
 
@@ -89,8 +85,8 @@ public class FileBO {
 	}
 
 	private String getUploadDir() {
-		String uploadPath = new File("/files/pir").getAbsolutePath();
-//		String uploadPath = new File(System.getProperty("user.home") + "/PIRService", "/Data").getAbsolutePath();
+//		String uploadPath = new File("/files/pir").getAbsolutePath();
+		String uploadPath = new File(System.getProperty("user.home") + "/PIRService", "/Data").getAbsolutePath();
 
 		if(!new File(uploadPath).exists())
 			if (!new File(uploadPath).mkdir())
@@ -116,10 +112,10 @@ public class FileBO {
 	}
 
 	public Collection<FileDTO> findAllSongs() {
-		return StreamSupport.stream(repository.findAllBySong(true).spliterator(), false).map(FileDTO::new).collect(Collectors.toList());
+		return repository.findAllBySong(true).stream().map(FileDTO::new).collect(Collectors.toList());
 	}
 
 	public Collection<FileDTO> findAllResources() {
-		return StreamSupport.stream(repository.findAllByResource(true).spliterator(), false).map(FileDTO::new).collect(Collectors.toList());
+		return repository.findAllByResource(true).stream().map(FileDTO::new).collect(Collectors.toList());
 	}
 }

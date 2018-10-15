@@ -126,11 +126,11 @@ public class ChapterDTO extends BaseDTO<Chapter> {
 			setGreetingsDTO(chapter.getGreetings() != null? new GreetingsDTO(chapter.getGreetings(), device, true) : null);
 			setInterventionDTO(chapter.getIntervention() != null? new InterventionDTO(chapter.getIntervention(), device, true) : null);
 			setConclusionDTO(chapter.getConclusion() != null? new ConclusionDTO(chapter.getConclusion(), device, true) : null);
-			Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMediasDTO(item.stream().map(FileDTO::new).collect(Collectors.toSet())));
+			setMediasDTO(chapter.getMedias().stream().map(FileDTO::new).collect(Collectors.toList()));
 		} else {
 			setTimeUntilNext(chapter.getTimeUntilNext() / 1000 / 3600 / 24);
 			setUntilComplete(CTools.calculateChapterCompleteness(chapter));
-			Optional.ofNullable(chapter.getMedias()).ifPresent(item -> setMediasDTO(item.stream().map(FileDTO::new).collect(Collectors.toList())));
+			setMediasDTO(chapter.getMedias().stream().map(FileDTO::new).collect(Collectors.toList()));
 		}
 	}
 
