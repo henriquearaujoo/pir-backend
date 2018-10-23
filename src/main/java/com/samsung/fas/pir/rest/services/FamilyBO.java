@@ -114,7 +114,7 @@ public class FamilyBO extends BaseBO<Family, FamilyDAO, FamilyDTO, Long> {
 		Collection<UUID>		modelIDs		= collection.stream().map(Base::getUuid).collect(Collectors.toList());
 		return collection.stream().map(item -> {
 			UUID		uuid		= modelIDs.stream().filter(id -> item.getUuid() != null && id != null && id.compareTo(item.getUuid()) == 0).findAny().orElse(null);
-			Child		child		= uuid != null? getChildBO().getDao().findOne(uuid) :  getChildBO().getDao().findOneByAgentAndExternalID(agent.getUuid(), item.getExternalID());
+			Child		child		= uuid != null? getChildBO().getDao().findOne(uuid) : getChildBO().getDao().findOneByAgentAndExternalID(agent.getUuid(), item.getExternalID());
 			if (child != null) {
 				return getChildBO().setupChild(child, item, family, agent);
 			} else {

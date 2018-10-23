@@ -17,10 +17,10 @@ public class MailSender {
 
 		sender.setDefaultEncoding(StandardCharsets.UTF_8.name());
 		sender.setProtocol("smtp");
-		sender.setHost("mail.timeitn.com.br");
+		sender.setHost("smtp.gmail.com");
 		sender.setPort(587);
-		sender.setUsername("noreply@timeitn.com.br");
-		sender.setPassword("Itn@qawsed");
+		sender.setUsername("pir@fas-amazonas.org");
+		sender.setPassword("FAS123pir");
 		properties.put("mail.smtps.auth", "true");
 		properties.put("mail.smtp.starttls.enable", "true");
 		properties.put("mail.smtp.debug", "true");
