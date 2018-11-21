@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -66,14 +67,18 @@ public abstract class Base {
 
 	@PrePersist
 	public void prePersist() {
-		setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails? ((Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser() : null);
-		setCreatedAt(new Date());
+		if (SecurityContextHolder.getContext().getAuthentication() != null) {
+			if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS")))
+				setCreatedBy((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+		}
 	}
 
 	@PreUpdate
 	public void preUpdate() {
-		setModifiedBy(SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails? ((Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser() : null);
-		setUpdatedAt(new Date());
+		if (SecurityContextHolder.getContext().getAuthentication() != null) {
+			if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS")))
+				setCreatedBy((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+		}
 	}
 
 	@Override

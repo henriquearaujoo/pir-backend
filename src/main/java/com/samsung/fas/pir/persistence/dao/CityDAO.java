@@ -20,4 +20,8 @@ public class CityDAO extends BaseDAO<City, Long, ICity, QCity> {
 	public Collection<City> findAllIn(Collection<UUID> collection) {
 		return getRepository().findAllByUuidIn(collection);
 	}
+
+	public City findOne(String city, String abbreviation) {
+		return getRepository().findByNameAndStateAbbreviation(city, abbreviation);
+	}
 }

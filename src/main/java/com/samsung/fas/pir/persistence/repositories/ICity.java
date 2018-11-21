@@ -16,6 +16,7 @@ import java.util.UUID;
 @Repository
 public interface ICity extends IBaseRepository<City, Long, QCity> {
 	Collection<City> findAllByUuidIn(Collection<UUID> collection);
+	City findByNameAndStateAbbreviation(String name, String abbreviation);
 
 	@Override
 	default void customize(@Nonnull QuerydslBindings bindings, @Nonnull QCity root) {

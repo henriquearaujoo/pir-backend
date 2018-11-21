@@ -1,0 +1,35 @@
+Lista de Capítulos|capitulos
+Registro de Capítulos|capitulos/registro
+Lista de Usuários|usuarios
+Registro de Usuários|usuarios/registro
+Detalhes do Usuário|usuarios/detalhes
+Informaçoes do Agente|agente-dashboard
+Registro do Agente|agente-dashboard/registro
+Detalhes do Agente|agente-dashboard/detalhes
+Localização do Agente|agente-dashboard/localizacao
+Histórico de Visita|agente-visita
+Lista de Visitas|agente-visita/historico
+Desempenho do Agente|agente-desempenho
+Mapa dos Agentes|agentes-mapa
+Lista de Perfis|perfis
+Lista de Famílias|familias
+Detalhes da Família|familias/detalhes
+Registro de Família|familias/registro
+Lista de Gestantes|gestantes
+Detalhes da Gestante|gestantes/detalhes
+Registro da Gestante|gestantes/registro
+Lista de Crianças|criancas
+Detalhes da Criança|criancas/detalhes
+Registro da Criança|criancas/registro
+Lista de Comunidades|comunidades
+Registro da Comunidade|comunidades/registro
+Detalhes da Comunidade|comunidades/detalhes
+Lista de Formulários|formularios
+Registro de Formulário|formularios/registro
+Detalhes do Formulário|formularios/detalhes
+Relatório|relatorios
+Construtor de Formulários|formularios/construtor
+Registro de Formulários|formularios/construtor/registro
+Regionais|regionais
+Regionais - Registro|regionais/registro
+Regionais - Detalhes|regionais/detalhes
