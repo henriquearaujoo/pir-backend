@@ -8,12 +8,12 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(schema = "fas_warehouse")
+@Table(	schema = "fas_warehouse", indexes = @Index(name = "idx_question", columnList = "question, type", unique = true))
 public class QuestionDimension extends BIBase {
 	@Getter
 	@Setter
 	@Column
-	private				String				value;
+	private				String				question;
 
 	@Getter
 	@Setter

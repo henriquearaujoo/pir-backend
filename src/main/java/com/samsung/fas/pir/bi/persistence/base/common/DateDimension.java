@@ -19,11 +19,6 @@ public class DateDimension extends BIBase {
 	@Getter
 	@Setter
 	@Column
-	private			Short			day;
-
-	@Getter
-	@Setter
-	@Column
 	private			Short			weekDay;
 
 	@Getter

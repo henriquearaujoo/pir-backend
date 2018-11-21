@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(schema = "fas_warehouse")
+@Table(schema = "fas_warehouse", indexes = @Index(name = "idx_community_data", columnList = "zone, hasElectricity, hasCivicCenter, hasCulturalEvent, hasLeader, hasPatron, hasReligiousPlace, hasKindergarten, hasElementarySchool, hasHighSchool, hasCollege", unique = true))
 public class CommunityDataDimension extends BIBase {
 	@Getter
 	@Setter
@@ -64,5 +64,5 @@ public class CommunityDataDimension extends BIBase {
 	@Getter
 	@Setter
 	@Column
-	private				boolean				hasCollegeSchool;
+	private				boolean				hasCollege;
 }

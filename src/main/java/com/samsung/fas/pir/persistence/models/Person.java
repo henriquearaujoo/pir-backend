@@ -10,7 +10,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "person", uniqueConstraints = {@UniqueConstraint(name = "cpf", columnNames = {"cpf"})}, indexes = @Index(name = "cpf", columnList = "cpf"))
+@Table(name = "person", uniqueConstraints = {@UniqueConstraint(name = "uk_cpf", columnNames = {"cpf"})}, indexes = @Index(name = "idx_cpf", columnList = "cpf"))
 @DynamicUpdate
 @DynamicInsert
 @Alias("Pessoa Física")

@@ -32,7 +32,7 @@ public class VisitFact extends BIFactBase {
 	@Getter
 	@Setter
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_chapter_dimension"))
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_agent_rating_dimension"))
 	private				AgentRatingDimension					agentRating;
 
 	@Getter

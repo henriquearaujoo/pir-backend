@@ -12,7 +12,7 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "questions", uniqueConstraints = @UniqueConstraint(columnNames = {"conclusion_id", "description"}, name = "question"))
+@Table(name = "questions", uniqueConstraints = @UniqueConstraint(columnNames = {"conclusion_id", "description"}, name = "uk_question"))
 @DynamicUpdate
 @DynamicInsert
 @Alias("Questão")

@@ -7,10 +7,11 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 @Entity
-@Table(schema = "fas_warehouse")
+@Table(schema = "fas_warehouse", indexes = @Index(name = "idx_gender", columnList = "value", unique = true))
 public class GenderDimension extends BIBase {
 	@Getter
 	@Setter

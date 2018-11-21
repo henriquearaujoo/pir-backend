@@ -7,10 +7,11 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 @Entity
-@Table(schema = "fas_warehouse")
+@Table(schema = "fas_warehouse", indexes = @Index(name = "idx_community_city", columnList = "name, stateAbbreviation", unique = true))
 public class CommunityCityDimension extends BIBase {
 	@Getter
 	@Setter

@@ -7,13 +7,11 @@ import com.samsung.fas.pir.persistence.enums.EHabitationType;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(schema = "fas_warehouse")
+@Table(schema = "fas_warehouse", indexes = @Index(name = "idx_family_data", columnList = "gender, civilState, habitationType, socialProgram, nearbyBasicUnity, sanitation, waterTreatment, membersCount, childCount, birth", unique = true))
 public class FamilyDataDimension extends BIBase {
 	@Getter
 	@Setter
@@ -63,5 +61,6 @@ public class FamilyDataDimension extends BIBase {
 	@Getter
 	@Setter
 	@Column
+	@Temporal(TemporalType.DATE)
 	private				Date						birth;
 }

@@ -23,7 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configuration
+//@Configuration
 public class Database {
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)

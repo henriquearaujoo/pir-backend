@@ -11,7 +11,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "answer_type_b", uniqueConstraints = @UniqueConstraint(name = "question", columnNames = {"child_id", "question_id"}))
+@Table(name = "answer_type_b", uniqueConstraints = @UniqueConstraint(name = "uk_answer_b", columnNames = {"child_id", "question_id"}))
 @DynamicUpdate
 @DynamicInsert
 @Alias("Resposta Formulário B")

@@ -9,7 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(schema = "fas_warehouse")
+@Table(schema = "fas_warehouse", indexes = @Index(name = "idx_community_garbage", columnList = "value", unique = true))
 public class CommunityGarbageDestinationDimension extends BIBase {
 	@Getter
 	@Setter
