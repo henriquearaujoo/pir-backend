@@ -9,6 +9,7 @@ import com.samsung.fas.pir.bi.persistence.community.CommunityServiceDimension;
 import com.samsung.fas.pir.bi.persistence.community.CommunitySocialDimension;
 import com.samsung.fas.pir.bi.persistence.family.FamilyServiceDimension;
 import com.samsung.fas.pir.bi.persistence.family.FamilySocialDimension;
+import com.samsung.fas.pir.bi.persistence.pregnancy.PregnancyMeasureDimension;
 import com.samsung.fas.pir.bi.repository.dimensions.*;
 import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.repositories.*;
@@ -359,6 +360,23 @@ public class TransformTasks {
 					// Ignore error for duplicated entries
 					Log.error(e.getMessage());
 				}
+			}
+		}
+	}
+
+	private void populatePregnancyDimensions() {
+		for (Pregnancy pregnancy : getPregnancyRepository().findAll(QPregnancy.pregnancy.createdAt.after(getYesterday().toDate()))) {
+			try {
+				PregnancyMeasureDimension				measure			= new PregnancyMeasureDimension();
+
+				measure.setHeight(pregnancy.getHeight());
+				measure.setPlanned(pregnancy.getPlanned());
+				measure.setWeight((short) Math.round(pregnancy.getWeight()));
+
+				getPregnancyMeasureDimensionRepository().save(measure);
+			} catch (Exception e) {
+				// Ignore error for duplicated entries
+				Log.error(e.getMessage());
 			}
 		}
 	}
