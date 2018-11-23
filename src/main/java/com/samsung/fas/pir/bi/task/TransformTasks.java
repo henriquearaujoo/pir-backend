@@ -4,6 +4,10 @@ import com.samsung.fas.pir.bi.persistence.answer.AnswerDimension;
 import com.samsung.fas.pir.bi.persistence.child.ChildSocialDimension;
 import com.samsung.fas.pir.bi.persistence.common.AgentDimension;
 import com.samsung.fas.pir.bi.persistence.common.DateDimension;
+import com.samsung.fas.pir.bi.persistence.community.CommunityLocationDimension;
+import com.samsung.fas.pir.bi.persistence.community.CommunityServiceDimension;
+import com.samsung.fas.pir.bi.persistence.community.CommunitySocialDimension;
+import com.samsung.fas.pir.bi.persistence.family.FamilySocialDimension;
 import com.samsung.fas.pir.bi.repository.dimensions.*;
 import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.repositories.*;
@@ -173,17 +177,15 @@ public class TransformTasks {
 //	@Scheduled(cron="0 0 0 * * *")
 	@Scheduled(fixedDelay = 1200 * 1000)
 	public void transform() {
-		setLocalDate();
-		populateDateDimension();
-		populateAgentDimension();
-		populateAnswerDimension();
-	}
-
-	private void setLocalDate() {
 		setYesterday(LocalDate.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone("America/Manaus"))).plusDays(-1));
+		populateDateDimensions();
+		populateAgentDimensions();
+		populateAnswerDimensions();
+		populateChildDimensions();
+		populateCommunityDimensions();
 	}
 
-	private void populateDateDimension() {
+	private void populateDateDimensions() {
 		try {
 			LocalDate 		now		= LocalDate.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone("America/Manaus")));
 			DateDimension	date	= new DateDimension();
@@ -204,7 +206,7 @@ public class TransformTasks {
 		}
 	}
 
-	private void populateAgentDimension() {
+	private void populateAgentDimensions() {
 		for (Agent data : getAgentRepository().findAll(QAgent.agent.createdAt.after(getYesterday().toDate()))) {
 			try {
 				AgentDimension		agent		= new AgentDimension();
@@ -221,7 +223,7 @@ public class TransformTasks {
 		}
 	}
 
-	private void populateAnswerDimension() {
+	private void populateAnswerDimensions() {
 		for (Answer data : getAnswerRepository().findAll(QAnswer.answer.createdAt.after(getYesterday().toDate()))) {
 			try {
 				AnswerDimension			answer			= new AnswerDimension();
@@ -251,6 +253,82 @@ public class TransformTasks {
 			} catch (Exception e) {
 				// Ignore error for duplicated entries
 				Log.error(e.getMessage());
+			}
+		}
+	}
+
+	private void populateCommunityDimensions() {
+		for (Community data : getCommunityRepository().findAll(QCommunity.community.createdAt.after(getYesterday().toDate()))) {
+			{
+				try {
+					CommunityLocationDimension		location		= new CommunityLocationDimension();
+
+					location.setAccess(data.getAccess());
+					location.setName(data.getName());
+					location.setCity(data.getCity().getName());
+					location.setState(data.getCity().getState().getAbbreviation());
+					location.setZone(data.getCommunityZone());
+					location.setUnity(data.getUnity().getName());
+					location.setRegional(data.getUnity().getRegional().getName());
+
+					getCommunityLocationDimensionRepository().save(location);
+				} catch (Exception e) {
+					// Ignore error for duplicated entries
+					Log.error(e.getMessage());
+				}
+			}
+
+			{
+				try {
+					CommunitySocialDimension 		social		= new CommunitySocialDimension();
+
+					social.setCulturalProduction(data.getCulturalProductions());
+					social.setIncome(data.getMainIncome());
+					social.setHasCivicCenter(data.isCommunityCenter());
+					social.setHasCulturalEvent(data.isCulturalEvents());
+					social.setHasLeader(data.isCommunityLeaders());
+					social.setHasPatron(data.isPatron());
+					social.setHasReligiousPlace(data.isReligiousPlace());
+
+					getCommunitySocialDimensionRepository().save(social);
+
+				} catch (Exception e) {
+					// Ignore error for duplicated entries
+					Log.error(e.getMessage());
+				}
+			}
+
+			{
+				try {
+					CommunityServiceDimension		service		= new CommunityServiceDimension();
+
+					service.setGarbageDestination(data.getGarbageDestination());
+					service.setHasCollege(data.isCollege());
+					service.setHasElectricity(data.isElectricity());
+					service.setHasElementarySchool(data.isElementarySchool());
+					service.setHasHighSchool(data.isHighSchool());
+					service.setHasKindergarten(data.isKindergarten());
+					service.setHealthService(data.getHealthServices());
+					service.setWaterSupply(data.getWaterSupply());
+
+					getCommunityServiceDimensionRepository().save(service);
+				} catch (Exception e) {
+					// Ignore error for duplicated entries
+					Log.error(e.getMessage());
+				}
+			}
+		}
+	}
+
+	private void populateFamilyDimension() {
+		for (Family data : getFamilyRepository().findAll(QFamily.family.createdAt.after(getYesterday().toDate()))) {
+			{
+				try {
+					FamilySocialDimension			social		= new FamilySocialDimension();
+				} catch (Exception e) {
+					// Ignore error for duplicated entries
+					Log.error(e.getMessage());
+				}
 			}
 		}
 	}
