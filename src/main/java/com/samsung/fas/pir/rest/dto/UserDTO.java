@@ -18,7 +18,6 @@ import org.springframework.mobile.device.Device;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 import java.util.UUID;
 
 @DTO(User.class)

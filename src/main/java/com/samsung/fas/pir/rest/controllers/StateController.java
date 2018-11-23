@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Collection;
-import java.util.Collections;
 
 @Api(value = "States", description = "REST Controller for States", tags = "STATES")
 @RequestMapping(value = "/rest/states", produces = MediaType.APPLICATION_JSON_VALUE)

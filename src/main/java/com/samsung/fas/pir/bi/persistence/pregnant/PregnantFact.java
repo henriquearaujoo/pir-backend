@@ -1,18 +1,20 @@
 package com.samsung.fas.pir.bi.persistence.pregnant;
 
 import com.samsung.fas.pir.bi.persistence.base.BIFactBase;
-import com.samsung.fas.pir.bi.persistence.base.common.*;
-import com.samsung.fas.pir.bi.persistence.community.*;
-import com.samsung.fas.pir.bi.persistence.family.FamilyDataDimension;
-import com.samsung.fas.pir.bi.persistence.family.FamilyIncomeDimension;
-import com.samsung.fas.pir.bi.persistence.family.FamilyWaterTreatmentDimension;
+import com.samsung.fas.pir.bi.persistence.common.AgentDimension;
+import com.samsung.fas.pir.bi.persistence.common.DateDimension;
+import com.samsung.fas.pir.bi.persistence.community.CommunityLocationDimension;
+import com.samsung.fas.pir.bi.persistence.community.CommunityServiceDimension;
+import com.samsung.fas.pir.bi.persistence.community.CommunitySocialDimension;
+import com.samsung.fas.pir.bi.persistence.family.FamilyServiceDimension;
+import com.samsung.fas.pir.bi.persistence.family.FamilySocialDimension;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Table(schema = "fas_warehouse")
+@Table(schema = "fas_warehouse", indexes = @Index(name = "idx_pregnant_fact", unique = true, columnList = "date_id, agent_id, social_id, family_service_id, family_social_id, community_location_id, community_service_id, community_social_id"))
 public class PregnantFact extends BIFactBase {
 	@Getter
 	@Setter
@@ -23,126 +25,48 @@ public class PregnantFact extends BIFactBase {
 	@Getter
 	@Setter
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_civil_state_dimension"))
-	private				CivilStateDimension						civilState;
-
-	@Getter
-	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_ethinicity_dimension"))
-	private 			EthinicityDimension 					ethinicity;
-
-	@Getter
-	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_scholarity_dimension"))
-	private 			ScholarityDimension 					scholarity;
-
-	@Getter
-	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_agent_dimension"))
 	private 			AgentDimension 							agent;
 
+	// region Pregnant
 	@Getter
 	@Setter
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_name_dimension"))
-	private 			NameDimension 							name;
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_social_dimension"))
+	private 			PregnantSocialDimension 				social;
+	// endregion
+
+	// region Family
+	@Getter
+	@Setter
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_family_service_dimension"))
+	private 		FamilyServiceDimension 						familyService;
 
 	@Getter
 	@Setter
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_mother_dimension"))
-	private				NameDimension							motherName;
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_family_social_dimension"))
+	private 		FamilySocialDimension 						familySocial;
+	// endregion
+
+	// region Community
+	@Getter
+	@Setter
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_community_location_dimension"))
+	private 		CommunityLocationDimension 					communityLocation;
 
 	@Getter
 	@Setter
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_father_dimension"))
-	private				NameDimension							fatherName;
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_community_service_dimension"))
+	private 		CommunityServiceDimension					communityService;
 
 	@Getter
 	@Setter
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_data_dimension"))
-	private				FamilyDataDimension						data;
-
-	@Getter
-	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_family_name_dimension"))
-	private				NameDimension							familyName;
-
-	@Getter
-	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_income_dimension"))
-	private				FamilyIncomeDimension					income;
-
-	@Getter
-	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_water_treatment_dimension"))
-	private				FamilyWaterTreatmentDimension			waterTreatment;
-
-	@Getter
-	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_access_dimension"))
-	private				CommunityAccessDimension				communityAccess;
-
-	@Getter
-	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_community_data_dimension"))
-	private				CommunityDataDimension					communityData;
-
-	@Getter
-	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_cultural_production_dimension"))
-	private				CommunityCulturalProductionDimension	culturalProduction;
-
-	@Getter
-	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_garbage_destination_dimension"))
-	private				CommunityGarbageDestinationDimension	hasGarbageDestination;
-
-	@Getter
-	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_health_service_dimension"))
-	private				CommunityHealthServiceDimension			hasHealthService;
-
-	@Getter
-	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_community_income_dimension"))
-	private				CommunityIncomeDimension				communityIncome;
-
-	@Getter
-	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_water_supply_dimension"))
-	private				CommunityWaterSupplyDimension			waterSupply;
-
-	@Getter
-	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_regional_dimension"))
-	private				CommunityRegionalDimension				regional;
-
-	@Getter
-	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_unity_dimension"))
-	private				CommunityUnityDimension					unity;
-
-	@Getter
-	@Setter
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_city_dimension"))
-	private				CommunityCityDimension					city;
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_community_social_dimension"))
+	private 		CommunitySocialDimension 					communitySocial;
+	// endregion
 }

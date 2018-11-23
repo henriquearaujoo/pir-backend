@@ -14,7 +14,6 @@ import org.springframework.mobile.device.Device;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @DTO(Chapter.class)

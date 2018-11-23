@@ -1,6 +1,5 @@
 package com.samsung.fas.pir.persistence.models.base;
 
-import com.samsung.fas.pir.configuration.security.persistence.models.Account;
 import com.samsung.fas.pir.persistence.models.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +8,6 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.persistence.ForeignKey;
