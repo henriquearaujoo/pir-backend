@@ -7,6 +7,7 @@ import com.samsung.fas.pir.bi.persistence.common.DateDimension;
 import com.samsung.fas.pir.bi.persistence.community.CommunityLocationDimension;
 import com.samsung.fas.pir.bi.persistence.community.CommunityServiceDimension;
 import com.samsung.fas.pir.bi.persistence.community.CommunitySocialDimension;
+import com.samsung.fas.pir.bi.persistence.family.FamilyServiceDimension;
 import com.samsung.fas.pir.bi.persistence.family.FamilySocialDimension;
 import com.samsung.fas.pir.bi.repository.dimensions.*;
 import com.samsung.fas.pir.persistence.models.*;
@@ -183,6 +184,7 @@ public class TransformTasks {
 		populateAnswerDimensions();
 		populateChildDimensions();
 		populateCommunityDimensions();
+		populateFamilyDimensions();
 	}
 
 	private void populateDateDimensions() {
@@ -320,11 +322,39 @@ public class TransformTasks {
 		}
 	}
 
-	private void populateFamilyDimension() {
+	private void populateFamilyDimensions() {
 		for (Family data : getFamilyRepository().findAll(QFamily.family.createdAt.after(getYesterday().toDate()))) {
 			{
 				try {
 					FamilySocialDimension			social		= new FamilySocialDimension();
+
+					social.setBirth(data.getBirth());
+					social.setChildCount(data.getChildrenCount());
+					social.setCivilState(data.getCivilState());
+					social.setGender(data.getGender());
+					social.setHabitationType(data.getHabitationType());
+					social.setIncome(data.getIncome());
+					social.setMembersCount(data.getMembersCount());
+					social.setName(data.getName());
+
+					getFamilySocialDimensionRepository().save(social);
+				} catch (Exception e) {
+					// Ignore error for duplicated entries
+					Log.error(e.getMessage());
+				}
+			}
+
+			{
+				try {
+					FamilyServiceDimension 			service			= new FamilyServiceDimension();
+
+					service.setHasNearbyBasicUnity(data.getNearbyUB());
+					service.setHasSanitation(data.getSanitation());
+					service.setHasWaterTreatment(data.getWaterTreatment());
+					service.setInSocialProgram(data.getSocialProgram());
+					service.setWaterTreatment(data.getWaterTreatmentDescription());
+
+					getFamilyServiceDimensionRepository().save(service);
 				} catch (Exception e) {
 					// Ignore error for duplicated entries
 					Log.error(e.getMessage());
