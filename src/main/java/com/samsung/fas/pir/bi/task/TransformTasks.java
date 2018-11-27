@@ -1,16 +1,24 @@
 package com.samsung.fas.pir.bi.task;
 
 import com.samsung.fas.pir.bi.persistence.answer.AnswerDimension;
+import com.samsung.fas.pir.bi.persistence.answer.QuestionDimension;
+import com.samsung.fas.pir.bi.persistence.child.ChildFact;
 import com.samsung.fas.pir.bi.persistence.child.ChildSocialDimension;
 import com.samsung.fas.pir.bi.persistence.common.AgentDimension;
 import com.samsung.fas.pir.bi.persistence.common.DateDimension;
 import com.samsung.fas.pir.bi.persistence.community.CommunityLocationDimension;
 import com.samsung.fas.pir.bi.persistence.community.CommunityServiceDimension;
 import com.samsung.fas.pir.bi.persistence.community.CommunitySocialDimension;
+import com.samsung.fas.pir.bi.persistence.family.FamilyFact;
 import com.samsung.fas.pir.bi.persistence.family.FamilyServiceDimension;
 import com.samsung.fas.pir.bi.persistence.family.FamilySocialDimension;
+import com.samsung.fas.pir.bi.persistence.pregnancy.PregnancyFact;
 import com.samsung.fas.pir.bi.persistence.pregnancy.PregnancyMeasureDimension;
+import com.samsung.fas.pir.bi.persistence.pregnant.PregnantFact;
+import com.samsung.fas.pir.bi.persistence.pregnant.PregnantSocialDimension;
+import com.samsung.fas.pir.bi.persistence.visit.VisitDataDimension;
 import com.samsung.fas.pir.bi.repository.dimensions.*;
+import com.samsung.fas.pir.bi.repository.facts.*;
 import com.samsung.fas.pir.persistence.models.*;
 import com.samsung.fas.pir.persistence.repositories.*;
 import lombok.AccessLevel;
@@ -25,8 +33,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.TimeZone;
 
+@SuppressWarnings("ALL")
 @Component
 public class TransformTasks {
 	private		static			Logger			Log			= LoggerFactory.getLogger(TransformTasks.class);
@@ -89,6 +99,32 @@ public class TransformTasks {
 	private 		IVisitDataDimension 			visitDataDimensionRepository;
 	// endregion
 
+	// region Facts
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
+	private 		IFamilyFact						familyFactRepository;
+
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
+	private 		IChildFact 						childFactRepository;
+
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
+	private 		IPregnantFact 					pregnantFactRepository;
+
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
+	private 		IPregnancyFact 					pregnancyFactRepository;
+
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
+	private			IVisitFact						visitFactRepository;
+
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
+	private 		IAnswerFact 					answerFactRepository;
+	// endregion
+
 	// region Data
 	@Getter(AccessLevel.PRIVATE)
 	@Setter(AccessLevel.PRIVATE)
@@ -127,6 +163,7 @@ public class TransformTasks {
 	private 		IVisit 							visitRepository;
 	// endregion
 
+	// region Constructor
 	@Autowired
 	public TransformTasks(
 			@Qualifier("BIDateDimension") IDateDimension dateDimensionRepository,
@@ -142,6 +179,12 @@ public class TransformTasks {
 			@Qualifier("BIPregnantSocialDimension") IPregnantSocialDimension pregnantSocialDimensionRepository,
 			@Qualifier("BIQuestionDimension") IQuestionDimension questionDimensionRepository,
 			@Qualifier("BIVisitDataDimension") IVisitDataDimension visitDataDimensionRepository,
+			@Qualifier("BIAnswerFact") IAnswerFact answerFactRepository,
+			@Qualifier("BIVisitFact") IVisitFact visitFactRepository,
+			@Qualifier("BIPregnancyFact") IPregnancyFact pregnancyFactRepository,
+			@Qualifier("BIPregnantFact") IPregnantFact pregnantFactRepository,
+			@Qualifier("BIChildFact") IChildFact childFactRepository,
+			@Qualifier("BIFamilyFact") IFamilyFact familyFactRepository,
 			IAgent agentRepository,
 			IAnswer answerRepository,
 			IChild childRepository,
@@ -165,6 +208,12 @@ public class TransformTasks {
 		setPregnantSocialDimensionRepository(pregnantSocialDimensionRepository);
 		setQuestionDimensionRepository(questionDimensionRepository);
 		setVisitDataDimensionRepository(visitDataDimensionRepository);
+		setFamilyFactRepository(familyFactRepository);
+		setChildFactRepository(childFactRepository);
+		setPregnantFactRepository(pregnantFactRepository);
+		setPregnancyFactRepository(pregnancyFactRepository);
+		setVisitFactRepository(visitFactRepository);
+		setAnswerFactRepository(answerFactRepository);
 		setAnswerRepository(answerRepository);
 		setAgentRepository(agentRepository);
 		setChildRepository(childRepository);
@@ -175,6 +224,7 @@ public class TransformTasks {
 		setQuestionRepository(questionRepository);
 		setVisitRepository(visitRepository);
 	}
+	// endregion
 
 //	@Scheduled(cron="0 0 0 * * *")
 	@Scheduled(fixedDelay = 1200 * 1000)
@@ -186,8 +236,15 @@ public class TransformTasks {
 		populateChildDimensions();
 		populateCommunityDimensions();
 		populateFamilyDimensions();
+		populatePregnancyDimensions();
+		populateVisitDimensions();
+		populateQuestionDimension();
+
+		populateFamilyFact();
+		populateChildFact();
 	}
 
+	// region Dimensions
 	private void populateDateDimensions() {
 		try {
 			LocalDate 		now		= LocalDate.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone("America/Manaus")));
@@ -380,4 +437,168 @@ public class TransformTasks {
 			}
 		}
 	}
+
+	private void populateVisitDimensions() {
+		for (Visit visit : getVisitRepository().findAll(QPregnancy.pregnancy.createdAt.after(getYesterday().toDate()))) {
+			try {
+				VisitDataDimension						data			= new VisitDataDimension();
+
+				data.setAgentRating(visit.getAgentRating());
+				data.setNumber((short) visit.getNumber());
+				data.setTitle(visit.getChapter().getTitle());
+
+				getVisitDataDimensionRepository().save(data);
+			} catch (Exception e) {
+				// Ignore error for duplicated entries
+				Log.error(e.getMessage());
+			}
+		}
+	}
+
+	private void populateQuestionDimension() {
+		for (Question question : getQuestionRepository().findAll(QQuestion.question.createdAt.after(getYesterday().toDate()))) {
+			try {
+				QuestionDimension						data			= new QuestionDimension();
+
+				data.setQuestion(question.getDescription());
+				data.setType(question.getType());
+
+				getQuestionDimensionRepository().save(data);
+			} catch (Exception e) {
+				// Ignore error for duplicated entries
+				Log.error(e.getMessage());
+			}
+		}
+	}
+	// endregion
+
+	// region Facts
+	private void populateFamilyFact() {
+		for (Family family : getFamilyRepository().findAll(QFamily.family.createdAt.after(getYesterday().toDate()).or(QFamily.family.updatedAt.after(getYesterday().toDate())))) {
+			try {
+				Community						community						= family.getCommunity();
+				DateDimension					dateDimension					= getDateDimensionRepository().findOne(family.getCreatedAt());
+				CommunityLocationDimension		locationDimension				= getCommunityLocationDimensionRepository().findOne(community.getName(), community.getCommunityZone(), community.getAccess(), community.getCity().getName(), community.getUnity().getName(), community.getUnity().getRegional().getName(), community.getCity().getState().getAbbreviation());
+				CommunityServiceDimension		communityServiceDimension		= getCommunityServiceDimensionRepository().findOne(community.getHealthServices(), community.getGarbageDestination(), community.getWaterSupply(), community.isElectricity(), community.isKindergarten(), community.isElementarySchool(), community.isHighSchool(), community.isCollege());
+				CommunitySocialDimension		communitySocialDimension		= getCommunitySocialDimensionRepository().findOne(community.getCulturalProductions(), community.getMainIncome(), community.isCommunityCenter(), community.isCulturalEvents(), community.isCommunityLeaders(), community.isPatron(), community.isReligiousPlace());
+				FamilyServiceDimension			serviceDimension				= getFamilyServiceDimensionRepository().findOne(family.getWaterTreatmentDescription(), family.getSocialProgram(), family.getNearbyUB(), family.getSanitation(), family.getWaterTreatment());
+				FamilySocialDimension			socialDimension					= getFamilySocialDimensionRepository().findOne(family.getName(), family.getBirth(), family.getGender(), family.getCivilState(), family.getHabitationType(), family.getMembersCount(), family.getChildrenCount(), family.getIncome());
+				FamilyFact						fact							= Optional.of(getFamilyFactRepository().findOne(dateDimension.getId(), serviceDimension.getId(), socialDimension.getId(), locationDimension.getId(), communityServiceDimension.getId(), communitySocialDimension.getId())).orElse(new FamilyFact());
+
+				fact.setCommunityLocation(locationDimension);
+				fact.setCommunityService(communityServiceDimension);
+				fact.setCommunitySocial(communitySocialDimension);
+				fact.setService(serviceDimension);
+				fact.setSocial(socialDimension);
+
+				getFamilyFactRepository().save(fact);
+			} catch (Exception e) {
+				// Ignore error for duplicated entries
+				Log.error(e.getMessage());
+			}
+		}
+	}
+
+	private void populateChildFact() {
+		for (Child child : getChildRepository().findAll(QChild.child.createdAt.after(getYesterday().toDate()).or(QChild.child.updatedAt.after(getYesterday().toDate())))) {
+			try {
+				Family							family							= child.getFamily();
+				Community						community						= family.getCommunity();
+				DateDimension					dateDimension					= getDateDimensionRepository().findOne(family.getCreatedAt());
+				CommunityLocationDimension		locationDimension				= getCommunityLocationDimensionRepository().findOne(community.getName(), community.getCommunityZone(), community.getAccess(), community.getCity().getName(), community.getUnity().getName(), community.getUnity().getRegional().getName(), community.getCity().getState().getAbbreviation());
+				CommunityServiceDimension		communityServiceDimension		= getCommunityServiceDimensionRepository().findOne(community.getHealthServices(), community.getGarbageDestination(), community.getWaterSupply(), community.isElectricity(), community.isKindergarten(), community.isElementarySchool(), community.isHighSchool(), community.isCollege());
+				CommunitySocialDimension		communitySocialDimension		= getCommunitySocialDimensionRepository().findOne(community.getCulturalProductions(), community.getMainIncome(), community.isCommunityCenter(), community.isCulturalEvents(), community.isCommunityLeaders(), community.isPatron(), community.isReligiousPlace());
+				FamilyServiceDimension			familyServiceDimension			= getFamilyServiceDimensionRepository().findOne(family.getWaterTreatmentDescription(), family.getSocialProgram(), family.getNearbyUB(), family.getSanitation(), family.getWaterTreatment());
+				FamilySocialDimension			familySocialDimension			= getFamilySocialDimensionRepository().findOne(family.getName(), family.getBirth(), family.getGender(), family.getCivilState(), family.getHabitationType(), family.getMembersCount(), family.getChildrenCount(), family.getIncome());
+				AgentDimension					agentDimension					= getAgentDimensionRepository().findOne(child.getAgent().getPerson().getCpf());
+				ChildSocialDimension			socialDimension					= getChildSocialDimensionRepository().findOne(child.getName(), child.getGender(), child.getFatherFullName(), child.getMotherFullName());
+				ChildFact 						fact							= Optional.of(getChildFactRepository().findOne(dateDimension.getId(), agentDimension.getId(), socialDimension.getId(), familyServiceDimension.getId(), familySocialDimension.getId(), locationDimension.getId(), communityServiceDimension.getId(), communitySocialDimension.getId())).orElse(new ChildFact());
+
+				fact.setDate(dateDimension);
+				fact.setAgent(agentDimension);
+				fact.setSocial(socialDimension);
+				fact.setFamilyService(familyServiceDimension);
+				fact.setFamilySocial(familySocialDimension);
+				fact.setCommunityLocation(locationDimension);
+				fact.setCommunityService(communityServiceDimension);
+				fact.setCommunitySocial(communitySocialDimension);
+
+				getChildFactRepository().save(fact);
+			} catch (Exception e) {
+				// Ignore error for duplicated entries
+				Log.error(e.getMessage());
+			}
+		}
+	}
+
+	private void populatePregnantFact() {
+		for (Pregnant pregnant : getPregnantRepository().findAll(QPregnant.pregnant.createdAt.after(getYesterday().toDate()).or(QPregnant.pregnant.updatedAt.after(getYesterday().toDate())))) {
+			try {
+				Family							family							= pregnant.getFamily();
+				Community						community						= family.getCommunity();
+				DateDimension					dateDimension					= getDateDimensionRepository().findOne(family.getCreatedAt());
+				CommunityLocationDimension		locationDimension				= getCommunityLocationDimensionRepository().findOne(community.getName(), community.getCommunityZone(), community.getAccess(), community.getCity().getName(), community.getUnity().getName(), community.getUnity().getRegional().getName(), community.getCity().getState().getAbbreviation());
+				CommunityServiceDimension		communityServiceDimension		= getCommunityServiceDimensionRepository().findOne(community.getHealthServices(), community.getGarbageDestination(), community.getWaterSupply(), community.isElectricity(), community.isKindergarten(), community.isElementarySchool(), community.isHighSchool(), community.isCollege());
+				CommunitySocialDimension		communitySocialDimension		= getCommunitySocialDimensionRepository().findOne(community.getCulturalProductions(), community.getMainIncome(), community.isCommunityCenter(), community.isCulturalEvents(), community.isCommunityLeaders(), community.isPatron(), community.isReligiousPlace());
+				FamilyServiceDimension			familyServiceDimension			= getFamilyServiceDimensionRepository().findOne(family.getWaterTreatmentDescription(), family.getSocialProgram(), family.getNearbyUB(), family.getSanitation(), family.getWaterTreatment());
+				FamilySocialDimension			familySocialDimension			= getFamilySocialDimensionRepository().findOne(family.getName(), family.getBirth(), family.getGender(), family.getCivilState(), family.getHabitationType(), family.getMembersCount(), family.getChildrenCount(), family.getIncome());
+				AgentDimension					agentDimension					= getAgentDimensionRepository().findOne(pregnant.getAgent().getPerson().getCpf());
+				PregnantSocialDimension			socialDimension					= getPregnantSocialDimensionRepository().findOne(pregnant.getName(), pregnant.getCivilState(), pregnant.getEthnicity(), pregnant.getScholarity());
+				PregnantFact 					fact							= Optional.of(getPregnantFactRepository().findOne(dateDimension.getId(), agentDimension.getId(), socialDimension.getId(), familyServiceDimension.getId(), familySocialDimension.getId(), locationDimension.getId(), communityServiceDimension.getId(), communitySocialDimension.getId())).orElse(new PregnantFact());
+
+				fact.setDate(dateDimension);
+				fact.setAgent(agentDimension);
+				fact.setSocial(socialDimension);
+				fact.setFamilyService(familyServiceDimension);
+				fact.setFamilySocial(familySocialDimension);
+				fact.setCommunityLocation(locationDimension);
+				fact.setCommunityService(communityServiceDimension);
+				fact.setCommunitySocial(communitySocialDimension);
+
+				getPregnantFactRepository().save(fact);
+			} catch (Exception e) {
+				// Ignore error for duplicated entries
+				Log.error(e.getMessage());
+			}
+		}
+	}
+
+	private void populatePregnancyFact() {
+		for (Pregnancy pregnancy : getPregnancyRepository().findAll(QPregnancy.pregnancy.createdAt.after(getYesterday().toDate()).or(QPregnancy.pregnancy.updatedAt.after(getYesterday().toDate())))) {
+			try {
+				Pregnant						pregnant						= pregnancy.getPregnant();
+				Family							family							= pregnant.getFamily();
+				Community						community						= family.getCommunity();
+				DateDimension					dateDimension					= getDateDimensionRepository().findOne(family.getCreatedAt());
+				CommunityLocationDimension		locationDimension				= getCommunityLocationDimensionRepository().findOne(community.getName(), community.getCommunityZone(), community.getAccess(), community.getCity().getName(), community.getUnity().getName(), community.getUnity().getRegional().getName(), community.getCity().getState().getAbbreviation());
+				CommunityServiceDimension		communityServiceDimension		= getCommunityServiceDimensionRepository().findOne(community.getHealthServices(), community.getGarbageDestination(), community.getWaterSupply(), community.isElectricity(), community.isKindergarten(), community.isElementarySchool(), community.isHighSchool(), community.isCollege());
+				CommunitySocialDimension		communitySocialDimension		= getCommunitySocialDimensionRepository().findOne(community.getCulturalProductions(), community.getMainIncome(), community.isCommunityCenter(), community.isCulturalEvents(), community.isCommunityLeaders(), community.isPatron(), community.isReligiousPlace());
+				FamilyServiceDimension			familyServiceDimension			= getFamilyServiceDimensionRepository().findOne(family.getWaterTreatmentDescription(), family.getSocialProgram(), family.getNearbyUB(), family.getSanitation(), family.getWaterTreatment());
+				FamilySocialDimension			familySocialDimension			= getFamilySocialDimensionRepository().findOne(family.getName(), family.getBirth(), family.getGender(), family.getCivilState(), family.getHabitationType(), family.getMembersCount(), family.getChildrenCount(), family.getIncome());
+				AgentDimension					agentDimension					= getAgentDimensionRepository().findOne(pregnant.getAgent().getPerson().getCpf());
+				PregnantSocialDimension			socialDimension					= getPregnantSocialDimensionRepository().findOne(pregnant.getName(), pregnant.getCivilState(), pregnant.getEthnicity(), pregnant.getScholarity());
+				PregnancyMeasureDimension		measureDimension				= getPregnancyMeasureDimensionRepository().findOne(pregnancy.getHeight(), (short) Math.round(pregnancy.getWeight()), pregnancy.getPlanned());
+				PregnancyFact 					fact							= Optional.of(getPregnancyFactRepository().findOne(dateDimension.getId(), measureDimension.getId(), agentDimension.getId(), socialDimension.getId(), familyServiceDimension.getId(), familySocialDimension.getId(), locationDimension.getId(), communityServiceDimension.getId(), communitySocialDimension.getId())).orElse(new PregnancyFact());
+
+				fact.setDate(dateDimension);
+				fact.setAgent(agentDimension);
+				fact.setSocial(socialDimension);
+				fact.setMeasure(measureDimension);
+				fact.setFamilyService(familyServiceDimension);
+				fact.setFamilySocial(familySocialDimension);
+				fact.setCommunityLocation(locationDimension);
+				fact.setCommunityService(communityServiceDimension);
+				fact.setCommunitySocial(communitySocialDimension);
+
+				getPregnancyFactRepository().save(fact);
+			} catch (Exception e) {
+				// Ignore error for duplicated entries
+				Log.error(e.getMessage());
+			}
+		}
+	}
+
+
+
+	// endregion
 }
