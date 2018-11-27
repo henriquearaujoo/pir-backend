@@ -6,7 +6,7 @@ import com.samsung.fas.pir.bi.repository.base.IBase;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-@Repository("BIAnswerFact")
+@Repository("BIVisitFact")
 public interface IVisitFact extends IBase<VisitFact, Long, QVisitFact> {
 	@Query("SELECT fact FROM VisitFact fact WHERE " +
 			"fact.date.id 					= :dateID " +
